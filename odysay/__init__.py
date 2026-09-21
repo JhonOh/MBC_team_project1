@@ -5,6 +5,8 @@ db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+    from .views import place_views
+    app.register_blueprint(place_views.bp)
 
     @app.route('/')
     def index():
@@ -22,8 +24,5 @@ def create_app():
     def map():
         return render_template('map.html')
 
-    @app.route('/hjs')
-    def hjs():
-        return render_template('hjs.html')
 
     return app
