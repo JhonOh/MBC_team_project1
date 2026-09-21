@@ -1,0 +1,3 @@
+FLASK_APP=odysay
+FLASK_ENV=development
+FLASK_DEBUG=true
