@@ -1,5 +1,7 @@
 from flask import Flask, render_template
+from flask_sqlalchemy import SQLAlchemy
 
+db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
@@ -15,6 +17,10 @@ def create_app():
     @app.route('/sjw')
     def sjw():
         return render_template('sjw.html')
+
+    @app.route('/map.html')
+    def map():
+        return render_template('map.html')
 
     @app.route('/hjs')
     def hjs():
