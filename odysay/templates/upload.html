@@ -1,0 +1,9 @@
+
+{# 나라 선택 #}
+<select name="country">
+    <option value="">국가를 선택하세요</option>
+
+    {% for country in countries %}
+        <option value="{{ country }}">{{ country }}</option>
+    {% endfor %}
+</select>
