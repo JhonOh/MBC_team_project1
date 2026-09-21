@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>어딧세이 | 여행의 시작</title>
+
+    <link rel="stylesheet" href="css/reset.css">
+    <link rel="stylesheet" href="css/common.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+    <div class="header-inner">
+
+        <a href="index.html" class="logo">
+            <span class="logo-symbol">△△</span>
+
+            <div class="logo-text">
+                <strong>어딧세이</strong>
+                <span>ODYSAY</span>
+            </div>
+        </a>
+
+        <nav class="gnb">
+            <a href="#">여행지</a>
+            <a href="#">커뮤니티</a>
+            <a href="#">여행지 등록</a>
+            <a href="#">마이페이지</a>
+        </nav>
+
+        <div class="header-util">
+            <button type="button" class="search-button">
+                🔍
+            </button>
+
+            <button type="button" class="logout-button">
+                로그아웃
+            </button>
+        </div>
+
+    </div>
+</header>
+
+
+<main>
+
+    <!-- 메인 여행 이미지 -->
+    <section class="hero">
+
+        <div class="hero-inner">
+
+            <p class="hero-small-text">
+                ✈ 어디로 갈지 고민이라면,
+            </p>
+
+            <h1>
+                어딧세이와 함께 떠나요.
+            </h1>
+
+            <p class="hero-description">
+                여행의 시작, 사람들의 이야기로부터
+            </p>
+
+
+            <!-- 여행지 검색 -->
+            <div class="travel-search">
+
+                <input
+                    type="text"
+                    placeholder="어디로 떠나고 싶으신가요?"
+                >
+
+                <button type="button">
+                    검색
+                </button>
+
+            </div>
+
+
+            <!-- 여행 카테고리 -->
+            <div class="travel-menu">
+
+                <a href="#">
+                    <span>⌂</span>
+                    국내여행
+                </a>
+
+                <a href="#">
+                    <span>◎</span>
+                    해외여행
+                </a>
+
+                <a href="#">
+                    <span>☆</span>
+                    인기여행지
+                </a>
+
+                <a href="#">
+                    <span>♧</span>
+                    추천코스
+                </a>
+
+                <a href="#">
+                    <span>☼</span>
+                    여행꿀팁
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- 실시간 핫플 -->
+    <section class="hot-place">
+
+        <div class="section-inner">
+
+            <div class="section-title">
+
+                <div>
+                    <h2>실시간 핫플 🔥</h2>
+                    <p>지금, 가장 주목받는 여행지를 만나보세요!</p>
+                </div>
+
+                <div class="ranking-filter">
+                    <button type="button" class="active" data-period="today">오늘</button>
+                    <button type="button" data-period="week">주간</button>
+                    <button type="button" data-period="month">월간</button>
+                </div>
+
+            </div>
+
+
+            <div class="hot-list" id="hotList">
+                <!-- JavaScript에서 여행지 카드를 생성합니다 -->
+
+            </div>
+
+        </div>
+
+
+
+</section>
+
+<!-- ========================================
+     메인 콘텐츠
+     추천 여행지 / 최근 등록 / 커뮤니티
+======================================== -->
+
+<section class="home-content">
+
+    <div class="section-inner home-grid">
+
+        <!-- 추천 여행지 -->
+        <div class="recommend-section">
+
+            <div class="sub-section-title">
+                <div>
+                    <h2>추천 여행지</h2>
+                    <p>어딧세이가 추천하는 특별한 여행지</p>
+                </div>
+
+                <a href="#">더보기 ›</a>
+            </div>
+
+
+            <div class="recommend-list">
+
+                <a href="#" class="recommend-card">
+
+                    <div class="recommend-image">
+                        <img src="images/recommend/rome.png" alt="로마">
+                    </div>
+
+                    <div class="recommend-info">
+                        <span>🇮🇹 이탈리아</span>
+                        <strong>로마</strong>
+
+                        <p>♡ 2,341</p>
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="recommend-card">
+
+                    <div class="recommend-image">
+                        <img src="images/recommend/danang.png" alt="다낭">
+                    </div>
+
+                    <div class="recommend-info">
+                        <span>🇻🇳 베트남</span>
+                        <strong>다낭</strong>
+
+                        <p>♡ 1,982</p>
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="recommend-card">
+
+                    <div class="recommend-image">
+                        <img src="images/recommend/jeju.png" alt="제주도">
+                    </div>
+
+                    <div class="recommend-info">
+                        <span>🇰🇷 대한민국</span>
+                        <strong>제주도</strong>
+
+                        <p>♡ 3,567</p>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- 최근 등록된 여행지 -->
+        <div class="recent-section">
+
+            <div class="sub-section-title">
+                <div>
+                    <h2>최근 등록된 여행지</h2>
+                    <p>새로운 여행지를 확인해보세요!</p>
+                </div>
+
+                <a href="#">더보기 ›</a>
+            </div>
+
+
+            <div class="recent-list">
+
+                <a href="#" class="recent-item">
+
+                    <img src="images/recent/interlaken.png"
+                         alt="스위스 인터라켄">
+
+                    <div class="recent-info">
+                        <strong>스위스 인터라켄</strong>
+
+                        <div class="recent-bottom">
+                            <span>2026. 09. 17</span>
+
+                            <div>
+                                ♡ 128
+                                &nbsp;
+                                ♧ 24
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="recent-item">
+
+                    <img src="images/recent/banff.png"
+                         alt="캐나다 밴프 국립공원">
+
+                    <div class="recent-info">
+                        <strong>캐나다 밴프 국립공원</strong>
+
+                        <div class="recent-bottom">
+                            <span>2026. 09. 16</span>
+
+                            <div>
+                                ♡ 96
+                                &nbsp;
+                                ♧ 12
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="recent-item">
+
+                    <img src="images/recent/singapore.png"
+                         alt="싱가포르 마리나 베이">
+
+                    <div class="recent-info">
+                        <strong>싱가포르 마리나 베이</strong>
+
+                        <div class="recent-bottom">
+                            <span>2026. 09. 15</span>
+
+                            <div>
+                                ♡ 142
+                                &nbsp;
+                                ♧ 18
+                            </div>
+                        </div>
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- 커뮤니티 인기글 -->
+        <div class="community-section">
+
+            <div class="sub-section-title">
+
+                <div>
+                    <h2>커뮤니티 인기글</h2>
+                </div>
+
+                <a href="#">더보기 ›</a>
+
+            </div>
+
+
+            <div class="community-list">
+
+                <a href="#" class="community-item">
+
+                    <div class="community-thumb">
+                        <img src="images/community/europe.png"
+                             alt="유럽여행">
+                    </div>
+
+                    <div class="community-info">
+
+                        <span class="community-category">
+                            자유게시판
+                        </span>
+
+                        <strong>
+                            처음 간 유럽여행, 이것만은 꼭 알고 가세요!
+                        </strong>
+
+                        <div class="community-meta">
+
+                            <span>♡ 320 &nbsp; ♧ 24</span>
+
+                            <span>2026. 09. 16</span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="community-item">
+
+                    <div class="community-thumb">
+                        <img src="images/community/santorini.png"
+                             alt="산토리니 여행">
+                    </div>
+
+                    <div class="community-info">
+
+                        <span class="community-category">
+                            여행후기
+                        </span>
+
+                        <strong>
+                            산토리니 4박 5일 솔직 후기 ✈
+                        </strong>
+
+                        <div class="community-meta">
+
+                            <span>♡ 278 &nbsp; ♧ 17</span>
+
+                            <span>2026. 09. 15</span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+
+                <a href="#" class="community-item">
+
+                    <div class="community-thumb">
+                        <img src="images/community/checklist.png"
+                             alt="여행 준비물">
+                    </div>
+
+                    <div class="community-info">
+
+                        <span class="community-category">
+                            여행팁
+                        </span>
+
+                        <strong>
+                            여행 준비물 체크리스트 (해외편)
+                        </strong>
+
+                        <div class="community-meta">
+
+                            <span>♡ 256 &nbsp; ♧ 32</span>
+
+                            <span>2026. 09. 14</span>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ========================================
+     하단 브랜드 배너
+======================================== -->
+<section class="bottom-banner">
+    <div class="section-inner bottom-banner-inner">
+
+        <p class="bottom-message">
+            여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
+        </p>
+
+        <div class="bottom-brand">
+            <div class="bottom-logo">
+                <span class="logo-symbol">△△</span>
+
+                <div>
+                    <strong>어딧세이</strong>
+                    <small>ODYSAY</small>
+                </div>
+            </div>
+
+            <div class="bottom-divider"></div>
+
+            <p class="bottom-slogan">
+                더 많은 이야기로,<br>
+                더 멀리.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ========================================
+     FOOTER
+======================================== -->
+<footer class="footer">
+
+    <div class="section-inner footer-inner">
+
+        <div class="footer-left">
+            <strong>어딧세이 ODYSAY</strong>
+
+            <p>
+                참여형 여행정보 커뮤니티
+            </p>
+        </div>
+
+        <div class="footer-right">
+            <span>© 2026 ODYSAY</span>
+            <span>Team Project</span>
+        </div>
+
+    </div>
+
+</footer>
+
+
+</main>
+
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

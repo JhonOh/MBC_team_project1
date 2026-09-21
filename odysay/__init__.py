@@ -16,7 +16,7 @@ def create_app():
 
     @app.route('/sjw')
     def sjw():
-        return render_template('sjw.html')
+        return render_template('shin2ryu/sjw.html')
 
     @app.route('/map.html')
     def map():
