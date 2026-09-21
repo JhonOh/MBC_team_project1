@@ -1,11 +1,334 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>마이페이지</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/ojh.css') }}">
 </head>
+
 <body>
-<h1>나야</h1>
-<h2>오디세이? 어디세이?</h2>
+
+<div class="mypage-wrap">
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="header">
+
+        <div class="header-inner">
+
+            <a href="#" class="logo">
+                <span class="logo-icon">△</span>
+                <span>어디갈까?</span>
+            </a>
+
+            <nav class="main-menu">
+                <a href="#">홈</a>
+                <a href="#">여행지</a>
+                <a href="#">여행 후기</a>
+                <a href="#">여행지 등록</a>
+                <a href="#">마이페이지</a>
+            </nav>
+
+            <button type="button" class="search-btn">
+                ⌕
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CONTENT
+    ========================== -->
+    <main class="content">
+
+
+        <!-- =========================
+             LEFT SIDE MENU
+        ========================== -->
+        <aside class="side-menu">
+
+            <div class="side-title">
+                마이페이지
+            </div>
+
+            <ul class="side-list">
+
+                <li>
+                    <a href="#" class="active">
+                        <span class="menu-icon">♙</span>
+                        <span>내 정보</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♧</span>
+                        <span>내가 쓴 글</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♡</span>
+                        <span>내가 찜한 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">⚙</span>
+                        <span>설정</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </aside>
+
+
+        <!-- =========================
+             RIGHT CONTENT
+        ========================== -->
+        <section class="mypage-main">
+
+            <h1 class="page-title">
+                내 정보
+            </h1>
+
+
+            <!-- =========================
+                 PROFILE
+            ========================== -->
+            <div class="profile-box">
+
+                <div class="profile-left">
+
+                    <div class="profile-img">
+                        ♙
+                    </div>
+
+                    <div class="profile-info">
+
+                        <h2>
+                            여행을 좋아하는 사용자
+                        </h2>
+
+                        <p>
+                            안녕하세요.<br>
+                            나만의 여행 이야기를 기록해보세요.
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <button type="button" class="profile-btn">
+                    프로필 수정
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 STATISTICS
+            ========================== -->
+            <div class="stat-box">
+
+                <div class="stat-item">
+
+                    <span class="stat-title">
+                        내가 쓴 글
+                    </span>
+
+                    <span class="stat-number">
+                        12
+                    </span>
+
+                </div>
+
+
+                <div class="stat-item">
+
+                    <span class="stat-title">
+                        내가 찜한 여행지
+                    </span>
+
+                    <span class="stat-number">
+                        328
+                    </span>
+
+                </div>
+
+
+                <div class="stat-item">
+
+                    <span class="stat-title">
+                        내가 만든 여행지
+                    </span>
+
+                    <span class="stat-number">
+                        24
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 RECENT POSTS
+            ========================== -->
+            <div class="recent-box">
+
+                <div class="recent-header">
+
+                    <h3>
+                        최근 작성한 글
+                    </h3>
+
+                    <a href="#" class="more">
+                        전체보기 ›
+                    </a>
+
+                </div>
+
+
+                <div class="post-list">
+
+
+                    <!-- POST 1 -->
+                    <a href="#" class="post-item">
+
+                        <div class="post-thumbnail">
+                            △
+                        </div>
+
+                        <div class="post-info">
+
+                            <span class="post-title">
+                                산토리니 4박 5일 솔직 후기 ✈
+                            </span>
+
+                            <span class="post-meta">
+                                ♡ 26　 💬 17
+                            </span>
+
+                        </div>
+
+                        <span class="post-date">
+                            2026. 09. 15
+                        </span>
+
+                    </a>
+
+
+                    <!-- POST 2 -->
+                    <a href="#" class="post-item">
+
+                        <div class="post-thumbnail">
+                            △
+                        </div>
+
+                        <div class="post-info">
+
+                            <span class="post-title">
+                                이번 여름 제주도 여행지 추천
+                            </span>
+
+                            <span class="post-meta">
+                                ♡ 256　 💬 32
+                            </span>
+
+                        </div>
+
+                        <span class="post-date">
+                            2026. 09. 14
+                        </span>
+
+                    </a>
+
+
+                    <!-- POST 3 -->
+                    <a href="#" class="post-item">
+
+                        <div class="post-thumbnail">
+                            △
+                        </div>
+
+                        <div class="post-info">
+
+                            <span class="post-title">
+                                꼭 가봐야 할 국내 여행지 BEST 5
+                            </span>
+
+                            <span class="post-meta">
+                                ♡ 89　 💬 14
+                            </span>
+
+                        </div>
+
+                        <span class="post-date">
+                            2026. 09. 10
+                        </span>
+
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-logo">
+                △ 어디갈까?
+            </div>
+
+            <div class="footer-menu">
+
+                <a href="#">
+                    이용약관
+                </a>
+
+                <a href="#">
+                    개인정보처리방침
+                </a>
+
+                <a href="#">
+                    고객센터
+                </a>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 어디갈까? All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/ojh.js') }}"></script>
+
 </body>
 </html>

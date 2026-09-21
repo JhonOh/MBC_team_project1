@@ -1,0 +1,661 @@
+/* =========================
+   RESET
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    background: #f5f7f9;
+    color: #333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+
+/* =========================
+   전체
+========================= */
+
+.mypage-wrap {
+    width: 100%;
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.header {
+    height: 70px;
+
+    background: #fff;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.header-inner {
+    width: 1100px;
+    height: 100%;
+
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+}
+
+
+/* 로고 */
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logo-icon {
+    width: 32px;
+    height: 32px;
+
+    border: 2px solid #263238;
+    border-radius: 6px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+}
+
+
+/* 상단 메뉴 */
+
+.main-menu {
+    display: flex;
+
+    gap: 35px;
+
+    margin-left: auto;
+    margin-right: 30px;
+}
+
+.main-menu a {
+    font-size: 14px;
+
+    color: #555;
+
+    transition: 0.2s;
+}
+
+.main-menu a:hover {
+    color: #1677b7;
+}
+
+
+/* 검색 */
+
+.search-btn {
+    width: 35px;
+    height: 35px;
+
+    border: 1px solid #ddd;
+    border-radius: 50%;
+
+    font-size: 16px;
+}
+
+.search-btn:hover {
+    background: #f5f5f5;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+    width: 1100px;
+
+    margin: 35px auto 50px;
+
+    display: flex;
+
+    gap: 25px;
+
+    flex: 1;
+}
+
+
+/* =========================
+   LEFT MENU
+========================= */
+
+.side-menu {
+    width: 210px;
+
+    flex-shrink: 0;
+
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+/* 제목 */
+
+.side-title {
+    height: 65px;
+
+    padding: 0 22px;
+
+    display: flex;
+    align-items: center;
+
+    font-size: 20px;
+    font-weight: bold;
+
+    border-bottom: 1px solid #eee;
+}
+
+
+/* 메뉴 */
+
+.side-list {
+    padding: 10px 0;
+
+    list-style: none;
+}
+
+.side-list li {
+    list-style: none;
+}
+
+.side-list a {
+    height: 48px;
+
+    padding: 0 22px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    font-size: 14px;
+
+    color: #555;
+
+    transition: 0.2s;
+}
+
+.side-list a:hover {
+    background: #f4f8fb;
+
+    color: #1677b7;
+}
+
+
+/* 선택된 메뉴 */
+
+.side-list a.active {
+    background: #eef7fc;
+
+    color: #1677b7;
+
+    font-weight: bold;
+
+    border-left: 3px solid #1677b7;
+}
+
+.menu-icon {
+    width: 20px;
+
+    text-align: center;
+
+    font-size: 16px;
+}
+
+
+/* =========================
+   RIGHT CONTENT
+========================= */
+
+.mypage-main {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* 제목 */
+
+.page-title {
+    margin-bottom: 18px;
+
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-box {
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    padding: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 18px;
+}
+
+.profile-left {
+    display: flex;
+    align-items: center;
+
+    gap: 18px;
+}
+
+
+/* 프로필 이미지 */
+
+.profile-img {
+    width: 75px;
+    height: 75px;
+
+    border-radius: 50%;
+
+    background: #e9eef2;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 38px;
+
+    color: #aeb8c0;
+}
+
+
+/* 프로필 정보 */
+
+.profile-info h2 {
+    font-size: 17px;
+
+    margin-bottom: 7px;
+}
+
+.profile-info p {
+    font-size: 13px;
+
+    color: #888;
+
+    line-height: 1.6;
+}
+
+
+/* 프로필 수정 */
+
+.profile-btn {
+    padding: 9px 15px;
+
+    border: 1px solid #ccc;
+
+    border-radius: 4px;
+
+    font-size: 12px;
+
+    color: #555;
+}
+
+.profile-btn:hover {
+    background: #f5f5f5;
+}
+
+
+/* =========================
+   STAT
+========================= */
+
+.stat-box {
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    margin-bottom: 18px;
+}
+
+.stat-item {
+    height: 95px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    border-right: 1px solid #eee;
+}
+
+.stat-item:last-child {
+    border-right: none;
+}
+
+.stat-title {
+    font-size: 12px;
+
+    color: #888;
+
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 23px;
+
+    font-weight: bold;
+
+    color: #333;
+}
+
+
+/* =========================
+   RECENT POSTS
+========================= */
+
+.recent-box {
+    background: #fff;
+
+    border: 1px solid #ddd;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+/* 최근 글 제목 */
+
+.recent-header {
+    height: 55px;
+
+    padding: 0 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    border-bottom: 1px solid #eee;
+}
+
+.recent-header h3 {
+    font-size: 16px;
+}
+
+.more {
+    font-size: 12px;
+
+    color: #888;
+}
+
+.more:hover {
+    color: #1677b7;
+}
+
+
+/* 게시물 */
+
+.post-list {
+    padding: 5px 20px;
+}
+
+.post-item {
+    min-height: 75px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    border-bottom: 1px solid #eee;
+}
+
+.post-item:last-child {
+    border-bottom: none;
+}
+
+
+/* 썸네일 */
+
+.post-thumbnail {
+    width: 50px;
+    height: 50px;
+
+    background: #e8edf1;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: #aab3ba;
+
+    font-size: 22px;
+
+    flex-shrink: 0;
+}
+
+
+/* 게시물 정보 */
+
+.post-info {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.post-title {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.post-meta {
+    font-size: 11px;
+
+    color: #999;
+}
+
+.post-date {
+    font-size: 11px;
+
+    color: #999;
+
+    white-space: nowrap;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer {
+    height: 65px;
+
+    background: #273746;
+
+    color: #fff;
+}
+
+.footer-inner {
+    width: 1100px;
+    height: 100%;
+
+    margin: 0 auto;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+}
+
+.footer-logo {
+    font-size: 14px;
+
+    font-weight: bold;
+}
+
+.footer-menu {
+    display: flex;
+
+    gap: 20px;
+
+    font-size: 11px;
+
+    color: #c7cdd1;
+}
+
+.footer-menu a:hover {
+    color: #fff;
+}
+
+.copyright {
+    font-size: 10px;
+
+    color: #9da7ad;
+}
+
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1150px) {
+
+    .header-inner,
+    .content,
+    .footer-inner {
+        width: calc(100% - 40px);
+    }
+
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 750px) {
+
+    .header {
+        height: auto;
+    }
+
+    .header-inner {
+        height: 65px;
+    }
+
+    .main-menu {
+        display: none;
+    }
+
+    .content {
+        flex-direction: column;
+
+        margin-top: 20px;
+    }
+
+    .side-menu {
+        width: 100%;
+    }
+
+    .side-list {
+        display: flex;
+
+        overflow-x: auto;
+    }
+
+    .side-list a {
+        white-space: nowrap;
+    }
+
+    .side-list a.active {
+        border-left: none;
+
+        border-bottom: 3px solid #1677b7;
+    }
+
+    .profile-box {
+        padding: 18px;
+    }
+
+    .profile-btn {
+        display: none;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+
+        justify-content: center;
+
+        gap: 5px;
+    }
+
+    .footer-menu {
+        display: none;
+    }
+
+}
