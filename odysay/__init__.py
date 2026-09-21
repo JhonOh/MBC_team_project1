@@ -12,8 +12,12 @@ def create_app():
     def ojh():
         return render_template('ojh.html')
 
-    @app.route('./sjw')
+    @app.route('/sjw')
     def sjw():
         return render_template('sjw.html')
+
+    @app.route('/hjs')
+    def hjs():
+        return render_template('hjs.html')
 
     return app
