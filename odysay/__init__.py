@@ -7,22 +7,8 @@ from sqlalchemy import MetaData
 
 import config
 
-db = SQLAlchemy()
+db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
-
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object(config)
-
-    #ORM
-    db.init_app(app)
-    migrate.init_app(app, db)
-
-
-    #블루프린트
-    from .views import main_views ,auth_views
-    app.register_blueprint(main_views.bp)
-    app.register_blueprint(auth_views.bp)
 
 
 naming_convention = {
@@ -47,7 +33,7 @@ def create_app():
         migrate.init_app(app, db, render_as_batch=True)
     else:
         migrate.init_app(app, db)
-    from . import models
+
 
     # 블루프린트 등록
     from .views import main_views, mapmain_views, sub_views
