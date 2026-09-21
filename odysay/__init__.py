@@ -22,4 +22,8 @@ def create_app():
     def map():
         return render_template('map.html')
 
+    @app.route('/hjs')
+    def hjs():
+        return render_template('hjs.html')
+
     return app
