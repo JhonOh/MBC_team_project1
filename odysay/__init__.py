@@ -32,10 +32,12 @@ def create_app():
         db.create_all()
 
     # 블루프린트 등록[cite: 11]
-    from .views import main_views, mapmain_views, sub_views
+    from .views import main_views, mapmain_views, sub_views, auth_views
+
     app.register_blueprint(main_views.bp)
     app.register_blueprint(mapmain_views.bp)
     app.register_blueprint(sub_views.bp)
+    app.register_blueprint(auth_views.bp)
 
     # # 라우트 설정[cite: 11]
     # @app.route('/')

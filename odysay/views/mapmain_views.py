@@ -1,8 +1,17 @@
 from flask import Blueprint, render_template
+from odysay.forms import UserCreateForm, LoginForm
 
-# Blueprint: 라우팅 함수를 체계적으로 관리
+
 bp = Blueprint('first', __name__, url_prefix='/first')
+
 
 @bp.route('/map')
 def _map():
-    return render_template('map.html')
+    signup_form = UserCreateForm()
+    login_form = LoginForm()
+
+    return render_template(
+        'map.html',
+        signup_form=signup_form,
+        login_form=login_form
+    )
