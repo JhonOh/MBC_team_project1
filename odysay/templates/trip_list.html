@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>여행지 목록</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
+</head>
+
+<body>
+
+<div class="travel-page">
+
+    <!-- =========================
+         Header
+    ========================== -->
+    <header class="header">
+
+        <div class="header-inner">
+
+            <!-- 로고 -->
+            <a href="#" class="logo">
+                <span class="logo-icon">
+                    △△
+                </span>
+                <span class="logo-text">
+                    여행새끼
+                    <small>ODYSSEY</small>
+                </span>
+            </a>
+
+            <!-- 메뉴 -->
+            <nav class="main-nav">
+                <a href="#">여행지</a>
+                <a href="#">여행정보</a>
+                <a href="#">여행 후기</a>
+                <a href="#">여행가이드</a>
+            </nav>
+
+            <!-- 오른쪽 -->
+            <div class="header-right">
+                <button class="search-icon">⌕</button>
+                <a href="#">로그인</a>
+                <button class="mypage-btn">마이페이지</button>
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         Main
+    ========================== -->
+    <main class="main">
+
+        <!-- 제목 -->
+        <section class="title-section">
+
+            <h1>여행지</h1>
+
+            <p>
+                다양한 여행지를 발견해보세요.
+            </p>
+
+        </section>
+
+
+        <!-- 국내 / 해외 -->
+        <div class="area-tabs">
+
+            <button class="area-tab active" data-area="all">
+                국내
+            </button>
+
+            <button class="area-tab" data-area="overseas">
+                해외
+            </button>
+
+        </div>
+
+
+        <!-- 국가 필터 -->
+        <div class="country-filter">
+
+            <button class="country-btn active" data-country="all">
+                전체
+            </button>
+
+            <button class="country-btn" data-country="일본">
+                아시아
+            </button>
+
+            <button class="country-btn" data-country="유럽">
+                유럽
+            </button>
+
+            <button class="country-btn" data-country="미국">
+                북아메리카
+            </button>
+
+            <button class="country-btn" data-country="동남아">
+                남아메리카
+            </button>
+
+            <button class="country-btn" data-country="호주">
+                오세아니아
+            </button>
+
+            <button class="country-btn" data-country="아프리카">
+                아프리카
+            </button>
+
+        </div>
+
+
+        <!-- 검색 / 정렬 -->
+        <div class="search-area">
+
+            <div class="search-box">
+
+                <input
+                    type="text"
+                    id="travelSearch"
+                    placeholder="지역명을 또는 여행지를 검색해보세요."
+                >
+
+                <button id="searchBtn">
+                    🔍
+                </button>
+
+            </div>
+
+            <select id="sortSelect">
+
+                <option value="popular">
+                    인기순
+                </option>
+
+                <option value="name">
+                    이름순
+                </option>
+
+                <option value="latest">
+                    최신순
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- =========================
+             여행지 카드
+        ========================== -->
+
+        <section class="travel-list" id="travelList">
+
+            <!-- 1 -->
+            <article
+                class="travel-card"
+                data-area="all"
+                data-country="국내"
+                data-name="부산"
+                data-likes="9842"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>부산</h2>
+
+                    <div class="travel-bottom">
+                        <span>일본</span>
+
+                        <span class="likes">
+                            ♡ 9,842
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- 2 -->
+            <article
+                class="travel-card"
+                data-area="overseas"
+                data-country="태국"
+                data-name="푸켓"
+                data-likes="8736"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>푸켓</h2>
+
+                    <div class="travel-bottom">
+                        <span>태국</span>
+
+                        <span class="likes">
+                            ♡ 8,736
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- 3 -->
+            <article
+                class="travel-card"
+                data-area="overseas"
+                data-country="프랑스"
+                data-name="에펠탑"
+                data-likes="7521"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>에펠탑</h2>
+
+                    <div class="travel-bottom">
+                        <span>프랑스</span>
+
+                        <span class="likes">
+                            ♡ 7,521
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- 4 -->
+            <article
+                class="travel-card"
+                data-area="overseas"
+                data-country="그리스"
+                data-name="산토리니"
+                data-likes="6906"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>산토리니</h2>
+
+                    <div class="travel-bottom">
+                        <span>그리스</span>
+
+                        <span class="likes">
+                            ♡ 6,906
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- 5 -->
+            <article
+                class="travel-card"
+                data-area="overseas"
+                data-country="일본"
+                data-name="뉴욕 타임스퀘어"
+                data-likes="6321"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>뉴욕 타임스퀘어</h2>
+
+                    <div class="travel-bottom">
+                        <span>미국</span>
+
+                        <span class="likes">
+                            ♡ 6,321
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <!-- 6 -->
+            <article
+                class="travel-card"
+                data-area="overseas"
+                data-country="호주"
+                data-name="다낭"
+                data-likes="5982"
+            >
+
+                <div class="travel-image">
+                    <div class="image-placeholder">
+                        <span>△△</span>
+                    </div>
+                </div>
+
+                <div class="travel-info">
+
+                    <h2>다낭</h2>
+
+                    <div class="travel-bottom">
+                        <span>베트남</span>
+
+                        <span class="likes">
+                            ♡ 5,982
+                        </span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- 검색 결과 없음 -->
+        <div id="noResult" class="no-result">
+            검색 결과가 없습니다.
+        </div>
+
+
+        <!-- =========================
+             Pagination
+        ========================== -->
+
+        <div class="pagination">
+
+            <button class="page-arrow" data-page="prev">
+                ‹
+            </button>
+
+            <button class="page-number active" data-page="1">
+                1
+            </button>
+
+            <button class="page-number" data-page="2">
+                2
+            </button>
+
+            <button class="page-number" data-page="3">
+                3
+            </button>
+
+            <button class="page-number" data-page="4">
+                4
+            </button>
+
+            <button class="page-number" data-page="5">
+                5
+            </button>
+
+            <button class="page-arrow" data-page="next">
+                ›
+            </button>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         Footer
+    ========================== -->
+
+    <footer class="footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-logo">
+
+                <span class="footer-logo-icon">
+                    △△
+                </span>
+
+                <div>
+                    <strong>여행새끼</strong>
+                    <small>ODYSSEY</small>
+                </div>
+
+            </div>
+
+
+            <div class="footer-menu">
+
+                <a href="#">이용약관</a>
+                <a href="#">개인정보처리방침</a>
+                <a href="#">고객센터</a>
+
+            </div>
+
+
+            <div class="footer-social">
+
+                <span>◉</span>
+                <span>f</span>
+                <span>●</span>
+
+            </div>
+
+        </div>
+
+
+        <div class="copyright">
+            © 2025 ODYSAY. All rights reserved.
+        </div>
+
+    </footer>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/trip_list.js') }}"></script>
+
+</body>
+</html>

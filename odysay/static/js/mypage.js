@@ -10,8 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         item.addEventListener("click", function (event) {
 
-            event.preventDefault();
-
             // 기존 active 제거
             menuItems.forEach(function (menu) {
                 menu.classList.remove("active");

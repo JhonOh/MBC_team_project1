@@ -1,0 +1,347 @@
+/* 기본 초기화 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+body {
+    background-color: #ffffff;
+    color: #333333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+    background: none;
+}
+
+/* 상단 네비게이션 바 */
+.header {
+    border-bottom: 1px solid #e0e0e0;
+    padding: 15px 0;
+}
+
+.header-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+.logo {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.logo-icon {
+    font-size: 16px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 30px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.header-auth {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.search-btn {
+    font-size: 16px;
+}
+
+.signup-btn {
+    background-color: #2c3e50;
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* 메인 컨테이너 */
+.container {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+/* 상단 카드 정보 구조 */
+.detail-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+/* 메인 이미지 슬라이더 */
+.image-slider {
+    position: relative;
+    background-color: #f2f4f7;
+    border-radius: 8px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.left-arrow { left: 10px; }
+.right-arrow { right: 10px; }
+
+.placeholder-image {
+    text-align: center;
+    color: #bdc3c7;
+}
+
+.mountains-icon {
+    font-size: 50px;
+    letter-spacing: -5px;
+}
+
+.slider-dots {
+    position: absolute;
+    bottom: 15px;
+    display: flex;
+    gap: 5px;
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    background-color: #bdc3c7;
+    border-radius: 50%;
+}
+
+.dot.active {
+    background-color: #2c3e50;
+    width: 12px;
+    border-radius: 3px;
+}
+
+/* 메인 텍스트 우측 블록 */
+.info-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-top: 10px;
+}
+
+.title {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    color: #7f8c8d;
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+.likes-count {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 25px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-action {
+    flex: 1;
+    border: 1px solid #dcdde1;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    background-color: #fff;
+    font-weight: 500;
+}
+
+/* 중간 메뉴 탭 바 */
+.tab-bar {
+    display: flex;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 25px;
+}
+
+.tab-item {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    font-size: 15px;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.tab-item.active {
+    color: #000000;
+    border-bottom: 2px solid #000000;
+    font-weight: bold;
+}
+
+/* 본문 상세 스타일 */
+.info-group {
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 16px;
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.info-table th {
+    width: 80px;
+    text-align: left;
+    color: #7f8c8d;
+    font-size: 14px;
+    padding: 8px 0;
+    vertical-align: top;
+}
+
+.info-table td {
+    color: #333;
+    font-size: 14px;
+    padding: 8px 0;
+}
+
+.intro-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #4f5f6f;
+}
+
+/* 서브 하단 갤러리 리스트 */
+.related-images {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.thumb-image {
+    background-color: #f2f4f7;
+    height: 120px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #bdc3c7;
+}
+
+.thumb-image .mountains-icon {
+    font-size: 30px;
+}
+
+/* 반응도 투표 피드백 섹션 */
+.feedback-section {
+    margin-top: 40px;
+    border-top: 1px solid #f2f4f7;
+    padding-top: 25px;
+}
+
+.feedback-title {
+    font-size: 15px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.feedback-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-feedback {
+    flex: 1;
+    background-color: #f8f9fa;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-feedback:hover {
+    background-color: #e9ecef;
+}
+
+/* 하단 푸터 바 */
+.footer {
+    background-color: #2c3e50;
+    color: #b2bec3;
+    padding: 30px 0;
+    margin-top: 60px;
+    font-size: 13px;
+}
+
+.footer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #34495e;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.footer-logo {
+    font-weight: bold;
+    color: #ffffff;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-sns {
+    display: flex;
+    gap: 15px;
+}
+
+.footer-bottom {
+    font-size: 11px;
+    color: #7f8c8d;
+}
