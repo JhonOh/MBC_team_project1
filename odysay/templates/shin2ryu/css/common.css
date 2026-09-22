@@ -1,0 +1,15 @@
+/* ==============================
+   어딧세이 공통 스타일
+============================== */
+
+body {
+    background-color: #ffffff;
+    color: #14233b;
+}
+
+.header-inner,
+.section-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    margin: 0 auto;
+}
