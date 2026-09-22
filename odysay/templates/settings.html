@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>설정</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+</head>
+
+<body>
+
+<div class="mypage-wrap">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="header-inner">
+
+            <a href="#" class="logo">
+                <span class="logo-icon">△</span>
+                <span>어디갈까?</span>
+            </a>
+
+            <nav class="main-menu">
+                <a href="#">홈</a>
+                <a href="#">여행지</a>
+                <a href="#">여행 후기</a>
+                <a href="#">여행지 등록</a>
+                <a href="#">마이페이지</a>
+            </nav>
+
+            <button type="button" class="search-btn">
+                ⌕
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <!-- LEFT SIDE MENU -->
+        <aside class="side-menu">
+
+            <div class="side-title">
+                마이페이지
+            </div>
+
+            <ul class="side-list">
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage') }}">
+                        <span class="menu-icon">♙</span>
+                        <span>내 정보</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♧</span>
+                        <span>내가 쓴 글</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♡</span>
+                        <span>내가 찜한 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage_settings') }}"
+                       class="active">
+                        <span class="menu-icon">⚙</span>
+                        <span>설정</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </aside>
+
+
+        <!-- RIGHT CONTENT -->
+        <section class="mypage-main">
+
+            <h1 class="page-title">
+                설정
+            </h1>
+
+
+            <!-- 회원 탈퇴 -->
+            <div class="withdraw-box">
+
+                <div class="withdraw-header">
+                    <h2>회원 탈퇴</h2>
+                </div>
+
+                <div class="withdraw-content">
+
+                    <p class="withdraw-title">
+                        회원 탈퇴를 진행하시겠습니까?
+                    </p>
+
+                    <p class="withdraw-description">
+                        회원 탈퇴 시 계정과 관련된 정보가 삭제될 수 있으며,
+                        <br>
+                        삭제된 정보는 복구할 수 없습니다.
+                    </p>
+
+                    <div class="withdraw-warning">
+                        <strong>회원 탈퇴 전 확인해주세요.</strong>
+
+                        <ul>
+                            <li>작성한 여행 후기 및 게시물이 삭제될 수 있습니다.</li>
+                            <li>찜한 여행지 등의 개인 정보가 삭제될 수 있습니다.</li>
+                            <li>탈퇴 후에는 계정을 복구할 수 없습니다.</li>
+                        </ul>
+                    </div>
+
+                    <button type="button"
+                            class="withdraw-btn"
+                            onclick="confirmWithdraw()">
+                        회원 탈퇴
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-logo">
+                △ 어디갈까?
+            </div>
+
+            <div class="footer-menu">
+
+                <a href="#">
+                    이용약관
+                </a>
+
+                <a href="#">
+                    개인정보처리방침
+                </a>
+
+                <a href="#">
+                    고객센터
+                </a>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 어디갈까? All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+
+</body>
+</html>

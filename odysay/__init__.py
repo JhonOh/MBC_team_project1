@@ -20,6 +20,8 @@ migrate = Migrate()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
+    from .views import place_views
+    app.register_blueprint(place_views.bp)
 
     # ORM 초기 설정
     db.init_app(app)
@@ -39,5 +41,6 @@ def create_app():
     # # 필터 등록
     # from .filter import format_datetime
     # app.jinja_env.filters['datetime'] = format_datetime
+
 
     return app
