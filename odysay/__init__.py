@@ -5,6 +5,27 @@ from sqlalchemy import MetaData
 
 import config
 
+def create_app():
+    app = Flask(__name__)
+    from .views import place_views
+    app.register_blueprint(place_views.bp)
+
+    @app.route('/')
+    def index():
+        return "flask team project!!"
+
+    @app.route('/ojh')
+    def ojh():
+        return render_template('ojh.html')
+
+    @app.route('/sjw')
+    def sjw():
+        return render_template('shin2ryu/sjw.html')
+
+    @app.route('/map.html')
+    def map():
+        return render_template('map.html')
+
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
@@ -39,5 +60,4 @@ def create_app():
     # # 필터 등록
     # from .filter import format_datetime
     # app.jinja_env.filters['datetime'] = format_datetime
-
     return app
