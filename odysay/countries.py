@@ -1,7 +1,3 @@
-from flask import Blueprint, render_template
-
-bp = Blueprint('place', __name__)
-
 countries = [
     '가나',
     '가봉',
@@ -199,10 +195,3 @@ countries = [
     '필리핀',
     '헝가리'
 ]
-
-@bp.route('/upload')
-def upload():
-    return render_template(
-        'upload.html',
-        countries=countries
-    )

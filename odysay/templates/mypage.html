@@ -6,8 +6,7 @@
 
     <title>마이페이지</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/ojh.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 </head>
 
 <body>
@@ -82,7 +81,7 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('homepage.mypage_settings') }}">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>
                     </a>
@@ -328,7 +327,7 @@
 </div>
 
 
-<script src="{{ url_for('static', filename='js/ojh.js') }}"></script>
+<script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
 
 </body>
 </html>

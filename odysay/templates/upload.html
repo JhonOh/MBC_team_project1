@@ -1,9 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어딧세이 - 여행지 등록</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
+</head>
+<body>
 
-{# 나라 선택 #}
-<select name="country">
-    <option value="">국가를 선택하세요</option>
+<main class="page-container">
 
-    {% for country in countries %}
-        <option value="{{ country }}">{{ country }}</option>
-    {% endfor %}
-</select>
+    <!-- left menu -->
+    <aside class="left-menu">
+        <p class="side-message">
+            여행은 목적지가 아닌,<br>
+            새로운 나를 만나는<br>
+            여정입니다.
+        </p>
+
+        <div class="menu-list">
+            <a class="selected" href="#">여행지 등록</a>
+            <a href="#">등록 가이드</a>
+            <a href="#">내가 등록한 여행지</a>
+        </div>
+
+        <div class="side-bottom">
+            <strong>어딧세이</strong>
+            <small>ODYSAY</small>
+        </div>
+    </aside>
+
+    <!-- FORM -->
+    <section class="form-container">
+        <div class="form-title">
+            <h2>여행지 등록하기</h2>
+            <p>
+                당신이 다녀온 특별한 여행지를 공유해주세요.<br>
+                당신의 경험이 누군가에게는 소중한 여행의 시작이 됩니다.
+            </p>
+        </div>
+
+        <form id="travelForm" action="{{ url_for('homepage.upload') }}" method="POST" enctype="multipart/form-data">
+            <section class="form-section">
+                <h3>기본 정보</h3>
+
+                <div class="two-column">
+                    <!-- 나라 선택 -->
+                    <div class="form-group">
+                        <label for="country">나라 선택 <span>*</span></label>
+                        <select name="country" id="country" class="form-select" required>
+                            <option value="">나라를 선택해주세요.</option>
+                        </select>
+                    </div>
+
+                    <!-- 지역 -->
+                    <div class="form-group">
+                        <label for="region">지역 <span>*</span></label>
+                        <input type="text" id="region" name="region" class="form-control" placeholder="지역을 입력해주세요." required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="place">세부 여행지명 <span>*</span></label>
+                    <input type="text" id="place" name="place" class="form-control" placeholder="ex) 에펠탑, 후쿠오카 타워, 산토리니 이아 마을" required>
+                </div>
+
+                <!-- 카테고리 -->
+                <div class="form-group">
+                    <label>여행지 카테고리 <span>*</span></label>
+                    <div class="category-list">
+                        <input type="checkbox" class="btn-check" name="category" id="tour" value="관광지" checked>
+                        <label class="category-button" for="tour">✈ 관광지</label>
+
+                        <input type="checkbox" class="btn-check" name="category" id="food" value="맛집">
+                        <label class="category-button" for="food">🍴 맛집</label>
+
+                        <input type="checkbox" class="btn-check" name="category" id="hotel" value="숙소">
+                        <label class="category-button" for="hotel">🛏 숙소</label>
+
+                        <input type="checkbox" class="btn-check" name="category" id="activity" value="체험">
+                        <label class="category-button" for="activity">📷 체험 · 액티비티</label>
+
+                        <label class="category-button" for="etc">··· 기타</label>
+
+                        <div id="etc-input-box" style="display: none;">
+                            <input type="text" id="etc-category" name="etc_category" placeholder="카테고리를 직접 입력해주세요.">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 여행지 소개 -->
+            <section class="form-section">
+                <h3>여행지 소개</h3>
+                <div class="form-group">
+                    <label for="intro">한줄 소개 <span>*</span></label>
+                    <input type="text" id="intro" name="intro" class="form-control" maxlength="100" placeholder="이 여행지를 한 문장으로 소개해주세요." required>
+                    <div class="counter"><span id="introCount">0</span>/100</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reason">등록하는 이유 <span>*</span></label>
+                    <textarea name="reason" id="reason" class="form-control" maxlength="500" placeholder="이 여행지를 추천하는 이유는 무엇인가요?" required></textarea>
+                    <div class="counter"><span id="reasonCount">0</span>/500</div>
+                </div>
+            </section>
+
+            <!-- 주변 정보 -->
+            <section class="form-section">
+                <h3>주변 정보 <small>(선택)</small></h3>
+                <div class="two-column">
+                    <div class="form-group">
+                        <label for="restaurant">주변 맛집</label>
+                        <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nearby">주변 볼거리 / 즐길거리</label>
+                        <textarea id="nearby" name="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 사진 첨부 -->
+            <section class="form-section">
+                <h3>📷 사진 등록 <small>(선택)</small></h3>
+                <p class="photo-info">여행지의 매력을 보여주는 사진을 추가해주세요. (최대 10장)</p>
+
+                <label class="upload-box" for="photos">
+                    <span class="upload-icon">▧</span>
+                    <span>사진을 클릭하여 업로드하세요.<br><small>JPG, PNG, WEBP 형식을 지원합니다.</small></span>
+                </label>
+
+                <!-- name="photos" 지정 필수 -->
+                <input type="file" id="photos" name="photos" accept="image/*" multiple hidden>
+
+                <div id="previewContainer" class="preview-container"></div>
+            </section>
+
+            <!-- 하단 버튼 -->
+            <div class="bottom-area">
+                <label class="agree">
+                    <input type="checkbox" id="agree"> 등록 가이드라인을 확인했으며, 이에 동의합니다.
+                </label>
+                <div class="button-area">
+                    <button type="button" class="cancel-button">취소하기</button>
+                    <button type="submit" class="submit-button">등록하기</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <!-- right info -->
+    <aside class="right-info">
+        <h4>💡 좋은 여행지가 될 수 있어요!</h4>
+        <p>✓ 직접 경험한 내용을 작성해주세요.</p>
+        <p>✓ 다른 여행자에게 도움이 되는 정보를 공유해주세요.</p>
+        <p>✓ 사진과 함께 등록하면 더 좋아요!</p>
+        <p>✓ 광고성 내용은 제외해주세요.</p>
+        <div class="right-message">당신의 이야기가<br>누군가의 특별한 여행이 됩니다.</div>
+    </aside>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+</body>
+</html>
