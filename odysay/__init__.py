@@ -1,16 +1,11 @@
 from flask import Flask
-
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 
-
 import config
 
-db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
-migrate = Migrate()
-
-
+# 1. naming_convention 딕셔너리를 먼저 정의
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
@@ -19,8 +14,10 @@ naming_convention = {
     'pk': 'pk_%(table_name)s',
 }
 
+# 2. 정의된 변수를 넘겨서 SQLAlchemy 및 Migrate 인스턴스 생성 (중복 제거)
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
+
 
 # 애플리케이션 팩토리
 def create_app():
@@ -34,7 +31,6 @@ def create_app():
     else:
         migrate.init_app(app, db)
 
-
     # 블루프린트 등록
     from .views import main_views, mapmain_views, sub_views
     app.register_blueprint(main_views.bp)
@@ -42,7 +38,4 @@ def create_app():
     app.register_blueprint(sub_views.bp)
     # app.register_blueprint(auth_views.bp)
 
-    # # 필터 등록
-    # from .filter import format_datetime
-    # app.jinja_env.filters['datetime'] = format_datetime
     return app
