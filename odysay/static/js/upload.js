@@ -1,8 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    // =========================
+    // 국가 선택
+    const countrySelect = document.querySelector('#country');
+
+    countries.forEach(function(country) {
+        const option = document.createElement('option');
+
+        option.value = country;
+        option.textContent = country;
+
+        countrySelect.appendChild(option);
+    });
+
+
+    // 기타 카테고리
+    const etcCheckbox = document.querySelector('#etc');
+    const etcInputBox = document.querySelector('#etc-input-box');
+
+    etcCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            etcInputBox.style.display = 'block';
+        } else {
+            etcInputBox.style.display = 'none';
+        }
+    });
+
     // 글자 수
-    // =========================
 
     const intro = document.getElementById("intro");
     const introCount = document.getElementById("introCount");
@@ -20,11 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
         reasonCount.textContent = reason.value.length;
     });
 
-
-
-    // =========================
     // 사진
-    // =========================
 
     const photos = document.getElementById("photos");
 
@@ -103,11 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
-
-
-    // =========================
     // 등록 버튼
-    // =========================
 
     const travelForm =
         document.getElementById("travelForm");
