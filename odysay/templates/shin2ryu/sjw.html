@@ -6,9 +6,15 @@
 
     <title>어딧세이 | 여행의 시작</title>
 
-    <link rel="stylesheet" href="css/reset.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/reset.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/common.css') }}">
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
@@ -34,7 +40,7 @@
 
         <div class="header-util">
             <button type="button" class="search-button">
-                🔍
+
             </button>
 
             <button type="button" class="logout-button">
@@ -175,7 +181,8 @@
                 <a href="#" class="recommend-card">
 
                     <div class="recommend-image">
-                        <img src="images/recommend/rome.png" alt="로마">
+                        <img src="{{ url_for('static', filename='images/recommend/rome.png') }}"
+                            alt="로마">
                     </div>
 
                     <div class="recommend-info">
@@ -191,7 +198,7 @@
                 <a href="#" class="recommend-card">
 
                     <div class="recommend-image">
-                        <img src="images/recommend/danang.png" alt="다낭">
+                        <img src="{{ url_for('static', filename='images/recommend/danang.png') }}">
                     </div>
 
                     <div class="recommend-info">
@@ -207,7 +214,7 @@
                 <a href="#" class="recommend-card">
 
                     <div class="recommend-image">
-                        <img src="images/recommend/jeju.png" alt="제주도">
+                        <img src="{{ url_for('static', filename='images/recommend/jeju.png') }}">
                     </div>
 
                     <div class="recommend-info">
@@ -241,8 +248,8 @@
 
                 <a href="#" class="recent-item">
 
-                    <img src="images/recent/interlaken.png"
-                         alt="스위스 인터라켄">
+                    <img src="{{ url_for('static', filename='images/recent/interlaken.png') }}"
+                    alt="스위스 인터라켄">
 
                     <div class="recent-info">
                         <strong>스위스 인터라켄</strong>
@@ -263,7 +270,7 @@
 
                 <a href="#" class="recent-item">
 
-                    <img src="images/recent/banff.png"
+                    <img src="{{ url_for('static', filename='images/recent/banff.png') }}"
                          alt="캐나다 밴프 국립공원">
 
                     <div class="recent-info">
@@ -285,7 +292,7 @@
 
                 <a href="#" class="recent-item">
 
-                    <img src="images/recent/singapore.png"
+                    <img src="{{ url_for('static', filename='images/recent/singapore.png') }}"
                          alt="싱가포르 마리나 베이">
 
                     <div class="recent-info">
@@ -328,8 +335,8 @@
                 <a href="#" class="community-item">
 
                     <div class="community-thumb">
-                        <img src="images/community/europe.png"
-                             alt="유럽여행">
+                        <img src="{{ url_for('static', filename='images/community/europe.png') }}"
+                            alt="유럽여행">
                     </div>
 
                     <div class="community-info">
@@ -358,8 +365,8 @@
                 <a href="#" class="community-item">
 
                     <div class="community-thumb">
-                        <img src="images/community/santorini.png"
-                             alt="산토리니 여행">
+                        <img src="{{ url_for('static', filename='images/community/santorini.png') }}"
+                            alt="산토리니 여행">
                     </div>
 
                     <div class="community-info">
@@ -388,8 +395,8 @@
                 <a href="#" class="community-item">
 
                     <div class="community-thumb">
-                        <img src="images/community/checklist.png"
-                             alt="여행 준비물">
+                        <img src="{{ url_for('static', filename='images/community/checklist.png') }}"
+                            alt="여행 준비물">
                     </div>
 
                     <div class="community-info">
@@ -482,7 +489,7 @@
 </main>
 
 
-<script src="js/main.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>js/main.js"></script>
 
 </body>
 </html>

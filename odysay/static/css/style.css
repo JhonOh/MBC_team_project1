@@ -46,6 +46,65 @@
     letter-spacing: 4px;
 }
 
+/* =========================
+   헤더 검색 버튼
+========================= */
+
+.search-button {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+/* 돋보기 원 */
+.search-button::before {
+    content: "";
+
+    position: absolute;
+
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid #10233f;
+    border-radius: 50%;
+
+    top: 9px;
+    left: 8px;
+
+    box-sizing: border-box;
+}
+
+/* 돋보기 손잡이 */
+.search-button::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 2px;
+
+    background: #10233f;
+    border-radius: 2px;
+
+    top: 23px;
+    left: 21px;
+
+    transform: rotate(45deg);
+    transform-origin: left center;
+}
+
+/* 마우스를 올렸을 때 */
+.search-button:hover {
+    opacity: 0.6;
+}
+
 
 /* ==============================
    NAVIGATION
@@ -80,8 +139,42 @@
     gap: 20px;
 }
 
-.search-button {
-    font-size: 20px;
+.search-icon {
+    position: relative;
+    display: inline-block;
+
+    width: 19px;
+    height: 19px;
+
+    border: 1.8px solid #12233d;
+    border-radius: 50%;
+
+    box-sizing: border-box;
+    cursor: pointer;
+
+    transition: 0.2s ease;
+}
+
+.search-icon::after {
+    content: "";
+
+    position: absolute;
+
+    width: 7px;
+    height: 1.8px;
+
+    background: #12233d;
+    border-radius: 10px;
+
+    right: -5px;
+    bottom: -2px;
+
+    transform: rotate(45deg);
+}
+
+.search-icon:hover {
+    opacity: 0.55;
+    transform: scale(1.05);
 }
 
 .logout-button {
@@ -318,6 +411,8 @@
     color: white;
 }
 
+
+
 /* ========================================
    실시간 핫플 여행지 카드
 ======================================== */
@@ -416,6 +511,27 @@
     backdrop-filter: blur(5px);
 
     z-index: 2;
+}
+
+/* 1위 - 금 */
+.hot-rank.rank-1 {
+    background: linear-gradient(135deg, #FFD86A, #E6A72D);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(230, 167, 45, 0.35);
+}
+
+/* 2위 - 은 */
+.hot-rank.rank-2 {
+    background: linear-gradient(135deg, #DDE3EA, #929CA8);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(120, 130, 140, 0.25);
+}
+
+/* 3위 - 동 */
+.hot-rank.rank-3 {
+    background: linear-gradient(135deg, #D79564, #A85F36);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(168, 95, 54, 0.30);
 }
 
 
