@@ -1,4 +1,4 @@
-countries = [
+const countries = [
     '가나',
     '가봉',
     '가이아나',
