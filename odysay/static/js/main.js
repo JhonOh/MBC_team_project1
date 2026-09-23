@@ -12,35 +12,35 @@ const hotPlaceData = {
             name: "후지산",
             location: "야마나시현",
             score: "9,842",
-            image: "images/hot/fuji.png"
+            image: "/static/images/hot/fuji.png",
         },
         {
             country: "🇹🇭 태국",
             name: "푸껫",
             location: "푸껫주",
             score: "8,736",
-            image: "images/hot/phuket.png"
+            image: "/static/images/hot/phuket.png"
         },
         {
             country: "🇫🇷 프랑스",
             name: "에펠탑",
             location: "파리",
             score: "7,521",
-            image: "images/hot/paris.png"
+            image: "/static/images/hot/paris.png"
         },
         {
             country: "🇬🇷 그리스",
             name: "산토리니",
             location: "티라",
             score: "6,904",
-            image: "images/hot/santorini.png"
+            image: "/static/images/hot/santorini.png"
         },
         {
             country: "🇺🇸 미국",
             name: "뉴욕 타임스퀘어",
             location: "뉴욕",
             score: "6,321",
-            image: "images/hot/newyork.png"
+            image: "/static/images/hot/newyork.png"
         }
     ],
 
@@ -52,35 +52,35 @@ const hotPlaceData = {
             name: "에펠탑",
             location: "파리",
             score: "48,215",
-            image: "images/hot/paris.jpg"
+            image: "/static/images/hot/paris.png",
         },
         {
             country: "🇯🇵 일본",
             name: "후지산",
             location: "야마나시현",
             score: "45,782",
-            image: "images/hot/fuji.jpg"
+            image: "/static/images/hot/fuji.png",
         },
         {
             country: "🇺🇸 미국",
             name: "뉴욕 타임스퀘어",
             location: "뉴욕",
             score: "42,104",
-            image: "images/hot/newyork.jpg"
+            image: "/static/images/hot/newyork.png"
         },
         {
             country: "🇹🇭 태국",
             name: "푸껫",
             location: "푸껫주",
             score: "39,845",
-            image: "images/hot/phuket.jpg"
+            image: "/static/images/hot/phuket.png",
         },
         {
             country: "🇬🇷 그리스",
             name: "산토리니",
             location: "티라",
             score: "36,521",
-            image: "images/hot/santorini.jpg"
+            image: "/static/images/hot/santorini.png"
         }
     ],
 
@@ -92,35 +92,35 @@ const hotPlaceData = {
             name: "산토리니",
             location: "티라",
             score: "184,210",
-            image: "images/hot/santorini.jpg"
+            image: "/static/images/hot/santorini.png"
         },
         {
             country: "🇫🇷 프랑스",
             name: "에펠탑",
             location: "파리",
             score: "172,845",
-            image: "images/hot/paris.jpg"
+            image: "/static/images/hot/paris.png"
         },
         {
             country: "🇯🇵 일본",
             name: "후지산",
             location: "야마나시현",
             score: "165,742",
-            image: "images/hot/fuji.jpg"
+            image: "/static/images/hot/fuji.png",
         },
         {
             country: "🇺🇸 미국",
             name: "뉴욕 타임스퀘어",
             location: "뉴욕",
             score: "153,294",
-            image: "images/hot/newyork.jpg"
+            image: "/static/images/hot/newyork.png"
         },
         {
             country: "🇹🇭 태국",
             name: "푸껫",
             location: "푸껫주",
             score: "148,932",
-            image: "images/hot/phuket.jpg"
+            image: "/static/images/hot/phuket.png"
         }
     ]
 };
@@ -151,8 +151,8 @@ function renderHotPlaces(period) {
         card.innerHTML = `
             <div class="hot-card-image">
 
-                <span class="hot-rank">
-                    ${index + 1}
+                <span class="hot-rank rank-${index + 1}">
+                ${index + 1}
                 </span>
 
                 <img
