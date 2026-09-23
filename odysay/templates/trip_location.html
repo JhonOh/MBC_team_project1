@@ -38,7 +38,6 @@
             {% if photos and photos|length > 0 %}
             <button class="slider-arrow left-arrow">&lt;</button>
             <div class="slider-view">
-                <!-- static/uploads/ 에 저장된 파일명 표시 -->
                 <img id="mainImage" src="{{ url_for('static', filename='uploads/' + photos[0]) }}"
                      alt="{{ place.place }}" style="width: 100%; height: 250px; object-fit: cover; border-radius: 8px;">
             </div>
@@ -60,6 +59,14 @@
         <div class="info-side">
             <h1 class="title">{{ place.place }}</h1>
             <p class="subtitle">{{ place.country }} / {{ place.region }}</p>
+
+            <!-- 사용자 로컬 시간 변환용 데이터 전달 -->
+            <p class="created-time-box" style="font-size: 0.85rem; color: #888; margin-top: 4px;">
+                작성일: <span class="created-time" data-utc="{{ place.created_at.isoformat() if place.created_at else '' }}">
+                    {{ place.created_at.strftime('%Y-%m-%d %H:%M') if place.created_at else '' }}
+                </span>
+            </p>
+
             <div class="likes-count">❤️ {{ place.likes }}</div>
 
             <div class="action-buttons">
@@ -170,7 +177,6 @@
 </footer>
 
 <script>
-    // 파이썬 리스트를 자바스크립트 배열로 안전하게 전달
     const photoList = {{ photos | tojson }};
     const uploadPath = "{{ url_for('static', filename='uploads/') }}";
 </script>
