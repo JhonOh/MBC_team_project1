@@ -1,0 +1,44 @@
+<form method="POST">
+{{ form.csrf_token }}
+
+    {{ form.username.label }}
+    {{ form.username }}
+    <!-- 유저네임 에러처리 -->
+    {% for error in form.username.errors %}
+    <div>
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.password1.label }}
+    {{ form.password1 }}
+    <!-- 비밀번호 에러처리 -->
+    {% for error in form.password1.errors %}
+    <div>
+        {{ error }}
+    </div>
+    {% endfor %}
+
+    {{ form.password2.label }}
+    {{ form.password2 }}
+    <!-- 비밀번호 에러처리 -->
+    {% for error in form.password2.errors %}
+    <div>
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.email.label }}
+    {{ form.email }}
+    <!-- 이메일 에러처리 -->
+    {% for error in form.email.errors %}
+    <div>
+        {{ error }}
+    </div>
+    {% endfor %}
+
+
+    {{ form.submit }}
+
+</form>
