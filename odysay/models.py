@@ -1,12 +1,17 @@
 from datetime import datetime
-from . import db  # odysay/__init__.py의 db 객체 참조
+from . import db
+
 
 class User(db.Model):
-    # 회원가입 유저정보
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+
+    # 회원가입 추가 정보
+    nickname = db.Column(db.String(20), unique=True, nullable=True)
+    birth_date = db.Column(db.Date, nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
 
 
 class TravelPlace(db.Model):
@@ -24,19 +29,19 @@ class TravelPlace(db.Model):
     intro = db.Column(db.String(100), nullable=False)
     reason = db.Column(db.Text, nullable=False)
 
-    # 주변 정보 (선택)
+    # 주변 정보
     restaurant = db.Column(db.Text, nullable=True)
     nearby = db.Column(db.Text, nullable=True)
 
-    # 사진 (선택)
+    # 사진
     photos = db.Column(db.Text, nullable=True)
 
-    # 좋아요 수 (기본값 0)
+    # 좋아요 수
     likes = db.Column(db.Integer, default=0)
 
-    # 생성 일시 (서버 시스템 로컬 시간으로 저장)
+    # 생성 일시
     created_at = db.Column(db.DateTime, default=datetime.now)
 
-    # 👈 아래 두 줄을 새로 추가합니다.
+    # 지도 좌표
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
