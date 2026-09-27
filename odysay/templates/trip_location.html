@@ -70,94 +70,499 @@
             <div class="likes-count">❤️ {{ place.likes }}</div>
 
             <div class="action-buttons">
-                <button class="btn-action btn-jjim">♥ 찜하기</button>
-                <button class="btn-action btn-share">┚ 공유하기</button>
+
+            <!-- 찜하기 -->
+            <button type="button" class="btn-action btn-jjim">
+                ♥ 찜하기
+            </button>
+
+
+            <!-- 공유하기 -->
+            <div class="share-wrapper">
+
+                <button type="button" class="btn-action btn-share">
+                    ↗ 공유하기
+                </button>
+
+
+                <!-- 공유 팝업 -->
+                <div class="share-popup" id="sharePopup">
+
+                    <div class="share-popup-title">
+                        공유하기
+                    </div>
+
+
+             <!-- SNS 공유 -->
+            <div class="share-sns-list">
+
+                <!-- 카카오톡 -->
+                <button type="button"
+                        class="share-sns-button"
+                        id="kakaoShareButton">
+
+                    <div class="share-icon kakao-icon">
+                        <span>💬</span>
+                    </div>
+
+                    <span class="share-sns-name">카카오톡</span>
+
+                </button>
+
+
+                <!-- 인스타그램 -->
+                <button type="button"
+                        class="share-sns-button"
+                        id="instagramShareButton">
+
+                    <div class="share-icon instagram-icon">
+                        <span>◎</span>
+                    </div>
+
+                    <span class="share-sns-name">인스타</span>
+
+                </button>
+
+
+                <!-- X -->
+                <button type="button"
+                        class="share-sns-button"
+                        id="xShareButton">
+
+                    <div class="share-icon x-icon">
+                        <span>𝕏</span>
+                    </div>
+
+                    <span class="share-sns-name">X</span>
+
+                </button>
+
+
+                <!-- 페이스북 -->
+                <button type="button"
+                        class="share-sns-button"
+                        id="facebookShareButton">
+
+                    <div class="share-icon facebook-icon">
+                        <span>f</span>
+                    </div>
+
+                    <span class="share-sns-name">페이스북</span>
+
+                </button>
+
             </div>
+
+
+                    <!-- 링크 -->
+                    <div class="share-link-title">
+                        링크
+                    </div>
+
+                    <div class="share-link-box">
+
+                        <input type="text"
+                               id="shareLink"
+                               readonly>
+
+                        <button type="button"
+                                id="copyLinkButton">
+                            복사
+                        </button>
+
+                    </div>
+
+
+                    <!-- 복사 완료 문구 -->
+                    <p class="copy-message"
+                       id="copyMessage">
+                        링크가 복사되었습니다.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
         </div>
     </section>
 
-    <!-- 탭 메뉴 상태 바 -->
+    <!-- 탭 메뉴 -->
     <nav class="tab-bar">
-        <button class="tab-item active" onclick="showTab('intro-tab')">소개</button>
-        <button class="tab-item" onclick="showTab('restaurant-tab')">맛집</button>
-        <button class="tab-item" onclick="showTab('nearby-tab')">볼거리</button>
-        <button class="tab-item">리뷰 (0)</button>
+
+        <button type="button"
+                class="tab-item active"
+                data-tab="all-tab">
+            전체
+        </button>
+
+        <button type="button"
+                class="tab-item"
+                data-tab="intro-tab">
+            소개
+        </button>
+
+        <button type="button"
+                class="tab-item"
+                data-tab="restaurant-tab">
+            맛집
+        </button>
+
+        <button type="button"
+                class="tab-item"
+                data-tab="nearby-tab">
+            볼거리
+        </button>
+
+        <button type="button"
+                class="tab-item"
+                data-tab="review-tab">
+            리뷰 (<span id="reviewCount">0</span>)
+        </button>
+
     </nav>
 
-    <!-- 세부 콘텐츠 내용 -->
+
+    <!-- 세부 콘텐츠 -->
     <section class="content-section">
-        <!-- 기본 정보 -->
-        <div class="info-group">
-            <h2 class="section-title">📍 기본 정보</h2>
-            <table class="info-table">
-                <tr>
-                    <th>위치</th>
-                    <td>{{ place.country }} {{ place.region }} {{ place.place }}</td>
-                </tr>
-                <tr>
-                    <th>카테고리</th>
-                    <td>{{ place.category }}</td>
-                </tr>
-                <tr>
-                    <th>한줄 소개</th>
-                    <td>{{ place.intro }}</td>
-                </tr>
-            </table>
-        </div>
 
-        <!-- 여행지 소개 / 추천 이유 -->
-        <div class="info-group tab-content" id="intro-tab">
-            <h2 class="section-title">📖 등록하는 이유 & 소개</h2>
-            <p class="intro-text">
-                {{ place.reason }}
-            </p>
-        </div>
+        <!-- ================= 전체 ================= -->
+        <div class="tab-content active" id="all-tab">
 
-        <!-- 주변 맛집 -->
-        {% if place.restaurant %}
-        <div class="info-group tab-content" id="restaurant-tab">
-            <h2 class="section-title">🍴 주변 맛집 정보</h2>
-            <p class="intro-text">
-                {{ place.restaurant }}
-            </p>
-        </div>
-        {% endif %}
+            <!-- 기본 정보 -->
+            <div class="info-group">
 
-        <!-- 주변 볼거리 -->
-        {% if place.nearby %}
-        <div class="info-group tab-content" id="nearby-tab">
-            <h2 class="section-title">📷 주변 볼거리 / 즐길거리</h2>
-            <p class="intro-text">
-                {{ place.nearby }}
-            </p>
-        </div>
-        {% endif %}
+                <h2 class="section-title">
+                    📍 기본 정보
+                </h2>
 
-        <!-- 관련 이미지 -->
-        {% if photos %}
-        <div class="info-group">
-            <h2 class="section-title">관련 이미지</h2>
-            <div class="related-images">
-                {% for photo in photos %}
-                <div class="thumb-image" style="overflow: hidden;">
-                    <img src="{{ url_for('static', filename='uploads/' + photo) }}"
-                         style="width: 100%; height: 100%; object-fit: cover;">
+                <table class="info-table">
+
+                    <tr>
+                        <th>위치</th>
+                        <td>
+                            {{ place.country }}
+                            {{ place.region }}
+                            {{ place.place }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>카테고리</th>
+                        <td>{{ place.category }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>한줄 소개</th>
+                        <td>{{ place.intro }}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <!-- 등록 이유 -->
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    📖 등록하는 이유 & 소개
+                </h2>
+
+                <p class="intro-text">
+                    {{ place.reason }}
+                </p>
+
+            </div>
+
+
+            <!-- 맛집 -->
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    🍴 주변 맛집 정보
+                </h2>
+
+                {% if place.restaurant %}
+
+                    <p class="intro-text">
+                        {{ place.restaurant }}
+                    </p>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        등록된 주변 맛집 정보가 없습니다.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- 볼거리 -->
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    📷 주변 볼거리 / 즐길거리
+                </h2>
+
+                {% if place.nearby %}
+
+                    <p class="intro-text">
+                        {{ place.nearby }}
+                    </p>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        등록된 주변 볼거리 정보가 없습니다.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+            <!-- 여행지 사진 -->
+            {% if photos %}
+
+            <div class="info-group related-image-section">
+
+                <h2 class="section-title">
+                    📷 여행지 사진
+                </h2>
+
+                <div class="related-images">
+
+                    {% for photo in photos %}
+
+                    <div class="thumb-image">
+
+                        <img
+                            src="{{ url_for('static', filename='uploads/' + photo) }}"
+                            alt="{{ place.place }}"
+                            class="gallery-image"
+                            data-index="{{ loop.index0 }}">
+
+                    </div>
+
+                    {% endfor %}
+
                 </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
 
-        <!-- 피드백 (이 여행지는 어때요?) -->
-        <div class="feedback-section">
-            <h3 class="feedback-title">이 여행지는 어때요?</h3>
-            <div class="feedback-buttons">
-                <button class="btn-feedback btn-like" id="likeBtn">👍 좋아요 <span>{{ place.likes }}</span></button>
-                <button class="btn-feedback btn-dislike" id="dislikeBtn">👎 싫어요 <span>0</span></button>
             </div>
+
+            {% endif %}
+
         </div>
+
+
+        <!-- ================= 소개 ================= -->
+        <div class="tab-content" id="intro-tab">
+
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    📍 기본 정보
+                </h2>
+
+                <table class="info-table">
+
+                    <tr>
+                        <th>위치</th>
+                        <td>
+                            {{ place.country }}
+                            {{ place.region }}
+                            {{ place.place }}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th>카테고리</th>
+                        <td>{{ place.category }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>한줄 소개</th>
+                        <td>{{ place.intro }}</td>
+                    </tr>
+
+                </table>
+
+            </div>
+
+
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    📖 등록하는 이유 & 소개
+                </h2>
+
+                <p class="intro-text">
+                    {{ place.reason }}
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= 맛집 ================= -->
+        <div class="tab-content" id="restaurant-tab">
+
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    🍴 주변 맛집 정보
+                </h2>
+
+                {% if place.restaurant %}
+
+                    <p class="intro-text">
+                        {{ place.restaurant }}
+                    </p>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        등록된 주변 맛집 정보가 없습니다.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= 볼거리 ================= -->
+        <div class="tab-content" id="nearby-tab">
+
+            <div class="info-group">
+
+                <h2 class="section-title">
+                    📷 주변 볼거리 / 즐길거리
+                </h2>
+
+                {% if place.nearby %}
+
+                    <p class="intro-text">
+                        {{ place.nearby }}
+                    </p>
+
+                {% else %}
+
+                    <p class="empty-message">
+                        등록된 주변 볼거리 정보가 없습니다.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= 리뷰 ================= -->
+        <div class="tab-content" id="review-tab">
+
+            <div class="review-section">
+
+                <h2 class="section-title">
+                    💬 리뷰
+                </h2>
+
+                <!-- 리뷰 작성 -->
+                <div class="review-write">
+
+                    <textarea
+                        id="reviewInput"
+                        maxlength="300"
+                        placeholder="이 여행지에 대한 리뷰를 남겨주세요."></textarea>
+
+                    <div class="review-write-bottom">
+
+                        <span class="review-counter">
+                            <span id="reviewTextCount">0</span>/300
+                        </span>
+
+                        <button type="button"
+                                id="reviewSubmit"
+                                class="review-submit">
+                            등록
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 등록된 리뷰가 들어갈 곳 -->
+                <div id="reviewList"
+                     class="review-list">
+
+                    <p id="noReviewMessage"
+                       class="empty-message">
+                        아직 등록된 리뷰가 없습니다.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+
     </section>
 </main>
+
+<!-- ================= 이미지 크게보기 팝업 ================= -->
+
+<div class="image-modal" id="imageModal">
+
+    <!-- 닫기 버튼 -->
+    <button
+        type="button"
+        class="image-modal-close"
+        id="imageModalClose">
+        ×
+    </button>
+
+    <!-- 이전 사진 -->
+    <button
+        type="button"
+        class="image-modal-arrow image-modal-prev"
+        id="imageModalPrev">
+        &lt;
+    </button>
+
+    <!-- 큰 이미지 영역 -->
+    <div class="image-modal-content">
+
+        <img
+            src=""
+            alt="여행지 사진 크게보기"
+            id="imageModalPhoto">
+
+        <!-- 아래 작은 이미지 -->
+        <div
+            class="image-modal-thumbnails"
+            id="imageModalThumbnails">
+        </div>
+
+    </div>
+
+    <!-- 다음 사진 -->
+    <button
+        type="button"
+        class="image-modal-arrow image-modal-next"
+        id="imageModalNext">
+        &gt;
+    </button>
+
+</div>
 
 <!-- 푸터 영역 -->
 <footer class="footer">
