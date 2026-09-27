@@ -32,10 +32,10 @@
         </a>
 
         <nav class="gnb">
-            <a href="#">여행지</a>
+            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
             <a href="#">커뮤니티</a>
-            <a href="#">여행지 등록</a>
-            <a href="#">마이페이지</a>
+            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
+            <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
         </nav>
 
         <div class="header-util">
