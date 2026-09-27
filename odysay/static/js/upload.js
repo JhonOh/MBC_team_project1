@@ -229,30 +229,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const formData = new FormData(travelForm);
 
-            fetch(travelForm.action, {
-                method: "POST",
-                body: formData
-            })
-            .then(function (response) {
-
-                if (response.redirected) {
-
-                    window.location.href = response.url;
-
-                } else {
-
-                    return response.text().then(function (html) {
-                        document.open();
-                        document.write(html);
-                        document.close();
-                    });
-                }
-            })
-            .catch(function (error) {
-
-                console.error("Error:", error);
-                alert("서버 전송 중 오류가 발생했습니다.");
-            });
+            const submitButton = travelForm.querySelector('[type="submit"]');
+            submitButton.disabled = true;
+            fetch(travelForm.action, { method: 'POST', body: formData })
+                .then(async response => {
+                    if (!response.ok) {
+                        let data = {};
+                        try { data = await response.json(); } catch (_) {}
+                        throw new Error(data.error || '등록에 실패했습니다. 입력값을 확인해 주세요.');
+                    }
+                    if (response.redirected) window.location.href = response.url;
+                })
+                .catch(error => alert(error.message))
+                .finally(() => { submitButton.disabled = false; });
         });
     }
 

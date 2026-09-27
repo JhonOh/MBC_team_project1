@@ -12,6 +12,8 @@ from wtforms.validators import (
     EqualTo,
     ValidationError
 )
+from datetime import date
+from wtforms import DateField, SelectField
 
 from odysay.models import User
 
@@ -48,6 +50,39 @@ class UserCreateForm(FlaskForm):
             Email()
         ]
     )
+    nickname = StringField(
+        '닉네임',
+        filters=[lambda value: value.strip() if value else value],
+        validators=[
+            DataRequired(),
+            Length(min=2, max=20)
+        ]
+    )
+
+    birth_date = DateField(
+        '생년월일',
+        validators=[DataRequired()]
+    )
+
+    gender = SelectField(
+        '성별',
+        choices=[
+            ('', '선택하세요'),
+            ('male', '남성'),
+            ('female', '여성'),
+        ],
+        validators=[DataRequired()]
+    )
+
+    def validate_nickname(self, field):
+        user = User.query.filter_by(nickname=field.data).first()
+
+        if user:
+            raise ValidationError('이미 사용 중인 닉네임입니다.')
+
+    def validate_birth_date(self, field):
+        if field.data > date.today():
+            raise ValidationError('생년월일은 오늘 이후일 수 없습니다.')
 
     submit = SubmitField('회원가입')
 

@@ -1,7 +1,12 @@
 .venv/
 .idea/
 __pycache__/
-
-migrations/
+*.pyc
 instance/
 *.db
+*.db-*
+*.bak
+.env
+.env.*
+!.env.example
+odysay/static/uploads/*

@@ -1,4 +1,5 @@
-from flask import Flask, render_template
+from flask import Flask, jsonify
+from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
@@ -14,10 +15,24 @@ naming_convention = {
 
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
+csrf = CSRFProtect()
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
     app.config.from_object(config)
+    if test_config:
+        app.config.update(test_config)
+    if not app.config.get('SECRET_KEY'):
+        raise RuntimeError('먼저 python setup_env.py를 실행해 로컬 .env를 생성하세요.')
+    csrf.init_app(app)
+
+    @app.errorhandler(CSRFError)
+    def csrf_error(error):
+        return jsonify(error='요청이 만료되었습니다. 페이지를 새로고침하고 다시 시도해 주세요.'), 400
+
+    @app.errorhandler(413)
+    def upload_too_large(error):
+        return jsonify(error='전체 업로드 크기는 20MB 이하여야 합니다.'), 413
 
     # ORM 초기 설정
     db.init_app(app)
@@ -28,8 +43,6 @@ def create_app():
 
     # 모델 불러오기 및 DB 테이블 생성[cite: 11]
     from . import models
-    with app.app_context():
-        db.create_all()
 
     # 블루프린트 등록[cite: 11]
     from .views import main_views, mapmain_views, sub_views, auth_views

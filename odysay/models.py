@@ -2,11 +2,15 @@ from datetime import datetime
 from . import db  # odysay/__init__.py의 db 객체 참조
 
 class User(db.Model):
-    # 회원가입 유저정보
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
+
+    # 새 항목
+    nickname = db.Column(db.String(20), unique=True, nullable=True)
+    birth_date = db.Column(db.Date, nullable=True)
+    gender = db.Column(db.String(10), nullable=True)
 
 
 class TravelPlace(db.Model):
@@ -36,3 +40,6 @@ class TravelPlace(db.Model):
 
     # 생성 일시 (서버 시스템 로컬 시간으로 저장)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    # 지도에 마커로 표시하기 위한 위도 경도롤 따오기위한 매서드
+    latitude = db.Column(db.Float, nullable=True)  # 위도
+    longitude = db.Column(db.Float, nullable=True)  # 경도

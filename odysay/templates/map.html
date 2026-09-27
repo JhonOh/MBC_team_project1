@@ -3,8 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Odysay</title>
 
@@ -12,217 +11,191 @@
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
         rel="stylesheet">
-
-    <!-- Leaflet CSS -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
-
 
 <body class="m-0 overflow-hidden">
 
-<!-- =====================================================
-     세계 지도
-===================================================== -->
-
-<div id="map"
-     class="position-absolute top-0 start-0 w-100 vh-100">
+<!-- 세계 지도 -->
+<div
+    id="map"
+    class="position-absolute top-0 start-0 w-100 vh-100">
 </div>
+<!-- 홈페이지로 이동 -->
+<a
+    href="{{ url_for('homepage.homepage') }}"
+    class="btn btn-dark position-absolute bottom-0 start-50
+           translate-middle-x mb-4 px-4 py-3 rounded-pill shadow"
+    style="z-index: 1000;">
+    여행 둘러보기
+</a>
 
 
-<!-- =====================================================
-     로그인한 사용자
-===================================================== -->
+<!-- 가입 완료 또는 로그인 오류 메시지 -->
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div
+        class="position-absolute top-0 start-0 m-3"
+        style="z-index: 1100; max-width: calc(100% - 2rem);"
+        role="status">
+
+        {% for message in messages %}
+        <div class="alert alert-info shadow-sm mb-2">
+            {{ message }}
+        </div>
+        {% endfor %}
+
+    </div>
+    {% endif %}
+{% endwith %}
+
 
 {% if g.user %}
 
-<div class="position-absolute top-0 end-0 m-4 d-flex align-items-center gap-2"
-     style="z-index: 1000;">
+<!-- 로그인한 사용자 -->
+<div
+    class="position-absolute top-0 end-0 m-4 d-flex align-items-center gap-2"
+    style="z-index: 1000;">
 
     <span class="bg-white rounded-3 shadow-sm px-3 py-2">
         {{ g.user.username }}님
     </span>
 
-    <a href="{{ url_for('auth.logout') }}"
-       class="btn btn-light border shadow-sm">
+    <a
+        href="{{ url_for('auth.logout') }}"
+        class="btn btn-light border shadow-sm">
         로그아웃
     </a>
 
 </div>
 
-
-<!-- =====================================================
-     로그인하지 않은 사용자 → 회원가입 카드
-===================================================== -->
-
 {% else %}
 
-<div class="position-absolute top-50 end-0 translate-middle-y
-            bg-white rounded-4 shadow p-4 me-5 "
-     style="
+<!-- 로그인하지 않은 사용자: 로그인 카드 -->
+<section
+    class="position-absolute top-50 end-0 translate-middle-y
+           bg-white rounded-4 shadow p-4 me-3"
+    style="
         width: 400px;
-        height: 60vh;
-        min-height: 570px;
+        max-width: calc(100% - 2rem);
+        max-height: 90vh;
+        overflow-y: auto;
         z-index: 1000;
-     ">
-
-    <!-- 제목 -->
+    ">
 
     <div class="mb-4">
-
         <h2 class="fw-bold mb-2">
-            회원가입
+            로그인
         </h2>
 
         <p class="text-secondary mb-0">
-            세계를 탐험할 준비를 시작하세요.
+            로그인하고 여행을 시작하세요.
         </p>
-
     </div>
 
+    <!-- 로그인 정보 전송 -->
+    <form
+        method="POST"
+        action="{{ url_for('auth.login') }}">
 
-    <!-- =================================================
-         회원가입 Form
-    ================================================== -->
-
-    <form method="POST"
-          action="{{ url_for('auth.signup') }}">
-
-        <!-- CSRF -->
-        {{ signup_form.csrf_token }}
-
+        {{ login_form.csrf_token }}
 
         <!-- 사용자 이름 -->
-
         <div class="mb-3">
-
-            {{ signup_form.username.label(
+            {{ login_form.username.label(
                 class="form-label"
             ) }}
 
-            {{ signup_form.username(
+            {{ login_form.username(
                 class="form-control",
-                placeholder="사용자 이름"
+                placeholder="사용자 이름",
+                autocomplete="username"
             ) }}
-
         </div>
-
-
-        <!-- 이메일 -->
-
-        <div class="mb-3">
-
-            {{ signup_form.email.label(
-                class="form-label"
-            ) }}
-
-            {{ signup_form.email(
-                class="form-control",
-                placeholder="you@example.com"
-            ) }}
-
-        </div>
-
 
         <!-- 비밀번호 -->
-
-        <div class="mb-3">
-
-            {{ signup_form.password1.label(
-                class="form-label"
-            ) }}
-
-            {{ signup_form.password1(
-                class="form-control",
-                placeholder="비밀번호"
-            ) }}
-
-        </div>
-
-
-        <!-- 비밀번호 확인 -->
-
         <div class="mb-4">
-
-            {{ signup_form.password2.label(
+            {{ login_form.password1.label(
                 class="form-label"
             ) }}
 
-            {{ signup_form.password2(
+            {{ login_form.password1(
                 class="form-control",
-                placeholder="비밀번호 확인"
+                placeholder="비밀번호",
+                autocomplete="current-password"
             ) }}
-
         </div>
 
-
-        <!-- 가입하기 -->
-
-        {{ signup_form.submit(
-            class="btn btn-dark w-100 py-2",
-            value="가입하기"
+        <!-- 로그인 버튼 -->
+        {{ login_form.submit(
+            class="btn btn-dark w-100 py-2"
         ) }}
 
     </form>
 
-
-    <!-- =================================================
-         로그인 링크
-    ================================================== -->
-
+    <!-- 별도 회원가입 페이지로 이동 -->
     <div class="text-center mt-4">
-
         <span class="text-secondary">
-            이미 계정이 있으신가요?
+            아직 계정이 없으신가요?
         </span>
 
-        <a href="{{ url_for('auth.login') }}"
-           class="text-decoration-none fw-semibold ms-1">
-            로그인
+        <a
+            href="{{ url_for('auth.signup') }}"
+            class="text-decoration-none fw-semibold ms-1">
+            회원가입
         </a>
-
     </div>
 
-</div>
+</section>
 
 {% endif %}
 
 
-<!-- =====================================================
-     Leaflet
-===================================================== -->
-
+<!-- 디벨롭 버전의 Leaflet / OpenStreetMap 지도 -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
-
-    // 지도 생성
-    const map = L.map('map').setView(
-        [20, 0],
-        2
-    );
-
-
-    // OpenStreetMap 지도
-    L.tileLayer(
-        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
+    const map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+    async function loadPlaces() {
+        try {
+            const response = await fetch({{ url_for('homepage.get_places') | tojson }});
+            if (!response.ok) throw new Error('여행지를 불러오지 못했습니다.');
+            const places = await response.json();
+            let lastPlace = null;
+            for (const place of places) {
+                if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
+                    Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
+                const popup = document.createElement('div');
+                const title = document.createElement('strong');
+                title.textContent = place.title;
+                const location = document.createElement('p');
+                location.textContent = [place.country, place.region].filter(Boolean).join(' ');
+                const intro = document.createElement('p');
+                intro.textContent = place.intro || '';
+                const link = document.createElement('a');
+                link.href = place.detail_url;
+                link.textContent = '상세보기';
+                popup.append(title, location, intro, link);
+                L.marker([place.lat, place.lng]).addTo(map).bindPopup(popup);
+                lastPlace = place;
+            }
+            if (lastPlace) map.setView([lastPlace.lat, lastPlace.lng], 10);
+        } catch (error) {
+            const message = document.createElement('div');
+            message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';
+            message.style.zIndex = '1100';
+            message.textContent = '여행지 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+            document.body.append(message);
         }
-    ).addTo(map);
-
+    }
+    loadPlaces();
 </script>
 
-
-<!-- =====================================================
-     Bootstrap JS
-===================================================== -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
-</script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
