@@ -1,8 +1,7 @@
-import os
 from uuid import uuid4
 from pathlib import Path
 from odysay.services.geocoding import find_location, valid_coords
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify ,session
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from werkzeug.utils import secure_filename
 from odysay.models import db, TravelPlace
 
@@ -62,7 +61,7 @@ def upload():
 
         selected_location = candidates[selected_index]
 
-        # 카테고리
+        # 카테고리 처리
         categories = request.form.getlist('category')
         etc_cat = request.form.get('etc_category')
         if etc_cat:
@@ -143,18 +142,16 @@ def upload():
     return render_template('upload.html')
 
 
-# 2. 여행지 상세 페이지
+# -----------------------------------------------------------
+# 지도 페이지 라우트 및 API
+# -----------------------------------------------------------
 @bp.route('/trip_location/<int:place_id>')
 def trip_location_detail(place_id):
     place_data = TravelPlace.query.get_or_404(place_id)
-
-    # 이미지 파싱 (공백 및 빈 문자열 제거)
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-
     return render_template('trip_location.html', place=place_data, photos=photos)
 
 
-# 3. 테스트용 라우트
 @bp.route('/trip_location')
 def trip_location():
     place_data = TravelPlace.query.order_by(TravelPlace.id.desc()).first()
