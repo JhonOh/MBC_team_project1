@@ -111,43 +111,6 @@ body {
     opacity: 0.6;
 }
 
-/* hero */
-.hero {
-    height: 260px;
-
-    background:
-        linear-gradient(
-            rgba(10, 30, 55, 0.3),
-            rgba(10, 30, 55, 0.3)
-        ),
-        url("../photo/travel-left.jpg");
-
-    background-size: cover;
-    background-position: center;
-
-    color: white;
-}
-
-.hero-text {
-    width: 1100px;
-    margin: auto;
-    padding-top: 55px;
-}
-
-.hero-text p {
-    margin-bottom: 8px;
-}
-
-.hero-text h1 {
-    font-size: 31px;
-    font-weight: 700;
-}
-
-.hero-text span {
-    font-size: 14px;
-    line-height: 1.8;
-}
-
 
 /* ================= LAYOUT ================= */
 
@@ -176,7 +139,16 @@ body {
 /* ================= LEFT ================= */
 
 .left-menu {
-    background: #edf4fb;
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-left.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
     border-radius: 12px;
 
@@ -185,7 +157,12 @@ body {
     padding: 30px 15px;
 
     position: relative;
+
+    overflow: hidden;
 }
+
+
+/* 위쪽 문구 */
 
 .side-message {
     margin: 40px 10px 45px;
@@ -195,12 +172,45 @@ body {
     font-style: italic;
 
     color: #385476;
+
+    position: relative;
+    z-index: 2;
 }
+
+/* 사진 위 문구 */
+
+.side-bottom {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
+
+    text-align: center;
+
+    font-style: italic;
+
+    line-height: 1.8;
+
+    color: #4f6584;
+
+    z-index: 2;
+}
+
+/* 메뉴 */
 
 .menu-list {
     display: flex;
     flex-direction: column;
+
     gap: 8px;
+
+    padding: 0 15px;
+
+    position: relative;
+    z-index: 2;
 }
 
 .menu-list a {
@@ -220,27 +230,6 @@ body {
 
     font-weight: bold;
 }
-
-.side-bottom {
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    bottom: 40px;
-
-    text-align: center;
-}
-
-.side-bottom strong {
-    display: block;
-
-    font-size: 20px;
-}
-
-.side-bottom small {
-    letter-spacing: 3px;
-}
-
 
 /* ================= FORM ================= */
 
@@ -630,39 +619,63 @@ textarea.form-control {
 /* ================= RIGHT ================= */
 
 .right-info {
-    background: #f3f7fc;
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-right.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
     border-radius: 12px;
 
-    padding: 30px 18px;
-
-    font-size: 13px;
-
-    color: #718097;
     position: relative;
+
+    overflow: hidden;
+}
+
+
+/* 위쪽 안내 영역 */
+
+.right-content {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 40px 20px 20px;
 }
 
 .right-info h4 {
-    margin-top: 40px;
+    margin: 0 0 25px;
 
     font-size: 14px;
 
     color: #17305a;
 
     font-weight: 700;
-
-    margin-bottom: 25px;
 }
 
-.right-info p {
+.right-info .right-content p {
     line-height: 1.7;
 
     margin-bottom: 14px;
+
+    color: #4f6584;
 }
+
+/* 사진 위 문구 */
 
 .right-message {
     position: absolute;
-    bottom: 40px;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
 
     text-align: center;
 
@@ -671,12 +684,14 @@ textarea.form-control {
     line-height: 1.8;
 
     color: #4f6584;
+
+    z-index: 2;
 }
 
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 900px) {
+@media (max-width: 700px) {
     .left-menu,
     .right-info {
         display: none;
