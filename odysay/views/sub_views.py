@@ -97,11 +97,6 @@ def upload():
             country=country,
             region=region,
             place=place,
-
-            # 자동으로 찾은 지도 좌표 저장
-            latitude=selected_location['latitude'],
-            longitude=selected_location['longitude'],
-
             category=category_str,
             intro=intro,
             reason=reason,
