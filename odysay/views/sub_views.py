@@ -5,7 +5,10 @@ from flask import Blueprint, render_template, request, redirect, url_for, curren
 from werkzeug.utils import secure_filename
 from odysay.models import db, TravelPlace
 from odysay.forms import LoginForm
-
+from flask import g
+from sqlalchemy.exc import IntegrityError
+from odysay.forms import ProfileEditForm
+from odysay.models import User
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
 
@@ -151,16 +154,39 @@ def upload():
 # -----------------------------------------------------------
 # 지도 페이지 라우트 및 API
 # -----------------------------------------------------------
+
 @bp.route('/trip_location/<int:place_id>')
 def trip_location_detail(place_id):
+    if g.user is None:
+        return redirect(
+            url_for('homepage.main', signup_required=1)
+        )
+
     place_data = TravelPlace.query.get_or_404(place_id)
-    photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-    return render_template('trip_location.html', place=place_data, photos=photos)
+
+    photos = (
+        [p.strip() for p in place_data.photos.split(',') if p.strip()]
+        if place_data.photos else []
+    )
+
+    return render_template(
+        'trip_location.html',
+        place=place_data,
+        photos=photos
+    )
 
 
 @bp.route('/trip_location')
 def trip_location():
-    place_data = TravelPlace.query.order_by(TravelPlace.id.desc()).first()
+    if g.user is None:
+        return redirect(
+            url_for('homepage.main', signup_required=1)
+        )
+
+    # 이 아래 기존 코드는 그대로 유지
+    place_data = TravelPlace.query.order_by(
+        TravelPlace.id.desc()
+    ).first()
 
     if not place_data:
         return "<script>alert('등록된 여행지가 없습니다. 먼저 여행지를 등록해주세요!'); location.href='/homepage/upload';</script>"
@@ -176,12 +202,53 @@ def trip_list():
 
 @bp.route('/mypage')
 def mypage():
+    if g.user is None:
+        return redirect(url_for('homepage.main'))
+
     return render_template('mypage.html')
+
+
+@bp.route('/mypage/profile', methods=['GET', 'POST'])
+def profile_edit():
+    if g.user is None:
+        return redirect(url_for('homepage.main'))
+
+    form = ProfileEditForm(obj=g.user)
+
+    if form.validate_on_submit():
+        nickname = form.nickname.data
+
+        # 자신의 닉네임은 허용하고 다른 회원과의 중복만 검사
+        duplicate = User.query.filter(
+            User.nickname == nickname,
+            User.id != g.user.id
+        ).first()
+
+        if duplicate:
+            form.nickname.errors.append(
+                '이미 사용 중인 닉네임입니다.'
+            )
+        else:
+            g.user.nickname = nickname
+
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+                form.nickname.errors.append(
+                    '이미 사용 중인 닉네임입니다.'
+                )
+            else:
+                return redirect(url_for('homepage.mypage'))
+
+    return render_template('profile_edit.html', form=form)
 
 
 @bp.route('/mypage/settings')
 def mypage_settings():
     return render_template('settings.html')
+
+
 @bp.route('/geocode', methods=['GET'])
 def geocode():
     query = [request.args.get(k, '').strip() for k in ('country', 'region', 'place')]

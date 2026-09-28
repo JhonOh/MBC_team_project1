@@ -122,3 +122,19 @@ class LoginForm(FlaskForm):
     )
 
     submit = SubmitField('로그인')
+
+class ProfileEditForm(FlaskForm):
+        nickname = StringField(
+            '닉네임',
+            filters=[lambda value: value.strip() if value else value],
+            validators=[
+                DataRequired(message='닉네임을 입력해 주세요.'),
+                Length(
+                    min=2,
+                    max=20,
+                    message='닉네임은 2~20자로 입력해 주세요.'
+                )
+            ]
+        )
+
+        submit = SubmitField('저장')
