@@ -48,14 +48,14 @@ def signup():
         session['user_id'] = user.id
 
         flash('회원가입이 완료되었습니다.')
-        return redirect(url_for('first._map'))
+        return redirect(url_for('homepage.main'))
 
     return render_template('signup.html', form=form)
 
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return redirect(url_for('first._map'))
+        return redirect(url_for('homepage.main'))
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -77,20 +77,20 @@ def login():
             session.clear()
             session['user_id'] = user.id
 
-            return redirect(url_for('first._map'))
+            return redirect(url_for('homepage.main'))
 
     if form.errors:
         for errors in form.errors.values():
             for error in errors:
                 flash(error)
-    return redirect(url_for('first._map'))
+    return redirect(url_for('homepage.main'))
 
 
 @bp.route('/logout/')
 def logout():
     session.clear()
 
-    return redirect(url_for('first._map'))
+    return redirect(url_for('homepage.main'))
 
 @bp.route('/check-nickname/', methods=['GET'])
 def check_nickname():

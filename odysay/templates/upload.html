@@ -51,7 +51,9 @@
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
-            <a class="logout-button" href="{{ url_for('first._map') }}">로그인</a>
+
+            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
+
             {% endif %}
         </div>
 
@@ -342,7 +344,10 @@
                 </label>
                 <div class="button-area">
 
-                <button type="button" class="cancel-button" onclick="window.location.href='{{ url_for('first._map') }}'">
+
+                <button type="button" class="cancel-button" onclick="window.location.href='{{ url_for('homepage.main') }}'">
+
+
                     취소하기
                 </button>
 

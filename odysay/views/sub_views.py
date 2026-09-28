@@ -4,9 +4,15 @@ from odysay.services.geocoding import find_location, valid_coords
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, session
 from werkzeug.utils import secure_filename
 from odysay.models import db, TravelPlace
+from odysay.forms import LoginForm
 
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
+
+
+@bp.route('/main')
+def main():
+    return render_template('map.html', login_form=LoginForm())
 
 
 @bp.route('/sjw')
@@ -194,7 +200,7 @@ def geocode():
 
 @bp.route('/map')
 def map_page():
-    return redirect(url_for('first._map'))
+    return redirect(url_for('homepage.main'))
 
 
 @bp.route('/api/places')
