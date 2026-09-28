@@ -135,7 +135,6 @@ body {
     border-radius: 20px 20px 0 0;
 }
 
-
 /* ================= LEFT ================= */
 
 .left-menu {
@@ -152,11 +151,13 @@ body {
 
     border-radius: 12px;
 
-    min-height: 100%;
+    height: 787px;
+    align-self: start;
 
     padding: 30px 15px;
 
-    position: relative;
+    position: sticky;
+    top: 20px;
 
     overflow: hidden;
 }
@@ -165,13 +166,13 @@ body {
 /* 위쪽 문구 */
 
 .side-message {
-    margin: 40px 10px 45px;
+    margin: 50px 10px 45px;
 
     line-height: 2;
 
     font-style: italic;
-
-    color: #385476;
+    font-weight: 600;
+    color: black;
 
     position: relative;
     z-index: 2;
@@ -199,6 +200,19 @@ body {
     z-index: 2;
 }
 
+.side-bottom strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.side-bottom small {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
 /* 메뉴 */
 
 .menu-list {
@@ -216,7 +230,7 @@ body {
 .menu-list a {
     text-decoration: none;
 
-    color: #43516b;
+    color: black;
 
     padding: 13px;
 
@@ -224,7 +238,7 @@ body {
 }
 
 .menu-list a.selected {
-    background: white;
+    background: rgba(255, 255, 255, 0.85);
 
     color: #142443;
 
@@ -235,6 +249,9 @@ body {
 
 .form-container {
     padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
 }
 
 .form-title {
@@ -339,6 +356,57 @@ textarea.form-control {
     resize: none;
 }
 
+/* ================= COUNTRY SEARCH ================= */
+
+.country-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.country-results {
+    display: none;
+
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+
+    width: 100%;
+    max-height: 200px;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border: 1px solid #d7dfea;
+    border-radius: 7px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    z-index: 100;
+}
+
+.country-result-item {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #142443;
+
+    cursor: pointer;
+}
+
+.country-result-item:hover {
+    background: #f4f8ff;
+    color: #1473ff;
+}
+
+.country-no-result {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #9aa4b5;
+}
 
 /* ================= CATEGORY ================= */
 
@@ -500,6 +568,71 @@ textarea.form-control {
     cursor: pointer;
 }
 
+/* ================= NEARBY PHOTO ================= */
+
+.nearby-photo-area {
+    margin-top: 10px;
+}
+
+.nearby-photo-button {
+    display: flex !important;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 42px;
+
+    margin-bottom: 5px !important;
+
+    border: 1px dashed #cbd5e3;
+    border-radius: 7px;
+
+    background: #fafbfd;
+
+    color: #68758b;
+
+    font-size: 12px !important;
+
+    cursor: pointer;
+}
+
+.nearby-photo-button:hover {
+    border-color: #2878ff;
+
+    background: #f4f8ff;
+
+    color: #1473ff;
+}
+
+.nearby-photo-area small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #8994a5;
+
+    font-size: 11px;
+}
+
+.nearby-preview {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.nearby-preview .preview-item img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+}
 
 /* ================= BOTTOM ================= */
 
@@ -557,6 +690,9 @@ textarea.form-control {
 .guide-container {
     display: none;
     padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
 }
 
 .guide-box {
@@ -631,12 +767,19 @@ textarea.form-control {
     background-repeat: no-repeat;
 
     border-radius: 12px;
-
-    position: relative;
+    height: 787px;
+    align-self: start;
+    position: sticky;
+    top: 20px;
 
     overflow: hidden;
 }
 
+/* 양쪽 배너 그림자 */
+.left-menu,
+.right-info {
+    box-shadow: 0 8px 18px rgba(20, 41, 71, 0.05);
+}
 
 /* 위쪽 안내 영역 */
 
@@ -645,15 +788,15 @@ textarea.form-control {
 
     z-index: 2;
 
-    padding: 40px 20px 20px;
+    padding: 90px 20px 20px;
 }
 
 .right-info h4 {
-    margin: 0 0 25px;
+    margin: 0 0 60px;
 
-    font-size: 14px;
+    font-size: 15px;
 
-    color: #17305a;
+    color: black;
 
     font-weight: 700;
 }
@@ -663,7 +806,7 @@ textarea.form-control {
 
     margin-bottom: 14px;
 
-    color: #4f6584;
+    color: black;
 }
 
 /* 사진 위 문구 */
