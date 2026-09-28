@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로필 수정 | 어딧세이</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/mypage.css') }}">
+
+    <style>
+        .profile-edit-wrap {
+            width: min(480px, calc(100% - 32px));
+            margin: 60px auto;
+        }
+
+        .profile-edit-card {
+            padding: 28px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .profile-edit-card label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .profile-edit-input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        .profile-edit-help {
+            margin-top: 8px;
+            color: #667085;
+            font-size: 13px;
+        }
+
+        .profile-edit-error {
+            margin-top: 8px;
+            color: #b42318;
+            font-size: 13px;
+        }
+
+        .profile-edit-actions {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            margin-top: 24px;
+        }
+
+        .profile-save-btn {
+            padding: 10px 20px;
+            border: 0;
+            border-radius: 6px;
+            background: #152238;
+            color: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <main class="profile-edit-wrap">
+        <h1 class="page-title">프로필 수정</h1>
+
+        <form class="profile-edit-card"
+              method="POST"
+              action="{{ url_for('homepage.profile_edit') }}">
+
+            {{ form.hidden_tag() }}
+
+            {{ form.nickname.label }}
+            {{ form.nickname(
+                class_='profile-edit-input',
+                minlength=2,
+                maxlength=20,
+                autocomplete='nickname',
+                required=True
+            ) }}
+
+            <p class="profile-edit-help">
+                닉네임은 2~20자로 입력해 주세요.
+            </p>
+
+            {% for error in form.nickname.errors %}
+                <p class="profile-edit-error" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+
+            <div class="profile-edit-actions">
+                <a href="{{ url_for('homepage.mypage') }}"
+                   class="profile-btn">
+                    취소
+                </a>
+
+                {{ form.submit(class_='profile-save-btn') }}
+            </div>
+        </form>
+    </main>
+</body>
+</html>
