@@ -67,9 +67,10 @@
     <aside class="left-menu">
 
         <p class="side-message">
-            여행은 목적지가 아닌,<br>
-            새로운 나를 만나는<br>
-            여정입니다.
+            여행은<br>
+            목적지가 아닌,<br>
+            새로운 나를<br>
+            만나는 여정입니다.
         </p>
 
         <div class="menu-list">
@@ -114,17 +115,32 @@
 
                 <div class="two-column">
 
-                {# 나라 #}
-                <div class="form-group">
-                    <label for="country">
+                {# 나라 검색 #}
+                <div class="form-group country-search-group">
+                    <label for="countrySearch">
                         나라 선택 <span>*</span>
                     </label>
 
-                    <select name="country" id="country" class="form-select" required>
-                        <option value="">
-                            나라를 선택해주세요.
-                        </option>
-                    </select>
+                    <div class="country-search-wrapper">
+
+                        <input type="text"
+                               id="countrySearch"
+                               class="form-control"
+                               placeholder="나라를 검색해주세요."
+                               autocomplete="off">
+
+                        <!-- 실제 서버로 전달될 나라 -->
+                        <input type="hidden"
+                               id="country"
+                               name="country"
+                               required>
+
+                        <!-- 검색 결과가 나타나는 곳 -->
+                        <div id="countryResults"
+                             class="country-results">
+                        </div>
+
+                    </div>
                 </div>
 
                 {# 지역 #}
@@ -242,6 +258,25 @@
                         </label>
 
                         <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
+                        <!-- 주변 맛집 사진 -->
+                        <div class="nearby-photo-area">
+
+                            <label for="restaurantPhotos" class="nearby-photo-button">
+                                📷 맛집 사진 추가
+                            </label>
+
+                            <input type="file"
+                                   id="restaurantPhotos"
+                                   name="restaurant_photos"
+                                   accept="image/png, image/jpeg"
+                                   multiple
+                                   hidden>
+
+                            <small>최대 3장까지 등록할 수 있습니다.</small>
+
+                            <div id="restaurantPreview" class="nearby-preview"></div>
+
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -250,6 +285,25 @@
                         </label>
 
                         <textarea id="nearby" name="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
+                        <!-- 주변 볼거리 사진 -->
+                        <div class="nearby-photo-area">
+
+                            <label for="nearbyPhotos" class="nearby-photo-button">
+                                📷 볼거리 사진 추가
+                            </label>
+
+                            <input type="file"
+                                   id="nearbyPhotos"
+                                   name="nearby_photos"
+                                   accept="image/png, image/jpeg"
+                                   multiple
+                                   hidden>
+
+                            <small>최대 3장까지 등록할 수 있습니다.</small>
+
+                            <div id="nearbyPreview" class="nearby-preview"></div>
+
+                        </div>
                     </div>
                 </div>
             </section>
