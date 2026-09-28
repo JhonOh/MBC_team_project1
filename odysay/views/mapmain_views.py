@@ -1,5 +1,4 @@
-from flask import Blueprint, render_template, jsonify
-from odysay.forms import LoginForm
+from flask import Blueprint, redirect, url_for, jsonify
 from odysay.models import TravelPlace
 
 
@@ -9,12 +8,7 @@ bp = Blueprint('first', __name__, url_prefix='/first')
 # 지도 화면
 @bp.route('/map')
 def _map():
-    login_form = LoginForm()
-
-    return render_template(
-        'map.html',
-        login_form=login_form
-    )
+    return redirect(url_for('homepage.main'))
 
 
 # 지도에 표시할 여행지 정보

@@ -8,10 +8,18 @@
     <title>Odysay</title>
 
     <!-- Bootstrap CSS -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Leaflet MarkerCluster CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 </head>
 
 <body class="m-0 overflow-hidden">
@@ -151,19 +159,32 @@
 {% endif %}
 
 
-<!-- 디벨롭 버전의 Leaflet / OpenStreetMap 지도 -->
+<!-- Leaflet 지도 + 팀원의 마커 클러스터 기능 -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script>
-    const map = L.map('map').setView([20, 0], 2);
+    const map = L.map('map', {
+        minZoom: 2,
+        maxZoom: 19
+    }).setView([20, 0], 2);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
+    const markers = L.markerClusterGroup({
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: true,
+        spiderfyOnMaxZoom: true
+    });
+    map.addLayer(markers);
+
     async function loadPlaces() {
         try {
             const response = await fetch({{ url_for('homepage.get_places') | tojson }});
             if (!response.ok) throw new Error('여행지를 불러오지 못했습니다.');
             const places = await response.json();
+            if (!Array.isArray(places)) throw new Error('잘못된 여행지 응답입니다.');
+            markers.clearLayers();
             let lastPlace = null;
             for (const place of places) {
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
@@ -179,10 +200,11 @@
                 link.href = place.detail_url;
                 link.textContent = '상세보기';
                 popup.append(title, location, intro, link);
-                L.marker([place.lat, place.lng]).addTo(map).bindPopup(popup);
+                const marker = L.marker([place.lat, place.lng]).bindPopup(popup);
+                markers.addLayer(marker);
                 lastPlace = place;
             }
-            if (lastPlace) map.setView([lastPlace.lat, lastPlace.lng], 10);
+            if (lastPlace) map.setView([lastPlace.lat, lastPlace.lng], 12);
         } catch (error) {
             const message = document.createElement('div');
             message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';

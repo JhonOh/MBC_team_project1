@@ -56,7 +56,7 @@ http://127.0.0.1:5000/ 에서 확인하세요. 이 통합본에는 migrations가
 
 ## 통합하면서 수정한 연결 오류
 
-- `/homepage/map`은 `/first/map`으로 redirect. 템플릿 이름에 endpoint를 전달하던 오류 제거.
+- `/homepage/main`이 지도 메인 화면이며, `/homepage/map`과 `/first/map`은 새 주소로 redirect. 템플릿 이름에 endpoint를 전달하던 오류 제거.
 - 별도 app.py는 앱 팩토리만 호출. `python -m odysay.app`으로도 실행 가능.
 - 앱 시작 시 db.create_all() 제거. DB 구조는 migration으로 관리.
 - 로그인 POST·가입 후 자동 로그인·닉네임 검사·닉네임/생년월일/성별 폼 유지. GET `/auth/login/`도 로그인 카드로 이동.

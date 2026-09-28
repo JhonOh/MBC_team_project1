@@ -116,7 +116,7 @@
                     <div class="profile-info">
 
                         <h2>
-                            여행을 좋아하는 사용자
+                            <h2>{{ g.user.nickname or g.user.username }}</h2>
                         </h2>
 
                         <p>
@@ -128,9 +128,8 @@
 
                 </div>
 
-                <button type="button" class="profile-btn">
-                    프로필 수정
-                </button>
+               <a href="{{ url_for('homepage.profile_edit') }}" class="profile-btn">프로필 수정
+               </a>
 
             </div>
 

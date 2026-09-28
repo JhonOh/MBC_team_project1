@@ -266,40 +266,226 @@ button {
     font-size: 30px;
 }
 
-/* 반응도 투표 피드백 섹션 */
-.feedback-section {
-    margin-top: 40px;
-    border-top: 1px solid #f2f4f7;
-    padding-top: 25px;
+/* ================= 탭 콘텐츠 ================= */
+
+.tab-content {
+    display: none;
 }
 
-.feedback-title {
-    font-size: 15px;
-    margin-bottom: 15px;
-    font-weight: bold;
+.tab-content.active {
+    display: block;
 }
 
-.feedback-buttons {
-    display: flex;
-    gap: 15px;
-}
 
-.btn-feedback {
-    flex: 1;
-    background-color: #f8f9fa;
-    padding: 12px;
-    border-radius: 6px;
+/* 정보가 없을 때 */
+
+.empty-message {
+    padding: 30px 15px;
+
+    background: #f8fafc;
+    border-radius: 8px;
+
+    color: #9aa4b5;
+
     font-size: 14px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: background 0.2s;
+    text-align: center;
 }
 
-.btn-feedback:hover {
-    background-color: #e9ecef;
+
+/* ================= 리뷰 ================= */
+
+.review-section {
+    width: 100%;
+}
+
+
+/* 리뷰 작성 영역 */
+
+.review-write {
+    margin-top: 15px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+.review-write textarea {
+    display: block;
+
+    width: 100%;
+    height: 100px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    font-size: 14px;
+    line-height: 1.6;
+
+    color: #333;
+}
+
+.review-write textarea::placeholder {
+    color: #a4adb8;
+}
+
+
+/* 글자수 + 등록 버튼 */
+
+.review-write-bottom {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 10px 12px;
+
+    border-top: 1px solid #f0f2f5;
+}
+
+.review-counter {
+    color: #9aa4b5;
+
+    font-size: 12px;
+}
+
+.review-submit {
+    padding: 8px 20px;
+
+    border: none;
+    border-radius: 6px;
+
+    background: #2c3e50;
+
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.review-submit:hover {
+    opacity: 0.85;
+}
+
+
+/* ================= 등록된 리뷰 ================= */
+
+.review-list {
+    margin-top: 25px;
+}
+
+.review-item {
+    padding: 18px 5px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.review-item:first-child {
+    border-top: 1px solid #eeeeee;
+}
+
+
+/* 리뷰 상단 */
+
+.review-header {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 10px;
+}
+
+.review-user {
+    font-size: 13px;
+    font-weight: 700;
+
+    color: #333;
+}
+
+.review-date {
+    font-size: 11px;
+
+    color: #a0a8b2;
+}
+
+
+/* 리뷰 내용 */
+
+.review-text {
+    margin-bottom: 13px;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    color: #4f5f6f;
+}
+
+
+/* 추천 / 신고 */
+
+.review-actions {
+    display: flex;
+
+    gap: 15px;
+
+    align-items: center;
+}
+
+.review-action-button {
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    color: #7f8c8d;
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+.review-action-button:hover {
+    color: #2c3e50;
+}
+
+.review-action-button.recommended {
+    color: #e74c3c;
+    font-weight: 600;
+}
+
+.report-button:hover {
+    color: #e74c3c;
+}
+
+
+/* ================= 관련 이미지 ================= */
+
+.related-image-section {
+    margin-top: 35px;
+}
+
+.thumb-image {
+    overflow: hidden;
+}
+
+.thumb-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    border-radius: 6px;
 }
 
 /* 하단 푸터 바 */
@@ -344,4 +530,495 @@ button {
 .footer-bottom {
     font-size: 11px;
     color: #7f8c8d;
+}
+
+/* ================= 찜하기 ================= */
+
+.btn-jjim.active {
+    background: #ff5a67;
+    border-color: #ff5a67;
+    color: #ffffff;
+}
+
+.btn-jjim.active:hover {
+    background: #f04d5a;
+}
+
+/* ================= 공유하기 ================= */
+
+.share-wrapper {
+    position: relative;
+}
+
+
+/* 공유 팝업 */
+
+.share-popup {
+    display: none;
+
+    position: absolute;
+
+    top: calc(100% + 10px);
+    right: 0;
+
+    width: 300px;
+
+    padding: 18px;
+
+    background: #ffffff;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+}
+
+
+/* 팝업 열림 */
+
+.share-popup.active {
+    display: block;
+}
+
+
+/* 제목 */
+
+.share-popup-title {
+    margin-bottom: 15px;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    color: #222;
+}
+
+
+/* 다른 앱으로 공유 */
+
+.share-app-button {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    width: 100%;
+
+    padding: 11px;
+
+    margin-bottom: 18px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 7px;
+
+    background: #f8fafc;
+
+    color: #333;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.share-app-button:hover {
+    background: #f0f4f8;
+}
+
+
+/* 링크 제목 */
+
+.share-link-title {
+    margin-bottom: 7px;
+
+    color: #6f7b88;
+
+    font-size: 12px;
+}
+
+
+/* 링크 영역 */
+
+.share-link-box {
+    display: flex;
+
+    width: 100%;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+
+.share-link-box input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 9px 10px;
+
+    border: none;
+    outline: none;
+
+    background: #f8fafc;
+
+    color: #66717d;
+
+    font-size: 11px;
+}
+
+
+.share-link-box button {
+    flex-shrink: 0;
+
+    padding: 0 13px;
+
+    border: none;
+    border-left: 1px solid #dfe4ea;
+
+    background: #ffffff;
+
+    color: #2c3e50;
+
+    font-size: 12px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.share-link-box button:hover {
+    background: #f5f7f9;
+}
+
+
+/* 복사 완료 메시지 */
+
+.copy-message {
+    display: none;
+
+    margin: 8px 0 0;
+
+    color: #66717d;
+
+    font-size: 11px;
+    text-align: right;
+}
+
+/* ================= SNS 공유 아이콘 ================= */
+
+.share-sns-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+
+    margin-bottom: 20px;
+}
+
+
+/* SNS 버튼 */
+
+.share-sns-button {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    padding: 0;
+
+    border: none;
+    background: none;
+
+    cursor: pointer;
+
+    color: #555;
+}
+
+
+/* SNS 아이콘 공통 */
+
+.share-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 45px;
+    height: 45px;
+
+    border-radius: 50%;
+
+    font-size: 21px;
+    font-weight: 700;
+
+    transition: 0.2s;
+}
+
+
+/* 마우스 올렸을 때 */
+
+.share-sns-button:hover .share-icon {
+    transform: translateY(-2px);
+}
+
+
+/* SNS 이름 */
+
+.share-sns-name {
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+
+/* 카카오톡 */
+
+.kakao-icon {
+    background: #FEE500;
+    color: #191919;
+}
+
+
+/* 인스타그램 */
+
+.instagram-icon {
+    background: linear-gradient(
+        135deg,
+        #833ab4,
+        #fd1d1d,
+        #fcb045
+    );
+
+    color: #ffffff;
+}
+
+
+/* X */
+
+.x-icon {
+    background: #000000;
+    color: #ffffff;
+}
+
+
+/* 페이스북 */
+
+.facebook-icon {
+    background: #1877F2;
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+}
+
+/* ================= 이미지 크게보기 팝업 ================= */
+
+/* 여행지 사진 클릭 가능하게 */
+.gallery-image {
+    cursor: pointer;
+}
+
+
+/* 팝업 전체 배경 */
+.image-modal {
+    display: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(0, 0, 0, 0.82);
+
+    z-index: 9999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 80px;
+}
+
+
+/* 팝업 열렸을 때 */
+.image-modal.active {
+    display: flex;
+}
+
+
+/* 가운데 영역 */
+.image-modal-content {
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    max-width: 900px;
+    width: 100%;
+}
+
+
+/* 크게 보이는 사진 */
+#imageModalPhoto {
+    display: block;
+
+    max-width: 100%;
+    max-height: 70vh;
+
+    object-fit: contain;
+
+    border-radius: 8px;
+
+    background: #ffffff;
+}
+
+
+/* 닫기 X */
+.image-modal-close {
+    position: absolute;
+
+    top: 25px;
+    right: 35px;
+
+    color: #ffffff;
+
+    font-size: 40px;
+    line-height: 1;
+
+    z-index: 10001;
+}
+
+
+/* 좌우 화살표 */
+.image-modal-arrow {
+    position: absolute;
+
+    top: 50%;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+
+    background: rgba(0, 0, 0, 0.35);
+
+    color: #ffffff;
+
+    font-size: 28px;
+
+    z-index: 10001;
+}
+
+
+.image-modal-prev {
+    left: 30px;
+}
+
+
+.image-modal-next {
+    right: 30px;
+}
+
+
+/* 아래 작은 사진들 */
+.image-modal-thumbnails {
+    display: flex;
+
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+    max-width: 100%;
+
+    overflow-x: auto;
+}
+
+
+.image-modal-thumbnails img {
+    width: 80px;
+    height: 60px;
+
+    object-fit: cover;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    opacity: 0.55;
+
+    border: 2px solid transparent;
+}
+
+
+/* 현재 보고 있는 작은 사진 */
+.image-modal-thumbnails img.active {
+    opacity: 1;
+
+    border-color: #ffffff;
+}
+
+
+/* 버튼 hover */
+.image-modal-arrow:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+.image-modal-close:hover {
+    opacity: 0.7;
+}
+
+
+/* 모바일 */
+@media (max-width: 600px) {
+
+    .image-modal {
+        padding: 60px 20px 30px;
+    }
+
+    #imageModalPhoto {
+        max-height: 65vh;
+    }
+
+    .image-modal-arrow {
+        width: 38px;
+        height: 38px;
+
+        font-size: 22px;
+    }
+
+    .image-modal-prev {
+        left: 10px;
+    }
+
+    .image-modal-next {
+        right: 10px;
+    }
+
+    .image-modal-close {
+        top: 15px;
+        right: 20px;
+
+        font-size: 34px;
+    }
+
+    .image-modal-thumbnails img {
+        width: 60px;
+        height: 45px;
+    }
 }
