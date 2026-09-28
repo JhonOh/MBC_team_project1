@@ -42,33 +42,13 @@ def upload():
         if request.form.get('agree') != 'yes':
             return jsonify(error='등록 가이드라인에 동의해 주세요.'), 400
 
-        # 검색 당시의 입력값과 현재 입력값이 같은지 확인
-        geocode_result = session.get('geocode_result')
+        # 나라 + 지역 + 여행지명으로 좌표 자동 검색
+        selected_location = find_location(country, region, place)
 
-        if (
-                not geocode_result
-                or geocode_result.get('query') != [country, region, place]
-        ):
+        if selected_location is None:
             return jsonify(
-                error='위치를 검색하고 결과를 선택해 주세요. 장소 정보를 수정했다면 다시 검색해야 합니다.'
+                error='여행지 위치를 찾지 못했습니다. 나라, 지역, 세부 여행지명을 확인해 주세요.'
             ), 400
-
-        # 사용자가 선택한 검색 결과 번호
-        try:
-            selected_index = int(request.form.get('location_index', ''))
-        except (TypeError, ValueError):
-            return jsonify(
-                error='검색 결과에서 등록할 위치를 선택해 주세요.'
-            ), 400
-
-        candidates = geocode_result.get('candidates', [])
-
-        if not 0 <= selected_index < len(candidates):
-            return jsonify(
-                error='선택한 위치가 유효하지 않습니다. 다시 검색해 주세요.'
-            ), 400
-
-        selected_location = candidates[selected_index]
 
         # 카테고리 처리
         categories = request.form.getlist('category')
@@ -118,7 +98,7 @@ def upload():
             region=region,
             place=place,
 
-            # 추가
+            # 자동으로 찾은 지도 좌표 저장
             latitude=selected_location['latitude'],
             longitude=selected_location['longitude'],
 
