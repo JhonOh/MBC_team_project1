@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // 수정 모드인지 확인
+    const editMode =
+        document.getElementById("editMode")?.value === "true";
+
     // 등록 가이드 확인 여부
-    let guideChecked = false;
+    let guideChecked = editMode;
 
     // 메뉴 요소
     const uploadMenu = document.getElementById("uploadMenu");
@@ -233,10 +237,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     Array.from(photosInput.files);
 
 
-                // 기존 사진 + 새 사진이 10장을 넘는지 확인
-                if (selectedPhotos.length + newFiles.length > 10) {
+                // DB에 저장되어 있는 기존 메인 사진 개수
+                const existingPhotoCount =
+                    document.querySelectorAll("#existingPhotos .existing-photo").length;
 
-                    alert("사진은 최대 10장까지 등록할 수 있습니다.");
+                // 기존 DB 사진 + 이미 새로 선택한 사진 + 이번에 선택한 사진
+                if (existingPhotoCount + selectedPhotos.length + newFiles.length > 10) {
+
+                    alert("메인 사진은 최대 10장까지 등록할 수 있습니다.");
 
                     updatePhotoInput();
 
@@ -262,8 +270,24 @@ document.addEventListener("DOMContentLoaded", function () {
             });
 
         }
+
+        // 기존 DB 사진 삭제
+        document.querySelectorAll(".remove-existing-photo").forEach(function(button) {
+
+            button.addEventListener("click", function() {
+
+                const previewItem = button.closest(".existing-photo");
+
+                if (previewItem) {
+                    previewItem.remove();
+                }
+
+            });
+
+        });
+
         // 4-1. 주변 정보 사진 선택 / 추가 / 삭제
-        function setupNearbyPhotos(inputId, previewId) {
+        function setupNearbyPhotos(inputId, previewId, existingContainerId) {
 
             const input = document.getElementById(inputId);
             const preview = document.getElementById(previewId);
@@ -336,10 +360,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 const newFiles = Array.from(input.files);
 
-                // 최대 3장
-                if (selectedFiles.length + newFiles.length > 3) {
+                // 기존 DB 사진 개수
+                const existingPhotoCount =
+                    document.querySelectorAll(
+                        "#" + existingContainerId + " .existing-photo"
+                    ).length;
 
-                    alert("사진은 최대 3장까지 등록할 수 있습니다.");
+                // 기존 DB 사진 + 새로 선택한 사진 = 최대 3장
+                if (existingPhotoCount + selectedFiles.length + newFiles.length > 3) {
+
+                    alert("주변정보 사진은 최대 3장까지 등록할 수 있습니다.");
 
                     updateInput();
 
@@ -359,14 +389,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // 주변 맛집 사진
         setupNearbyPhotos(
             "restaurantPhotos",
-            "restaurantPreview"
+            "restaurantPreview",
+            "existingRestaurantPhotos"
         );
 
 
         // 주변 볼거리 사진
         setupNearbyPhotos(
             "nearbyPhotos",
-            "nearbyPreview"
+            "nearbyPreview",
+            "existingNearbyPhotos"
         );
 
     // 5. 폼 전송
@@ -403,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             // 2. 가이드는 봤지만 동의 체크 안 했을 때
-            if (!agree || !agree.checked) {
+            if (!editMode && (!agree || !agree.checked)) {
 
                 alert("등록 가이드라인에 동의해주세요.");
 
@@ -421,9 +453,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const formData = new FormData(travelForm);
-            // 주변정보 사진은 DB/서버에 저장하지 않음
-            formData.delete("restaurant_photos");
-            formData.delete("nearby_photos");
 
             const submitButton = travelForm.querySelector('[type="submit"]');
             submitButton.disabled = true;
