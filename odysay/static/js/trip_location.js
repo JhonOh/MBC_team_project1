@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // 1. 사용자 접속 기준 로컬 시간 변환 기능
-    const timeElements = document.querySelectorAll('.created-time');
+    const timeElements = document.querySelectorAll('.created-time, .updated-time');
     timeElements.forEach(el => {
         const rawTime = el.getAttribute('data-utc');
         if (!rawTime) return;

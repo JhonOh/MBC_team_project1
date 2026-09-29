@@ -60,6 +60,12 @@
             <h1 class="title">{{ place.place }}</h1>
             <p class="subtitle">{{ place.country }} / {{ place.region }}</p>
 
+            {% if author %}
+            <p class="author-info">
+                작성자: {{ author.nickname }}
+            </p>
+            {% endif %}
+
             <!-- 사용자 로컬 시간 변환용 데이터 전달 -->
             <p class="created-time-box" style="font-size: 0.85rem; color: #888; margin-top: 4px;">
                 작성일: <span class="created-time" data-utc="{{ place.created_at.isoformat() if place.created_at else '' }}">
@@ -67,10 +73,26 @@
                 </span>
             </p>
 
+            {% if place.updated_at %}
+            <p class="updated-time-box" style="font-size: 0.85rem; color: #888; margin-top: 4px;">
+                수정일:
+                <span class="updated-time"
+                      data-utc="{{ place.updated_at.isoformat() }}">
+                    {{ place.updated_at.strftime('%Y-%m-%d %H:%M') }}
+                </span>
+            </p>
+            {% endif %}
+
             <div class="likes-count">❤️ {{ place.likes }}</div>
 
             <div class="action-buttons">
 
+                {% if g.user and place.user_id == g.user.id %}
+                <a href="{{ url_for('homepage.trip_location_edit', place_id=place.id) }}"
+                   class="btn-action btn-edit">
+                    ✎ 수정하기
+                </a>
+                {% endif %}
             <!-- 찜하기 -->
             <button type="button" class="btn-action btn-jjim">
                 ♥ 찜하기
@@ -289,6 +311,19 @@
                         {{ place.restaurant }}
                     </p>
 
+                    {% if restaurant_photos %}
+                    <div class="related-images">
+                        {% for photo in restaurant_photos %}
+                        <div class="thumb-image">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                alt="주변 맛집 사진"
+                                class="gallery-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                 {% else %}
 
                     <p class="empty-message">
@@ -312,6 +347,19 @@
                     <p class="intro-text">
                         {{ place.nearby }}
                     </p>
+
+                    {% if nearby_photos %}
+                    <div class="related-images">
+                        {% for photo in nearby_photos %}
+                        <div class="thumb-image">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                alt="주변 볼거리 사진"
+                                class="gallery-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
                 {% else %}
 
@@ -422,6 +470,19 @@
                         {{ place.restaurant }}
                     </p>
 
+                    {% if restaurant_photos %}
+                    <div class="related-images">
+                        {% for photo in restaurant_photos %}
+                        <div class="thumb-image">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                alt="주변 맛집 사진"
+                                class="gallery-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
                 {% else %}
 
                     <p class="empty-message">
@@ -449,6 +510,19 @@
                     <p class="intro-text">
                         {{ place.nearby }}
                     </p>
+
+                    {% if nearby_photos %}
+                    <div class="related-images">
+                        {% for photo in nearby_photos %}
+                        <div class="thumb-image">
+                            <img
+                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                alt="주변 볼거리 사진"
+                                class="gallery-image">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
 
                 {% else %}
 
