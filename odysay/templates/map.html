@@ -20,39 +20,43 @@
           href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/common.css') }}">
 </head>
 
 <body class="m-0 overflow-hidden">
 
 <!-- 세계 지도 -->
 <div
-        id="map"
-        class="position-absolute top-0 start-0 w-100 vh-100">
+    id="map"
+    class="position-absolute top-0 start-0 w-100 vh-100">
 </div>
-<!-- 홈페이지로 이동 -->
+
+
+<!-- 로그인 여부와 관계없이 항상 표시 -->
 <a
-        href="{{ url_for('homepage.homepage') }}"
-        class="btn btn-dark position-absolute bottom-0 start-50
-           translate-middle-x mb-4 px-4 py-3 rounded-pill shadow"
-        style="z-index: 1000;">
+    id="map-explore-button"
+    href="{{ url_for('homepage.homepage') }}"
+    class="btn btn-dark px-4 py-3 rounded-pill shadow"
+>
     여행 둘러보기
 </a>
 
 
-<!-- 가입 완료 또는 로그인 오류 메시지 -->
+<!-- 가입 완료, 로그인 오류 등의 안내 메시지 -->
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div
-                class="position-absolute top-0 start-0 m-3"
-                style="z-index: 1100; max-width: calc(100% - 2rem);"
-                role="status">
-
+            class="position-absolute top-0 start-0 m-3"
+            style="z-index: 1100; max-width: calc(100% - 2rem);"
+            role="status"
+        >
             {% for message in messages %}
                 <div class="alert alert-info shadow-sm mb-2">
                     {{ message }}
                 </div>
             {% endfor %}
-
         </div>
     {% endif %}
 {% endwith %}
@@ -60,39 +64,34 @@
 
 {% if g.user %}
 
-    <!-- 로그인한 사용자 -->
+    <!-- 로그인 상태: 사용자 이름과 로그아웃 표시 -->
     <div
-            class="position-absolute top-0 end-0 m-4 d-flex align-items-center gap-2"
-            style="z-index: 1000;">
-
-    <span class="bg-white rounded-3 shadow-sm px-3 py-2">
-        {{ g.user.username }}님
-    </span>
+        class="position-absolute top-0 end-0 m-4 d-flex
+               align-items-center gap-2"
+        style="z-index: 1000;"
+    >
+        <span class="bg-white rounded-3 shadow-sm px-3 py-2">
+            {{ g.user.username }}님
+        </span>
 
         <a
-                href="{{ url_for('auth.logout') }}"
-                class="btn btn-light border shadow-sm">
+            href="{{ url_for('auth.logout') }}"
+            class="btn btn-light border shadow-sm"
+        >
             로그아웃
         </a>
-
     </div>
 
 {% else %}
 
-    <!-- 로그인하지 않은 사용자: 로그인 카드 -->
+    <!-- 비로그인 상태: 좌측 하단 로그인 카드 -->
     <section
-            class="position-absolute top-50 end-0 translate-middle-y
-           bg-white rounded-4 shadow p-4 me-3"
-            style="
-        width: 400px;
-        max-width: calc(100% - 2rem);
-        max-height: 90vh;
-        overflow-y: auto;
-        z-index: 1000;
-    ">
-
+        id="map-login-card"
+        class="bg-white rounded-4 shadow p-4"
+        aria-labelledby="map-login-title"
+    >
         <div class="mb-4">
-            <h2 class="fw-bold mb-2">
+            <h2 id="map-login-title" class="fw-bold mb-2">
                 로그인
             </h2>
 
@@ -101,59 +100,53 @@
             </p>
         </div>
 
-        <!-- 로그인 정보 전송 -->
         <form
-                method="POST"
-                action="{{ url_for('auth.login') }}">
-
+            method="post"
+            action="{{ url_for('auth.login') }}"
+        >
             {{ login_form.csrf_token }}
 
-            <!-- 사용자 이름 -->
             <div class="mb-3">
                 {{ login_form.username.label(
-                class="form-label"
-            ) }}
+                    class="form-label"
+                ) }}
 
                 {{ login_form.username(
-                class="form-control",
-                placeholder="사용자 이름",
-                autocomplete="username"
-            ) }}
+                    class="form-control",
+                    placeholder="사용자 이름",
+                    autocomplete="username"
+                ) }}
             </div>
 
-            <!-- 비밀번호 -->
             <div class="mb-4">
                 {{ login_form.password1.label(
-                class="form-label"
-            ) }}
+                    class="form-label"
+                ) }}
 
                 {{ login_form.password1(
-                class="form-control",
-                placeholder="비밀번호",
-                autocomplete="current-password"
-            ) }}
+                    class="form-control",
+                    placeholder="비밀번호",
+                    autocomplete="current-password"
+                ) }}
             </div>
 
-            <!-- 로그인 버튼 -->
             {{ login_form.submit(
-            class="btn btn-dark w-100 py-2"
-        ) }}
-
+                class="btn btn-dark w-100 py-2"
+            ) }}
         </form>
 
-        <!-- 별도 회원가입 페이지로 이동 -->
         <div class="text-center mt-4">
-        <span class="text-secondary">
-            아직 계정이 없으신가요?
-        </span>
+            <span class="text-secondary">
+                아직 계정이 없으신가요?
+            </span>
 
             <a
-                    href="{{ url_for('auth.signup') }}"
-                    class="text-decoration-none fw-semibold ms-1">
+                href="{{ url_for('auth.signup') }}"
+                class="text-decoration-none fw-semibold ms-1"
+            >
                 회원가입
             </a>
         </div>
-
     </section>
 
 {% endif %}
@@ -173,7 +166,7 @@
         maxZoom: 19,
         maxBounds: worldBounds,
         maxBoundsViscosity: 1.0
-    }).setView([20, 0], 2);
+    }).setView([20, 0], 3);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         noWrap: true,
@@ -211,7 +204,7 @@
             const places = await response.json();
             if (!Array.isArray(places)) throw new Error('잘못된 여행지 응답입니다.');
             markers.clearLayers();
-            let lastPlace = null;
+
             for (const place of places) {
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
                     Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
@@ -235,9 +228,9 @@
                 popup.append(title, location, intro, link);
                 const marker = L.marker([place.lat, place.lng]).bindPopup(popup);
                 markers.addLayer(marker);
-                lastPlace = place;
+
             }
-            if (lastPlace) map.setView([lastPlace.lat, lastPlace.lng], 12);
+
         } catch (error) {
             const message = document.createElement('div');
             message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';

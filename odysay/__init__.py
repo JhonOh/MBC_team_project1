@@ -2,7 +2,7 @@ from flask import Flask, jsonify
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import MetaData
+from sqlalchemy import MetaData, text, inspect
 import config
 
 naming_convention = {
@@ -16,6 +16,7 @@ naming_convention = {
 db = SQLAlchemy(metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate()
 csrf = CSRFProtect()
+
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -44,6 +45,37 @@ def create_app(test_config=None):
     # 모델 불러오기 및 DB 테이블 생성[cite: 11]
     from . import models
 
+    # 기존 SQLite DB에 필요한 컬럼 추가 26.09.26 박기흠 수정 마이페이지 내의 내가 등록한 여행지 등록관련
+    with app.app_context():
+        with db.engine.begin() as connection:
+            inspector = inspect(connection)
+
+            # 1. 회원 활성 상태 컬럼
+            if inspector.has_table('user'):
+                user_columns = {
+                    column['name']
+                    for column in inspector.get_columns('user')
+                }
+
+                if 'is_active' not in user_columns:
+                    connection.execute(text(
+                        'ALTER TABLE "user" '
+                        'ADD COLUMN is_active BOOLEAN NOT NULL DEFAULT TRUE'
+                    ))
+
+            # 2. 여행지 등록자 컬럼
+            # 위의 is_active 존재 여부와 관계없이 확인
+            if inspector.has_table('travel_places'):
+                place_columns = {
+                    column['name']
+                    for column in inspector.get_columns('travel_places')
+                }
+
+                if 'user_id' not in place_columns:
+                    connection.execute(text(
+                        'ALTER TABLE travel_places '
+                        'ADD COLUMN user_id INTEGER REFERENCES "user"(id)'
+                    ))
     # 블루프린트 등록[cite: 11]
     from .views import main_views, mapmain_views, sub_views, auth_views
 
@@ -51,6 +83,7 @@ def create_app(test_config=None):
     app.register_blueprint(mapmain_views.bp)
     app.register_blueprint(sub_views.bp)
     app.register_blueprint(auth_views.bp)
+    app.register_blueprint(auth_views.profile_bp)
 
     # # 라우트 설정[cite: 11]
     # @app.route('/')

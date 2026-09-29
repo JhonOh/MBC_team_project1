@@ -111,43 +111,6 @@ body {
     opacity: 0.6;
 }
 
-/* hero */
-.hero {
-    height: 260px;
-
-    background:
-        linear-gradient(
-            rgba(10, 30, 55, 0.3),
-            rgba(10, 30, 55, 0.3)
-        ),
-        url("../photo/travel-left.jpg");
-
-    background-size: cover;
-    background-position: center;
-
-    color: white;
-}
-
-.hero-text {
-    width: 1100px;
-    margin: auto;
-    padding-top: 55px;
-}
-
-.hero-text p {
-    margin-bottom: 8px;
-}
-
-.hero-text h1 {
-    font-size: 31px;
-    font-weight: 700;
-}
-
-.hero-text span {
-    font-size: 14px;
-    line-height: 1.8;
-}
-
 
 /* ================= LAYOUT ================= */
 
@@ -172,41 +135,102 @@ body {
     border-radius: 20px 20px 0 0;
 }
 
-
 /* ================= LEFT ================= */
 
 .left-menu {
-    background: #edf4fb;
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-left.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
     border-radius: 12px;
 
-    min-height: 100%;
+    height: 787px;
+    align-self: start;
 
     padding: 30px 15px;
 
-    position: relative;
+    position: sticky;
+    top: 20px;
+
+    overflow: hidden;
 }
 
+
+/* 위쪽 문구 */
+
 .side-message {
-    margin: 40px 10px 45px;
+    margin: 50px 10px 45px;
 
     line-height: 2;
 
     font-style: italic;
+    font-weight: 600;
+    color: black;
 
-    color: #385476;
+    position: relative;
+    z-index: 2;
 }
+
+/* 사진 위 문구 */
+
+.side-bottom {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
+
+    text-align: center;
+
+    font-style: italic;
+
+    line-height: 1.8;
+
+    color: #4f6584;
+
+    z-index: 2;
+}
+
+.side-bottom strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.side-bottom small {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+/* 메뉴 */
 
 .menu-list {
     display: flex;
     flex-direction: column;
+
     gap: 8px;
+
+    padding: 0 15px;
+
+    position: relative;
+    z-index: 2;
 }
 
 .menu-list a {
     text-decoration: none;
 
-    color: #43516b;
+    color: black;
 
     padding: 13px;
 
@@ -214,38 +238,20 @@ body {
 }
 
 .menu-list a.selected {
-    background: white;
+    background: rgba(255, 255, 255, 0.85);
 
     color: #142443;
 
     font-weight: bold;
 }
 
-.side-bottom {
-    position: absolute;
-
-    left: 0;
-    right: 0;
-    bottom: 40px;
-
-    text-align: center;
-}
-
-.side-bottom strong {
-    display: block;
-
-    font-size: 20px;
-}
-
-.side-bottom small {
-    letter-spacing: 3px;
-}
-
-
 /* ================= FORM ================= */
 
 .form-container {
     padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
 }
 
 .form-title {
@@ -350,6 +356,57 @@ textarea.form-control {
     resize: none;
 }
 
+/* ================= COUNTRY SEARCH ================= */
+
+.country-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.country-results {
+    display: none;
+
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+
+    width: 100%;
+    max-height: 200px;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border: 1px solid #d7dfea;
+    border-radius: 7px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    z-index: 100;
+}
+
+.country-result-item {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #142443;
+
+    cursor: pointer;
+}
+
+.country-result-item:hover {
+    background: #f4f8ff;
+    color: #1473ff;
+}
+
+.country-no-result {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #9aa4b5;
+}
 
 /* ================= CATEGORY ================= */
 
@@ -511,6 +568,71 @@ textarea.form-control {
     cursor: pointer;
 }
 
+/* ================= NEARBY PHOTO ================= */
+
+.nearby-photo-area {
+    margin-top: 10px;
+}
+
+.nearby-photo-button {
+    display: flex !important;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 42px;
+
+    margin-bottom: 5px !important;
+
+    border: 1px dashed #cbd5e3;
+    border-radius: 7px;
+
+    background: #fafbfd;
+
+    color: #68758b;
+
+    font-size: 12px !important;
+
+    cursor: pointer;
+}
+
+.nearby-photo-button:hover {
+    border-color: #2878ff;
+
+    background: #f4f8ff;
+
+    color: #1473ff;
+}
+
+.nearby-photo-area small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #8994a5;
+
+    font-size: 11px;
+}
+
+.nearby-preview {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.nearby-preview .preview-item img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+}
 
 /* ================= BOTTOM ================= */
 
@@ -568,6 +690,9 @@ textarea.form-control {
 .guide-container {
     display: none;
     padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
 }
 
 .guide-box {
@@ -630,39 +755,70 @@ textarea.form-control {
 /* ================= RIGHT ================= */
 
 .right-info {
-    background: #f3f7fc;
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-right.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
     border-radius: 12px;
+    height: 787px;
+    align-self: start;
+    position: sticky;
+    top: 20px;
 
-    padding: 30px 18px;
+    overflow: hidden;
+}
 
-    font-size: 13px;
+/* 양쪽 배너 그림자 */
+.left-menu,
+.right-info {
+    box-shadow: 0 8px 18px rgba(20, 41, 71, 0.05);
+}
 
-    color: #718097;
+/* 위쪽 안내 영역 */
+
+.right-content {
     position: relative;
+
+    z-index: 2;
+
+    padding: 90px 20px 20px;
 }
 
 .right-info h4 {
-    margin-top: 40px;
+    margin: 0 0 60px;
 
-    font-size: 14px;
+    font-size: 15px;
 
-    color: #17305a;
+    color: black;
 
     font-weight: 700;
-
-    margin-bottom: 25px;
 }
 
-.right-info p {
+.right-info .right-content p {
     line-height: 1.7;
 
     margin-bottom: 14px;
+
+    color: black;
 }
+
+/* 사진 위 문구 */
 
 .right-message {
     position: absolute;
-    bottom: 40px;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
 
     text-align: center;
 
@@ -671,12 +827,14 @@ textarea.form-control {
     line-height: 1.8;
 
     color: #4f6584;
+
+    z-index: 2;
 }
 
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 900px) {
+@media (max-width: 700px) {
     .left-menu,
     .right-info {
         display: none;

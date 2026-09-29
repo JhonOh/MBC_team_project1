@@ -10,3 +10,5 @@ instance/
 .env.*
 !.env.example
 odysay/static/uploads/*
+**/migrations/*/
+!**/migrations/__init__.py

@@ -26,11 +26,18 @@
             </a>
 
             <nav class="main-menu">
-                <a href="#">홈</a>
+                <a href="{{ url_for('homepage.homepage') }}">
+                    홈
+                </a>
                 <a href="#">여행지</a>
                 <a href="#">여행 후기</a>
-                <a href="#">여행지 등록</a>
-                <a href="#">마이페이지</a>
+                <a href="{{ url_for('homepage.upload') }}">
+                    여행지 등록
+                </a>
+
+                <a href="{{ url_for('homepage.mypage') }}" aria-current="page">
+                    마이페이지
+                </a>
             </nav>
 
             <button type="button" class="search-btn">
@@ -128,7 +135,7 @@
 
                 </div>
 
-               <a href="{{ url_for('homepage.profile_edit') }}" class="profile-btn">프로필 수정
+               <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">프로필 수정
                </a>
 
             </div>
@@ -172,7 +179,7 @@
                     </span>
 
                     <span class="stat-number">
-                        24
+                           {{ my_place_count }}
                     </span>
 
                 </div>

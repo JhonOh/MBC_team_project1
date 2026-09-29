@@ -67,9 +67,10 @@
     <aside class="left-menu">
 
         <p class="side-message">
-            여행은 목적지가 아닌,<br>
-            새로운 나를 만나는<br>
-            여정입니다.
+            여행은<br>
+            목적지가 아닌,<br>
+            새로운 나를<br>
+            만나는 여정입니다.
         </p>
 
         <div class="menu-list">
@@ -114,17 +115,32 @@
 
                 <div class="two-column">
 
-                {# 나라 #}
-                <div class="form-group">
-                    <label for="country">
+                {# 나라 검색 #}
+                <div class="form-group country-search-group">
+                    <label for="countrySearch">
                         나라 선택 <span>*</span>
                     </label>
 
-                    <select name="country" id="country" class="form-select" required>
-                        <option value="">
-                            나라를 선택해주세요.
-                        </option>
-                    </select>
+                    <div class="country-search-wrapper">
+
+                        <input type="text"
+                               id="countrySearch"
+                               class="form-control"
+                               placeholder="나라를 검색해주세요."
+                               autocomplete="off">
+
+                        <!-- 실제 서버로 전달될 나라 -->
+                        <input type="hidden"
+                               id="country"
+                               name="country"
+                               required>
+
+                        <!-- 검색 결과가 나타나는 곳 -->
+                        <div id="countryResults"
+                             class="country-results">
+                        </div>
+
+                    </div>
                 </div>
 
                 {# 지역 #}
@@ -148,54 +164,6 @@
                     <input type="text" id="place" name="place" class="form-control" placeholder="ex) 에펠탑, 후쿠오카 타워, 산토리니 이아 마을" required>
 
                 </div>
-
-                <div class="form-group">
-                    <button
-                            type="button"
-                            id="search-location"
-                            class="btn btn-outline-dark">
-                        위치 검색
-                    </button>
-
-                    <p
-                            id="location-message"
-                            class="small mt-2"
-                            role="status"
-                            aria-live="polite">
-                        국가·지역·세부 여행지명을 입력하고 위치를 검색해 주세요.
-                    </p>
-
-                    <label for="location-index">
-                        검색된 위치
-                    </label>
-
-                    <select
-                            id="location-index"
-                            name="location_index"
-                            class="form-select"
-                            required>
-                        <option value="">위치를 검색한 뒤 선택해 주세요.</option>
-                    </select>
-
-                    <small class="text-secondary">
-                        검색된 주소가 실제 여행지와 일치하는지 확인해 주세요.
-                        위치 검색:
-                        <a
-                                href="https://www.kakaocorp.com/page/service/service/KakaoMap"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                            카카오맵
-                        </a>
-                        ·
-                        <a
-                                href="https://www.openstreetmap.org/copyright"
-                                target="_blank"
-                                rel="noopener noreferrer">
-                            OpenStreetMap
-                        </a>
-                    </small>
-                </div>
-
 
                 <div class="form-group">
                     <label>
@@ -290,6 +258,25 @@
                         </label>
 
                         <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
+                        <!-- 주변 맛집 사진 -->
+                        <div class="nearby-photo-area">
+
+                            <label for="restaurantPhotos" class="nearby-photo-button">
+                                📷 맛집 사진 추가
+                            </label>
+
+                            <input type="file"
+                                   id="restaurantPhotos"
+                                   name="restaurant_photos"
+                                   accept="image/png, image/jpeg"
+                                   multiple
+                                   hidden>
+
+                            <small>최대 3장까지 등록할 수 있습니다.</small>
+
+                            <div id="restaurantPreview" class="nearby-preview"></div>
+
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -298,6 +285,25 @@
                         </label>
 
                         <textarea id="nearby" name="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
+                        <!-- 주변 볼거리 사진 -->
+                        <div class="nearby-photo-area">
+
+                            <label for="nearbyPhotos" class="nearby-photo-button">
+                                📷 볼거리 사진 추가
+                            </label>
+
+                            <input type="file"
+                                   id="nearbyPhotos"
+                                   name="nearby_photos"
+                                   accept="image/png, image/jpeg"
+                                   multiple
+                                   hidden>
+
+                            <small>최대 3장까지 등록할 수 있습니다.</small>
+
+                            <div id="nearbyPreview" class="nearby-preview"></div>
+
+                        </div>
                     </div>
                 </div>
             </section>
@@ -415,17 +421,22 @@
 
     <!-- right -->
     <aside class="right-info">
-        <h4>
-            💡 좋은 여행지가 될 수 있어요!
-        </h4>
 
-        <p>✓ 직접 경험한 내용을 작성해주세요.</p>
+        <div class="right-content">
 
-        <p>✓ 다른 여행자에게 도움이 되는 정보를 공유해주세요.</p>
+            <h4>
+                💡 좋은 여행지가 될 수 있어요!
+            </h4>
 
-        <p>✓ 사진과 함께 등록하면 더 좋아요!</p>
+            <p>✓ 직접 경험한 내용을 작성해주세요.</p>
 
-        <p>✓ 광고성 내용은 제외해주세요.</p>
+            <p>✓ 다른 여행자에게 도움이 되는 정보를 공유해주세요.</p>
+
+            <p>✓ 사진과 함께 등록하면 더 좋아요!</p>
+
+            <p>✓ 광고성 내용은 제외해주세요.</p>
+
+        </div>
 
         <div class="right-message">
             당신의 이야기가<br>
@@ -434,137 +445,88 @@
 
     </aside>
 
-</main>
+    </main>
+
+    <!-- ========================================
+         하단 브랜드 배너
+    ======================================== -->
+    <section class="bottom-banner">
+        <div class="section-inner bottom-banner-inner">
+
+            <p class="bottom-message">
+                여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
+            </p>
+
+            <div class="bottom-brand">
+
+                <div class="bottom-logo">
+
+                    <span class="logo-symbol">
+                        △△
+                    </span>
+
+                    <div>
+                        <strong>어딧세이</strong>
+                        <small>ODYSAY</small>
+                    </div>
+
+                </div>
+
+                <div class="bottom-divider"></div>
+
+                <p class="bottom-slogan">
+                    더 많은 이야기로,<br>
+                    더 멀리.
+                </p>
+
+            </div>
+
+        </div>
+    </section>
+
+
+    <!-- ========================================
+         FOOTER
+    ======================================== -->
+    <footer class="footer">
+
+        <div class="section-inner footer-inner">
+
+            <div class="footer-left">
+
+                <strong>
+                    어딧세이 ODYSAY
+                </strong>
+
+                <p>
+                    참여형 여행정보 커뮤니티
+                </p>
+
+            </div>
+
+            <div class="footer-right">
+
+                <span>
+                    © 2026 ODYSAY
+                </span>
+
+                <span>
+                    Team Project
+                </span>
+
+            </div>
+
+        </div>
+
+    </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="{{ url_for('static', filename='js/countries.js') }}"></script>
 
 <script src="{{ url_for('static', filename='js/upload.js') }}"></script>
-<script>
-    const locationFields = [
-        document.getElementById('country'),
-        document.getElementById('region'),
-        document.getElementById('place')
-    ];
 
-    const searchLocationButton =
-        document.getElementById('search-location');
-
-    const locationSelect =
-        document.getElementById('location-index');
-
-    const locationMessage =
-        document.getElementById('location-message');
-
-    let locationVersion = 0;
-
-    function resetLocationResults() {
-        locationSelect.replaceChildren(
-            new Option('위치를 검색한 뒤 선택해 주세요.', '')
-        );
-    }
-
-    // 국가·지역·장소를 바꾸면 이전 선택 취소
-    for (const field of locationFields) {
-        field.addEventListener('input', () => {
-            locationVersion += 1;
-            resetLocationResults();
-            locationMessage.textContent =
-                '장소 정보가 변경되었습니다. 다시 검색해 주세요.';
-        });
-    }
-
-    searchLocationButton.addEventListener('click', async () => {
-        const values = locationFields.map(
-            field => field.value.trim()
-        );
-
-        if (values.some(value => !value)) {
-            locationMessage.textContent =
-                '국가, 지역, 세부 여행지명을 먼저 입력해 주세요.';
-            return;
-        }
-
-        const version = ++locationVersion;
-
-        resetLocationResults();
-        searchLocationButton.disabled = true;
-        locationMessage.textContent = '위치를 검색하고 있습니다…';
-
-        try {
-            const url = new URL(
-                {{ url_for('homepage.geocode') | tojson }},
-                window.location.origin
-            );
-
-            url.searchParams.set('country', values[0]);
-            url.searchParams.set('region', values[1]);
-            url.searchParams.set('place', values[2]);
-
-            const response = await fetch(url, {
-                cache: 'no-store'
-            });
-
-            const data = await response.json();
-
-            if (version !== locationVersion) {
-                return;
-            }
-
-            if (!response.ok) {
-                throw new Error(
-                    data.error || '위치 검색에 실패했습니다.'
-                );
-            }
-
-            data.candidates.forEach((candidate, index) => {
-                const label =
-                    `${candidate.address}${candidate.approximate ? ' (지역 단위 위치)' : ''} ` +
-                    `(위도 ${candidate.latitude.toFixed(8)}, ` +
-                    `경도 ${candidate.longitude.toFixed(8)})`;
-
-                locationSelect.add(
-                    new Option(label, String(index))
-                );
-            });
-
-            locationMessage.textContent =
-                '검색 결과에서 실제 여행지에 해당하는 위치를 선택해 주세요.';
-
-        } catch (error) {
-            if (version === locationVersion) {
-                locationMessage.textContent = error.message;
-            }
-        } finally {
-            searchLocationButton.disabled = false;
-        }
-    });
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const upload = document.getElementById('uploadContent');
-    const guide = document.getElementById('guideContent');
-    const uploadMenu = document.getElementById('uploadMenu');
-    const guideMenu = document.getElementById('guideMenu');
-    function showGuide(visible) {
-        upload.style.display = visible ? 'none' : 'block';
-        guide.style.display = visible ? 'block' : 'none';
-        uploadMenu.classList.toggle('selected', !visible);
-        guideMenu.classList.toggle('selected', visible);
-    }
-    uploadMenu.addEventListener('click', function (event) {
-        event.preventDefault(); showGuide(false);
-    });
-    guideMenu.addEventListener('click', function (event) {
-        event.preventDefault(); showGuide(true);
-    });
-    document.getElementById('guideConfirmButton').addEventListener('click', function () {
-        showGuide(false);
-    });
-});
-</script>
 </body>
 
 </html>
