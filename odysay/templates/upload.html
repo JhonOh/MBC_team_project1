@@ -98,7 +98,13 @@
     {#  FORM  #}
     <section class="form-container" id="uploadContent">
         <div class="form-title">
-            <h2>여행지 등록하기</h2>
+            <h2>
+                {% if edit_mode %}
+                    여행지 수정하기
+                {% else %}
+                    여행지 등록하기
+                {% endif %}
+            </h2>
 
             <p>
                 당신이 다녀온 특별한 여행지를 공유해주세요.<br>
@@ -107,7 +113,12 @@
 
         </div>
 
-        <form id="travelForm" method="POST" action="{{ url_for('homepage.upload') }}" enctype="multipart/form-data">
+        <input type="hidden" id="editMode" value="{{ 'true' if edit_mode else 'false' }}">
+
+        <form id="travelForm"
+              method="POST"
+              action="{% if edit_mode %}{{ url_for('homepage.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
+              enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <section class="form-section">
 
@@ -127,12 +138,14 @@
                                id="countrySearch"
                                class="form-control"
                                placeholder="나라를 검색해주세요."
-                               autocomplete="off">
+                               autocomplete="off"
+                               value="{{ place.country if edit_mode else '' }}">
 
                         <!-- 실제 서버로 전달될 나라 -->
                         <input type="hidden"
                                id="country"
                                name="country"
+                               value="{{ place.country if edit_mode else '' }}"
                                required>
 
                         <!-- 검색 결과가 나타나는 곳 -->
@@ -150,7 +163,7 @@
                         지역 <span>*</span>
                     </label>
 
-                    <input type="text" id="region" name="region" class="form-control" placeholder="지역을 입력해주세요." required>
+                    <input type="text" id="region" name="region" class="form-control" placeholder="지역을 입력해주세요." value="{{ place.region if edit_mode else '' }}" required>
                 </div>
 
                 </div>
@@ -161,7 +174,7 @@
                         세부 여행지명 <span>*</span>
                     </label>
 
-                    <input type="text" id="place" name="place" class="form-control" placeholder="ex) 에펠탑, 후쿠오카 타워, 산토리니 이아 마을" required>
+                    <input type="text" id="place" name="place" class="form-control" placeholder="ex) 에펠탑, 후쿠오카 타워, 산토리니 이아 마을" value="{{ place.place if edit_mode else '' }}" required>
 
                 </div>
 
@@ -172,31 +185,36 @@
 
                     <div class="category-list">
 
-                        <input type="checkbox" class="btn-check" name="category" id="tour" value="관광지" checked>
+                        <input type="checkbox" class="btn-check" name="category" id="tour"
+                               value="관광지" {% if not edit_mode or '관광지' in place.category %}checked{% endif %}>
 
                         <label class="category-button" for="tour">
                             ✈ 관광지
                         </label>
 
-                        <input type="checkbox" class="btn-check" name="category" id="food" value="맛집">
+                        <input type="checkbox" class="btn-check" name="category" id="food"
+                               value="맛집" {% if edit_mode and '맛집' in place.category %}checked{% endif %}>
 
                         <label class="category-button" for="food">
                             🍴 맛집
                         </label>
 
-                        <input type="checkbox" class="btn-check" name="category" id="hotel" value="숙소">
+                        <input type="checkbox" class="btn-check" name="category" id="hotel"
+                               value="숙소" {% if edit_mode and '숙소' in place.category %}checked{% endif %}>
 
                         <label class="category-button" for="hotel">
                             🛏 숙소
                         </label>
 
-                        <input type="checkbox" class="btn-check" name="category" id="activity" value="체험">
+                        <input type="checkbox" class="btn-check" name="category" id="activity"
+                               value="체험" {% if edit_mode and '체험' in place.category %}checked{% endif %}>
 
                         <label class="category-button" for="activity">
                             📷 체험 · 액티비티
                         </label>
 
-                        <input type="checkbox" class="btn-check" name="category" id="etc" value="기타">
+                        <input type="checkbox" class="btn-check" name="category" id="etc"
+                               value="기타" {% if edit_mode and '기타' in place.category %}checked{% endif %}>
 
                         <label class="category-button" for="etc" >
                             ··· 기타
@@ -204,7 +222,8 @@
 
                         <!-- 기타 선택 시 나오는 입력창 -->
                         <div id="etc-input-box" style="display: none;">
-                            <input type="text" id="etc-category" name="etc_category" placeholder="카테고리를 직접 입력해주세요.">
+                            <input type="text" id="etc-category" name="etc_category"
+                                   placeholder="카테고리를 직접 입력해주세요.">
                         </div>
                     </div>
 
@@ -221,7 +240,9 @@
                         한줄 소개 <span>*</span>
                     </label>
 
-                    <input type="text" id="intro" name="intro" class="form-control" maxlength="100" placeholder="이 여행지를 한 문장으로 소개해주세요." required>
+                    <input type="text" id="intro" name="intro" class="form-control" maxlength="100"
+                           placeholder="이 여행지를 한 문장으로 소개해주세요."
+                           value="{{ place.intro if edit_mode else '' }}" required>
 
                     <div class="counter">
                         <span id="introCount">0</span>/100
@@ -235,7 +256,8 @@
                     </label>
 
                     <textarea name="reason" id="reason" class="form-control" maxlength="500"
-                              placeholder="이 여행지를 추천하는 이유는 무엇인가요? 직접 경험한 내용을 바탕으로 자유롭게 작성해주세요." required></textarea>
+                              placeholder="이 여행지를 추천하는 이유는 무엇인가요? 직접 경험한 내용을 바탕으로 자유롭게 작성해주세요."
+                              required>{{ place.reason if edit_mode else '' }}</textarea>
 
                     <div class="counter">
                         <span id="reasonCount">0</span>/500
@@ -257,7 +279,8 @@
                             주변 맛집
                         </label>
 
-                        <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
+                        <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300"
+                                  placeholder="이 근처에 추천하고 싶은 맛집이 있나요?">{{ place.restaurant if edit_mode and place.restaurant else '' }}</textarea>
                         <!-- 주변 맛집 사진 -->
                         <div class="nearby-photo-area">
 
@@ -274,6 +297,25 @@
 
                             <small>최대 3장까지 등록할 수 있습니다.</small>
 
+                            {% if edit_mode and restaurant_photos %}
+                            <div id="existingRestaurantPhotos" class="nearby-preview">
+                                {% for photo in restaurant_photos %}
+                                    <div class="preview-item existing-photo">
+                                        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}"
+                                             alt="기존 맛집 사진">
+
+                                        <input type="hidden"
+                                               name="existing_restaurant_photos"
+                                               value="{{ photo }}">
+
+                                        <button type="button" class="remove-photo remove-existing-photo">
+                                            ×
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
                             <div id="restaurantPreview" class="nearby-preview"></div>
 
                         </div>
@@ -284,7 +326,8 @@
                             주변 볼거리 / 즐길거리
                         </label>
 
-                        <textarea id="nearby" name="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
+                        <textarea id="nearby" name="nearby" class="form-control" maxlength="300"
+                                  placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?">{{ place.nearby if edit_mode and place.nearby else '' }}</textarea>
                         <!-- 주변 볼거리 사진 -->
                         <div class="nearby-photo-area">
 
@@ -300,6 +343,25 @@
                                    hidden>
 
                             <small>최대 3장까지 등록할 수 있습니다.</small>
+
+                            {% if edit_mode and nearby_photos %}
+                            <div id="existingNearbyPhotos" class="nearby-preview">
+                                {% for photo in nearby_photos %}
+                                    <div class="preview-item existing-photo">
+                                        <img src="{{ url_for('static', filename='uploads/' ~ photo) }}"
+                                             alt="기존 볼거리 사진">
+
+                                        <input type="hidden"
+                                               name="existing_nearby_photos"
+                                               value="{{ photo }}">
+
+                                        <button type="button" class="remove-photo remove-existing-photo">
+                                            ×
+                                        </button>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
 
                             <div id="nearbyPreview" class="nearby-preview"></div>
 
@@ -334,31 +396,54 @@
 
                 <input type="file" id="photos" name="photos" accept="image/png, image/jpeg" multiple hidden>
 
-                <div id="previewContainer" class="preview-container">
-                </div>
+                {% if edit_mode and photos %}
+                    <div id="existingPhotos" class="preview-container">
+                        {% for photo in photos %}
+                            <div class="preview-item existing-photo">
+                                <img src="{{ url_for('static', filename='uploads/' ~ photo) }}"
+                                     alt="기존 여행지 사진">
+
+                                <input type="hidden"
+                                       name="existing_photos"
+                                       value="{{ photo }}">
+
+                                <button type="button" class="remove-photo remove-existing-photo">
+                                    ×
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <div id="previewContainer" class="preview-container"></div>
 
             </section>
 
             <!-- 버튼 -->
             <div class="bottom-area">
+                {% if not edit_mode %}
                 <label class="agree">
                     <input type="checkbox" id="agree" name="agree" value="yes" required>
 
                     등록 가이드라인을 확인했으며,
                     이에 동의합니다.
-
                 </label>
+                {% endif %}
                 <div class="button-area">
 
 
-                <button type="button" class="cancel-button" onclick="window.location.href='{{ url_for('homepage.main') }}'">
-
-
+                <button type="button"
+                        class="cancel-button"
+                        onclick="window.location.href='{% if edit_mode %}{{ url_for('homepage.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.main') }}{% endif %}'">
                     취소하기
                 </button>
 
                 <button type="submit" class="submit-button">
-                    등록하기
+                    {% if edit_mode %}
+                        수정 완료
+                    {% else %}
+                        등록하기
+                    {% endif %}
                 </button>
                 </div>
 

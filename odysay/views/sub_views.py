@@ -2,10 +2,11 @@ import os
 import time
 import json
 import requests
+from datetime import datetime
 from dotenv import load_dotenv
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, jsonify, g
 from werkzeug.utils import secure_filename
-from odysay.models import db, TravelPlace
+from odysay.models import db, TravelPlace, User
 from geopy.geocoders import Nominatim
 from google import genai
 from google.genai import types
@@ -243,6 +244,33 @@ def upload():
                     file.save(os.path.join(upload_folder, unique_filename))
                     saved_photos.append(unique_filename)
 
+        # 주변 맛집 사진 저장
+        saved_restaurant_photos = []
+
+        if 'restaurant_photos' in request.files:
+            restaurant_files = request.files.getlist('restaurant_photos')
+
+            for file in restaurant_files:
+                if file and file.filename.strip() != '':
+                    filename = secure_filename(file.filename)
+                    unique_filename = f"{int(time.time())}_{filename}"
+                    file.save(os.path.join(upload_folder, unique_filename))
+                    saved_restaurant_photos.append(unique_filename)
+
+        # 주변 볼거리 / 즐길거리 사진 저장
+        saved_nearby_photos = []
+
+        if 'nearby_photos' in request.files:
+            nearby_files = request.files.getlist('nearby_photos')
+
+            for file in nearby_files:
+                if file and file.filename.strip() != '':
+                    filename = secure_filename(file.filename)
+                    unique_filename = f"{int(time.time())}_{filename}"
+                    file.save(os.path.join(upload_folder, unique_filename))
+                    saved_nearby_photos.append(unique_filename)
+
+
         # -----------------------------------------------------------
         # DB 저장 처리
         # -----------------------------------------------------------
@@ -257,6 +285,14 @@ def upload():
                 restaurant=restaurant,
                 nearby=nearby,
                 photos=','.join(saved_photos) if saved_photos else None,
+
+                # 주변정보 사진 추가
+                restaurant_photos=','.join(saved_restaurant_photos) if saved_restaurant_photos else None,
+                nearby_photos=','.join(saved_nearby_photos) if saved_nearby_photos else None,
+
+                # 작성자
+                user_id=g.user.id if g.user else None,
+
                 latitude=lat,
                 longitude=lng
             )
@@ -264,7 +300,13 @@ def upload():
             db.session.add(new_place)
             db.session.commit()
             print(f"[DB 저장 성공] {place} ({lat}, {lng})")
-            return redirect(url_for('homepage.main'))
+
+            return redirect(
+                url_for(
+                    'homepage.trip_location_detail',
+                    place_id=new_place.id
+                )
+            )
 
         except Exception as e:
             db.session.rollback()
@@ -292,6 +334,7 @@ def get_places():
                 'id': p.id,
                 'title': p.place,
                 'country': p.country,
+                'detail_url': url_for('homepage.trip_location_detail', place_id=p.id),
                 'region': p.region,
                 'intro': p.intro,
                 'lat': p.latitude,
@@ -304,8 +347,159 @@ def get_places():
 def trip_location_detail(place_id):
     place_data = TravelPlace.query.get_or_404(place_id)
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-    return render_template('trip_location.html', place=place_data, photos=photos)
+    # 주변 맛집 사진
+    restaurant_photos = (
+        [p.strip() for p in place_data.restaurant_photos.split(',') if p.strip()]
+        if place_data.restaurant_photos else []
+    )
 
+    # 주변 볼거리 / 즐길거리 사진
+    nearby_photos = (
+        [p.strip() for p in place_data.nearby_photos.split(',') if p.strip()]
+        if place_data.nearby_photos else []
+    )
+
+    # 작성자 정보
+    author = User.query.get(place_data.user_id) if place_data.user_id else None
+
+    return render_template('trip_location.html',
+                           place=place_data,
+                           photos=photos,
+                           restaurant_photos=restaurant_photos,
+                           nearby_photos=nearby_photos,
+                           author=author
+                           )
+
+# 여행지 수정 페이지
+@bp.route('/trip_location/<int:place_id>/edit', methods=['GET', 'POST'])
+def trip_location_edit(place_id):
+    place_data = TravelPlace.query.get_or_404(place_id)
+
+    # 로그인하지 않은 경우
+    if not g.user:
+        return redirect(url_for('homepage.trip_location_detail', place_id=place_id))
+
+    # 작성자가 아닌 경우
+    if place_data.user_id != g.user.id:
+        return redirect(url_for('homepage.trip_location_detail', place_id=place_id))
+
+    # 수정 내용 저장
+    if request.method == 'POST':
+        place_data.country = request.form.get('country', '')
+        place_data.region = request.form.get('region', '')
+        place_data.place = request.form.get('place', '')
+
+        # 카테고리
+        categories = request.form.getlist('category')
+        etc_cat = request.form.get('etc_category')
+
+        if etc_cat:
+            categories.append(etc_cat)
+
+        place_data.category = ', '.join(categories)
+
+        # 여행지 소개
+        place_data.intro = request.form.get('intro')
+        place_data.reason = request.form.get('reason')
+
+        # 주변 정보
+        place_data.restaurant = request.form.get('restaurant')
+        place_data.nearby = request.form.get('nearby')
+
+        # 수정 후에도 유지할 기존 사진
+        existing_photos = request.form.getlist('existing_photos')
+        existing_restaurant_photos = request.form.getlist('existing_restaurant_photos')
+        existing_nearby_photos = request.form.getlist('existing_nearby_photos')
+
+        # 새로 추가한 사진을 저장할 폴더
+        upload_folder = os.path.join(
+            current_app.root_path,
+            'static',
+            'uploads'
+        )
+        os.makedirs(upload_folder, exist_ok=True)
+
+        # 새로 추가한 메인 사진
+        new_photos = []
+
+        for file in request.files.getlist('photos'):
+            if file and file.filename.strip() != '':
+                filename = secure_filename(file.filename)
+                unique_filename = f"{int(time.time())}_{filename}"
+                file.save(os.path.join(upload_folder, unique_filename))
+                new_photos.append(unique_filename)
+
+        # 새로 추가한 맛집 사진
+        new_restaurant_photos = []
+
+        for file in request.files.getlist('restaurant_photos'):
+            if file and file.filename.strip() != '':
+                filename = secure_filename(file.filename)
+                unique_filename = f"{int(time.time())}_{filename}"
+                file.save(os.path.join(upload_folder, unique_filename))
+                new_restaurant_photos.append(unique_filename)
+
+        # 새로 추가한 볼거리 / 즐길거리 사진
+        new_nearby_photos = []
+
+        for file in request.files.getlist('nearby_photos'):
+            if file and file.filename.strip() != '':
+                filename = secure_filename(file.filename)
+                unique_filename = f"{int(time.time())}_{filename}"
+                file.save(os.path.join(upload_folder, unique_filename))
+                new_nearby_photos.append(unique_filename)
+
+        # 기존 사진 + 새로 추가한 사진 합치기
+        final_photos = existing_photos + new_photos
+        final_restaurant_photos = existing_restaurant_photos + new_restaurant_photos
+        final_nearby_photos = existing_nearby_photos + new_nearby_photos
+
+        # DB 사진 정보 수정
+        place_data.photos = ','.join(final_photos) if final_photos else None
+        place_data.restaurant_photos = ','.join(final_restaurant_photos) if final_restaurant_photos else None
+        place_data.nearby_photos = ','.join(final_nearby_photos) if final_nearby_photos else None
+
+        # 수정 일시 저장
+        place_data.updated_at = datetime.now()
+
+        # 수정 내용 DB 저장
+        db.session.commit()
+
+        # 수정 완료 후 상세페이지로 이동
+        return redirect(
+            url_for(
+                'homepage.trip_location_detail',
+                place_id=place_data.id
+            )
+        )
+
+
+    # 기존 메인 사진
+    photos = (
+        [p.strip() for p in place_data.photos.split(',') if p.strip()]
+        if place_data.photos else []
+    )
+
+    # 기존 주변 맛집 사진
+    restaurant_photos = (
+        [p.strip() for p in place_data.restaurant_photos.split(',') if p.strip()]
+        if place_data.restaurant_photos else []
+    )
+
+    # 기존 주변 볼거리 / 즐길거리 사진
+    nearby_photos = (
+        [p.strip() for p in place_data.nearby_photos.split(',') if p.strip()]
+        if place_data.nearby_photos else []
+    )
+
+    return render_template(
+        'upload.html',
+        place=place_data,
+        edit_mode=True,
+        photos=photos,
+        restaurant_photos=restaurant_photos,
+        nearby_photos=nearby_photos
+    )
 
 @bp.route('/trip_location')
 def trip_location():
@@ -315,7 +509,7 @@ def trip_location():
         return "<script>alert('등록된 여행지가 없습니다. 먼저 여행지를 등록해주세요!'); location.href='/homepage/upload';</script>"
 
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-    return render_template('trip_location.html', place=place_data, photos=photos)
+    return render_template('trip_location.html', place=place_data, photos=photos,)
 
 
 @bp.route('/trip_list')
