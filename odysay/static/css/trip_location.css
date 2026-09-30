@@ -77,15 +77,15 @@ button {
 
 /* 메인 컨테이너 */
 .container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 30px auto;
-    padding: 0 20px;
+    padding: 0 24px;
 }
 
 /* 상단 카드 정보 구조 */
 .detail-top {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.45fr 0.95fr;
     gap: 30px;
     margin-bottom: 30px;
 }
@@ -95,25 +95,78 @@ button {
     position: relative;
     background-color: #f2f4f7;
     border-radius: 8px;
-    height: 250px;
+    height: 420px;
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
+}
+
+.slider-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.image-slider #mainImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    display: block;
 }
 
 .slider-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.7);
-    width: 30px;
-    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 42px;
+    height: 42px;
+
+    border: 1px solid rgba(255, 255, 255, 0.7);
     border-radius: 50%;
-    font-weight: bold;
+
+    background: rgba(0, 0, 0, 0.35);
+    color: #ffffff;
+
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1;
+
+    z-index: 30;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
-.left-arrow { left: 10px; }
-.right-arrow { right: 10px; }
+.slider-arrow:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.left-arrow {
+    left: 16px;
+}
+
+.right-arrow {
+    right: 16px;
+}
 
 .placeholder-image {
     text-align: center;
@@ -125,24 +178,91 @@ button {
     letter-spacing: -5px;
 }
 
-.slider-dots {
+/* ================= 메인 이미지 하단 썸네일 ================= */
+.image-slider::after {
+    content: "";
     position: absolute;
-    bottom: 15px;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 115px;
+
+    background: linear-gradient(
+        to top,
+        rgba(0, 0, 0, 0.42),
+        rgba(0, 0, 0, 0)
+    );
+
+    pointer-events: none;
+    z-index: 15;
+}
+
+.main-thumbnails {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
     display: flex;
-    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: calc(100% - 80px);
+    transition: opacity 0.25s ease;
+    z-index: 20;
 }
 
-.dot {
-    width: 6px;
-    height: 6px;
-    background-color: #bdc3c7;
-    border-radius: 50%;
+/* 메인 이미지 위 작은 썸네일 */
+.main-thumbnail {
+    width: 100px;
+    height: 54px;
+    flex-shrink: 0;
+    object-fit: cover;
+    object-position: center;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    will-change: transform, opacity;
 }
 
-.dot.active {
-    background-color: #2c3e50;
-    width: 12px;
-    border-radius: 3px;
+.main-thumbnail-wrapper {
+    cursor: pointer;
+}
+
+.main-thumbnail-wrapper:hover .main-thumbnail {
+    transform: translateY(-4px) scale(1.04);
+    opacity: 0.9;
+}
+
+/* 썸네일 + 남은 사진 개수 묶음 */
+.main-thumbnail-wrapper {
+    position: relative;
+    width: 100px;
+    height: 54px;
+    flex-shrink: 0;
+}
+
+/* 마지막 썸네일 위 +N 표시 */
+.thumbnail-more-count {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+
+    padding: 2px 6px;
+
+    border-radius: 10px;
+
+    background: rgba(0, 0, 0, 0.6);
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.4;
+
+    pointer-events: none;
+    z-index: 2;
 }
 
 /* 메인 텍스트 우측 블록 */
@@ -164,10 +284,45 @@ button {
     margin-bottom: 15px;
 }
 
+.place-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    margin: 4px 0 18px;
+
+    padding: 12px 14px;
+
+    background: #f8fafc;
+    border-radius: 8px;
+
+    font-size: 13px;
+    color: #66717d;
+}
+
+.place-meta p {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.meta-label {
+    width: 46px;
+    flex-shrink: 0;
+
+    color: #9aa4b5;
+    font-size: 12px;
+}
+
 .likes-count {
+    display: flex;
+    align-items: center;
+
+    margin-bottom: 18px;
+
     font-size: 14px;
+    font-weight: 600;
     color: #555;
-    margin-bottom: 25px;
 }
 
 .action-buttons {
@@ -210,13 +365,22 @@ button {
 
 /* 본문 상세 스타일 */
 .info-group {
-    margin-bottom: 30px;
+    margin-bottom: 24px;
+    padding: 24px;
+
+    border: 1px solid #edf0f3;
+    border-radius: 12px;
+
+    background: #ffffff;
 }
 
 .section-title {
-    font-size: 16px;
-    margin-bottom: 12px;
-    font-weight: bold;
+    margin-bottom: 18px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    color: #26384a;
 }
 
 .info-table {
@@ -241,29 +405,53 @@ button {
 
 .intro-text {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.8;
+
     color: #4f5f6f;
+
+    white-space: pre-line;
+    word-break: keep-all;
 }
 
 /* 서브 하단 갤러리 리스트 */
 .related-images {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 12px;
+
+    margin-top: 18px;
 }
 
 .thumb-image {
+    position: relative;
+
+    width: 100%;
+    height: 180px;
+
     background-color: #f2f4f7;
-    height: 120px;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #bdc3c7;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    cursor: pointer;
 }
 
-.thumb-image .mountains-icon {
-    font-size: 30px;
+.thumb-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 10px;
+
+    transition: transform 0.25s ease;
+}
+
+.thumb-image:hover img {
+    transform: scale(1.04);
 }
 
 /* ================= 탭 콘텐츠 ================= */
@@ -473,19 +661,6 @@ button {
 
 .related-image-section {
     margin-top: 35px;
-}
-
-.thumb-image {
-    overflow: hidden;
-}
-
-.thumb-image img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    border-radius: 6px;
 }
 
 /* 하단 푸터 바 */
@@ -1021,4 +1196,125 @@ button {
         width: 60px;
         height: 45px;
     }
+
+        .image-slider {
+        height: 300px;
+    }
+
+    .main-thumbnails {
+        gap: 8px;
+        bottom: 12px;
+        max-width: calc(100% - 40px);
+    }
+
+    .main-thumbnail-wrapper,
+    .main-thumbnail {
+        width: 64px;
+        height: 44px;
+    }
+
+    .thumbnail-more-count {
+        top: 3px;
+        right: 3px;
+        padding: 1px 5px;
+        font-size: 10px;
+    }
+
+    .slider-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 20px;
+    }
+
+    .left-arrow {
+        left: 8px;
+    }
+
+    .right-arrow {
+        right: 8px;
+    }
+}
+
+/* ================= 상세페이지 반응형 ================= */
+
+@media (max-width: 900px) {
+
+    .container {
+        padding: 0 18px;
+    }
+
+    .detail-top {
+        grid-template-columns: 1fr;
+        gap: 22px;
+    }
+
+    .image-slider {
+        height: 380px;
+    }
+
+    .info-side {
+        padding-top: 0;
+    }
+
+    .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+        margin-top: 18px;
+        padding: 0 14px;
+    }
+
+    .detail-top {
+        gap: 18px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        min-width: calc(50% - 5px);
+    }
+
+    .tab-bar {
+        overflow-x: auto;
+    }
+
+    .tab-item {
+        flex: 0 0 auto;
+        min-width: 80px;
+        padding: 12px 14px;
+
+        white-space: nowrap;
+    }
+
+    .info-group {
+        padding: 18px;
+    }
+
+    .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .thumb-image {
+        height: 130px;
+    }
+
+    .info-table th {
+        width: 70px;
+    }
+
+    .image-slider {
+    height: 300px;
+}
 }
