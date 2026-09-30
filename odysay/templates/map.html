@@ -20,6 +20,10 @@
           href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='css/common.css') }}"
+>
 </head>
 
 <body class="m-0 overflow-hidden">
@@ -31,13 +35,12 @@
 </div>
 <!-- 홈페이지로 이동 -->
 <a
-        href="{{ url_for('homepage.homepage') }}"
-        class="btn btn-dark position-absolute bottom-0 start-50
-           translate-middle-x mb-4 px-4 py-3 rounded-pill shadow"
-        style="z-index: 1000;">
+    id="map-explore-button"
+    href="{{ url_for('homepage.homepage') }}"
+    class="btn btn-dark px-4 py-3 rounded-pill shadow"
+>
     여행 둘러보기
 </a>
-
 
 <!-- 가입 완료 또는 로그인 오류 메시지 -->
 {% with messages = get_flashed_messages() %}
@@ -80,16 +83,12 @@
 {% else %}
 
     <!-- 로그인하지 않은 사용자: 로그인 카드 -->
-    <section
-            class="position-absolute top-50 end-0 translate-middle-y
-           bg-white rounded-4 shadow p-4 me-3"
-            style="
-        width: 400px;
-        max-width: calc(100% - 2rem);
-        max-height: 90vh;
-        overflow-y: auto;
-        z-index: 1000;
-    ">
+    <!-- 로그인하지 않은 사용자: 로그인 카드 -->
+<section
+    id="map-login-card"
+    class="bg-white rounded-4 shadow p-4"
+    aria-label="로그인"
+>
 
         <div class="mb-4">
             <h2 class="fw-bold mb-2">
@@ -173,7 +172,7 @@
         maxZoom: 19,
         maxBounds: worldBounds,
         maxBoundsViscosity: 1.0
-    }).setView([20, 0], 2);
+    }).setView([20, 0], 3);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         noWrap: true,
@@ -211,7 +210,7 @@
             const places = await response.json();
             if (!Array.isArray(places)) throw new Error('잘못된 여행지 응답입니다.');
             markers.clearLayers();
-            let lastPlace = null;
+
             for (const place of places) {
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
                     Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
@@ -235,9 +234,9 @@
                 popup.append(title, location, intro, link);
                 const marker = L.marker([place.lat, place.lng]).bindPopup(popup);
                 markers.addLayer(marker);
-                lastPlace = place;
+
             }
-            if (lastPlace) map.setView([lastPlace.lat, lastPlace.lng], 12);
+
         } catch (error) {
             const message = document.createElement('div');
             message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';

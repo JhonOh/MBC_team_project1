@@ -4,7 +4,7 @@ import requests
 import json
 from datetime import datetime
 from dotenv import load_dotenv
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, g
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, g ,flash
 from werkzeug.utils import secure_filename
 from geopy.geocoders import Nominatim
 from google import genai
@@ -140,6 +140,11 @@ def get_coords_from_tmap(region, place, raw_place=""):
 # -----------------------------------------------------------
 @bp.route('/', methods=['GET', 'POST'])
 def upload():
+    # 로그인한 회원만 여행지 등록 가능
+    if g.user is None:
+        flash('여행지를 등록하려면 로그인해 주세요.')
+        return redirect(url_for('homepage.main'))
+
     if request.method == 'POST':
         country = request.form.get('country', '')
         region = request.form.get('region', '')
@@ -229,7 +234,7 @@ def upload():
                 photos=','.join(saved_photos) if saved_photos else None,
                 restaurant_photos=','.join(saved_restaurant_photos) if saved_restaurant_photos else None,
                 nearby_photos=','.join(saved_nearby_photos) if saved_nearby_photos else None,
-                user_id=g.user.id if g.user else None,
+                user_id=g.user.id,
                 latitude=lat,
                 longitude=lng
             )

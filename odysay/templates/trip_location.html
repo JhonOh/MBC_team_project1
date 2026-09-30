@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어딧세이 - {{ place.place }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location.css') }}">
+    <!-- 상세페이지 지도용 Leaflet CSS -->
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- 상세페이지 지도용 Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body>
 
@@ -225,26 +230,14 @@
 
         <button type="button"
                 class="tab-item"
-                data-tab="intro-tab">
-            소개
-        </button>
-
-        <button type="button"
-                class="tab-item"
-                data-tab="restaurant-tab">
-            맛집
-        </button>
-
-        <button type="button"
-                class="tab-item"
-                data-tab="nearby-tab">
-            볼거리
-        </button>
-
-        <button type="button"
-                class="tab-item"
                 data-tab="review-tab">
             리뷰 (<span id="reviewCount">0</span>)
+        </button>
+
+        <button type="button"
+                class="tab-item"
+                data-tab="community-tab">
+            커뮤니티 (<span id="communityCount">0</span>)
         </button>
 
     </nav>
@@ -262,6 +255,9 @@
                 <h2 class="section-title">
                     📍 기본 정보
                 </h2>
+
+                <div class="basic-info-layout">
+                <div class="basic-info-text">
 
                 <table class="info-table">
 
@@ -286,7 +282,32 @@
 
                 </table>
 
+                        </div>
+
+                    {% if place.latitude is not none and place.longitude is not none %}
+                    <div class="detail-map-link">
+
+                        <div class="detail-map"
+                             data-lat="{{ place.latitude }}"
+                             data-lng="{{ place.longitude }}"
+                             data-title="{{ place.place }}">
+                        </div>
+
+                        <a class="detail-map-caption"
+                           href="{{ url_for(
+                               'homepage.main',
+                               place_id=place.id,
+                               lat=place.latitude,
+                               lng=place.longitude
+                           ) }}">
+                            전체 지도에서 보기 →
+                        </a>
+
+                    </div>
+                    {% endif %}
+                </div>
             </div>
+
 
 
             <!-- 등록 이유 -->
@@ -378,150 +399,86 @@
 
         </div>
 
-
-        <!-- ================= 소개 ================= -->
-        <div class="tab-content" id="intro-tab">
-
-            <div class="info-group">
-
-                <h2 class="section-title">
-                    📍 기본 정보
-                </h2>
-
-                <table class="info-table">
-
-                    <tr>
-                        <th>위치</th>
-                        <td>
-                            {{ place.country }}
-                            {{ place.region }}
-                            {{ place.place }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <th>카테고리</th>
-                        <td>{{ place.category }}</td>
-                    </tr>
-
-                    <tr>
-                        <th>한줄 소개</th>
-                        <td>{{ place.intro }}</td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-
-            <div class="info-group">
-
-                <h2 class="section-title">
-                    📖 등록하는 이유 & 소개
-                </h2>
-
-                <p class="intro-text">
-                    {{ place.reason }}
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= 맛집 ================= -->
-        <div class="tab-content" id="restaurant-tab">
-
-            <div class="info-group">
-
-                <h2 class="section-title">
-                    🍴 주변 맛집 정보
-                </h2>
-
-                {% if place.restaurant %}
-
-                    <p class="intro-text">
-                        {{ place.restaurant }}
-                    </p>
-
-                    {% if restaurant_photos %}
-                    <div class="related-images">
-                        {% for photo in restaurant_photos %}
-                        <div class="thumb-image">
-                            <img
-                                src="{{ url_for('static', filename='uploads/' + photo) }}"
-                                alt="주변 맛집 사진"
-                                class="gallery-image">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                {% else %}
-
-                    <p class="empty-message">
-                        등록된 주변 맛집 정보가 없습니다.
-                    </p>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= 볼거리 ================= -->
-        <div class="tab-content" id="nearby-tab">
-
-            <div class="info-group">
-
-                <h2 class="section-title">
-                    📷 주변 볼거리 / 즐길거리
-                </h2>
-
-                {% if place.nearby %}
-
-                    <p class="intro-text">
-                        {{ place.nearby }}
-                    </p>
-
-                    {% if nearby_photos %}
-                    <div class="related-images">
-                        {% for photo in nearby_photos %}
-                        <div class="thumb-image">
-                            <img
-                                src="{{ url_for('static', filename='uploads/' + photo) }}"
-                                alt="주변 볼거리 사진"
-                                class="gallery-image">
-                        </div>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-
-                {% else %}
-
-                    <p class="empty-message">
-                        등록된 주변 볼거리 정보가 없습니다.
-                    </p>
-
-                {% endif %}
-
-            </div>
-
-        </div>
-
-
         <!-- ================= 리뷰 ================= -->
         <div class="tab-content" id="review-tab">
 
             <div class="review-section">
 
-                <h2 class="section-title">
-                    💬 리뷰
-                </h2>
+                <!-- 리뷰 요약 -->
+                <div class="review-summary">
 
-                <!-- 리뷰 작성 -->
-                <div class="review-write">
+                    <div class="review-score-box">
+                        <div class="review-big-score">
+                            <span class="review-big-star">★</span>
+                            <strong id="reviewAverage">0.0</strong>
+                        </div>
+
+                        <p>
+                            (<span id="reviewSummaryCount">0</span>개의 리뷰)
+                        </p>
+                    </div>
+
+
+                    <div class="review-score-bars">
+
+                        <div class="score-row">
+                            <span>5점</span>
+                            <div class="score-bar"><i id="scoreBar5"></i></div>
+                            <span id="scorePercent5">0%</span>
+                        </div>
+
+                        <div class="score-row">
+                            <span>4점</span>
+                            <div class="score-bar"><i id="scoreBar4"></i></div>
+                            <span id="scorePercent4">0%</span>
+                        </div>
+
+                        <div class="score-row">
+                            <span>3점</span>
+                            <div class="score-bar"><i id="scoreBar3"></i></div>
+                            <span id="scorePercent3">0%</span>
+                        </div>
+
+                        <div class="score-row">
+                            <span>2점</span>
+                            <div class="score-bar"><i id="scoreBar2"></i></div>
+                            <span id="scorePercent2">0%</span>
+                        </div>
+
+                        <div class="score-row">
+                            <span>1점</span>
+                            <div class="score-bar"><i id="scoreBar1"></i></div>
+                            <span id="scorePercent1">0%</span>
+                        </div>
+
+                    </div>
+
+
+                    <button type="button"
+                            class="review-open-button"
+                            id="reviewOpenButton">
+                        리뷰 작성하기
+                    </button>
+
+                </div>
+
+
+                <!-- 리뷰 작성창 -->
+                <div class="review-write" id="reviewWrite">
+
+                    <div class="review-star-select">
+                        <span>별점</span>
+
+                        <div id="reviewStars">
+                            <button type="button" data-score="1">★</button>
+                            <button type="button" data-score="2">★</button>
+                            <button type="button" data-score="3">★</button>
+                            <button type="button" data-score="4">★</button>
+                            <button type="button" data-score="5">★</button>
+                        </div>
+
+                        <strong id="selectedScore">0.0</strong>
+                    </div>
 
                     <textarea
                         id="reviewInput"
@@ -537,7 +494,7 @@
                         <button type="button"
                                 id="reviewSubmit"
                                 class="review-submit">
-                            등록
+                            리뷰 등록
                         </button>
 
                     </div>
@@ -545,9 +502,8 @@
                 </div>
 
 
-                <!-- 등록된 리뷰가 들어갈 곳 -->
-                <div id="reviewList"
-                     class="review-list">
+                <!-- 리뷰 목록 -->
+                <div id="reviewList" class="review-list">
 
                     <p id="noReviewMessage"
                        class="empty-message">
@@ -560,11 +516,81 @@
 
         </div>
 
+        <!-- ================= 커뮤니티 ================= -->
+        <div class="tab-content" id="community-tab">
+
+            <div class="community-section">
+
+                <div class="community-title-row">
+
+                    <div>
+                        <h2 class="section-title">
+                            💬 커뮤니티
+                        </h2>
+
+                        <p class="community-description">
+                            이 여행지에 대해 궁금한 점이나 정보를 자유롭게 이야기해보세요.
+                        </p>
+                    </div>
+
+                    <button type="button"
+                            id="communityOpenButton"
+                            class="community-open-button">
+                        글 작성하기
+                    </button>
+
+                </div>
 
 
+                <!-- 글 작성 -->
+                <div class="community-write"
+                     id="communityWrite">
 
+                    <input type="text"
+                           id="communityTitle"
+                           maxlength="60"
+                           placeholder="제목을 입력해주세요.">
+
+                    <textarea
+                        id="communityInput"
+                        maxlength="500"
+                        placeholder="내용을 입력해주세요."></textarea>
+
+                    <div class="community-write-bottom">
+
+                        <span class="community-counter">
+                            <span id="communityTextCount">0</span>/500
+                        </span>
+
+                        <button type="button"
+                                id="communitySubmit"
+                                class="community-submit">
+                            등록
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- 글 목록 -->
+                <div id="communityList"
+                     class="community-list">
+
+                    <p id="noCommunityMessage"
+                       class="empty-message">
+                        아직 등록된 커뮤니티 글이 없습니다.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
     </section>
 </main>
+
+
 
 <!-- ================= 이미지 크게보기 팝업 ================= -->
 
@@ -632,6 +658,13 @@
 <script>
     const photoList = {{ photos | tojson }};
     const uploadPath = "{{ url_for('static', filename='uploads/') }}";
+
+    // 리뷰 / 커뮤니티 작성자 정보
+    const currentUser = {
+        isLoggedIn: {{ 'true' if g.user else 'false' }},
+        nickname: {{ (g.user.nickname if g.user else '') | tojson }},
+        isPlaceAuthor: {{ 'true' if g.user and place.user_id == g.user.id else 'false' }}
+    };
 </script>
 <script src="{{ url_for('static', filename='js/trip_location.js') }}"></script>
 </body>

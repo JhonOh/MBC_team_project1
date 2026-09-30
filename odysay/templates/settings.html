@@ -7,6 +7,7 @@
     <title>설정</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/setting.css') }}">
 </head>
 
 <body>
@@ -18,17 +19,17 @@
 
         <div class="header-inner">
 
-            <a href="/homepage/sjw" class="logo">
-                <span class="logo-icon">△△</span>
-                <span>어딧세이</span>
+            <a href="#" class="logo">
+                <span class="logo-icon">△</span>
+                <span>어디갈까?</span>
             </a>
 
             <nav class="main-menu">
-                <a href="#">홈</a>
-                <a href="#">여행지</a>
-                <a href="#">여행 후기</a>
-                <a href="#">여행지 등록</a>
-                <a href="#">마이페이지</a>
+                <a href="{{ url_for('homepage.main') }}">홈</a>
+                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
+                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
+                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
             </nav>
 
             <button type="button" class="search-btn">
@@ -103,34 +104,82 @@
 
                 <div class="withdraw-content">
 
-                    <p class="withdraw-title">
-                        회원 탈퇴를 진행하시겠습니까?
-                    </p>
-
                     <p class="withdraw-description">
-                        회원 탈퇴 시 계정과 관련된 정보가 삭제될 수 있으며,
+                        탈퇴하면 계정이 비활성화되고 로그아웃됩니다.
                         <br>
-                        삭제된 정보는 복구할 수 없습니다.
+                        회원정보와 기존 게시물은 삭제되지 않고 보관됩니다.
                     </p>
 
                     <div class="withdraw-warning">
-                        <strong>회원 탈퇴 전 확인해주세요.</strong>
+                        <strong>탈퇴 전 확인해 주세요.</strong>
 
                         <ul>
-                            <li>작성한 여행 후기 및 게시물이 삭제될 수 있습니다.</li>
-                            <li>찜한 여행지 등의 개인 정보가 삭제될 수 있습니다.</li>
-                            <li>탈퇴 후에는 계정을 복구할 수 없습니다.</li>
+                            <li>
+                                탈퇴 후에는 로그인 및 회원 기능을
+                                이용할 수 없습니다.
+                            </li>
+                            <li>
+                                다른 기기의 로그인도 다음 요청부터
+                                해제됩니다.
+                            </li>
+                            <li>
+                                동일한 아이디·이메일·닉네임으로
+                                재가입할 수 없습니다.
+                            </li>
                         </ul>
                     </div>
 
-                    <button type="button"
-                            class="withdraw-btn"
-                            onclick="confirmWithdraw()">
-                        회원 탈퇴
-                    </button>
+                    <!-- 서버에서 전달한 안내 및 오류 -->
+                    {% for message in get_flashed_messages() %}
+                        <p class="withdraw-error" role="alert">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+
+                    <form
+                            method="post"
+                            action="{{ url_for('auth.withdraw') }}"
+                            onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
+                    >
+                        <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                        >
+
+                        <div class="withdraw-password-field">
+                            <label for="withdraw-password">
+                                현재 비밀번호
+                            </label>
+
+                            <input
+                                    type="password"
+                                    id="withdraw-password"
+                                    name="password"
+                                    placeholder="현재 비밀번호를 입력해 주세요"
+                                    autocomplete="current-password"
+                                    required
+                            >
+                        </div>
+
+                        <div class="withdraw-actions">
+                            <a
+                                    href="{{ url_for('homepage.mypage') }}"
+                                    class="withdraw-cancel"
+                            >
+                                취소
+                            </a>
+
+                            <button
+                                    type="submit"
+                                    class="withdraw-btn"
+                            >
+                                회원 탈퇴
+                            </button>
+                        </div>
+                    </form>
 
                 </div>
-
             </div>
 
         </section>
@@ -172,8 +221,6 @@
     </footer>
 
 </div>
-
-
 
 
 </body>
