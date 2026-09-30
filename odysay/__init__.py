@@ -45,10 +45,13 @@ def create_app(test_config=None):
     from . import models
 
     # 블루프린트 등록[cite: 11]
-    from .views import main_views, mapmain_views, sub_views, auth_views
+    from .views import main_views, a1_mapmain_views, a3_community_views, a4_upload_views, a4_z1_trip_location_views, sub_views, auth_views
 
     app.register_blueprint(main_views.bp)
-    app.register_blueprint(mapmain_views.bp)
+    app.register_blueprint(a1_mapmain_views.bp)
+    app.register_blueprint(a3_community_views.bp)
+    app.register_blueprint(a4_upload_views.bp)
+    app.register_blueprint(a4_z1_trip_location_views.bp)
     app.register_blueprint(sub_views.bp)
     app.register_blueprint(auth_views.bp)
 
