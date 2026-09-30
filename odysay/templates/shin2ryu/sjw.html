@@ -6,14 +6,9 @@
 
     <title>어딧세이 | 여행의 시작</title>
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/common.css') }}">
-
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <link rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -22,6 +17,15 @@
       href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
 
 <link rel="stylesheet"
+<<<<<<< HEAD
+=======
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+<link rel="stylesheet"
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+
+<link rel="stylesheet"
+>>>>>>> main
       href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
 </head>
 
@@ -30,12 +34,16 @@
 <header class="header">
     <div class="header-inner">
 
+<<<<<<< HEAD
+        <a href="/homepage/sjw" class="logo">
+=======
         <a href="{{ url_for('homepage.main') }}" class="logo">
+>>>>>>> main
             <span class="logo-symbol">△△</span>
 
             <div class="logo-text">
                 <strong>어딧세이</strong>
-                <span>ODYSAY</span>
+                <small>ODYSAY</small>
             </div>
         </a>
 
@@ -51,9 +59,9 @@
 
             </button>
 
-            <button type="button" class="logout-button">
-                로그아웃
-            </button>
+            <a href="{{ url_for('auth.logout') }}" class="logout-button">
+            로그아웃
+            </a>
         </div>
 
     </div>
