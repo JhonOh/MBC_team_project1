@@ -25,11 +25,11 @@
             </a>
 
             <nav class="main-menu">
-                <a href="#">홈</a>
-                <a href="#">여행지</a>
-                <a href="#">여행 후기</a>
-                <a href="#">여행지 등록</a>
-                <a href="#">마이페이지</a>
+                <a href="{{ url_for('homepage.main') }}">홈</a>
+                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
+                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
+                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
             </nav>
 
             <button type="button" class="search-btn">
@@ -95,7 +95,7 @@
             </h1>
 
 
-                      <!-- 회원 탈퇴 -->
+            <!-- 회원 탈퇴 -->
             <div class="withdraw-box">
 
                 <div class="withdraw-header">
@@ -137,14 +137,14 @@
                     {% endfor %}
 
                     <form
-                        method="post"
-                        action="{{ url_for('auth.withdraw') }}"
-                        onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
+                            method="post"
+                            action="{{ url_for('auth.withdraw') }}"
+                            onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
                     >
                         <input
-                            type="hidden"
-                            name="csrf_token"
-                            value="{{ csrf_token() }}"
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
                         >
 
                         <div class="withdraw-password-field">
@@ -153,26 +153,26 @@
                             </label>
 
                             <input
-                                type="password"
-                                id="withdraw-password"
-                                name="password"
-                                placeholder="현재 비밀번호를 입력해 주세요"
-                                autocomplete="current-password"
-                                required
+                                    type="password"
+                                    id="withdraw-password"
+                                    name="password"
+                                    placeholder="현재 비밀번호를 입력해 주세요"
+                                    autocomplete="current-password"
+                                    required
                             >
                         </div>
 
                         <div class="withdraw-actions">
                             <a
-                                href="{{ url_for('homepage.mypage') }}"
-                                class="withdraw-cancel"
+                                    href="{{ url_for('homepage.mypage') }}"
+                                    class="withdraw-cancel"
                             >
                                 취소
                             </a>
 
                             <button
-                                type="submit"
-                                class="withdraw-btn"
+                                    type="submit"
+                                    class="withdraw-btn"
                             >
                                 회원 탈퇴
                             </button>
@@ -221,8 +221,6 @@
     </footer>
 
 </div>
-
-
 
 
 </body>

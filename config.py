@@ -8,3 +8,6 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # 폼모듈 환경변수
 SECRET_KEY = 'dev'
+
+# 로컬 개발용: 서버를 다시 실행하면 이전 로그인 세션 무효화
+RESET_LOGIN_ON_RESTART = True

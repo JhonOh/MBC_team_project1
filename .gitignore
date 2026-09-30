@@ -10,3 +10,6 @@ instance/
 .env.*
 !.env.example
 odysay/static/uploads/*
+
+migrations/
+/odysay/백업.zip
