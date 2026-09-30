@@ -117,7 +117,7 @@
 
         <form id="travelForm"
               method="POST"
-              action="{% if edit_mode %}{{ url_for('homepage.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
+              action="{% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('upload.upload') }}{% endif %}"
               enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <section class="form-section">
@@ -434,7 +434,7 @@
 
                 <button type="button"
                         class="cancel-button"
-                        onclick="window.location.href='{% if edit_mode %}{{ url_for('homepage.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.main') }}{% endif %}'">
+                        onclick="window.location.href='{% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.main') }}{% endif %}'">
                     취소하기
                 </button>
 

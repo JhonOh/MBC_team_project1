@@ -366,7 +366,7 @@ button {
 /* 본문 상세 스타일 */
 .info-group {
     margin-bottom: 24px;
-    padding: 24px;
+    padding: 18px 20px;
 
     border: 1px solid #edf0f3;
     border-radius: 12px;
@@ -375,7 +375,7 @@ button {
 }
 
 .section-title {
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 
     font-size: 18px;
     font-weight: 700;
@@ -403,6 +403,86 @@ button {
     padding: 8px 0;
 }
 
+/* ================= 기본정보 + 지도 ================= */
+
+.basic-info-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(420px, 0.9fr);
+    gap: 22px;
+    align-items: stretch;
+}
+
+.basic-info-text {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+}
+
+.detail-map-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    min-width: 0;
+
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+.detail-map-link:hover {
+    border-color: #b9c5d1;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+}
+
+.detail-map {
+    width: 100%;
+    height: 165px;
+
+    background: #f2f4f7;
+
+    cursor: pointer;
+}
+
+.detail-map-caption {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+
+    z-index: 500;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 7px 12px;
+
+    border: 1px solid #e3e8ee;
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.94);
+
+    color: #26384a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.detail-map-link:hover .detail-map-caption {
+    color: #26384a;
+}
+
 .intro-text {
     font-size: 14px;
     line-height: 1.8;
@@ -421,6 +501,57 @@ button {
     gap: 12px;
 
     margin-top: 18px;
+}
+
+
+/* ================= 전체 탭 맛집 / 볼거리 압축 배치 ================= */
+
+/* ================= 전체 탭 여행지 소개 ================= */
+
+#all-tab > .info-group:nth-of-type(2) {
+    padding: 14px 4px 16px;
+
+    border: none;
+    border-radius: 0;
+
+    background: transparent;
+}
+
+#all-tab > .info-group:nth-of-type(2) .section-title {
+    margin-bottom: 8px;
+}
+
+#all-tab > .info-group:nth-of-type(2) .intro-text {
+    padding-left: 4px;
+
+    line-height: 1.7;
+}
+
+#all-tab > .info-group:nth-of-type(3),
+#all-tab > .info-group:nth-of-type(4) {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    column-gap: 16px;
+    align-items: start;
+}
+
+#all-tab > .info-group:nth-of-type(3) .section-title,
+#all-tab > .info-group:nth-of-type(4) .section-title {
+    grid-column: 1 / -1;
+    margin-bottom: 2px;
+    font-size: 17px;
+}
+
+#all-tab > .info-group:nth-of-type(3) .related-images,
+#all-tab > .info-group:nth-of-type(4) .related-images {
+    width: 100%;
+    min-width: 0;
+
+    margin-top: 0;
+    margin-left: auto;
+
+    justify-self: stretch;
+    align-self: start;
 }
 
 .thumb-image {
@@ -452,6 +583,59 @@ button {
 
 .thumb-image:hover img {
     transform: scale(1.04);
+}
+
+/* 맛집 / 볼거리 카드 높이 압축 */
+
+#all-tab > .info-group:nth-of-type(3),
+#all-tab > .info-group:nth-of-type(4) {
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    row-gap: 6px;
+}
+
+#all-tab > .info-group:nth-of-type(3) .intro-text,
+#all-tab > .info-group:nth-of-type(4) .intro-text {
+    min-width: 0;
+    width: 100%;
+
+    padding: 7px 10px;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+
+    overflow: hidden;
+}
+
+#all-tab .related-images {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#all-tab > .info-group:nth-of-type(3) .thumb-image,
+#all-tab > .info-group:nth-of-type(4) .thumb-image {
+    height: 130px;
+}
+
+/* 주변 맛집 */
+#all-tab > .info-group:nth-of-type(3) {
+    border-color: #f4dfe3;
+    background: #fffafb;
+}
+
+/* 주변 볼거리 */
+#all-tab > .info-group:nth-of-type(4) {
+    border-color: #dcecf5;
+    background: #f9fcfe;
 }
 
 /* ================= 탭 콘텐츠 ================= */
@@ -486,18 +670,146 @@ button {
     width: 100%;
 }
 
+.review-summary {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px;
+    gap: 35px;
+    align-items: center;
 
-/* 리뷰 작성 영역 */
+    padding: 25px;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+.review-score-box {
+    text-align: center;
+}
+
+.review-big-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 32px;
+}
+
+.review-big-star {
+    color: #ffad20;
+}
+
+.review-score-box p {
+    margin-top: 5px;
+    color: #8a96a3;
+    font-size: 12px;
+}
+
+.review-score-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.score-row {
+    display: grid;
+    grid-template-columns: 30px 1fr 38px;
+    gap: 8px;
+    align-items: center;
+
+    color: #697786;
+    font-size: 12px;
+}
+
+.score-bar {
+    height: 7px;
+
+    border-radius: 10px;
+
+    background: #edf0f3;
+
+    overflow: hidden;
+}
+
+.score-bar i {
+    display: block;
+
+    width: 0;
+    height: 100%;
+
+    border-radius: 10px;
+
+    background: #ffad20;
+
+    transition: width 0.25s ease;
+}
+
+.review-open-button,
+.community-open-button {
+    padding: 11px 18px;
+
+    border-radius: 7px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* 리뷰 작성 */
 
 .review-write {
-    margin-top: 15px;
+    display: none;
+
+    margin-top: 18px;
 
     border: 1px solid #dfe4ea;
-    border-radius: 8px;
+    border-radius: 10px;
 
     background: #ffffff;
 
     overflow: hidden;
+}
+
+.review-write.active {
+    display: block;
+}
+
+.review-star-select {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    border-bottom: 1px solid #edf0f3;
+
+    font-size: 13px;
+}
+
+#reviewStars {
+    display: flex;
+    gap: 2px;
+}
+
+#reviewStars button {
+    padding: 0;
+
+    color: #d8dde3;
+
+    font-size: 24px;
+}
+
+#reviewStars button.active {
+    color: #ffad20;
+}
+
+#selectedScore {
+    color: #26384a;
 }
 
 .review-write textarea {
@@ -515,23 +827,12 @@ button {
 
     font-size: 14px;
     line-height: 1.6;
-
-    color: #333;
 }
-
-.review-write textarea::placeholder {
-    color: #a4adb8;
-}
-
-
-/* 글자수 + 등록 버튼 */
 
 .review-write-bottom {
     display: flex;
-
     justify-content: flex-end;
     align-items: center;
-
     gap: 15px;
 
     padding: 10px 12px;
@@ -541,121 +842,671 @@ button {
 
 .review-counter {
     color: #9aa4b5;
-
     font-size: 12px;
 }
 
 .review-submit {
-    padding: 8px 20px;
+    padding: 8px 18px;
 
-    border: none;
     border-radius: 6px;
 
-    background: #2c3e50;
-
-    color: white;
+    background: #26384a;
+    color: #ffffff;
 
     font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
-
-.review-submit:hover {
-    opacity: 0.85;
+    font-weight: 700;
 }
 
 
-/* ================= 등록된 리뷰 ================= */
+/* 리뷰 목록 */
 
 .review-list {
-    margin-top: 25px;
+    margin-top: 22px;
 }
 
 .review-item {
-    padding: 18px 5px;
+    margin-bottom: 10px;
+    padding: 16px 18px;
 
-    border-bottom: 1px solid #eeeeee;
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+
+    background: #ffffff;
 }
-
-.review-item:first-child {
-    border-top: 1px solid #eeeeee;
-}
-
-
-/* 리뷰 상단 */
 
 .review-header {
     display: flex;
-
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+
+    gap: 15px;
 
     margin-bottom: 10px;
 }
 
-.review-user {
+.review-user-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.review-avatar,
+.community-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #eaf2ff;
+
+    font-size: 15px;
+}
+
+.review-user,
+.community-user {
+    color: #26384a;
+
     font-size: 13px;
     font-weight: 700;
-
-    color: #333;
 }
 
-.review-date {
+.author-badge {
+    padding: 2px 7px;
+
+    border-radius: 10px;
+
+    background: #fff0f2;
+    color: #e45b69;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.review-rating {
+    color: #ffad20;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.review-date,
+.community-date {
+    color: #9aa4b5;
+
     font-size: 11px;
 
-    color: #a0a8b2;
+    white-space: nowrap;
 }
 
-
-/* 리뷰 내용 */
-
 .review-text {
-    margin-bottom: 13px;
+    margin: 0 0 12px 37px;
+
+    color: #4f5f6f;
 
     font-size: 14px;
     line-height: 1.7;
 
-    color: #4f5f6f;
+    white-space: pre-wrap;
 }
-
-
-/* 추천 / 신고 */
 
 .review-actions {
     display: flex;
+    gap: 16px;
 
-    gap: 15px;
-
-    align-items: center;
+    margin-left: 37px;
 }
 
 .review-action-button {
-    padding: 0;
-
-    border: none;
-    background: none;
-
-    color: #7f8c8d;
-
+    color: #8793a0;
     font-size: 12px;
-
-    cursor: pointer;
-}
-
-.review-action-button:hover {
-    color: #2c3e50;
 }
 
 .review-action-button.recommended {
-    color: #e74c3c;
-    font-weight: 600;
+    color: #e45b69;
 }
 
-.report-button:hover {
-    color: #e74c3c;
+
+/* ================= 커뮤니티 ================= */
+
+.community-section {
+    width: 100%;
 }
 
+.community-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+.community-description {
+    margin-top: -5px;
+
+    color: #7b8794;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* 커뮤니티 작성 */
+
+.community-write {
+    display: none;
+
+    margin-bottom: 22px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+.community-write.active {
+    display: block;
+}
+
+.community-write input {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: none;
+    border-bottom: 1px solid #edf0f3;
+    outline: none;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.community-write textarea {
+    display: block;
+
+    width: 100%;
+    height: 130px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.community-write-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+
+    padding: 10px 12px;
+
+    border-top: 1px solid #f0f2f5;
+}
+
+.community-counter {
+    color: #9aa4b5;
+    font-size: 12px;
+}
+
+.community-submit {
+    padding: 8px 18px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* N Lounge 형태 글 목록 */
+
+.community-list {
+    margin-top: 10px;
+}
+
+.community-item {
+    padding: 20px 8px;
+
+    border-bottom: 1px solid #edf0f3;
+}
+
+.community-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 9px;
+}
+
+.community-user-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.community-post-title {
+    margin: 0 0 7px 38px;
+
+    color: #1f2937;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+.community-text {
+    margin-left: 38px;
+
+    color: #4f5f6f;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.community-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    margin-top: 13px;
+    margin-left: 38px;
+}
+
+.community-action-button {
+    padding: 0;
+
+    color: #929ba5;
+
+    font-size: 12px;
+}
+
+.community-action-button.liked {
+    color: #e45b69;
+}
+
+.community-more {
+    margin-left: auto;
+
+    color: #929ba5;
+
+    font-size: 18px;
+}
+/* ================= 커뮤니티 댓글 ================= */
+
+/* ================= 작성자 수정 / 삭제 메뉴 ================= */
+
+.community-owner-menu,
+.comment-owner-menu {
+    position: relative;
+    margin-left: auto;
+}
+
+.community-more-menu,
+.comment-more-menu {
+    position: absolute;
+    right: 0;
+    bottom: 28px;
+
+    display: none;
+
+    min-width: 82px;
+
+    padding: 5px;
+
+    border: 1px solid #e2e7ed;
+    border-radius: 8px;
+
+    background: #fff;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+
+    z-index: 20;
+}
+
+.community-more-menu.active,
+.comment-more-menu.active {
+    display: block;
+}
+
+.community-more-menu button,
+.comment-more-menu button {
+    display: block;
+
+    width: 100%;
+
+    padding: 7px 10px;
+
+    border-radius: 5px;
+
+    color: #4f5f6f;
+    font-size: 12px;
+    text-align: left;
+}
+
+.community-more-menu button:hover,
+.comment-more-menu button:hover {
+    background: #f5f7fa;
+}
+
+.community-delete-button,
+.comment-delete-button {
+    color: #e25555 !important;
+}
+
+
+/* ================= 글 수정 ================= */
+
+.community-inline-edit {
+    margin: 12px 0;
+}
+
+.community-edit-title,
+.community-edit-text,
+.comment-edit-text {
+    width: 100%;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 7px;
+
+    background: #fff;
+
+    color: #4f5f6f;
+
+    outline: none;
+}
+
+.community-edit-title {
+    height: 40px;
+
+    padding: 0 12px;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.community-edit-text,
+.comment-edit-text {
+    min-height: 80px;
+
+    padding: 10px 12px;
+
+    resize: vertical;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.community-edit-actions,
+.comment-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 7px;
+
+    margin-top: 8px;
+}
+
+.community-edit-actions button,
+.comment-edit-actions button {
+    padding: 6px 12px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+}
+
+.community-edit-cancel,
+.comment-edit-cancel {
+    border: 1px solid #dfe4ea;
+
+    background: #fff;
+
+    color: #66778a;
+}
+
+.community-edit-save,
+.comment-edit-save {
+    background: #26384a;
+
+    color: #fff;
+}
+
+
+/* 댓글 ⋯ */
+.comment-more-button {
+    color: #9aa4b5;
+
+    font-size: 17px;
+
+    line-height: 1;
+}
+
+/* 기본 상태에서는 댓글 전체 숨김 */
+.community-comment-section {
+    display: none;
+
+    margin: 18px 0 0 38px;
+    padding: 16px 18px;
+
+    border-top: 1px solid #edf0f3;
+
+    background: #fafbfd;
+}
+
+
+/* 💬 버튼을 눌렀을 때만 표시 */
+.community-comment-section.active {
+    display: block;
+}
+
+
+/* 댓글 목록 */
+.community-comment-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* 댓글 없음 */
+.community-no-comment {
+    padding: 12px 0 18px;
+
+    color: #9aa4b5;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* 댓글 하나 */
+.community-comment-item {
+    padding: 13px 0;
+
+    border-bottom: 1px solid #e9edf2;
+}
+
+.community-comment-item:last-child {
+    border-bottom: none;
+}
+
+
+/* 댓글 작성자 + 시간 */
+.community-comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 7px;
+}
+
+
+.community-comment-user-area {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+
+.community-comment-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    border-radius: 50%;
+
+    background: #eaf2ff;
+
+    font-size: 12px;
+}
+
+
+.community-comment-user {
+    color: #26384a;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+.community-comment-date {
+    color: #9aa4b5;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* 댓글 내용 */
+.community-comment-body {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding-left: 33px;
+}
+
+
+.community-comment-text {
+    flex: 1;
+
+    color: #4f5f6f;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+
+.community-comment-report {
+    flex-shrink: 0;
+
+    color: #9aa4b5;
+
+    font-size: 11px;
+}
+
+
+/* 댓글 작성창 */
+.community-comment-write {
+    margin-top: 14px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+
+.community-comment-input {
+    display: block;
+
+    width: 100%;
+    height: 70px;
+
+    padding: 11px 13px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    color: #4f5f6f;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+.community-comment-write-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 10px;
+
+    border-top: 1px solid #edf0f3;
+}
+
+
+.community-comment-counter {
+    color: #9aa4b5;
+
+    font-size: 11px;
+}
+
+
+.community-comment-submit {
+    padding: 6px 14px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
 
 /* ================= 관련 이미지 ================= */
 
@@ -1317,4 +2168,62 @@ button {
     .image-slider {
     height: 300px;
 }
+}
+
+/* 상세페이지 기본정보 지도 반응형 */
+@media (max-width: 900px) {
+
+    .basic-info-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .detail-map {
+        height: 210px;
+    }
+
+    #all-tab > .info-group:nth-of-type(3),
+    #all-tab > .info-group:nth-of-type(4) {
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+    }
+
+    #all-tab > .info-group:nth-of-type(3) .related-images,
+    #all-tab > .info-group:nth-of-type(4) .related-images {
+        margin-top: 0;
+    }
+
+    #all-tab .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #all-tab > .info-group:nth-of-type(3) .thumb-image,
+    #all-tab > .info-group:nth-of-type(4) .thumb-image {
+        height: 130px;
+    }
+
+    #restaurant-tab .info-group,
+    #nearby-tab .info-group {
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+    }
+
+    #restaurant-tab .related-images,
+    #nearby-tab .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 0;
+    }
+
+    #restaurant-tab .thumb-image,
+    #nearby-tab .thumb-image {
+        height: 130px;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .detail-map {
+        height: 190px;
+    }
 }
