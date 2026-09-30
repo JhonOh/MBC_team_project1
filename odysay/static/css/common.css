@@ -13,3 +13,49 @@ body {
     max-width: calc(100% - 80px);
     margin: 0 auto;
 }
+
+/* ==============================
+   지도 첫 화면: 로그인 카드
+============================== */
+
+#map-login-card {
+    position: fixed;
+    left: 24px;
+    bottom: 24px;
+    z-index: 1000;
+
+    width: 360px;
+    max-width: calc(100vw - 48px);
+
+    /* 화면이 낮아도 폼 내부 스크롤로 로그인 가능 */
+    max-height: calc(100vh - 100px);
+    max-height: calc(100dvh - 100px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+/* 여행 둘러보기: 기존처럼 하단 중앙 */
+#map-explore-button {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    z-index: 1000;
+}
+
+/* 좁은 화면에서는 버튼과 로그인 카드의 겹침 방지 */
+@media (max-width: 991.98px) {
+    #map-login-card {
+        left: 16px;
+        bottom: 88px;
+        width: 320px;
+        max-width: calc(100vw - 32px);
+
+        max-height: calc(100vh - 170px);
+        max-height: calc(100dvh - 170px);
+    }
+
+    #map-explore-button {
+        bottom: 16px;
+    }
+}
