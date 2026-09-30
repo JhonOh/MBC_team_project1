@@ -53,9 +53,7 @@ def community():
 
 @bp.route('/upload')
 def upload():
-    # 새로 분리된 a4_upload 블루프린트의 upload 라우트로 리다이렉트
     return redirect(url_for('upload.upload'))
-
 
 @bp.route('/mypage')
 def mypage():

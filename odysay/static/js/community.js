@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentSort === 'popular') {
       filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
     } else {
-      filtered.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
     }
 
     // [페이지네이션 계산]
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     items.forEach(item => {
-      let thumbImg = 'https://via.placeholder.com/100?text=No+Image';
+      let thumbImg = 'https://via.placeholder.com/100?text=Odysay';
       if (item.photos) {
         const photoArray = item.photos.split(',');
         if (photoArray.length > 0 && photoArray[0].trim() !== '') {
@@ -100,14 +100,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const cardHtml = `
         <a href="${item.detail_url}" class="post-card">
-          <img src="${thumbImg}" alt="${item.title}" class="post-thumb" onerror="this.src='https://via.placeholder.com/100'">
+          <img src="${thumbImg}" alt="${item.title}" class="post-thumb" onerror="this.src='https://via.placeholder.com/100?text=Odysay'">
           <div class="post-info">
             <div>
               <div class="post-header">
-                <span class="badge">여행 후기</span>
-                <span class="post-title">[${item.country}/${item.region}] ${item.title}</span>
+                <span class="badge">${item.category || '일반'}</span>
+                <span class="post-title">[${item.country || '어딧세이'}/${item.region || '게시판'}] ${item.title}</span>
               </div>
-              <p class="post-desc">${item.intro || '등록된 소개가 없습니다.'}</p>
+              <p class="post-desc">${item.intro || '등록된 내용이 없습니다.'}</p>
             </div>
             <div class="post-meta">
               <div class="author-time">
@@ -176,7 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sorted = [...items].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
 
     sorted.forEach((item, index) => {
-      let thumbImg = 'https://via.placeholder.com/44';
+      let thumbImg = 'https://via.placeholder.com/44?text=Odysay';
       if (item.photos) {
         const photoArray = item.photos.split(',');
         if (photoArray.length > 0 && photoArray[0].trim() !== '') {
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <li>
           <a href="${item.detail_url}" class="hot-item">
             <span class="hot-rank">${index + 1}</span>
-            <img src="${thumbImg}" alt="thumb" class="hot-thumb" onerror="this.src='https://via.placeholder.com/44'">
+            <img src="${thumbImg}" alt="thumb" class="hot-thumb" onerror="this.src='https://via.placeholder.com/44?text=Odysay'">
             <div class="hot-details">
               <div class="hot-title">${item.title}</div>
               <div class="hot-stats">

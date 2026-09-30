@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>글쓰기 - 어딧세이</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community_postwrite.css') }}">
+</head>
+<body>
+
+<div class="editor-container">
+    <!-- 파일 업로드를 위해 enctype="multipart/form-data" 추가 -->
+    <form action="/homepage/community/postwrite/" method="POST" enctype="multipart/form-data">
+        {% if csrf_token %}
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        {% endif %}
+
+        <!-- 1. 게시판 선택 -->
+        <div class="board-select-bar">
+            <label for="boardCategory">게시판</label>
+            <select name="category" id="boardCategory" required>
+                <option value="" disabled selected>게시판 선택</option>
+                <option value="여행 팁" {% if default_category == 'tip' %}selected{% endif %}>여행 팁</option>
+                <option value="자유 게시판" {% if default_category == 'free' %}selected{% endif %}>자유 게시판</option>
+            </select>
+        </div>
+
+        <!-- 2. 제목 입력 -->
+        <div class="title-input-box">
+            <input type="text" name="title" placeholder="게시글 제목을 입력하세요" required>
+        </div>
+
+        <!-- 3. 이미지 첨부 (필요 시 사용) -->
+        <div class="file-input-box" style="margin-bottom: 15px;">
+            <label for="postPhotos" style="display:block; margin-bottom:5px; font-weight:bold;">사진 첨부</label>
+            <input type="file" name="photos" id="postPhotos" accept="image/*" multiple>
+        </div>
+
+        <!-- 4. 본문 작성 -->
+        <div class="content-input-box">
+            <textarea name="content" placeholder="내용을 입력하세요..." required></textarea>
+        </div>
+
+        <!-- 버튼 영역 -->
+        <div class="btn-group">
+            <button type="button" class="btn-cancel" onclick="history.back()">취소</button>
+            <button type="submit" class="btn-submit">등록</button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

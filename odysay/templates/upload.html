@@ -117,7 +117,9 @@
 
         <form id="travelForm"
               method="POST"
-              action="{% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('upload.upload') }}{% endif %}"
+
+              action="{% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
+
               enctype="multipart/form-data">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <section class="form-section">
