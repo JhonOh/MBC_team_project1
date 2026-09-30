@@ -26,34 +26,184 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainImage = document.getElementById('mainImage');
     const leftArrow = document.querySelector('.left-arrow');
     const rightArrow = document.querySelector('.right-arrow');
-    const dots = document.querySelectorAll('.slider-dots .dot');
+    const mainThumbnails = document.getElementById('mainThumbnails');
 
     let currentIndex = 0;
 
-    function updateSlider(index) {
+    // 메인사진 하단 썸네일 만들기
+    function renderMainThumbnails() {
+
+        if (!mainThumbnails || !photoList || photoList.length <= 1) {
+            return;
+        }
+
+        // 기존 썸네일 비우기
+        mainThumbnails.innerHTML = '';
+
+        // 현재 메인사진 기준 앞 2장 + 뒤 2장 선택
+        let startIndex = currentIndex - 2;
+        let endIndex = currentIndex + 2;
+
+        // 처음 부분이면 뒤쪽 사진으로 부족한 자리 채우기
+        if (startIndex < 0) {
+            endIndex += Math.abs(startIndex);
+            startIndex = 0;
+        }
+
+        // 마지막 부분이면 앞쪽 사진으로 부족한 자리 채우기
+        if (endIndex >= photoList.length) {
+            const overflow = endIndex - photoList.length + 1;
+            startIndex = Math.max(0, startIndex - overflow);
+            endIndex = photoList.length - 1;
+        }
+
+        // 현재 메인사진을 제외하고 썸네일 목록 만들기
+        const visiblePhotos = [];
+
+
+        for (let index = startIndex; index <= endIndex; index++) {
+
+            if (index === currentIndex) {
+                continue;
+            }
+
+            visiblePhotos.push({
+                photo: photoList[index],
+                originalIndex: index
+            });
+
+        }
+
+        // 현재 메인사진 + 화면에 보이는 썸네일을 제외한 사진 개수
+        const hiddenPhotoCount =
+            photoList.length - 1 - visiblePhotos.length;
+
+        visiblePhotos.forEach((item) => {
+
+            const thumbnailWrapper = document.createElement('div');
+            thumbnailWrapper.classList.add('main-thumbnail-wrapper');
+
+            const thumbnail = document.createElement('img');
+
+            thumbnail.src = uploadPath + item.photo;
+            thumbnail.alt = '여행지 썸네일';
+            thumbnail.classList.add('main-thumbnail');
+
+            thumbnailWrapper.appendChild(thumbnail);
+
+            // 마지막 썸네일 위에 숨겨진 사진 개수 표시
+            if (
+                hiddenPhotoCount > 0 &&
+                item === visiblePhotos[visiblePhotos.length - 1]
+            ) {
+                const moreCount = document.createElement('span');
+
+                moreCount.classList.add('thumbnail-more-count');
+                moreCount.textContent = `+${hiddenPhotoCount}`;
+
+                thumbnailWrapper.appendChild(moreCount);
+            }
+
+            mainThumbnails.appendChild(thumbnailWrapper);
+
+            thumbnailWrapper.addEventListener('click', () => {
+
+                const direction =
+                    item.originalIndex > currentIndex
+                        ? 'right'
+                        : 'left';
+
+                currentIndex = item.originalIndex;
+
+                updateSlider(currentIndex, direction);
+
+            });
+
+        });
+
+    }
+
+    function updateSlider(index, direction = 'right') {
         if (!photoList || photoList.length === 0 || !mainImage) return;
 
-        mainImage.src = uploadPath + photoList[index];
+        // 현재 사진이 화살표 방향으로 살짝 빠져나가기
+        mainImage.style.opacity = '0';
 
-        dots.forEach((dot, idx) => {
-            if (idx === index) {
-                dot.classList.add('active');
-            } else {
-                dot.classList.remove('active');
-            }
-        });
-    }
+        mainImage.style.transform =
+            direction === 'right'
+                ? 'translateX(-25px)'
+                : 'translateX(25px)';
+
+        // 썸네일도 같이 살짝 흐려지게
+        if (mainThumbnails) {
+            mainThumbnails.style.opacity = '0';
+        }
+
+        setTimeout(() => {
+
+            // 메인사진 교체
+            mainImage.src = uploadPath + photoList[index];
+
+            // 새 사진은 반대편에서 시작
+            mainImage.style.transition = 'none';
+
+            mainImage.style.transform =
+                direction === 'right'
+                    ? 'translateX(25px)'
+                    : 'translateX(-25px)';
+
+            // 썸네일 새로 생성
+            renderMainThumbnails();
+
+            // 브라우저가 시작 위치를 먼저 인식하게 함
+            requestAnimationFrame(() => {
+
+                requestAnimationFrame(() => {
+
+                    mainImage.style.transition =
+                        'opacity 0.2s ease, transform 0.2s ease';
+
+                    mainImage.style.opacity = '1';
+                    mainImage.style.transform = 'translateX(0)';
+
+                    if (mainThumbnails) {
+                        mainThumbnails.style.opacity = '1';
+                    }
+
+                });
+
+            });
+
+        }, 200);
+
+}
 
     if (rightArrow && leftArrow && photoList && photoList.length > 0) {
         rightArrow.addEventListener('click', () => {
             currentIndex = (currentIndex + 1) % photoList.length;
-            updateSlider(currentIndex);
+            updateSlider(currentIndex, 'right');
         });
 
         leftArrow.addEventListener('click', () => {
             currentIndex = (currentIndex - 1 + photoList.length) % photoList.length;
-            updateSlider(currentIndex);
+            updateSlider(currentIndex, 'left');
         });
+    }
+
+    // 처음 페이지가 열렸을 때 썸네일 생성
+    renderMainThumbnails();
+
+    // 사진이 1장뿐이면 좌우 화살표 숨기기
+    if (!photoList || photoList.length <= 1) {
+
+        if (leftArrow) {
+            leftArrow.style.display = 'none';
+        }
+
+        if (rightArrow) {
+            rightArrow.style.display = 'none';
+        }
+
     }
 
     // 3. 탭 전환
@@ -557,168 +707,507 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
         }
-            // 12. 여행지 사진 크게보기
+                // 12. 여행지 사진 크게보기
 
-            const galleryImages =
-                document.querySelectorAll('.gallery-image');
+                const galleryImages =
+                    document.querySelectorAll('.gallery-image');
 
-            const imageModal =
-                document.getElementById('imageModal');
-
-            const imageModalPhoto =
-                document.getElementById('imageModalPhoto');
-
-            const imageModalClose =
-                document.getElementById('imageModalClose');
-
-            const imageModalPrev =
-                document.getElementById('imageModalPrev');
-
-            const imageModalNext =
-                document.getElementById('imageModalNext');
-
-            const imageModalThumbnails =
-                document.getElementById('imageModalThumbnails');
-
-
-            let modalIndex = 0;
-
-
-            // 팝업에 현재 사진 표시
-            function showModalImage(index) {
-
-                modalIndex = index;
-
-                imageModalPhoto.src =
-                    galleryImages[modalIndex].src;
-
-
-                // 아래 작은 사진 active 변경
-                const thumbnails =
-                    imageModalThumbnails.querySelectorAll('img');
-
-                thumbnails.forEach(function(thumbnail, index) {
-
-                    thumbnail.classList.toggle(
-                        'active',
-                        index === modalIndex
+                const restaurantImages =
+                    document.querySelectorAll(
+                        '.gallery-image[alt="주변 맛집 사진"]'
                     );
 
-                });
+                const nearbyImages =
+                    document.querySelectorAll(
+                        '.gallery-image[alt="주변 볼거리 사진"]'
+                    );
 
-            }
+                const imageModal =
+                    document.getElementById('imageModal');
 
+                const imageModalPhoto =
+                    document.getElementById('imageModalPhoto');
 
-            // 아래 작은 사진 만들기
-            galleryImages.forEach(function(image, index) {
+                const imageModalClose =
+                    document.getElementById('imageModalClose');
 
-                const thumbnail =
-                    document.createElement('img');
+                const imageModalPrev =
+                    document.getElementById('imageModalPrev');
 
-                thumbnail.src = image.src;
+                const imageModalNext =
+                    document.getElementById('imageModalNext');
 
-                thumbnail.alt = image.alt;
-
-
-                // 작은 사진 클릭
-                thumbnail.addEventListener('click', function(event) {
-
-                    event.stopPropagation();
-
-                    showModalImage(index);
-
-                });
+                const imageModalThumbnails =
+                    document.getElementById('imageModalThumbnails');
 
 
-                imageModalThumbnails.appendChild(thumbnail);
+                let modalIndex = 0;
+                let currentModalImages = [];
 
 
-                // 원래 여행지 사진 클릭
-                image.addEventListener('click', function() {
+                // ================================
+                // 상단 메인 여행지 사진
+                // ================================
 
-                    showModalImage(index);
+                const mainModalImages =
+                    (photoList || []).map(function(photo) {
 
-                    imageModal.classList.add('active');
+                        return {
+                            src: uploadPath + photo,
+                            alt: '여행지 사진'
+                        };
 
-                    // 팝업 열렸을 때 뒤 페이지 스크롤 막기
-                    document.body.style.overflow = 'hidden';
-
-                });
-
-            });
-
-
-            // 이전 사진
-            if (imageModalPrev) {
-
-                imageModalPrev.addEventListener('click', function(event) {
-
-                    event.stopPropagation();
-
-                    modalIndex =
-                        (modalIndex - 1 + galleryImages.length)
-                        % galleryImages.length;
-
-                    showModalImage(modalIndex);
-
-                });
-
-            }
+                    });
 
 
-            // 다음 사진
-            if (imageModalNext) {
+                // ================================
+                // 같은 사진 중복 제거
+                // ================================
 
-                imageModalNext.addEventListener('click', function(event) {
+                function removeDuplicateImages(images) {
 
-                    event.stopPropagation();
+                    return Array.from(images).filter(
+                        (item, index, array) =>
 
-                    modalIndex =
-                        (modalIndex + 1)
-                        % galleryImages.length;
+                            index === array.findIndex(
+                                other => other.src === item.src
+                            )
+                    );
 
-                    showModalImage(modalIndex);
-
-                });
-
-            }
-
-
-            // 팝업 닫기 함수
-            function closeImageModal() {
-
-                imageModal.classList.remove('active');
-
-                document.body.style.overflow = '';
-
-            }
+                }
 
 
-            // X 버튼
-            if (imageModalClose) {
+                // ================================
+                // 모달 화살표 표시 여부
+                // ================================
 
-                imageModalClose.addEventListener('click', function() {
+                function updateModalArrows() {
 
-                    closeImageModal();
+                    const shouldShow =
+                        currentModalImages &&
+                        currentModalImages.length > 1;
 
-                });
+                    if (imageModalPrev) {
+                        imageModalPrev.style.display =
+                            shouldShow ? 'flex' : 'none';
+                    }
 
-            }
+                    if (imageModalNext) {
+                        imageModalNext.style.display =
+                            shouldShow ? 'flex' : 'none';
+                    }
+
+                }
 
 
-            // 검은 배경 클릭
-            if (imageModal) {
+                // ================================
+                // 현재 사진 표시
+                // ================================
 
-                imageModal.addEventListener('click', function(event) {
+                function showModalImage(index) {
 
-                    if (event.target === imageModal) {
+                    if (
+                        !currentModalImages ||
+                        currentModalImages.length === 0 ||
+                        !imageModalPhoto
+                    ) {
+                        return;
+                    }
 
-                        closeImageModal();
+                    modalIndex = index;
+
+                    imageModalPhoto.src =
+                        currentModalImages[modalIndex].src;
+
+                    imageModalPhoto.alt =
+                        currentModalImages[modalIndex].alt || '여행지 사진 크게보기';
+
+
+                    // 아래 썸네일 active 변경
+                    if (imageModalThumbnails) {
+
+                        const thumbnails =
+                            imageModalThumbnails.querySelectorAll('img');
+
+                        thumbnails.forEach(function(thumbnail, thumbIndex) {
+
+                            thumbnail.classList.toggle(
+                                'active',
+                                thumbIndex === modalIndex
+                            );
+
+                        });
 
                     }
 
+                }
+
+
+                // ================================
+                // 현재 사진 그룹 썸네일 만들기
+                // ================================
+
+                function renderModalThumbnails() {
+
+                    if (!imageModalThumbnails) {
+                        return;
+                    }
+
+                    imageModalThumbnails.innerHTML = '';
+
+
+                    currentModalImages.forEach(function(image, index) {
+
+                        const thumbnail =
+                            document.createElement('img');
+
+                        thumbnail.src = image.src;
+                        thumbnail.alt = image.alt || '여행지 사진';
+
+
+                        if (index === modalIndex) {
+                            thumbnail.classList.add('active');
+                        }
+
+
+                        thumbnail.addEventListener(
+                            'click',
+                            function(event) {
+
+                                event.stopPropagation();
+
+                                showModalImage(index);
+
+                            }
+                        );
+
+
+                        imageModalThumbnails.appendChild(thumbnail);
+
+                    });
+
+                }
+
+
+                // ================================
+                // 모달 열기 공통 함수
+                // ================================
+
+                function openImageModal(images, startIndex = 0) {
+
+                    if (
+                        !imageModal ||
+                        !images ||
+                        images.length === 0
+                    ) {
+                        return;
+                    }
+
+
+                    currentModalImages =
+                        removeDuplicateImages(images);
+
+
+                    if (startIndex < 0) {
+                        startIndex = 0;
+                    }
+
+                    if (startIndex >= currentModalImages.length) {
+                        startIndex = currentModalImages.length - 1;
+                    }
+
+
+                    modalIndex = startIndex;
+
+
+                    renderModalThumbnails();
+
+                    showModalImage(modalIndex);
+
+                    updateModalArrows();
+
+
+                    imageModal.classList.add('active');
+
+                    document.body.style.overflow = 'hidden';
+
+                }
+
+
+                // ================================
+                // 상단 메인 이미지 클릭
+                // ================================
+
+                if (mainImage) {
+
+                    mainImage.style.cursor = 'pointer';
+
+
+                    mainImage.addEventListener('click', function() {
+
+                        openImageModal(
+                            mainModalImages,
+                            currentIndex
+                        );
+
+                    });
+
+                }
+
+
+                // ================================
+                // 맛집 / 볼거리 사진 클릭
+                // ================================
+
+                galleryImages.forEach(function(image) {
+
+                    image.addEventListener('click', function() {
+
+                        let selectedGroup = [];
+
+
+                        // 맛집 사진
+                        if (image.alt === '주변 맛집 사진') {
+
+                            selectedGroup =
+                                removeDuplicateImages(restaurantImages);
+
+                        }
+
+
+                        // 볼거리 사진
+                        else if (image.alt === '주변 볼거리 사진') {
+
+                            selectedGroup =
+                                removeDuplicateImages(nearbyImages);
+
+                        }
+
+
+                        // 클릭한 사진 위치 찾기
+                        const groupIndex =
+                            selectedGroup.findIndex(
+                                item => item.src === image.src
+                            );
+
+
+                        openImageModal(
+                            selectedGroup,
+                            groupIndex
+                        );
+
+                    });
+
                 });
 
-            }
+
+                // ================================
+                // 이전 사진
+                // ================================
+
+                if (imageModalPrev) {
+
+                    imageModalPrev.addEventListener(
+                        'click',
+                        function(event) {
+
+                            event.stopPropagation();
+
+
+                            if (
+                                !currentModalImages ||
+                                currentModalImages.length <= 1
+                            ) {
+                                return;
+                            }
+
+
+                            modalIndex =
+                                (
+                                    modalIndex - 1 +
+                                    currentModalImages.length
+                                )
+                                % currentModalImages.length;
+
+
+                            showModalImage(modalIndex);
+
+                        }
+                    );
+
+                }
+
+
+                // ================================
+                // 다음 사진
+                // ================================
+
+                if (imageModalNext) {
+
+                    imageModalNext.addEventListener(
+                        'click',
+                        function(event) {
+
+                            event.stopPropagation();
+
+
+                            if (
+                                !currentModalImages ||
+                                currentModalImages.length <= 1
+                            ) {
+                                return;
+                            }
+
+
+                            modalIndex =
+                                (modalIndex + 1)
+                                % currentModalImages.length;
+
+
+                            showModalImage(modalIndex);
+
+                        }
+                    );
+
+                }
+
+
+                // ================================
+                // 마우스 휠 이전 / 다음
+                // ================================
+
+                if (imageModal) {
+
+                    imageModal.addEventListener(
+                        'wheel',
+                        function(event) {
+
+                            if (
+                                !imageModal.classList.contains('active')
+                            ) {
+                                return;
+                            }
+
+
+                            if (
+                                !currentModalImages ||
+                                currentModalImages.length <= 1
+                            ) {
+                                return;
+                            }
+
+
+                            event.preventDefault();
+
+
+                            const wheelAmount =
+
+                                Math.abs(event.deltaY) >=
+                                Math.abs(event.deltaX)
+
+                                    ? event.deltaY
+                                    : event.deltaX;
+
+
+                            // 아래 / 오른쪽 → 다음
+                            if (wheelAmount > 0) {
+
+                                modalIndex =
+                                    (modalIndex + 1)
+                                    % currentModalImages.length;
+
+                            }
+
+                            // 위 / 왼쪽 → 이전
+                            else if (wheelAmount < 0) {
+
+                                modalIndex =
+                                    (
+                                        modalIndex - 1 +
+                                        currentModalImages.length
+                                    )
+                                    % currentModalImages.length;
+
+                            }
+
+
+                            showModalImage(modalIndex);
+
+                        },
+                        {
+                            passive: false
+                        }
+                    );
+
+                }
+
+
+                // ================================
+                // 모달 닫기
+                // ================================
+
+                function closeImageModal() {
+
+                    if (!imageModal) {
+                        return;
+                    }
+
+                    imageModal.classList.remove('active');
+
+                    document.body.style.overflow = '';
+
+                }
+
+
+                // X 버튼
+                if (imageModalClose) {
+
+                    imageModalClose.addEventListener(
+                        'click',
+                        closeImageModal
+                    );
+
+                }
+
+
+                // 검은 배경 클릭
+                if (imageModal) {
+
+                    imageModal.addEventListener(
+                        'click',
+                        function(event) {
+
+                            if (event.target === imageModal) {
+
+                                closeImageModal();
+
+                            }
+
+                        }
+                    );
+
+                }
+
+
+                // ================================
+                // ESC 키로 모달 닫기
+                // ================================
+
+                document.addEventListener(
+                    'keydown',
+                    function(event) {
+
+                        if (
+                            event.key === 'Escape' &&
+                            imageModal &&
+                            imageModal.classList.contains('active')
+                        ) {
+
+                            closeImageModal();
+
+                        }
+
+                    }
+                );
 
     });  // ← DOMContentLoaded 끝
