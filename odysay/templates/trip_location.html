@@ -93,7 +93,7 @@
             <div class="action-buttons">
 
                 {% if g.user and place.user_id == g.user.id %}
-                <a href="{{ url_for('homepage.trip_location_edit', place_id=place.id) }}"
+                <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
                    class="btn-action btn-edit">
                     ✎ 수정하기
                 </a>

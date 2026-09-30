@@ -136,9 +136,9 @@ def get_coords_from_tmap(region, place, raw_place=""):
 
 
 # -----------------------------------------------------------
-# 여행지 등록 라우트
+# 여행지 등록 라우트 (/homepage/upload)
 # -----------------------------------------------------------
-@bp.route('/upload', methods=['GET', 'POST'])
+@bp.route('/', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
         country = request.form.get('country', '')

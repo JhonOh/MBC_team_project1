@@ -70,3 +70,21 @@ class TravelPlace(db.Model):
         db.Text,
         nullable=True
     )
+
+
+# ==========================================
+# 커뮤니티(여행 팁 / 자유 게시판)용 모델 (들여쓰기 제거)
+# ==========================================
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    category = db.Column(db.String(50), nullable=False)  # '여행 팁', '자유 게시판'
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    photos = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    likes = db.Column(db.Integer, default=0)
+
+    # 작성자 (로그인 연동 시 사용)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)

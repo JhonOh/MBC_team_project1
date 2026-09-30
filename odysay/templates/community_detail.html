@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ item.title if is_post else item.place }} - 어딧세이</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
+    <style>
+        .detail-container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+        .detail-header {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .detail-badge {
+            display: inline-block;
+            background: #eef5ff;
+            color: #3b82f6;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .detail-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .detail-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #777;
+            font-size: 14px;
+        }
+        .detail-content {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #444;
+            min-height: 200px;
+            white-space: pre-wrap;
+            margin-bottom: 30px;
+        }
+        .detail-images {
+            margin-bottom: 30px;
+        }
+        .detail-images img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f1f5f9;
+            color: #475569;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .btn-back:hover { background: #e2e8f0; }
+    </style>
+</head>
+<body>
+
+<div class="detail-container">
+    <div class="detail-header">
+        <span class="detail-badge">{{ item.category if is_post else '여행 후기' }}</span>
+        <h1 class="detail-title">
+            {% if is_post %}
+                {{ item.title }}
+            {% else %}
+                [{{ item.country }}/{{ item.region }}] {{ item.place }}
+            {% endif %}
+        </h1>
+        <div class="detail-meta">
+            <span><i class="fa-regular fa-user"></i> {{ author_name }}</span>
+            <span>{{ item.created_at.strftime('%Y.%m.%d %H:%M') if item.created_at else '' }}</span>
+        </div>
+    </div>
+
+    <!-- 이미지 목록 -->
+    {% if photo_list %}
+    <div class="detail-images">
+        {% for photo in photo_list %}
+            {% if photo.strip() %}
+                <img src="/static/uploads/{{ photo.strip() }}" alt="첨부사진">
+            {% endif %}
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 본문 내용 -->
+    <div class="detail-content">
+        {% if is_post %}
+            {{ item.content }}
+        {% else %}
+            <p><strong>소개:</strong> {{ item.intro }}</p>
+            <p><strong>추천 이유:</strong> {{ item.reason }}</p>
+        {% endif %}
+    </div>
+
+    <a href="javascript:history.back()" class="btn-back"><i class="fa-solid fa-arrow-left"></i> 목록으로 돌아가기</a>
+</div>
+
+</body>
+</html>
