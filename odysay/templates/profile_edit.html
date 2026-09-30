@@ -64,118 +64,133 @@
             color: #fff;
             cursor: pointer;
         }
+                .profile-password-section {
+            min-width: 0;
+            margin: 28px 0 0;
+            padding: 20px 0 0;
+            border: 0;
+            border-top: 1px solid #ddd;
+        }
+
+        .profile-password-section legend {
+            padding: 0 10px 0 0;
+            font-weight: bold;
+        }
+
+        .profile-password-field {
+            margin-top: 18px;
+        }
+
+        .profile-edit-actions {
+            flex-wrap: wrap;
+        }
+
+        .profile-edit-card .profile-btn {
+            display: inline-block;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
-<main class="profile-edit-wrap">
-    <h1 class="page-title">프로필 수정</h1>
+    <main class="profile-edit-wrap">
+        <h1 class="page-title">프로필 수정</h1>
 
-   <form
-    class="profile-edit-card"
-    method="POST"
-    action="{{ url_for('profile.profile_edit') }}"
->
-    {{ form.hidden_tag() }}
+        <form class="profile-edit-card"
+              method="POST"
+              action="{{ url_for('profile.profile_edit') }}">
 
-    {% if save_error %}
-        <p class="profile-edit-error" role="alert">
-            {{ save_error }}
-        </p>
-    {% endif %}
+            {{ form.hidden_tag() }}
 
-    <!-- 닉네임 -->
-    {{ form.nickname.label }}
+            {% if save_error %}
+                <p class="profile-edit-error" role="alert">
+                    {{ save_error }}
+                </p>
+            {% endif %}
 
-    {{ form.nickname(
-        class_='profile-edit-input',
-        minlength=2,
-        maxlength=20,
-        autocomplete='nickname',
-        required=True
-    ) }}
-
-    <p class="profile-edit-help">
-        닉네임은 2~20자로 입력해 주세요.
-    </p>
-
-    {% for error in form.nickname.errors %}
-        <p class="profile-edit-error" role="alert">
-            {{ error }}
-        </p>
-    {% endfor %}
-
-    <!-- 비밀번호 변경 -->
-    <fieldset class="profile-password-section">
-        <legend>비밀번호 변경</legend>
-
-        <p class="profile-edit-help">
-            비밀번호를 변경할 때만 아래 항목을 입력해 주세요.
-            닉네임만 수정하려면 모두 비워 두세요.
-        </p>
-
-        <div class="profile-password-field">
-            {{ form.current_password.label }}
-
-            {{ form.current_password(
+            {{ form.nickname.label }}
+            {{ form.nickname(
                 class_='profile-edit-input',
-                autocomplete='current-password',
-                placeholder='현재 비밀번호'
+                minlength=2,
+                maxlength=20,
+                autocomplete='nickname',
+                required=True
             ) }}
 
-            {% for error in form.current_password.errors %}
+            <p class="profile-edit-help">
+                닉네임은 2~20자로 입력해 주세요.
+            </p>
+
+            {% for error in form.nickname.errors %}
                 <p class="profile-edit-error" role="alert">
                     {{ error }}
                 </p>
             {% endfor %}
-        </div>
+                        <fieldset class="profile-password-section">
+                <legend>비밀번호 변경</legend>
 
-        <div class="profile-password-field">
-            {{ form.new_password.label }}
-
-            {{ form.new_password(
-                class_='profile-edit-input',
-                autocomplete='new-password',
-                placeholder='새 비밀번호 · 8~128자',
-                minlength=8,
-                maxlength=128
-            ) }}
-
-            {% for error in form.new_password.errors %}
-                <p class="profile-edit-error" role="alert">
-                    {{ error }}
+                <p class="profile-edit-help">
+                    닉네임만 수정하려면 아래 세 항목을 모두 비워 두세요.
+                    비밀번호를 변경하면 다시 로그인해야 합니다.
                 </p>
-            {% endfor %}
-        </div>
 
-        <div class="profile-password-field">
-            {{ form.confirm_password.label }}
+                <div class="profile-password-field">
+                    {{ form.current_password.label }}
+                    {{ form.current_password(
+                        class_='profile-edit-input',
+                        autocomplete='current-password'
+                    ) }}
 
-            {{ form.confirm_password(
-                class_='profile-edit-input',
-                autocomplete='new-password',
-                placeholder='새 비밀번호를 다시 입력해 주세요',
-                maxlength=128
-            ) }}
+                    {% for error in form.current_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
 
-            {% for error in form.confirm_password.errors %}
-                <p class="profile-edit-error" role="alert">
-                    {{ error }}
-                </p>
-            {% endfor %}
-        </div>
-    </fieldset>
+                <div class="profile-password-field">
+                    {{ form.new_password.label }}
+                    {{ form.new_password(
+                        class_='profile-edit-input',
+                        minlength=8,
+                        maxlength=128,
+                        autocomplete='new-password'
+                    ) }}
 
-    <div class="profile-edit-actions">
-        <a
-            href="{{ url_for('homepage.mypage') }}"
-            class="profile-btn"
-        >
-            취소
-        </a>
+                    <p class="profile-edit-help">
+                        현재 비밀번호와 다른 8~128자의 비밀번호를 입력하세요.
+                    </p>
 
-        {{ form.submit(class_='profile-save-btn') }}
-    </div>
-</form>
-</main>
+                    {% for error in form.new_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="profile-password-field">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(
+                        class_='profile-edit-input',
+                        autocomplete='new-password'
+                    ) }}
+
+                    {% for error in form.confirm_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="profile-edit-actions">
+                <a href="{{ url_for('homepage.mypage') }}"
+                   class="profile-btn">
+                    취소
+                </a>
+
+                {{ form.submit(class_='profile-save-btn') }}
+            </div>
+        </form>
+    </main>
 </body>
 </html>

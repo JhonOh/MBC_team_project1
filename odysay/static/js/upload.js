@@ -1,7 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // 수정 모드인지 확인
+    const editMode =
+        document.getElementById("editMode")?.value === "true";
+
     // 등록 가이드 확인 여부
-    let guideChecked = false;
+    let guideChecked = editMode;
 
     // 메뉴 요소
     const uploadMenu = document.getElementById("uploadMenu");
@@ -10,15 +14,98 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadContent = document.getElementById("uploadContent");
     const guideContent = document.getElementById("guideContent");
 
-    // 1. 국가 목록 생성
-    const countrySelect = document.getElementById("country");
+    // 1. 국가 검색
+    const countrySearch = document.getElementById("countrySearch");
+    const countryInput = document.getElementById("country");
+    const countryResults = document.getElementById("countryResults");
 
-    if (countrySelect && typeof countries !== "undefined") {
-        countries.forEach(function (country) {
-            const option = document.createElement("option");
-            option.value = country;
-            option.textContent = country;
-            countrySelect.appendChild(option);
+    if (
+        countrySearch &&
+        countryInput &&
+        countryResults &&
+        typeof countries !== "undefined"
+    ) {
+        // 나라 검색창을 클릭하면 전체 나라 목록 보여주기
+        countrySearch.addEventListener("focus", function () {
+
+            countryResults.innerHTML = "";
+
+            countries.forEach(function (country) {
+
+                const item = document.createElement("div");
+
+                item.classList.add("country-result-item");
+                item.textContent = country;
+
+                item.addEventListener("click", function () {
+
+                    countrySearch.value = country;
+                    countryInput.value = country;
+
+                    countryResults.innerHTML = "";
+                    countryResults.style.display = "none";
+                });
+
+                countryResults.appendChild(item);
+            });
+
+            countryResults.style.display = "block";
+        });
+
+        countrySearch.addEventListener("input", function () {
+
+            const keyword = this.value.trim().toLowerCase();
+
+            // 검색어를 다시 입력하면 기존 선택값 초기화
+            countryInput.value = "";
+            countryResults.innerHTML = "";
+
+            if (keyword === "") {
+                countryResults.style.display = "none";
+                return;
+            }
+
+            const filteredCountries = countries.filter(function (country) {
+                return country.toLowerCase().includes(keyword);
+            });
+
+            if (filteredCountries.length === 0) {
+                countryResults.innerHTML =
+                    '<div class="country-no-result">검색 결과가 없습니다.</div>';
+
+                countryResults.style.display = "block";
+                return;
+            }
+
+            filteredCountries.forEach(function (country) {
+
+                const item = document.createElement("div");
+
+                item.classList.add("country-result-item");
+                item.textContent = country;
+
+                item.addEventListener("click", function () {
+
+                    countrySearch.value = country;
+                    countryInput.value = country;
+
+                    countryResults.innerHTML = "";
+                    countryResults.style.display = "none";
+                });
+
+                countryResults.appendChild(item);
+            });
+
+            countryResults.style.display = "block";
+        });
+
+        // 검색창 바깥 클릭 시 결과 닫기
+        document.addEventListener("click", function (event) {
+
+            if (!event.target.closest(".country-search-wrapper")) {
+                countryResults.style.display = "none";
+            }
+
         });
     }
 
@@ -150,10 +237,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     Array.from(photosInput.files);
 
 
-                // 기존 사진 + 새 사진이 10장을 넘는지 확인
-                if (selectedPhotos.length + newFiles.length > 10) {
+                // DB에 저장되어 있는 기존 메인 사진 개수
+                const existingPhotoCount =
+                    document.querySelectorAll("#existingPhotos .existing-photo").length;
 
-                    alert("사진은 최대 10장까지 등록할 수 있습니다.");
+                // 기존 DB 사진 + 이미 새로 선택한 사진 + 이번에 선택한 사진
+                if (existingPhotoCount + selectedPhotos.length + newFiles.length > 10) {
+
+                    alert("메인 사진은 최대 10장까지 등록할 수 있습니다.");
 
                     updatePhotoInput();
 
@@ -180,6 +271,135 @@ document.addEventListener("DOMContentLoaded", function () {
 
         }
 
+        // 기존 DB 사진 삭제
+        document.querySelectorAll(".remove-existing-photo").forEach(function(button) {
+
+            button.addEventListener("click", function() {
+
+                const previewItem = button.closest(".existing-photo");
+
+                if (previewItem) {
+                    previewItem.remove();
+                }
+
+            });
+
+        });
+
+        // 4-1. 주변 정보 사진 선택 / 추가 / 삭제
+        function setupNearbyPhotos(inputId, previewId, existingContainerId) {
+
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            if (!input || !preview) {
+                return;
+            }
+
+            let selectedFiles = [];
+
+            // 실제 input의 파일 목록 업데이트
+            function updateInput() {
+
+                const dataTransfer = new DataTransfer();
+
+                selectedFiles.forEach(function(file) {
+                    dataTransfer.items.add(file);
+                });
+
+                input.files = dataTransfer.files;
+            }
+
+
+            // 미리보기 표시
+            function renderPreview() {
+
+                preview.innerHTML = "";
+
+                selectedFiles.forEach(function(file, index) {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(event) {
+
+                        const previewItem = document.createElement("div");
+                        previewItem.classList.add("preview-item");
+
+                        const image = document.createElement("img");
+                        image.src = event.target.result;
+                        image.alt = file.name;
+
+                        const removeButton = document.createElement("button");
+
+                        removeButton.type = "button";
+                        removeButton.classList.add("remove-photo");
+                        removeButton.textContent = "×";
+
+                        // 사진 삭제
+                        removeButton.addEventListener("click", function() {
+
+                            selectedFiles.splice(index, 1);
+
+                            updateInput();
+                            renderPreview();
+                        });
+
+                        previewItem.appendChild(image);
+                        previewItem.appendChild(removeButton);
+
+                        preview.appendChild(previewItem);
+                    };
+
+                    reader.readAsDataURL(file);
+                });
+            }
+
+
+            // 사진 선택
+            input.addEventListener("change", function() {
+
+                const newFiles = Array.from(input.files);
+
+                // 기존 DB 사진 개수
+                const existingPhotoCount =
+                    document.querySelectorAll(
+                        "#" + existingContainerId + " .existing-photo"
+                    ).length;
+
+                // 기존 DB 사진 + 새로 선택한 사진 = 최대 3장
+                if (existingPhotoCount + selectedFiles.length + newFiles.length > 3) {
+
+                    alert("주변정보 사진은 최대 3장까지 등록할 수 있습니다.");
+
+                    updateInput();
+
+                    return;
+                }
+
+                newFiles.forEach(function(file) {
+                    selectedFiles.push(file);
+                });
+
+                updateInput();
+                renderPreview();
+            });
+        }
+
+
+        // 주변 맛집 사진
+        setupNearbyPhotos(
+            "restaurantPhotos",
+            "restaurantPreview",
+            "existingRestaurantPhotos"
+        );
+
+
+        // 주변 볼거리 사진
+        setupNearbyPhotos(
+            "nearbyPhotos",
+            "nearbyPreview",
+            "existingNearbyPhotos"
+        );
 
     // 5. 폼 전송
     const travelForm = document.getElementById("travelForm");
@@ -215,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
             // 2. 가이드는 봤지만 동의 체크 안 했을 때
-            if (!agree || !agree.checked) {
+            if (!editMode && (!agree || !agree.checked)) {
 
                 alert("등록 가이드라인에 동의해주세요.");
 
@@ -225,6 +445,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 return;
+            }
+
+            // 나라 검색창 값을 실제 country 값에 넣기
+            if (countrySearch && countryInput) {
+                countryInput.value = countrySearch.value.trim();
             }
 
             const formData = new FormData(travelForm);

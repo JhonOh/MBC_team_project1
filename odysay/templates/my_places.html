@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>내가 만든 여행지 | 어딧세이</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/trip_list.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/my_places.css') }}">
+</head>
+
+<body class="my-places-page">
+       <div class="travel-page">
+
+        <!-- 상단 메뉴 -->
+        <header class="header">
+            <div class="header-inner">
+
+                <a href="{{ url_for('homepage.homepage') }}"
+                   class="logo">
+                    <span class="logo-icon">△△</span>
+                    <span class="logo-text">
+                        어딧세이
+                        <small>ODYSAY</small>
+                    </span>
+                </a>
+
+                <nav class="main-nav">
+                    <a href="{{ url_for('homepage.homepage') }}">
+                        홈
+                    </a>
+                    <a href="{{ url_for('homepage.trip_list') }}">
+                        여행지
+                    </a>
+                    <a href="{{ url_for('homepage.upload') }}">
+                        여행지 등록
+                    </a>
+                </nav>
+
+                <div class="header-right">
+                    <a href="{{ url_for('auth.logout') }}">
+                        로그아웃
+                    </a>
+                    <a href="{{ url_for('homepage.mypage') }}"
+                       class="mypage-btn">
+                        마이페이지
+                    </a>
+                </div>
+
+            </div>
+        </header>
+
+        <!-- 본문 -->
+        <main class="main">
+
+            <section class="title-section">
+                <h1>내가 만든 여행지</h1>
+                <p>
+                    {{ g.user.nickname or g.user.username }}님이
+                    등록한 여행지 {{ places | length }}개
+                </p>
+            </section>
+
+            <div class="my-list-actions">
+                <a href="{{ url_for('homepage.mypage') }}"
+                   class="back-link">
+                    ← 마이페이지로 돌아가기
+                </a>
+
+                <a href="{{ url_for('homepage.upload') }}"
+                   class="upload-link">
+                    여행지 등록
+                </a>
+            </div>
+
+            {% if places %}
+                <section class="travel-list"
+                         aria-label="내가 등록한 여행지 목록">
+
+                    {% for place in places %}
+
+                        {% set photo_names =
+                            (place.photos or '').split(',')
+                            | map('trim')
+                            | reject('equalto', '')
+                            | list
+                        %}
+
+                        <a class="travel-card"
+                           href="{{ url_for(
+                                'trip_location.trip_location_detail',
+                               place_id=place.id
+                           ) }}">
+
+                            <div class="travel-image">
+                                {% if photo_names %}
+                                    <img
+                                        src="{{ url_for(
+                                            'static',
+                                            filename='uploads/' ~ photo_names[0]
+                                        ) }}"
+                                        alt="{{ place.place }} 사진"
+                                        loading="lazy"
+                                    >
+                                {% else %}
+                                    <div class="image-placeholder">
+                                        등록된 사진이 없습니다
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="travel-info">
+                                <h2>{{ place.place }}</h2>
+
+                                <div class="travel-bottom">
+                                    <span>
+                                        {{ place.country }} /
+                                        {{ place.region }}
+                                    </span>
+
+                                    <span class="likes"
+                                          aria-label="좋아요 {{ place.likes or 0 }}개">
+                                        ♡ {{ place.likes or 0 }}
+                                    </span>
+                                </div>
+
+                                <p class="my-place-intro">
+                                    {{ place.intro or '소개가 없습니다.' }}
+                                </p>
+
+                                {% if place.created_at %}
+                                    <time
+                                        class="my-place-date"
+                                        datetime="{{ place.created_at.isoformat() }}"
+                                    >
+                                        등록일
+                                        {{ place.created_at.strftime('%Y.%m.%d') }}
+                                    </time>
+                                {% endif %}
+
+                                <span class="my-place-detail">
+                                    상세보기 →
+                                </span>
+                            </div>
+
+                        </a>
+                    {% endfor %}
+
+                </section>
+            {% else %}
+                <section class="my-empty-state">
+                    <h2>아직 등록한 여행지가 없습니다.</h2>
+                    <p>여행지 등록 버튼으로 첫 여행지를 등록해 보세요.</p>
+                </section>
+            {% endif %}
+
+        </main>
+
+        <!-- 하단 -->
+        <footer class="footer">
+            <div class="footer-inner">
+
+                <div class="footer-logo">
+                    <span class="footer-logo-icon">△△</span>
+                    <div>
+                        <strong>어딧세이</strong>
+                        <small>ODYSAY</small>
+                    </div>
+                </div>
+
+                <nav class="footer-menu">
+                    <a href="{{ url_for('homepage.homepage') }}">
+                        홈
+                    </a>
+                    <a href="{{ url_for('homepage.mypage') }}">
+                        마이페이지
+                    </a>
+                </nav>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 ODYSAY. All rights reserved.
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

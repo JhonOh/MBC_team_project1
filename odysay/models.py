@@ -8,7 +8,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
-    # True: 정상 회원 / False: 탈퇴 회원 작업 작업자 박기흠 26.09.29 회원탈퇴 기능 구현
+    # 정상 회원: True / 탈퇴 회원: False
     is_active = db.Column(
         db.Boolean,
         nullable=False,
@@ -22,16 +22,12 @@ class User(db.Model):
     gender = db.Column(db.String(10), nullable=True)
 
 
+
+
 class TravelPlace(db.Model):
     __tablename__ = 'travel_places'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # 마이페이지 내가 만든 여행지 확인 기능을 사용하기 위하여 여행지 db. 정보에 등록 id 추가 기능 추가 26.09.29 박기흠
-    user_id = db.Column(
-        db.Integer,
-        db.ForeignKey('user.id'),
-        nullable=True
-    )
 
     # 기본 정보
     country = db.Column(db.String(100), nullable=False)
@@ -60,6 +56,12 @@ class TravelPlace(db.Model):
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
 
+    # 작성자
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=True
+    )
 
     # 수정 일시
     updated_at = db.Column(

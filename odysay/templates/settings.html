@@ -5,14 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>설정</title>
-<link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-    crossorigin="anonymous"
->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/setting.css') }}">
 </head>
 
 <body>
@@ -30,15 +25,11 @@
             </a>
 
             <nav class="main-menu">
-                <a href="{{ url_for('homepage.homepage') }}">홈</a>
-                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+                <a href="#">홈</a>
+                <a href="#">여행지</a>
                 <a href="#">여행 후기</a>
-                <a href="{{ url_for('homepage.upload') }}">
-                   여행지 등록
-                </a>
-                <a href="{{ url_for('homepage.mypage') }}" aria-current="page">
-                    마이페이지
-                </a>
+                <a href="#">여행지 등록</a>
+                <a href="#">마이페이지</a>
             </nav>
 
             <button type="button" class="search-btn">
@@ -104,154 +95,134 @@
             </h1>
 
 
-           <!-- 회원 탈퇴 -->
-<div id="withdraw-panel">
-    <div class="card withdraw-card">
-        <div class="card-body p-4 p-md-5">
+                      <!-- 회원 탈퇴 -->
+            <div class="withdraw-box">
 
-            <div class="mb-4">
-                <p class="withdraw-eyebrow mb-2">
-                    ACCOUNT SETTINGS
-                </p>
+                <div class="withdraw-header">
+                    <h2>회원 탈퇴</h2>
+                </div>
 
-                <h2 class="h4 fw-bold mb-3">
-                    회원 탈퇴
-                </h2>
+                <div class="withdraw-content">
 
-                <p class="text-secondary mb-0 lh-lg">
-                    탈퇴 전 아래 내용을 확인해 주세요.
-                    <br>
-                    탈퇴하면 계정이 비활성화되고 로그아웃됩니다.
-                </p>
-            </div>
-
-            <!-- 탈퇴 안내 -->
-            <div class="withdraw-notice p-3 p-md-4 mb-4">
-                <h3 class="h6 fw-bold mb-3">
-                    탈퇴 전 확인해 주세요
-                </h3>
-
-                <ul class="small text-secondary ps-3 mb-0">
-                    <li>
+                    <p class="withdraw-description">
+                        탈퇴하면 계정이 비활성화되고 로그아웃됩니다.
+                        <br>
                         회원정보와 기존 게시물은 삭제되지 않고 보관됩니다.
-                    </li>
-                    <li>
-                        탈퇴 후에는 로그인 및 회원 기능을 이용할 수 없습니다.
-                    </li>
-                    <li>
-                        다른 기기의 로그인도 다음 요청부터 해제됩니다.
-                    </li>
-                    <li>
-                        동일한 아이디·이메일·닉네임으로 재가입할 수 없습니다.
-                    </li>
-                </ul>
+                    </p>
+
+                    <div class="withdraw-warning">
+                        <strong>탈퇴 전 확인해 주세요.</strong>
+
+                        <ul>
+                            <li>
+                                탈퇴 후에는 로그인 및 회원 기능을
+                                이용할 수 없습니다.
+                            </li>
+                            <li>
+                                다른 기기의 로그인도 다음 요청부터
+                                해제됩니다.
+                            </li>
+                            <li>
+                                동일한 아이디·이메일·닉네임으로
+                                재가입할 수 없습니다.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 서버에서 전달한 안내 및 오류 -->
+                    {% for message in get_flashed_messages() %}
+                        <p class="withdraw-error" role="alert">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+
+                    <form
+                        method="post"
+                        action="{{ url_for('auth.withdraw') }}"
+                        onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
+                    >
+                        <input
+                            type="hidden"
+                            name="csrf_token"
+                            value="{{ csrf_token() }}"
+                        >
+
+                        <div class="withdraw-password-field">
+                            <label for="withdraw-password">
+                                현재 비밀번호
+                            </label>
+
+                            <input
+                                type="password"
+                                id="withdraw-password"
+                                name="password"
+                                placeholder="현재 비밀번호를 입력해 주세요"
+                                autocomplete="current-password"
+                                required
+                            >
+                        </div>
+
+                        <div class="withdraw-actions">
+                            <a
+                                href="{{ url_for('homepage.mypage') }}"
+                                class="withdraw-cancel"
+                            >
+                                취소
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="withdraw-btn"
+                            >
+                                회원 탈퇴
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
             </div>
 
-            <!-- 서버에서 전달한 오류 또는 안내 -->
-            {% for message in get_flashed_messages() %}
-                <div class="alert alert-warning small" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
+        </section>
 
-            <!-- 기존 탈퇴 라우터로 연결 -->
-            <form
-                method="post"
-                action="{{ url_for('auth.withdraw') }}"
-                onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
-            >
-                <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                >
+    </main>
 
-                <div class="mb-4">
-                    <label
-                        for="withdraw-password"
-                        class="form-label fw-semibold small"
-                    >
-                        현재 비밀번호
-                    </label>
 
-                    <input
-                        type="password"
-                        class="form-control"
-                        id="withdraw-password"
-                        name="password"
-                        placeholder="현재 비밀번호를 입력해 주세요"
-                        autocomplete="current-password"
-                        aria-describedby="withdraw-password-help"
-                        required
-                    >
+    <!-- FOOTER -->
+    <footer class="footer">
 
-                    <div
-                        id="withdraw-password-help"
-                        class="form-text mt-2"
-                    >
-                        본인 확인을 위해 현재 비밀번호를 입력해 주세요.
-                    </div>
-                </div>
+        <div class="footer-inner">
 
-                <div class="border-top pt-4">
-                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-end">
-                        <a
-                            href="{{ url_for('homepage.mypage') }}"
-                            class="btn btn-outline-secondary"
-                        >
-                            취소
-                        </a>
+            <div class="footer-logo">
+                △ 어디갈까?
+            </div>
 
-                        <button type="submit" class="btn btn-danger">
-                            회원 탈퇴
-                        </button>
-                    </div>
-                </div>
-            </form>
+            <div class="footer-menu">
+
+                <a href="#">
+                    이용약관
+                </a>
+
+                <a href="#">
+                    개인정보처리방침
+                </a>
+
+                <a href="#">
+                    고객센터
+                </a>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 어디갈까? All rights reserved.
+            </div>
 
         </div>
-    </div>
+
+    </footer>
+
 </div>
 
-</section>
 
-</main>
-
-
-<!-- FOOTER -->
-<footer class="footer">
-
-    <div class="footer-inner">
-
-        <div class="footer-logo">
-            △ 어디갈까?
-        </div>
-
-        <div class="footer-menu">
-
-            <a href="#">
-                이용약관
-            </a>
-
-            <a href="#">
-                개인정보처리방침
-            </a>
-
-            <a href="#">
-                고객센터
-            </a>
-
-        </div>
-
-        <div class="copyright">
-            © 2026 어디갈까? All rights reserved.
-        </div>
-
-    </div>
-
-</footer>
-
-</div>
 
 
 </body>
