@@ -1,4 +1,44 @@
 /* ==============================
+   RESET / 브라우저 기본 스타일 초기화
+============================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+}
+
+body {
+    font-family: Arial, "Noto Sans KR", sans-serif;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    border: 0;
+    background: none;
+    cursor: pointer;
+}
+
+ul,
+ol {
+    list-style: none;
+}
+
+/* ==============================
    어딧세이 공통 스타일
 ============================== */
 
@@ -12,4 +52,13 @@ body {
     width: 1200px;
     max-width: calc(100% - 80px);
     margin: 0 auto;
+}
+
+/* 헤더와 하단 브랜드 배너에서 공유하는 로고 */
+.logo-symbol {
+    font-size: 30px;
+    font-weight: 700;
+    color: #14233b;
+    letter-spacing: -10px;
+    margin-right: 8px;
 }

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>어딧세이 - 커뮤니티</title>
+    <!-- FontAwesome 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
+</head>
+<body>
+
+<!-- 헤더 (Navbar) -->
+<header class="navbar">
+    <div class="nav-container">
+        <div class="logo">
+            <a href="/homepage/main">
+                <i class="fa-solid fa-mountain-sun"></i>
+                <span>어딧세이</span>
+            </a>
+        </div>
+        <nav class="nav-menu">
+            <a href="/homepage/map">여행지</a>
+            <a href="/homepage/community" class="active">커뮤니티</a>
+            <a href="/homepage/upload">여행지 등록</a>
+            <a href="/homepage/mypage">마이페이지</a>
+        </nav>
+        <div class="nav-right">
+            <button class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <a href="/auth/logout" class="btn-logout">로그아웃</a>
+        </div>
+    </div>
+</header>
+
+<!-- 메인 컨테이너 -->
+<main class="main-container">
+
+    <!-- 좌측 사이드바 -->
+    <aside class="sidebar-left">
+        <div class="menu-list">
+            <a href="/homepage/community/all"
+               class="menu-item {% if current_category == 'ALL' or not current_category %}active{% endif %}">
+                <i class="fa-regular fa-comments"></i>
+                <span>전체 게시판</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+            <a href="/homepage/community/review"
+               class="menu-item {% if current_category == '여행 후기' %}active{% endif %}">
+                <i class="fa-regular fa-image"></i>
+                <span>여행 후기</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+            <a href="/homepage/community/tip" class="menu-item {% if current_category == '여행 팁' %}active{% endif %}">
+                <i class="fa-solid fa-map-location-dot"></i>
+                <span>여행 팁</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+            <a href="/homepage/community/free" class="menu-item {% if current_category == '자유 게시판' %}active{% endif %}">
+                <i class="fa-regular fa-comment-dots"></i>
+                <span>자유 게시판</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+            <a href="/homepage/community/check" class="menu-item {% if current_category == '출석' %}active{% endif %}">
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>출석</span>
+                <i class="fa-solid fa-chevron-right arrow"></i>
+            </a>
+        </div>
+
+        <!-- 현재 카테고리를 JS에서 전달받을 수 있도록 hidden input 추가 -->
+        <input type="hidden" id="currentCategoryInput" value="{{ current_category if current_category else 'ALL' }}">
+
+        <!-- 좌측 하단 배너 -->
+        <div class="promo-card">
+            <p>지금, 나만의<br>여행 이야기를 공유해보세요!</p>
+            <a href="/homepage/upload" class="btn-write-promo">글쓰기 +</a>
+            <div class="promo-illustration">
+                <i class="fa-solid fa-suitcase-rolling"></i>
+                <i class="fa-solid fa-plane"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 중앙 게시판 컨텐츠 -->
+    <section class="content-center">
+
+        <!-- 검색바 -->
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="제목 또는 내용을 검색해보세요.">
+            <button id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+        </div>
+
+        <!-- 정렬 및 글쓰기 버튼 -->
+        <div class="filter-bar">
+            <div class="tab-group">
+                <button class="tab-btn active" data-sort="latest">최신순</button>
+                <button class="tab-btn" data-sort="popular">인기순</button>
+                <button class="tab-btn" data-sort="comments">댓글순</button>
+            </div>
+            <a href="/homepage/upload" class="btn-primary-write">
+                <i class="fa-solid fa-pen"></i> 글쓰기
+            </a>
+        </div>
+
+        <!-- 게시물 리스트 (JS로 TravelPlace DB 연동 dynamic rendering) -->
+        <div class="post-list" id="postList">
+            <!-- JS 렌더링 영역 -->
+        </div>
+
+        <!-- 페이지네이션 -->
+        <div class="pagination" id="pagination">
+            <button class="page-nav">&lt;</button>
+            <button class="page-num active">1</button>
+            <button class="page-num">2</button>
+            <button class="page-num">3</button>
+            <button class="page-num">4</button>
+            <button class="page-num">5</button>
+            <button class="page-nav">&gt;</button>
+        </div>
+    </section>
+
+    <!-- 우측 사이드바 -->
+    <aside class="sidebar-right">
+
+        <!-- 지금 핫한 글 -->
+        <div class="widget hot-widget">
+            <div class="widget-header">
+                <h3><i class="fa-solid fa-fire text-orange"></i> 지금 핫한 글</h3>
+                <a href="#" class="more-link">더보기 &gt;</a>
+            </div>
+            <ol class="hot-list" id="hotList">
+                <!-- JS에서 인기순 top 5를 동적으로 채웁니다 -->
+            </ol>
+        </div>
+
+        <!-- 우측 하단 프로모션 카드 -->
+        <div class="widget banner-widget">
+            <h3>좋은 여행지는<br><span>좋은 사람들과!</span></h3>
+            <p>지금 바로 커뮤니티에 참여하고<br>다양한 여행 이야기를 만나보세요.</p>
+            <div class="banner-footer">
+                <span class="lets-go">Let's Go!</span>
+                <i class="fa-solid fa-camera"></i>
+            </div>
+        </div>
+    </aside>
+
+</main>
+
+<script src="{{ url_for('static', filename='js/community.js') }}"></script>
+</body>
+</html>

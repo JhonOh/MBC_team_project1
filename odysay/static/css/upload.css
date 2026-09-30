@@ -1,0 +1,866 @@
+* {box-sizing: border-box;}
+
+body {
+    margin: 0;
+    background: #f5f8fc;
+    color: #142443;
+    font-family: Arial, "Noto Sans KR", sans-serif;
+}
+
+/* header */
+.header {
+    width: 100%;
+    height: 76px;
+    background: #ffffff;
+}
+
+.header-inner {
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+}
+
+/* 로고 */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 80px;
+}
+
+.logo-symbol {
+    font-size: 28px;
+    font-weight: 700;
+    color: #14233b;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text strong {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.logo-text span {
+    margin-top: 2px;
+    font-size: 9px;
+    letter-spacing: 4px;
+}
+
+/* =========================
+   헤더 검색 버튼
+========================= */
+
+.search-button {
+    position: relative;
+
+    width: 40px;
+    height: 40px;
+
+    padding: 0;
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+}
+
+/* 돋보기 원 */
+.search-button::before {
+    content: "";
+
+    position: absolute;
+
+    width: 15px;
+    height: 15px;
+
+    border: 2px solid #10233f;
+    border-radius: 50%;
+
+    top: 9px;
+    left: 8px;
+
+    box-sizing: border-box;
+}
+
+/* 돋보기 손잡이 */
+.search-button::after {
+    content: "";
+
+    position: absolute;
+
+    width: 8px;
+    height: 2px;
+
+    background: #10233f;
+    border-radius: 2px;
+
+    top: 23px;
+    left: 21px;
+
+    transform: rotate(45deg);
+    transform-origin: left center;
+}
+
+/* 마우스를 올렸을 때 */
+.search-button:hover {
+    opacity: 0.6;
+}
+
+
+/* ================= LAYOUT ================= */
+
+.page-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto 80px;
+
+    display: grid;
+
+    grid-template-columns:
+        190px
+        minmax(0, 1fr)
+        200px;
+
+    gap: 20px;
+
+    padding: 20px;
+
+    background: white;
+
+    border-radius: 20px 20px 0 0;
+}
+
+/* ================= LEFT ================= */
+
+.left-menu {
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-left.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border-radius: 12px;
+
+    height: 787px;
+    align-self: start;
+
+    padding: 30px 15px;
+
+    position: sticky;
+    top: 20px;
+
+    overflow: hidden;
+}
+
+
+/* 위쪽 문구 */
+
+.side-message {
+    margin: 50px 10px 45px;
+
+    line-height: 2;
+
+    font-style: italic;
+    font-weight: 600;
+    color: black;
+
+    position: relative;
+    z-index: 2;
+}
+
+/* 사진 위 문구 */
+
+.side-bottom {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
+
+    text-align: center;
+
+    font-style: italic;
+
+    line-height: 1.8;
+
+    color: #4f6584;
+
+    z-index: 2;
+}
+
+.side-bottom strong {
+    display: block;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.side-bottom small {
+    display: block;
+    margin-top: 2px;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+/* 메뉴 */
+
+.menu-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    padding: 0 15px;
+
+    position: relative;
+    z-index: 2;
+}
+
+.menu-list a {
+    text-decoration: none;
+
+    color: black;
+
+    padding: 13px;
+
+    border-radius: 8px;
+}
+
+.menu-list a.selected {
+    background: rgba(255, 255, 255, 0.85);
+
+    color: #142443;
+
+    font-weight: bold;
+}
+
+/* ================= FORM ================= */
+
+.form-container {
+    padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+.form-title {
+    margin-bottom: 25px;
+}
+
+.form-title h2 {
+    font-size: 25px;
+
+    font-weight: 700;
+}
+
+.form-title p {
+    color: #8590a2;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.form-section {
+    margin-bottom: 28px;
+}
+
+.form-section h3 {
+    font-size: 18px;
+
+    font-weight: 700;
+
+    margin-bottom: 15px;
+}
+
+.form-section h3 small {
+    font-size: 12px;
+
+    color: #8994a5;
+}
+
+/*주변 정보*/
+.nearby-section {
+    border: 1px solid #d7dfea;
+    border-radius: 7px;
+    padding: 15px;
+    margin-bottom: 28px;
+}
+
+.nearby-section h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.two-column {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 20px;
+}
+
+.form-group {
+    position: relative;
+
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    margin-bottom: 7px;
+}
+
+.form-group label span {
+    color: #ff5050;
+}
+
+.form-control,
+.form-select {
+    min-height: 48px;
+
+    border: 1px solid #d7dfea;
+
+    border-radius: 7px;
+
+    font-size: 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #2878ff;
+
+    box-shadow: 0 0 0 2px rgba(40, 120, 255, 0.1);
+}
+
+textarea.form-control {
+    height: 90px;
+
+    resize: none;
+}
+
+/* ================= COUNTRY SEARCH ================= */
+
+.country-search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.country-results {
+    display: none;
+
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+
+    width: 100%;
+    max-height: 200px;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border: 1px solid #d7dfea;
+    border-radius: 7px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+
+    z-index: 100;
+}
+
+.country-result-item {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #142443;
+
+    cursor: pointer;
+}
+
+.country-result-item:hover {
+    background: #f4f8ff;
+    color: #1473ff;
+}
+
+.country-no-result {
+    padding: 11px 13px;
+
+    font-size: 13px;
+
+    color: #9aa4b5;
+}
+
+/* ================= CATEGORY ================= */
+
+.category-list {
+    display: grid;
+
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    gap: 8px;
+    width: 100%;
+}
+
+.category-button {
+    display: flex !important;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+
+    border: 1px solid #dce3ec;
+
+    border-radius: 20px;
+
+    background: #fafbfd;
+
+    cursor: pointer;
+
+    font-size: 12px !important;
+    white-space: nowrap;
+}
+
+.btn-check:checked + .category-button {
+    color: #1473ff;
+
+    border-color: #1473ff;
+
+    background: #f4f8ff;
+}
+
+/* 기타 카테고리 입력칸 */
+#etc-input-box {
+    grid-column: 4 / 6;
+    width: 100%;
+    margin-top: 3px;
+}
+
+#etc-category {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid #d7dfea;
+    border-radius: 7px;
+    font-size: 12px;
+    color: #142443;
+    outline: none;
+}
+
+#etc-category::placeholder {
+    color : #9aa4b5;
+}
+
+#etc-category:focus {
+    border-color: #2878ff;
+    box-shadow: 0 0 0 2px rgba(40, 120, 255, 0.1);
+}
+
+
+/* ================= COUNTER ================= */
+
+.counter {
+    position: absolute;
+
+    right: 10px;
+    bottom: 8px;
+
+    color: #9aa4b5;
+
+    font-size: 11px;
+}
+
+
+/* ================= PHOTO ================= */
+
+.photo-info {
+    font-size: 12px;
+
+    color: #8893a4;
+}
+
+.upload-box {
+    min-height: 100px;
+
+    border: 1px dashed #cbd5e3;
+
+    border-radius: 8px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+
+    color: #68758b;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+.upload-icon {
+    font-size: 30px;
+}
+
+.preview-container {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.preview-item {
+    position: relative;
+}
+
+.preview-item img {
+    width: 85px;
+    height: 85px;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+}
+
+.remove-photo {
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    width: 20px;
+    height: 20px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #152944;
+
+    color: white;
+
+    font-size: 11px;
+
+    cursor: pointer;
+}
+
+/* ================= NEARBY PHOTO ================= */
+
+.nearby-photo-area {
+    margin-top: 10px;
+}
+
+.nearby-photo-button {
+    display: flex !important;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 42px;
+
+    margin-bottom: 5px !important;
+
+    border: 1px dashed #cbd5e3;
+    border-radius: 7px;
+
+    background: #fafbfd;
+
+    color: #68758b;
+
+    font-size: 12px !important;
+
+    cursor: pointer;
+}
+
+.nearby-photo-button:hover {
+    border-color: #2878ff;
+
+    background: #f4f8ff;
+
+    color: #1473ff;
+}
+
+.nearby-photo-area small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #8994a5;
+
+    font-size: 11px;
+}
+
+.nearby-preview {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 10px;
+}
+
+.nearby-preview .preview-item img {
+    width: 70px;
+    height: 70px;
+
+    object-fit: cover;
+
+    border-radius: 7px;
+}
+
+/* ================= BOTTOM ================= */
+
+.bottom-area {
+    border-top: 1px solid #eee;
+
+    padding-top: 20px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+.agree {
+    font-size: 12px;
+}
+
+.button-area {
+    display: flex;
+
+    gap: 10px;
+}
+
+.cancel-button,
+.submit-button {
+    width: 110px;
+
+    height: 43px;
+
+    border-radius: 7px;
+
+    font-weight: 600;
+}
+
+.cancel-button {
+    border: 1px solid #1c2e4c;
+
+    background: white;
+
+    color: #1c2e4c;
+}
+
+.submit-button {
+    border: none;
+
+    background: #142947;
+
+    color: white;
+}
+
+/* 등록 가이드 */
+
+.guide-container {
+    display: none;
+    padding: 10px 15px 30px;
+    position: relative;
+    z-index: 1;
+    background: white;
+}
+
+.guide-box {
+    padding: 22px;
+    margin-bottom: 15px;
+
+    border: 1px solid #d7dfea;
+    border-radius: 10px;
+
+    background: #fafcff;
+}
+
+.guide-box h3 {
+    margin-bottom: 10px;
+
+    font-size: 16px;
+    font-weight: 700;
+    color: #17305a;
+}
+
+.guide-box p {
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.8;
+    color: #718097;
+}
+.guide-bottom {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.guide-bottom p {
+    margin-bottom: 15px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #718097;
+}
+
+#guideConfirmButton {
+    width: 140px;
+    height: 43px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #142947;
+    color: white;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+#guideConfirmButton:hover {
+    opacity: 0.85;
+}
+
+/* ================= RIGHT ================= */
+
+.right-info {
+    background-image:
+        linear-gradient(
+            rgba(237, 244, 251, 0.55),
+            rgba(237, 244, 251, 0.55)
+        ),
+        url("../images/upload/travel-right.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    border-radius: 12px;
+    height: 787px;
+    align-self: start;
+    position: sticky;
+    top: 20px;
+
+    overflow: hidden;
+}
+
+/* 양쪽 배너 그림자 */
+.left-menu,
+.right-info {
+    box-shadow: 0 8px 18px rgba(20, 41, 71, 0.05);
+}
+
+/* 위쪽 안내 영역 */
+
+.right-content {
+    position: relative;
+
+    z-index: 2;
+
+    padding: 90px 20px 20px;
+}
+
+.right-info h4 {
+    margin: 0 0 60px;
+
+    font-size: 15px;
+
+    color: black;
+
+    font-weight: 700;
+}
+
+.right-info .right-content p {
+    line-height: 1.7;
+
+    margin-bottom: 14px;
+
+    color: black;
+}
+
+/* 사진 위 문구 */
+
+.right-message {
+    position: absolute;
+
+    left: 15px;
+    right: 15px;
+    bottom: 35px;
+
+    margin: 0;
+
+    text-align: center;
+
+    font-style: italic;
+
+    line-height: 1.8;
+
+    color: #4f6584;
+
+    z-index: 2;
+}
+
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 700px) {
+    .left-menu,
+    .right-info {
+        display: none;
+    }
+
+    .page-container {
+        display: block;
+        width: 100%;
+        max-width: 800px;
+        padding: 20px;
+    }
+
+    .form-container {
+        width: 100%;
+    }
+
+    .two-column {
+        grid-template-columns: 1fr;
+    }
+
+    /* 모바일에서는 카테고리 한 줄에 하나 */
+    .category-list {
+        grid-template-columns: 1fr;
+    }
+
+    #etc-input-box {
+        grid-column: 1;
+    }
+}

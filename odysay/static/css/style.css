@@ -1,6 +1,6 @@
-/* ==============================
+/* ============================================================
    HEADER
-============================== */
+============================================================ */
 
 .header {
     width: 100%;
@@ -22,12 +22,6 @@
     align-items: center;
     gap: 10px;
     margin-right: 80px;
-}
-
-.logo-symbol {
-    font-size: 28px;
-    font-weight: 700;
-    color: #14233b;
 }
 
 .logo-text {
@@ -105,7 +99,6 @@
     opacity: 0.6;
 }
 
-
 /* ==============================
    NAVIGATION
 ============================== */
@@ -127,7 +120,6 @@
 .gnb a:hover {
     color: #557ba8;
 }
-
 
 /* 오른쪽 메뉴 */
 
@@ -188,6 +180,9 @@
     font-size: 14px;
 }
 
+/* ============================================================
+   BODY / MAIN
+============================================================ */
 
 /* ==============================
    HERO
@@ -212,7 +207,6 @@
     color: white;
 }
 
-
 /* Hero 내부 */
 
 .hero-inner {
@@ -225,7 +219,6 @@
     padding-top: 75px;
 }
 
-
 /* 작은 문구 */
 
 .hero-small-text {
@@ -234,7 +227,6 @@
 
     opacity: 0.9;
 }
-
 
 /* 메인 제목 */
 
@@ -245,14 +237,12 @@
     margin-bottom: 10px;
 }
 
-
 /* 설명 */
 
 .hero-description {
     font-size: 16px;
     opacity: 0.9;
 }
-
 
 /* ==============================
    검색창
@@ -298,7 +288,6 @@
     background: #152238;
     color: white;
 }
-
 
 /* ==============================
    여행 카테고리
@@ -347,7 +336,6 @@
     opacity: 0.7;
 }
 
-
 /* ==============================
    실시간 핫플
 ============================== */
@@ -377,7 +365,6 @@
     color: #8490a2;
     font-size: 14px;
 }
-
 
 /* ==============================
    오늘 / 주간 / 월간
@@ -411,8 +398,6 @@
     color: white;
 }
 
-
-
 /* ========================================
    실시간 핫플 여행지 카드
 ======================================== */
@@ -425,7 +410,6 @@
 
     margin-top: 25px;
 }
-
 
 /* 카드 */
 
@@ -445,7 +429,6 @@
     transition: 0.25s;
 }
 
-
 /* 마우스를 올렸을 때 */
 
 .hot-card:hover {
@@ -453,7 +436,6 @@
 
     box-shadow: 0 10px 25px rgba(15, 30, 50, 0.15);
 }
-
 
 /* ==============================
    여행지 이미지
@@ -480,7 +462,6 @@
 .hot-card:hover .hot-card-image img {
     transform: scale(1.05);
 }
-
 
 /* ==============================
    순위 숫자
@@ -534,7 +515,6 @@
     box-shadow: 0 4px 12px rgba(168, 95, 54, 0.30);
 }
 
-
 /* 1위만 금색 */
 
 .hot-card:first-child .hot-rank {
@@ -547,7 +527,6 @@
     box-shadow: 0 5px 15px rgba(226, 173, 59, 0.35);
 }
 
-
 /* ==============================
    카드 내용
 ============================== */
@@ -555,7 +534,6 @@
 .hot-card-content {
     padding: 12px 14px 15px;
 }
-
 
 /* 국가 */
 
@@ -572,7 +550,6 @@
     color: #68778d;
 }
 
-
 /* 여행지 이름 */
 
 .hot-card-content h3 {
@@ -584,7 +561,6 @@
     color: #152238;
 }
 
-
 /* 지역명 */
 
 .hot-location {
@@ -592,7 +568,6 @@
 
     color: #96a0af;
 }
-
 
 /* ==============================
    인기 지수
@@ -616,7 +591,6 @@
     font-size: 14px;
 }
 
-
 /* ==============================
    반응형
 ============================== */
@@ -628,7 +602,6 @@
     }
 
 }
-
 
 @media (max-width: 700px) {
 
@@ -652,7 +625,6 @@
     gap: 25px;
 }
 
-
 /* 가운데 / 오른쪽 구분선 */
 
 .recent-section,
@@ -660,7 +632,6 @@
     border-left: 1px solid #e4e8ee;
     padding-left: 25px;
 }
-
 
 /* ========================================
    공통 제목
@@ -694,7 +665,6 @@
 
     margin-top: 5px;
 }
-
 
 /* ========================================
    추천 여행지
@@ -769,7 +739,6 @@
     color: #718096;
 }
 
-
 /* ========================================
    최근 등록된 여행지
 ======================================== */
@@ -819,7 +788,6 @@
     font-size: 10px;
     color: #8490a2;
 }
-
 
 /* ========================================
    커뮤니티 인기글
@@ -891,284 +859,6 @@
 
     color: #8c98a9;
 }
-
-
-/* ========================================
-   반응형
-======================================== */
-
-@media (max-width: 1000px) {
-
-    .home-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .recent-section,
-    .community-section {
-        border-left: none;
-
-        border-top: 1px solid #e4e8ee;
-
-        padding-left: 0;
-        padding-top: 25px;
-    }
-
-}
-
-/* ========================================
-   HOME CONTENT
-======================================== */
-
-.home-content {
-    padding: 15px 0 45px;
-}
-
-.home-grid {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr 1.05fr;
-    gap: 25px;
-}
-
-
-/* 가운데 / 오른쪽 구분선 */
-
-.recent-section,
-.community-section {
-    border-left: 1px solid #e4e8ee;
-    padding-left: 25px;
-}
-
-
-/* ========================================
-   공통 제목
-======================================== */
-
-.sub-section-title {
-    min-height: 55px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-
-    margin-bottom: 15px;
-}
-
-.sub-section-title h2 {
-    font-size: 20px;
-    color: #152238;
-
-    margin-bottom: 6px;
-}
-
-.sub-section-title p {
-    font-size: 12px;
-    color: #8b98aa;
-}
-
-.sub-section-title > a {
-    font-size: 12px;
-    color: #748299;
-
-    margin-top: 5px;
-}
-
-
-/* ========================================
-   추천 여행지
-======================================== */
-
-.recommend-list {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-
-    gap: 10px;
-}
-
-.recommend-card {
-    overflow: hidden;
-
-    border: 1px solid #e9edf2;
-    border-radius: 8px;
-
-    background: white;
-
-    transition: 0.25s;
-}
-
-.recommend-card:hover {
-    transform: translateY(-4px);
-
-    box-shadow: 0 8px 20px rgba(15, 30, 50, 0.10);
-}
-
-.recommend-image {
-    height: 125px;
-    overflow: hidden;
-}
-
-.recommend-image img {
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    transition: 0.4s;
-}
-
-.recommend-card:hover img {
-    transform: scale(1.06);
-}
-
-.recommend-info {
-    padding: 10px;
-}
-
-.recommend-info span {
-    display: block;
-
-    font-size: 11px;
-    color: #68778d;
-
-    margin-bottom: 6px;
-}
-
-.recommend-info strong {
-    display: block;
-
-    font-size: 14px;
-    color: #152238;
-}
-
-.recommend-info p {
-    margin-top: 13px;
-
-    font-size: 11px;
-    color: #718096;
-}
-
-
-/* ========================================
-   최근 등록된 여행지
-======================================== */
-
-.recent-item {
-    display: flex;
-
-    gap: 12px;
-
-    padding: 9px 0;
-
-    border-bottom: 1px solid #edf0f4;
-}
-
-.recent-item:last-child {
-    border-bottom: none;
-}
-
-.recent-item img {
-    width: 88px;
-    height: 58px;
-
-    border-radius: 7px;
-
-    object-fit: cover;
-}
-
-.recent-info {
-    flex: 1;
-
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.recent-info strong {
-    font-size: 13px;
-    color: #26364d;
-}
-
-.recent-bottom {
-    display: flex;
-    justify-content: space-between;
-
-    font-size: 10px;
-    color: #8490a2;
-}
-
-
-/* ========================================
-   커뮤니티 인기글
-======================================== */
-
-.community-item {
-    display: flex;
-
-    gap: 12px;
-
-    padding: 8px 0;
-
-    border-bottom: 1px solid #edf0f4;
-}
-
-.community-item:last-child {
-    border-bottom: none;
-}
-
-.community-thumb img {
-    width: 90px;
-    height: 60px;
-
-    border-radius: 7px;
-
-    object-fit: cover;
-}
-
-.community-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.community-category {
-    display: inline-block;
-
-    padding: 3px 7px;
-
-    margin-bottom: 5px;
-
-    border-radius: 10px;
-
-    background: #f0f3f7;
-
-    color: #718096;
-
-    font-size: 9px;
-}
-
-.community-info strong {
-    display: block;
-
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-
-    font-size: 12px;
-
-    color: #26364d;
-}
-
-.community-meta {
-    display: flex;
-    justify-content: space-between;
-
-    margin-top: 8px;
-
-    font-size: 9px;
-
-    color: #8c98a9;
-}
-
 
 /* ========================================
    반응형
@@ -1247,13 +937,6 @@
     color: #12233d;
 }
 
-.logo-symbol {
-    font-size: 30px;
-    letter-spacing: -10px;
-
-    margin-right: 8px;
-}
-
 .bottom-logo strong {
     display: block;
 
@@ -1283,10 +966,186 @@
     color: #68778b;
 }
 
+@media (max-width: 700px) {
+    .bottom-banner-inner {
+        padding: 22px;
 
-/* ========================================
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 25px;
+    }
+}
+
+/* 홈페이지 여행 지도 */
+.home-map-section {
+    position: relative;
+    width: 100%;
+    isolation: isolate;
+}
+
+#home-map {
+    width: 100%;
+    height: 500px;
+}
+
+#home-map-error {
+    position: absolute;
+    top: 16px;
+    left: 60px;
+    right: 16px;
+    z-index: 1000;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fff3cd;
+    color: #664d03;
+}
+
+/* 지도 오른쪽 위의 작은 배너 */
+.map-banner {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 800;
+
+    width: 360px;
+    max-width: calc(100% - 80px);
+    box-sizing: border-box;
+    padding: 18px;
+
+    color: #fff;
+    background: rgba(21, 34, 56, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(15, 30, 50, 0.2);
+}
+
+.map-banner-caption {
+    margin: 0 0 8px;
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.map-banner h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.map-banner-description {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* 검색창 축소 */
+.map-banner .travel-search {
+    position: static;
+    transform: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    width: 100%;
+    max-width: none;
+    height: 42px;
+    box-sizing: border-box;
+    margin: 16px 0 12px;
+    padding: 4px;
+    background: #fff;
+    border-radius: 24px;
+}
+
+.map-banner .travel-search input {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: 100%;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #152238;
+    background: transparent;
+}
+
+.map-banner .travel-search button {
+    position: static;
+    transform: none;
+    flex: 0 0 58px;
+    width: 58px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #fff;
+    background: #152238;
+    cursor: pointer;
+}
+
+/* 카테고리 메뉴 축소 */
+.map-banner .travel-menu {
+    position: static;
+    transform: none;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: 0;
+    padding: 10px 0;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.map-banner .travel-menu a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    width: auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0 2px;
+    color: #fff;
+    font-size: 10px;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.map-banner .travel-menu a span {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+}
+
+/* 좁은 화면에서는 패널을 지도 아래에 배치 */
+@media (max-width: 700px) {
+    #home-map {
+        height: 360px;
+    }
+
+    .map-banner {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+/* ============================================================
    FOOTER
-======================================== */
+============================================================ */
 
 .footer {
     border-top: 1px solid #e8ecf1;
@@ -1326,21 +1185,7 @@
     color: #9aa4b2;
 }
 
-
-/* 모바일 */
-
 @media (max-width: 700px) {
-
-    .bottom-banner-inner {
-        padding: 22px;
-
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 25px;
-    }
-
     .footer-inner {
         flex-direction: column;
 
@@ -1348,5 +1193,4 @@
 
         gap: 12px;
     }
-
 }
