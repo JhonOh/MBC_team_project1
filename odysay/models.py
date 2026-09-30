@@ -59,3 +59,22 @@ class TravelPlace(db.Model):
     # 지도 좌표
     latitude = db.Column(db.Float, nullable=True)
     longitude = db.Column(db.Float, nullable=True)
+
+
+    # 수정 일시
+    updated_at = db.Column(
+        db.DateTime,
+        nullable=True
+    )
+
+    # 주변 맛집 사진
+    restaurant_photos = db.Column(
+        db.Text,
+        nullable=True
+    )
+
+    # 주변 볼거리 / 즐길거리 사진
+    nearby_photos = db.Column(
+        db.Text,
+        nullable=True
+    )
