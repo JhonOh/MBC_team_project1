@@ -8,10 +8,20 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
+    # 정상 회원: True / 탈퇴 회원: False
+    is_active = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=True,
+        server_default=db.true()
+    )
+
     # 회원가입 추가 정보
     nickname = db.Column(db.String(20), unique=True, nullable=True)
     birth_date = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
+
+
 
 
 class TravelPlace(db.Model):

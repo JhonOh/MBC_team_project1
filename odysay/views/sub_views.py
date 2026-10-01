@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify
+from flask import Blueprint, render_template, redirect, url_for, jsonify ,g
 from odysay.models import TravelPlace
 from odysay.forms import LoginForm
 
@@ -56,14 +56,20 @@ def upload():
 
 @bp.route('/mypage')
 def mypage():
-    return render_template('mypage.html')
+    if g.user is None:
+        return redirect(url_for('homepage.main'))
+
+    my_places_count = TravelPlace.query.filter_by(
+        user_id=g.user.id
+    ).count()
+
+    return render_template(
+        'mypage.html',
+        my_places_count=my_places_count
+    )
 
 
 @bp.route('/mypage/settings')
 def mypage_settings():
     return render_template('settings.html')
 
-
-@bp.route('/profile_edit', methods=['GET', 'POST'])
-def profile_edit():
-    return render_template('profile_edit.html')
