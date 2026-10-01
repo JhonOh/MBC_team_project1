@@ -51,12 +51,13 @@ def create_app(test_config=None):
     from . import models
 
     # 블루프린트 등록[cite: 11]
-
+    
     from .views import main_views, a1_mapmain_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views,a4_z1_z1_trip_location_feature_views, a5_z1_mypage_views, sub_views, auth_views
 
 
     app.register_blueprint(main_views.bp)
     app.register_blueprint(a1_mapmain_views.bp)
+    app.register_blueprint(a2_trip_list_views.bp)  # 추가
     app.register_blueprint(a3_community_views.bp)
     app.register_blueprint(a3_z1_community_postwrite_views.bp)
     app.register_blueprint(a3_z2_community_detail_views.bp)
