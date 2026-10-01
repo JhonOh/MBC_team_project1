@@ -10,6 +10,8 @@
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <!-- 상세페이지 지도용 Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
@@ -93,7 +95,9 @@
 
             </div>
 
-            <div class="likes-count">❤️ {{ place.likes }}</div>
+            <div class="likes-count">
+                ❤️ <span id="bookmarkCount">0</span>
+            </div>
 
             <div class="action-buttons">
 
@@ -236,8 +240,8 @@
 
         <button type="button"
                 class="tab-item"
-                data-tab="community-tab">
-            커뮤니티 (<span id="communityCount">0</span>)
+                data-tab="travel-talk-tab">
+            여행톡 (<span id="travelTalkCount">0</span>)
         </button>
 
     </nav>
@@ -516,55 +520,67 @@
 
         </div>
 
-        <!-- ================= 커뮤니티 ================= -->
-        <div class="tab-content" id="community-tab">
+        <!-- ================= 여행톡 ================= -->
+        <div class="tab-content" id="travel-talk-tab">
 
-            <div class="community-section">
+            <div class="travel-talk-section">
 
-                <div class="community-title-row">
+                <div class="travel-talk-title-row">
 
                     <div>
                         <h2 class="section-title">
-                            💬 커뮤니티
+                            💬 여행톡
                         </h2>
 
-                        <p class="community-description">
+                        <p class="travel-talk-description">
                             이 여행지에 대해 궁금한 점이나 정보를 자유롭게 이야기해보세요.
                         </p>
                     </div>
 
-                    <button type="button"
-                            id="communityOpenButton"
-                            class="community-open-button">
-                        글 작성하기
-                    </button>
+                    <div class="travel-talk-write-buttons">
+
+                        <button
+                            type="button"
+                            class="travel-talk-write-cancel"
+                            id="travelTalkWriteCancel">
+                            작성 취소
+                        </button>
+
+                        <button
+                            type="button"
+                            class="travel-talk-open-button"
+                            id="travelTalkOpenButton">
+                            글 작성하기
+                        </button>
+
+                    </div>
 
                 </div>
 
 
                 <!-- 글 작성 -->
-                <div class="community-write"
-                     id="communityWrite">
+                <div class="travel-talk-write"
+                     id="travelTalkWrite">
 
                     <input type="text"
-                           id="communityTitle"
+                           id="travelTalkTitle"
                            maxlength="60"
                            placeholder="제목을 입력해주세요.">
 
                     <textarea
-                        id="communityInput"
+                        id="travelTalkInput"
                         maxlength="500"
                         placeholder="내용을 입력해주세요."></textarea>
 
-                    <div class="community-write-bottom">
+                    <div class="travel-talk-write-bottom">
 
-                        <span class="community-counter">
-                            <span id="communityTextCount">0</span>/500
+                        <span class="travel-talk-counter">
+                            <span id="travelTalkTextCount">0</span>/500
                         </span>
 
                         <button type="button"
-                                id="communitySubmit"
-                                class="community-submit">
+                                id="travelTalkSubmit"
+                                class="travel-talk-submit">
                             등록
                         </button>
 
@@ -574,12 +590,12 @@
 
 
                 <!-- 글 목록 -->
-                <div id="communityList"
-                     class="community-list">
+                <div id="travelTalkList"
+                     class="travel-talk-list">
 
-                    <p id="noCommunityMessage"
+                    <p id="noTravelTalkMessage"
                        class="empty-message">
-                        아직 등록된 커뮤니티 글이 없습니다.
+                        아직 등록된 여행톡이 없습니다.
                     </p>
 
                 </div>
@@ -659,7 +675,9 @@
     const photoList = {{ photos | tojson }};
     const uploadPath = "{{ url_for('static', filename='uploads/') }}";
 
-    // 리뷰 / 커뮤니티 작성자 정보
+    const placeId = {{ place.id }};
+
+    // 리뷰 / 여행톡 작성자 정보
     const currentUser = {
         isLoggedIn: {{ 'true' if g.user else 'false' }},
         nickname: {{ (g.user.nickname if g.user else '') | tojson }},

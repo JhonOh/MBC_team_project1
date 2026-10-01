@@ -1,6 +1,6 @@
 import os
 from flask import Blueprint, render_template, request, jsonify, url_for
-from odysay.models import db, TravelPlace, User, Post
+from odysay.models import db, TripLocationmd, User, Post
 
 bp = Blueprint('community', __name__, url_prefix='/homepage/community')
 
@@ -36,14 +36,14 @@ def community_check():
 
 
 # -----------------------------------------------------------
-# 2. 커뮤니티 데이터 제공 API (TravelPlace + Post 통합 조회)
+# 2. 커뮤니티 데이터 제공 API (TripLocationmd + Post 통합 조회)
 # -----------------------------------------------------------
 @bp.route('/api/places')
 def get_places():
     results = []
 
-    # 1) TravelPlace (여행 후기 게시글)
-    places = TravelPlace.query.order_by(TravelPlace.id.desc()).all()
+    # 1) TripLocationmd (여행 후기 게시글)
+    places = TripLocationmd.query.order_by(TripLocationmd.id.desc()).all()
     for p in places:
         author_name = "지구여행자"
         if p.user_id:

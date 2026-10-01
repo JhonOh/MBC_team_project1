@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort
-from odysay.models import Post, TravelPlace, User
+from odysay.models import Post, TripLocationmd, User
 
 bp = Blueprint('detail', __name__, url_prefix='/homepage/community/detail')
 
@@ -20,9 +20,9 @@ def detail(post_type, item_id):
 
         return render_template('community_detail.html', item=item, author_name=author_name, photo_list=photo_list, is_post=True)
 
-    # 2. 여행 후기 (TravelPlace)
+    # 2. 여행 후기 (TripLocationmd)
     elif post_type == 'place':
-        item = TravelPlace.query.get_or_404(item_id)
+        item = TripLocationmd.query.get_or_404(item_id)
         author_name = "지구여행자"
         if item.user_id:
             user = User.query.get(item.user_id)
