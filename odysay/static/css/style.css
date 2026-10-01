@@ -120,7 +120,7 @@
     font-size: 15px;
     font-weight: 600;
     color: #26364d;
-
+    text-decoration: none;
     transition: 0.2s;
 }
 
@@ -1530,4 +1530,9 @@
         border-radius: 0;
         box-shadow: none;
     }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
 }
