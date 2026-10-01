@@ -1,0 +1,105 @@
+
+
+/* 설정 페이지: 회원탈퇴 */
+.withdraw-box {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 28px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    color: #243044;
+}
+
+.withdraw-header h2 {
+    margin: 0 0 16px;
+    font-size: 22px;
+}
+
+.withdraw-description {
+    line-height: 1.7;
+}
+
+.withdraw-warning {
+    margin: 20px 0;
+    padding: 18px;
+    border-radius: 10px;
+    background: #f5f7fa;
+}
+
+.withdraw-warning ul {
+    margin-bottom: 0;
+    padding-left: 20px;
+}
+
+.withdraw-warning li {
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+.withdraw-error {
+    color: #b42318;
+    line-height: 1.6;
+}
+
+.withdraw-password-field {
+    margin-top: 24px;
+}
+
+.withdraw-password-field label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.withdraw-password-field input {
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font: inherit;
+}
+
+.withdraw-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.withdraw-cancel,
+.withdraw-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font: inherit;
+    text-decoration: none;
+}
+
+.withdraw-cancel {
+    background: #fff;
+    color: #334155;
+}
+
+.withdraw-btn {
+    border-color: #b42318;
+    background: #b42318;
+    color: #fff;
+    cursor: pointer;
+}
+
+.withdraw-btn:hover {
+    border-color: #912018;
+    background: #912018;
+}
+
+@media (max-width: 600px) {
+    .withdraw-box {
+        padding: 20px;
+    }
+}

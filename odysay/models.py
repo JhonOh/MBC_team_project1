@@ -8,10 +8,20 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
 
+    # 정상 회원: True / 탈퇴 회원: False
+    is_active = db.Column(
+        db.Boolean,
+        nullable=False,
+        default=True,
+        server_default=db.true()
+    )
+
     # 회원가입 추가 정보
     nickname = db.Column(db.String(20), unique=True, nullable=True)
     birth_date = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
+
+
 
 
 class TravelPlace(db.Model):
@@ -70,3 +80,21 @@ class TravelPlace(db.Model):
         db.Text,
         nullable=True
     )
+
+
+# ==========================================
+# 커뮤니티(여행 팁 / 자유 게시판)용 모델 (들여쓰기 제거)
+# ==========================================
+class Post(db.Model):
+    __tablename__ = 'posts'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    category = db.Column(db.String(50), nullable=False)  # '여행 팁', '자유 게시판'
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    photos = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    likes = db.Column(db.Integer, default=0)
+
+    # 작성자 (로그인 연동 시 사용)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)

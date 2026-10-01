@@ -6,7 +6,8 @@
 
     <title>마이페이지</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/ojh.css') }}">
 </head>
 
 <body>
@@ -20,17 +21,17 @@
 
         <div class="header-inner">
 
-             <a href="{{ url_for('homepage.main') }}" class="logo">
+            <a href="#" class="logo">
                 <span class="logo-icon">△</span>
                 <span>어디갈까?</span>
             </a>
 
             <nav class="main-menu">
-                <a href="{{ url_for('homepage.main') }}">홈</a>
-                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
-                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
-                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+                <a href="#">홈</a>
+                <a href="#">여행지</a>
+                <a href="#">여행 후기</a>
+                <a href="#">여행지 등록</a>
+                <a href="#">마이페이지</a>
             </nav>
 
             <button type="button" class="search-btn">
@@ -60,7 +61,7 @@
             <ul class="side-list">
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage') }}" class="active">
+                    <a href="#" class="active">
                         <span class="menu-icon">♙</span>
                         <span>내 정보</span>
                     </a>
@@ -73,7 +74,7 @@
                     </a>
                 </li>
 
-                               <li>
+                <li>
                     <a href="#">
                         <span class="menu-icon">♡</span>
                         <span>내가 찜한 여행지</span>
@@ -81,14 +82,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ url_for('mypage.my_places') }}">
-                        <span class="menu-icon">✎</span>
-                        <span>내가 만든 여행지</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="{{ url_for('homepage.mypage_settings') }}">
+                    <a href="#">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>
                     </a>
@@ -122,7 +116,8 @@
 
                     <div class="profile-info">
 
-                        <h2>{{ g.user.nickname or g.user.username }}
+                        <h2>
+                            여행을 좋아하는 사용자
                         </h2>
 
                         <p>
@@ -134,8 +129,9 @@
 
                 </div>
 
-                 <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">프로필 수정
-               </a>
+                <button type="button" class="profile-btn">
+                    프로필 수정
+                </button>
 
             </div>
 
@@ -171,18 +167,17 @@
                 </div>
 
 
-                                <a href="{{ url_for('mypage.my_places') }}"
-                   class="stat-item">
+                <div class="stat-item">
 
                     <span class="stat-title">
                         내가 만든 여행지
                     </span>
 
                     <span class="stat-number">
-                        {{ my_places_count }}
+                        24
                     </span>
 
-                </a>
+                </div>
 
             </div>
 
@@ -333,7 +328,7 @@
 </div>
 
 
-<script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ojh.js') }}"></script>
 
 </body>
 </html>

@@ -10,7 +10,8 @@ from wtforms.validators import (
     DataRequired,
     Length,
     EqualTo,
-    ValidationError
+    ValidationError,
+    Optional
 )
 from datetime import date
 from wtforms import DateField, SelectField
@@ -124,17 +125,39 @@ class LoginForm(FlaskForm):
     submit = SubmitField('로그인')
 
 class ProfileEditForm(FlaskForm):
-        nickname = StringField(
-            '닉네임',
-            filters=[lambda value: value.strip() if value else value],
-            validators=[
-                DataRequired(message='닉네임을 입력해 주세요.'),
-                Length(
-                    min=2,
-                    max=20,
-                    message='닉네임은 2~20자로 입력해 주세요.'
-                )
-            ]
-        )
+    nickname = StringField(
+        '닉네임',
+        filters=[lambda value: value.strip() if value else value],
+        validators=[
+            DataRequired(message='닉네임을 입력해 주세요.'),
+            Length(
+                min=2,
+                max=20,
+                message='닉네임은 2~20자로 입력해 주세요.'
+            )
+        ]
+    )
 
-        submit = SubmitField('저장')
+    current_password = PasswordField(
+        '현재 비밀번호',
+        validators=[Optional()]
+    )
+
+    new_password = PasswordField(
+        '새 비밀번호',
+        validators=[
+            Optional(),
+            Length(
+                min=8,
+                max=128,
+                message='새 비밀번호는 8~128자로 입력해 주세요.'
+            )
+        ]
+    )
+
+    confirm_password = PasswordField(
+        '새 비밀번호 확인',
+        validators=[Optional()]
+    )
+
+    submit = SubmitField('저장')
