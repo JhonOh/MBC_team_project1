@@ -6,382 +6,612 @@
     box-sizing: border-box;
 }
 
-html,
-body {
-    margin: 0;
-    padding: 0;
+html {
+    scroll-behavior: smooth;
 }
 
 body {
+    margin: 0;
     font-family:
-        "Noto Sans KR",
-        "Malgun Gothic",
-        Arial,
+        Pretendard,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
         sans-serif;
 
+    color: #1e293b;
     background: #ffffff;
-    color: #263746;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
 button,
-input,
-select {
+input {
     font-family: inherit;
 }
 
-button {
-    cursor: pointer;
-}
-
 
 /* =========================
-   전체 페이지
-========================= */
-
-.travel-page {
-    width: 100%;
-    min-height: 100vh;
-    background: #ffffff;
-}
-
-
-/* =========================
-   Header
+   HEADER
 ========================= */
 
 .header {
     width: 100%;
-    height: 64px;
+    height: 72px;
 
-    border-bottom: 1px solid #e6ebef;
     background: #ffffff;
+    border-bottom: 1px solid #e9edf3;
 }
 
 .header-inner {
-    width: 1040px;
+    max-width: 1180px;
     height: 100%;
 
     margin: 0 auto;
+    padding: 0 20px;
 
     display: flex;
     align-items: center;
 }
-
-
-/* 로고 */
 
 .logo {
     display: flex;
     align-items: center;
-
-    text-decoration: none;
-    color: #263746;
-
-    width: 150px;
-}
-
-.logo-icon {
-    font-size: 23px;
-    font-weight: 700;
-
-    margin-right: 6px;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-
-    font-size: 13px;
-    font-weight: 800;
-    line-height: 15px;
-}
-
-.logo-text small {
-    font-size: 7px;
-    letter-spacing: 1px;
-    color: #788896;
-}
-
-
-/* 메뉴 */
-
-.main-nav {
-    display: flex;
-    align-items: center;
-
-    gap: 28px;
-
-    margin-left: 20px;
-}
-
-.main-nav a {
-    color: #536372;
-
-    text-decoration: none;
-
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.main-nav a:hover {
-    color: #1d3445;
-}
-
-
-/* 오른쪽 */
-
-.header-right {
-    margin-left: auto;
-
-    display: flex;
-    align-items: center;
-
-    gap: 13px;
-}
-
-.header-right a {
-    color: #52616e;
-
-    text-decoration: none;
-
-    font-size: 11px;
-}
-
-.search-icon {
-    border: 0;
-    background: none;
-
-    font-size: 19px;
-    color: #334b5e;
-
-    padding: 0;
-}
-
-.mypage-btn {
-    border: 0;
-    border-radius: 7px;
-
-    background: #263746;
-    color: white;
-
-    padding: 9px 13px;
-
-    font-size: 10px;
-    font-weight: 700;
-}
-
-
-/* =========================
-   Main
-========================= */
-
-.main {
-    width: 1040px;
-
-    margin: 0 auto;
-
-    min-height: 780px;
-
-    padding: 38px 40px 60px;
-}
-
-
-/* =========================
-   제목
-========================= */
-
-.title-section {
-    margin-bottom: 23px;
-}
-
-.title-section h1 {
-    margin: 0 0 7px;
-
-    font-size: 28px;
-    font-weight: 800;
-
-    color: #253847;
-}
-
-.title-section p {
-    margin: 0;
-
-    color: #9ba7b1;
-
-    font-size: 13px;
-}
-
-
-/* =========================
-   국내 / 해외 탭
-========================= */
-
-.area-tabs {
-    display: flex;
-
     gap: 8px;
 
-    margin-bottom: 13px;
+    font-size: 22px;
+    font-weight: 800;
+
+    color: #1f3048;
+
+    white-space: nowrap;
 }
 
-.area-tab {
-    width: 76px;
-    height: 32px;
-
-    border: 1px solid #e3e8ec;
-    border-radius: 6px;
-
-    background: white;
-
-    color: #77848e;
-
-    font-size: 12px;
-    font-weight: 700;
+.logo-mark {
+    font-size: 23px;
 }
 
-.area-tab.active {
-    background: #263b4a;
-    color: white;
-
-    border-color: #263b4a;
-}
-
-
-/* =========================
-   국가 필터
-========================= */
-
-.country-filter {
+.gnb {
     display: flex;
+    align-items: center;
+    gap: 38px;
 
-    gap: 7px;
-
-    margin-bottom: 13px;
-
-    overflow-x: auto;
+    margin-left: 70px;
 }
 
-.country-btn {
-    flex-shrink: 0;
+.gnb a {
+    position: relative;
 
-    height: 29px;
+    font-size: 15px;
+    font-weight: 600;
 
-    padding: 0 13px;
+    color: #59677a;
 
-    border: 1px solid #e1e7eb;
-    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.gnb a:hover {
+    color: #1f3048;
+}
+
+.gnb a.active {
+    color: #1f3048;
+}
+
+.gnb a.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: -8px;
+
+    width: 100%;
+    height: 2px;
+
+    background: #1f3048;
+}
+
+.logout-btn {
+    margin-left: auto;
+
+    padding: 9px 17px;
+
+    border: 1px solid #d6dce5;
+    border-radius: 7px;
 
     background: #ffffff;
 
-    color: #84909a;
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #4b5563;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background: #f6f8fa;
+}
+
+
+/* =========================
+   HERO
+========================= */
+
+.travel-hero {
+    padding: 72px 20px 60px;
+
+    text-align: center;
+
+    background:
+        linear-gradient(
+            180deg,
+            #f7f9fc 0%,
+            #ffffff 100%
+        );
+}
+
+.hero-label {
+    margin: 0 0 13px;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    color: #687b94;
+}
+
+.travel-hero h1 {
+    margin: 0;
+
+    font-size: 38px;
+    font-weight: 800;
+
+    letter-spacing: -1.4px;
+
+    color: #1f3048;
+}
+
+.hero-description {
+    margin: 18px 0 0;
+
+    font-size: 15px;
+    line-height: 1.8;
+
+    color: #7a8798;
+}
+
+
+/* =========================
+   전체 컨테이너
+========================= */
+
+.travel-container {
+    width: 100%;
+    max-width: 1180px;
+
+    margin: 0 auto;
+
+    padding: 35px 20px 100px;
+}
+
+
+/* =========================
+   국가 + 여행지 전체 영역
+========================= */
+
+.country-section {
+    display: grid;
+
+    grid-template-columns: 300px minmax(0, 1fr);
+
+    gap: 28px;
+
+    align-items: start;
+}
+
+
+/* =========================
+   왼쪽 국가 패널
+========================= */
+
+.country-panel {
+    overflow: hidden;
+
+    border: 1px solid #e1e6ed;
+    border-radius: 16px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 8px 28px
+        rgba(31, 48, 72, 0.05);
+}
+
+.country-panel-header {
+    padding: 23px 22px 17px;
+}
+
+.section-label {
+    margin: 0 0 6px;
 
     font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    color: #8a98aa;
 }
 
-.country-btn:hover {
-    border-color: #b9c4cc;
+.country-panel-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    color: #24364d;
 }
 
-.country-btn.active {
-    background: #e7edf1;
 
-    border-color: #d7e0e5;
+/* =========================
+   국가 검색
+========================= */
 
-    color: #4a5a66;
+.country-search {
+    position: relative;
 
+    margin: 0 18px 15px;
+}
+
+.country-search input {
+    width: 100%;
+    height: 43px;
+
+    padding: 0 14px 0 40px;
+
+    border: 1px solid #dfe5ec;
+    border-radius: 10px;
+
+    outline: none;
+
+    background: #f8fafc;
+
+    color: #34445a;
+
+    font-size: 13px;
+
+    transition: 0.2s;
+}
+
+.country-search input::placeholder {
+    color: #a0a9b5;
+}
+
+.country-search input:focus {
+    border-color: #8292a6;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(38, 59, 87, 0.06);
+}
+
+.search-icon {
+    position: absolute;
+
+    left: 13px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    font-size: 13px;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   대륙 필터
+========================= */
+
+.continent-filter {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding: 0 18px 17px;
+
+    border-bottom: 1px solid #edf0f4;
+}
+
+.continent-btn {
+    padding: 7px 10px;
+
+    border: 1px solid #e0e5eb;
+    border-radius: 15px;
+
+    background: #ffffff;
+
+    color: #6c7888;
+
+    font-size: 11px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+.continent-btn:hover {
+    border-color: #aeb9c7;
+
+    color: #263b57;
+}
+
+.continent-btn.active {
+    border-color: #263b57;
+
+    background: #263b57;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   국가 스크롤 목록
+========================= */
+
+.country-list {
+    height: 560px;
+
+    overflow-y: auto;
+
+    padding: 10px 9px 12px;
+}
+
+
+/* 스크롤바 */
+
+.country-list::-webkit-scrollbar {
+    width: 7px;
+}
+
+.country-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.country-list::-webkit-scrollbar-thumb {
+    background: #d5dce5;
+
+    border-radius: 10px;
+}
+
+.country-list::-webkit-scrollbar-thumb:hover {
+    background: #b9c4d0;
+}
+
+
+/* =========================
+   국가 버튼
+========================= */
+
+.country-item {
+    width: 100%;
+
+    padding: 11px 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    border: none;
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #536174;
+
+    cursor: pointer;
+
+    transition: 0.18s;
+}
+
+.country-item:hover {
+    background: #f5f7fa;
+}
+
+.country-item.active {
+    background: #eef2f7;
+
+    color: #20344f;
+}
+
+.country-flag {
+    width: 28px;
+    height: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+}
+
+.country-flag img {
+    display: block;
+
+    width: 28px;
+    height: 20px;
+
+    object-fit: cover;
+
+    border-radius: 3px;
+
+    box-shadow:
+        0 0 0 1px rgba(31, 48, 72, 0.10);
+}
+
+.country-name {
+    flex: 1;
+
+    text-align: left;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.country-count {
+    min-width: 25px;
+
+    padding: 3px 7px;
+
+    border-radius: 10px;
+
+    background: #f0f3f7;
+
+    color: #8591a0;
+
+    text-align: center;
+
+    font-size: 10px;
     font-weight: 700;
 }
 
+.country-item.active .country-count {
+    background: #dfe6ee;
+
+    color: #344a66;
+}
+
 
 /* =========================
-   검색
+   오른쪽 여행지 영역
 ========================= */
 
-.search-area {
-    display: flex;
-
-    gap: 8px;
-
-    margin-bottom: 18px;
-}
-
-.search-box {
-    height: 38px;
-
-    flex: 1;
-
-    display: flex;
-
-    border: 1px solid #e0e6eb;
-    border-radius: 5px;
-
-    overflow: hidden;
-
-    background: white;
-}
-
-.search-box input {
-    flex: 1;
-
+.destination-section {
     min-width: 0;
-
-    border: 0;
-    outline: none;
-
-    padding: 0 13px;
-
-    color: #42515d;
-
-    font-size: 11px;
-}
-
-.search-box input::placeholder {
-    color: #aab4bb;
-}
-
-.search-box button {
-    width: 44px;
-
-    border: 0;
-
-    background: white;
-
-    color: #5d7280;
-
-    font-size: 16px;
-}
-
-#sortSelect {
-    width: 105px;
-
-    height: 38px;
-
-    border: 1px solid #e0e6eb;
-    border-radius: 5px;
-
-    background: white;
-
-    padding: 0 10px;
-
-    color: #667681;
-
-    font-size: 11px;
-
-    outline: none;
 }
 
 
 /* =========================
-   여행지 목록
+   선택 국가 HEADER
 ========================= */
 
-.travel-list {
+.selected-country {
+    min-height: 105px;
+
+    margin-bottom: 25px;
+    padding: 21px 24px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    border: 1px solid #e1e6ed;
+    border-radius: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f8fafc,
+            #ffffff
+        );
+}
+
+.selected-country-info {
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+}
+
+.selected-country-flag {
+    width: 57px;
+    height: 57px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    border-radius: 14px;
+
+    background: #edf2f7;
+
+    font-size: 29px;
+}
+
+.selected-label {
+    margin: 0 0 4px;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.4px;
+
+    color: #8b98a8;
+}
+
+.selected-country h2 {
+    margin: 0 0 5px;
+
+    font-size: 22px;
+    font-weight: 800;
+
+    letter-spacing: -0.5px;
+
+    color: #24364d;
+}
+
+.selected-country-info > div > p:last-child {
+    margin: 0;
+
+    font-size: 12px;
+
+    color: #8793a2;
+}
+
+.destination-count {
+    flex-shrink: 0;
+
+    font-size: 12px;
+
+    color: #8995a3;
+}
+
+.destination-count strong {
+    font-size: 15px;
+
+    color: #263b57;
+}
+
+
+/* =========================
+   여행지 GRID
+========================= */
+
+.destination-grid {
     display: grid;
 
     grid-template-columns:
-        repeat(3, 1fr);
+        repeat(3, minmax(0, 1fr));
 
-    gap: 16px 17px;
+    gap: 20px;
 }
 
 
@@ -389,395 +619,317 @@ button {
    여행지 카드
 ========================= */
 
-.travel-card {
-    border: 1px solid #e1e6ea;
-
-    border-radius: 4px;
-
+.destination-card {
     overflow: hidden;
 
-    background: white;
+    border: 1px solid #e5e9ef;
+    border-radius: 13px;
+
+    background: #ffffff;
 
     cursor: pointer;
 
     transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+        transform 0.25s,
+        box-shadow 0.25s,
+        border-color 0.25s;
 }
 
-.travel-card:hover {
-    transform: translateY(-3px);
+.destination-card:hover {
+    transform: translateY(-5px);
+
+    border-color: #cfd7e1;
 
     box-shadow:
-        0 5px 15px rgba(38, 55, 70, 0.09);
+        0 13px 28px
+        rgba(31, 48, 72, 0.09);
 }
 
 
-/* 이미지 */
+/* =========================
+   카드 이미지
+========================= */
 
-.travel-image {
+.card-image {
+    position: relative;
+
     width: 100%;
-    height: 155px;
-
-    background: #dce3e8;
-}
-
-.image-placeholder {
-    width: 100%;
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background:
-        linear-gradient(
-            135deg,
-            #dbe2e7,
-            #cfd8df
-        );
-}
-
-.image-placeholder span {
-    font-size: 27px;
-
-    color: #adb9c2;
-
-    letter-spacing: -8px;
-}
-
-
-/* 카드 정보 */
-
-.travel-info {
-    height: 72px;
-
-    padding: 10px 12px;
-}
-
-.travel-info h2 {
-    margin: 0 0 8px;
-
-    font-size: 13px;
-    font-weight: 800;
-
-    color: #3a4a57;
-
-    white-space: nowrap;
+    height: 165px;
 
     overflow: hidden;
 
-    text-overflow: ellipsis;
+    background: #edf0f4;
 }
 
-.travel-bottom {
-    display: flex;
+.card-image img {
+    width: 100%;
+    height: 100%;
 
+    display: block;
+
+    object-fit: cover;
+
+    transition: transform 0.4s;
+}
+
+.destination-card:hover .card-image img {
+    transform: scale(1.045);
+}
+
+
+/* =========================
+   국가 배지
+========================= */
+
+.country-badge {
+    position: absolute;
+
+    left: 12px;
+    bottom: 12px;
+
+    padding: 5px 8px;
+
+    border-radius: 6px;
+
+    background:
+        rgba(22, 33, 48, 0.78);
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    backdrop-filter: blur(5px);
+}
+
+
+/* =========================
+   카드 내용
+========================= */
+
+.card-content {
+    padding: 16px;
+}
+
+.card-location {
+    margin-bottom: 6px;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    color: #8793a3;
+}
+
+.card-title {
+    margin: 0 0 8px;
+
+    font-size: 16px;
+    font-weight: 800;
+
+    letter-spacing: -0.3px;
+
+    color: #24364d;
+}
+
+.card-description {
+    height: 39px;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    display: -webkit-box;
+
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    font-size: 12px;
+    line-height: 1.6;
+
+    color: #7c8998;
+}
+
+.card-bottom {
+    margin-top: 14px;
+    padding-top: 12px;
+
+    display: flex;
     align-items: center;
     justify-content: space-between;
 
-    color: #8c989f;
-
-    font-size: 10px;
+    border-top: 1px solid #eef1f4;
 }
 
-.likes {
-    display: flex;
-    align-items: center;
+.like {
+    font-size: 11px;
 
-    gap: 3px;
+    color: #84909f;
+}
 
-    color: #71808b;
+.detail-text {
+    font-size: 11px;
+    font-weight: 700;
+
+    color: #536982;
 }
 
 
 /* =========================
-   검색 결과 없음
+   EMPTY STATE
 ========================= */
 
-.no-result {
+.empty-state {
     display: none;
 
-    width: 100%;
+    min-height: 400px;
 
-    padding: 80px 0;
+    padding: 100px 20px;
 
     text-align: center;
 
-    color: #9aa6ae;
+    border: 1px dashed #dce2e9;
+    border-radius: 14px;
 
-    font-size: 13px;
+    background: #fafbfc;
 }
 
+.empty-icon {
+    margin-bottom: 15px;
 
-/* =========================
-   Pagination
-========================= */
-
-.pagination {
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-
-    gap: 5px;
-
-    margin-top: 45px;
+    font-size: 38px;
 }
 
-.page-number,
-.page-arrow {
-    width: 32px;
-    height: 32px;
+.empty-state h3 {
+    margin: 0 0 8px;
 
-    border: 1px solid #e1e6ea;
-    border-radius: 5px;
+    font-size: 17px;
 
-    background: white;
-
-    color: #6c7b86;
-
-    font-size: 11px;
+    color: #45566c;
 }
 
-.page-number.active {
-    border-color: #526b7b;
-
-    background: #f1f4f6;
-
-    color: #263746;
-
-    font-weight: 800;
-}
-
-.page-arrow {
-    border: 0;
-
-    font-size: 18px;
-
-    color: #60717d;
-}
-
-.page-number:hover {
-    background: #f5f7f8;
-}
-
-
-/* =========================
-   Footer
-========================= */
-
-.footer {
-    width: 100%;
-
-    background: #263746;
-
-    color: white;
-
-    padding: 27px 0 20px;
-}
-
-.footer-inner {
-    width: 1040px;
-
-    margin: 0 auto;
-
-    display: flex;
-
-    align-items: center;
-}
-
-
-/* Footer logo */
-
-.footer-logo {
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-}
-
-.footer-logo-icon {
-    font-size: 24px;
-}
-
-.footer-logo strong {
-    display: block;
+.empty-state p {
+    margin: 0;
 
     font-size: 12px;
-}
+    line-height: 1.7;
 
-.footer-logo small {
-    display: block;
-
-    font-size: 7px;
-
-    letter-spacing: 1px;
-
-    color: #b6c0c6;
-}
-
-
-/* Footer menu */
-
-.footer-menu {
-    display: flex;
-
-    gap: 22px;
-
-    margin-left: 40px;
-}
-
-.footer-menu a {
-    color: #c0c9ce;
-
-    text-decoration: none;
-
-    font-size: 9px;
-}
-
-
-/* SNS */
-
-.footer-social {
-    margin-left: auto;
-
-    display: flex;
-
-    gap: 12px;
-
-    color: #d1d9de;
-
-    font-size: 13px;
-}
-
-
-/* copyright */
-
-.copyright {
-    width: 1040px;
-
-    margin: 18px auto 0;
-
-    text-align: right;
-
-    color: #9ba8b0;
-
-    font-size: 8px;
+    color: #929ca9;
 }
 
 
 /* =========================
-   반응형
+   반응형 - 태블릿
 ========================= */
 
-@media (max-width: 1100px) {
+@media (max-width: 1000px) {
 
-    .header-inner,
-    .main,
-    .footer-inner,
-    .copyright {
-        width: calc(100% - 40px);
+    .country-section {
+        grid-template-columns: 260px minmax(0, 1fr);
     }
 
-}
-
-
-@media (max-width: 700px) {
-
-    .header {
-        height: auto;
-    }
-
-    .header-inner {
-        padding: 15px 0;
-
-        flex-wrap: wrap;
-    }
-
-    .main-nav {
-        order: 3;
-
-        width: 100%;
-
-        margin: 15px 0 0;
-
-        gap: 18px;
-    }
-
-    .header-right {
-        margin-left: auto;
-    }
-
-    .main {
-        padding-left: 0;
-        padding-right: 0;
-    }
-
-    .travel-list {
+    .destination-grid {
         grid-template-columns:
-            repeat(2, 1fr);
-    }
-
-    .travel-image {
-        height: 130px;
-    }
-
-    .footer-inner {
-        flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 20px;
-    }
-
-    .footer-menu {
-        margin-left: 0;
-
-        flex-wrap: wrap;
-    }
-
-    .footer-social {
-        margin-left: 0;
-    }
-
-    .copyright {
-        text-align: left;
+            repeat(2, minmax(0, 1fr));
     }
 
 }
 
 
-@media (max-width: 450px) {
+/* =========================
+   반응형 - 작은 태블릿
+========================= */
 
-    .main {
+@media (max-width: 760px) {
+
+    .gnb {
+        display: none;
+    }
+
+    .travel-hero {
+        padding: 55px 20px 45px;
+    }
+
+    .travel-hero h1 {
+        font-size: 30px;
+    }
+
+    .travel-container {
         padding-top: 25px;
     }
 
-    .travel-list {
-        grid-template-columns: 1fr 1fr;
-
-        gap: 10px;
+    .country-section {
+        grid-template-columns: 1fr;
     }
 
-    .travel-image {
-        height: 110px;
+    .country-list {
+        height: 330px;
     }
 
-    .travel-info {
-        padding: 8px;
+    .selected-country {
+        margin-top: 5px;
     }
 
-    .travel-info h2 {
-        font-size: 11px;
+}
+
+
+/* =========================
+   반응형 - 모바일
+========================= */
+
+@media (max-width: 520px) {
+
+    .header-inner {
+        padding: 0 15px;
     }
 
-    .travel-bottom {
-        font-size: 9px;
+    .logo {
+        font-size: 19px;
     }
 
-    .country-filter {
-        padding-bottom: 3px;
+    .travel-hero h1 {
+        font-size: 27px;
     }
 
+    .hero-description {
+        font-size: 13px;
+    }
+
+    .travel-container {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .destination-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .selected-country {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .destination-count {
+        margin-left: 73px;
+    }
+
+}
+
+#selectedCountryFlag {
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 6px;
+}
+
+#selectedCountryFlag img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+    display: block;
+
+    border-radius: 4px;
 }
