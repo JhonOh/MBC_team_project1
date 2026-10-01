@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify ,g
-from odysay.models import TravelPlace
+from odysay.models import TripLocationmd
 from odysay.forms import LoginForm
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
@@ -22,7 +22,7 @@ def map_page():
 
 @bp.route('/api/places')
 def get_places():
-    places = TravelPlace.query.all()
+    places = TripLocationmd.query.all()
     results = []
     for p in places:
         if p.latitude and p.longitude:
@@ -60,7 +60,7 @@ def mypage():
     if g.user is None:
         return redirect(url_for('homepage.main'))
 
-    my_places_count = TravelPlace.query.filter_by(
+    my_places_count = TripLocationmd.query.filter_by(
         user_id=g.user.id
     ).count()
 

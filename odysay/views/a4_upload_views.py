@@ -10,7 +10,7 @@ from geopy.geocoders import Nominatim
 from google import genai
 from google.genai import types
 
-from odysay.models import db, TravelPlace
+from odysay.models import db, Uploadmd, TripLocationmd
 
 bp = Blueprint('upload', __name__, url_prefix='/homepage/upload')
 
@@ -222,7 +222,8 @@ def upload():
 
         # DB 저장
         try:
-            new_place = TravelPlace(
+            # 1. 등록페이지 데이터 저장
+            new_upload = Uploadmd(
                 country=country,
                 region=region,
                 place=place,
@@ -239,12 +240,45 @@ def upload():
                 longitude=lng
             )
 
-            db.session.add(new_place)
+            db.session.add(new_upload)
+            db.session.flush()
+
+            # 2. 상세페이지 데이터 저장
+            new_trip_location = TripLocationmd(
+                place_id=new_upload.id,
+
+                country=new_upload.country,
+                region=new_upload.region,
+                place=new_upload.place,
+                category=new_upload.category,
+
+                intro=new_upload.intro,
+                reason=new_upload.reason,
+
+                restaurant=new_upload.restaurant,
+                nearby=new_upload.nearby,
+
+                photos=new_upload.photos,
+                restaurant_photos=new_upload.restaurant_photos,
+                nearby_photos=new_upload.nearby_photos,
+
+                latitude=new_upload.latitude,
+                longitude=new_upload.longitude,
+
+                user_id=new_upload.user_id
+            )
+
+            db.session.add(new_trip_location)
             db.session.commit()
+
             print(f"[DB 저장 성공] {place} ({lat}, {lng})")
 
+            # 3. 생성된 상세페이지로 이동
             return redirect(
-                url_for('trip_location.trip_location_detail', place_id=new_place.id)
+                url_for(
+                    'trip_location.trip_location_detail',
+                    place_id=new_trip_location.id
+                )
             )
 
         except Exception as e:

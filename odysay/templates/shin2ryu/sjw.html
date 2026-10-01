@@ -6,14 +6,15 @@
 
     <title>어딧세이 | 여행의 시작</title>
 
-<link rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/common.css') }}">
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}">
+      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
 
 <link rel="stylesheet"
       href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -30,19 +31,20 @@
 <header class="header">
     <div class="header-inner">
 
-        <a href="{{ url_for('homepage.main') }}" class="logo">
+        <a href="/homepage/sjw" class="logo">
+
             <span class="logo-symbol">△△</span>
 
             <div class="logo-text">
                 <strong>어딧세이</strong>
-                <span>ODYSAY</span>
+                <small>ODYSAY</small>
             </div>
         </a>
 
         <nav class="gnb">
             <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
             <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
-            <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
+            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
             <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
         </nav>
 
@@ -51,9 +53,9 @@
 
             </button>
 
-            <button type="button" class="logout-button">
-                로그아웃
-            </button>
+            <a href="{{ url_for('auth.logout') }}" class="logout-button">
+            로그아웃
+            </a>
         </div>
 
     </div>
@@ -430,7 +432,7 @@
 </main>
 
 
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>js/main.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
