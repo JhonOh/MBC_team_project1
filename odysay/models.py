@@ -98,3 +98,49 @@ class Post(db.Model):
 
     # 작성자 (로그인 연동 시 사용)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+
+
+# ==========================================
+# [추가] 자유게시판 / 여행팁 (Post) 좋아요 기록 모델
+# ==========================================
+class PostLike(db.Model):
+    __tablename__ = 'post_like'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+
+    # 좋아요를 누른 유저 ID (회원 탈퇴 시 삭제)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
+
+    # 좋아요를 누른 게시글 ID (게시글 삭제 시 삭제)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=False)
+
+    # 좋아요 누른 시간
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    # 한 유저(user_id)가 하나의 게시글(post_id)에 1회만 좋아요 가능하도록 유니크 제약
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'post_id', name='unique_user_post_like'),
+    )
+
+
+# ==========================================
+# 커뮤니티(여행 팁 / 자유 게시판) 밑에 댓글
+# ==========================================
+class Comment(db.Model):
+    __tablename__ = 'comment'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    content = db.Column(db.Text, nullable=False)
+    author = db.Column(db.String(50), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    # 작성자 회원 아이디 (로그인 및 수정/삭제 권한 확인용)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)
+    user = db.relationship('User', backref=db.backref('comments', cascade='all, delete-orphan'))
+
+    # 연결 게시글 (Post 또는 TravelPlace)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id', ondelete='CASCADE'), nullable=True)
+    post = db.relationship('Post', backref=db.backref('comments', cascade='all, delete-orphan'))
+
+    travel_place_id = db.Column(db.Integer, db.ForeignKey('travel_places.id', ondelete='CASCADE'), nullable=True)
+    travel_place = db.relationship('TravelPlace', backref=db.backref('comments', cascade='all, delete-orphan'))

@@ -45,15 +45,19 @@ def create_app(test_config=None):
     from . import models
 
     # 블루프린트 등록[cite: 11]
-    from .views import main_views, a1_mapmain_views, a3_community_views, a4_upload_views, a4_z1_trip_location_views, sub_views, auth_views
+    from .views import main_views, a0_mapmain_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views, a5_mypage_views, a1_homepage_views, auth_views
 
     app.register_blueprint(main_views.bp)
-    app.register_blueprint(a1_mapmain_views.bp)
+    app.register_blueprint(a0_mapmain_views.bp)
     app.register_blueprint(a3_community_views.bp)
+    app.register_blueprint(a3_z1_community_postwrite_views.bp)
+    app.register_blueprint(a3_z2_community_detail_views.bp)
     app.register_blueprint(a4_upload_views.bp)
     app.register_blueprint(a4_z1_trip_location_views.bp)
-    app.register_blueprint(sub_views.bp)
+    app.register_blueprint(a5_mypage_views.bp)
+    app.register_blueprint(a1_homepage_views.bp)
     app.register_blueprint(auth_views.bp)
+    app.register_blueprint(auth_views.profile_bp)
 
     # # 라우트 설정[cite: 11]
     # @app.route('/')

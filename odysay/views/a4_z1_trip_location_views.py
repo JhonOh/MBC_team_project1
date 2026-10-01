@@ -10,7 +10,7 @@ bp = Blueprint('trip_location', __name__, url_prefix='/homepage/trip_location')
 # -----------------------------------------------------------
 # 여행지 상세 페이지
 # -----------------------------------------------------------
-@bp.route('/trip_location/<int:place_id>')
+@bp.route('/<int:place_id>')
 def trip_location_detail(place_id):
     place_data = TravelPlace.query.get_or_404(place_id)
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
@@ -38,7 +38,7 @@ def trip_location_detail(place_id):
 # -----------------------------------------------------------
 # 여행지 수정 페이지
 # -----------------------------------------------------------
-@bp.route('/trip_location/<int:place_id>/edit', methods=['GET', 'POST'])
+@bp.route('/<int:place_id>/edit', methods=['GET', 'POST'])
 def trip_location_edit(place_id):
     place_data = TravelPlace.query.get_or_404(place_id)
 
@@ -115,7 +115,7 @@ def trip_location_edit(place_id):
 # -----------------------------------------------------------
 # 최근 등록된 여행지 보기
 # -----------------------------------------------------------
-@bp.route('/trip_location')
+@bp.route('/')
 def trip_location():
     place_data = TravelPlace.query.order_by(TravelPlace.id.desc()).first()
 
