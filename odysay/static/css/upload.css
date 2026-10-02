@@ -7,110 +7,6 @@ body {
     font-family: Arial, "Noto Sans KR", sans-serif;
 }
 
-/* header */
-.header {
-    width: 100%;
-    height: 76px;
-    background: #ffffff;
-}
-
-.header-inner {
-    height: 100%;
-
-    display: flex;
-    align-items: center;
-}
-
-/* 로고 */
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 80px;
-}
-
-.logo-symbol {
-    font-size: 28px;
-    font-weight: 700;
-    color: #14233b;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-text strong {
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.logo-text span {
-    margin-top: 2px;
-    font-size: 9px;
-    letter-spacing: 4px;
-}
-
-/* =========================
-   헤더 검색 버튼
-========================= */
-
-.search-button {
-    position: relative;
-
-    width: 40px;
-    height: 40px;
-
-    padding: 0;
-    border: none;
-    background: transparent;
-
-    cursor: pointer;
-}
-
-/* 돋보기 원 */
-.search-button::before {
-    content: "";
-
-    position: absolute;
-
-    width: 15px;
-    height: 15px;
-
-    border: 2px solid #10233f;
-    border-radius: 50%;
-
-    top: 9px;
-    left: 8px;
-
-    box-sizing: border-box;
-}
-
-/* 돋보기 손잡이 */
-.search-button::after {
-    content: "";
-
-    position: absolute;
-
-    width: 8px;
-    height: 2px;
-
-    background: #10233f;
-    border-radius: 2px;
-
-    top: 23px;
-    left: 21px;
-
-    transform: rotate(45deg);
-    transform-origin: left center;
-}
-
-/* 마우스를 올렸을 때 */
-.search-button:hover {
-    opacity: 0.6;
-}
-
 
 /* ================= LAYOUT ================= */
 
@@ -396,6 +292,12 @@ textarea.form-control {
 }
 
 .country-result-item:hover {
+    background: #f4f8ff;
+    color: #1473ff;
+}
+
+/* 키보드 ↑ ↓ 로 선택 중인 국가 */
+.country-result-item.active {
     background: #f4f8ff;
     color: #1473ff;
 }

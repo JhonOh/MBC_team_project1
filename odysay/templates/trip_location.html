@@ -4,7 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어딧세이 - {{ place.place }}</title>
+
+    {# header css  #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_all.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_review.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_talk.css') }}">
     <!-- 상세페이지 지도용 Leaflet CSS -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -17,21 +25,41 @@
 
 <!-- 헤더 영역 -->
 <header class="header">
-    <div class="header-container">
-        <div class="logo">
-            <span class="logo-icon">▲</span> 어딧세이
-        </div>
-        <nav class="nav-menu">
-            <a href="#">여행지</a>
-            <a href="#">커뮤니티</a>
+    <div class="header-inner">
+
+
+        <a href="/homepage/sjw" class="logo">
+
+
+            <span class="logo-symbol">△△</span>
+
+            <div class="logo-text">
+                <strong>어딧세이</strong>
+                <small>ODYSAY</small>
+            </div>
+        </a>
+
+        <nav class="gnb">
+            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+            <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
             <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
-            <a href="#">마이페이지</a>
+            <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
         </nav>
-        <div class="header-auth">
-            <button class="search-btn">🔍</button>
-            <a href="#" class="login-link">로그인</a>
-            <a href="#" class="signup-btn">회원가입</a>
+
+        <div class="header-util">
+            <button type="button" class="search-button">
+
+            </button>
+
+
+            {% if g.user %}
+            <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
+            {% else %}
+            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
+            {% endif %}
+
         </div>
+
     </div>
 </header>
 
@@ -43,12 +71,12 @@
         <!-- 이미지 슬라이더 영역 -->
         <div class="image-slider">
             {% if photos and photos|length > 0 %}
-            <button class="slider-arrow left-arrow">&lt;</button>
+            <button class="slider-arrow left-arrow">‹</button>
             <div class="slider-view">
                 <img id="mainImage" src="{{ url_for('static', filename='uploads/' + photos[0]) }}"
                      alt="{{ place.place }}">
             </div>
-            <button class="slider-arrow right-arrow">&gt;</button>
+            <button class="slider-arrow right-arrow">›</button>
 
             <!-- 메인사진 위에 겹쳐지는 썸네일 영역 -->
             <div class="main-thumbnails" id="mainThumbnails"></div>
@@ -63,8 +91,57 @@
 
         <!-- 우측 타이틀 및 버튼 정보 -->
         <div class="info-side">
-            <h1 class="title">{{ place.place }}</h1>
-            <p class="subtitle">{{ place.country }} / {{ place.region }}</p>
+
+            <div class="place-title-area">
+
+                <!-- 제목 + 찜 개수 + 수정/삭제 -->
+                <div class="place-title-line">
+
+                    <div class="place-title-left">
+
+                        <h1 class="title">
+                            {{ place.place }}
+                        </h1>
+
+                        <div class="title-bookmark-count">
+                            ♥ <span id="bookmarkCount">0</span>
+                        </div>
+
+                    </div>
+
+                    {% if g.user and place.user_id == g.user.id %}
+                    <div class="owner-actions">
+
+                        <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
+                           class="owner-button">
+                            수정
+                        </a>
+
+                        <form method="POST"
+                              action="{{ url_for('trip_location.trip_location_delete', place_id=place.id) }}"
+                              onsubmit="return confirm('정말 이 여행지를 삭제하시겠습니까?');">
+
+                            <input type="hidden"
+                                   name="csrf_token"
+                                   value="{{ csrf_token() }}">
+
+                            <button type="submit"
+                                    class="owner-button owner-delete">
+                                삭제
+                            </button>
+
+                        </form>
+
+                    </div>
+                    {% endif %}
+
+                </div>
+
+                <p class="subtitle">
+                    {{ place.country }} / {{ place.region }}
+                </p>
+
+            </div>
 
             <div class="place-meta">
 
@@ -93,25 +170,40 @@
                 </p>
                 {% endif %}
 
+            <div class="place-summary">
+
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        카테고리
+                    </span>
+
+                    <span class="place-category">
+                        {{ place.category }}
+                    </span>
+
+                </div>
+
+                {% if place.intro %}
+                <div class="summary-item">
+
+                    <span class="summary-label">
+                        한줄 소개
+                    </span>
+
+                    <p class="place-intro">
+                        {{ place.intro }}
+                    </p>
+
+                </div>
+                {% endif %}
+
             </div>
 
-            <div class="likes-count">
-                ❤️ <span id="bookmarkCount">0</span>
             </div>
+
 
             <div class="action-buttons">
-
-                {% if g.user and place.user_id == g.user.id %}
-                <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
-                   class="btn-action btn-edit">
-                    ✎ 수정하기
-                </a>
-                {% endif %}
-            <!-- 찜하기 -->
-            <button type="button" class="btn-action btn-jjim">
-                ♥ 찜하기
-            </button>
-
 
             <!-- 공유하기 -->
             <div class="share-wrapper">
@@ -218,6 +310,13 @@
                 </div>
 
             </div>
+            <div class="bookmark-action">
+                <button type="button"
+                        class="btn-action btn-jjim">
+                    ♥ 찜하기
+                </button>
+
+            </div>
 
         </div>
         </div>
@@ -254,39 +353,44 @@
         <div class="tab-content active" id="all-tab">
 
             <!-- 기본 정보 -->
-            <div class="info-group">
+            <div class="all-info-section">
 
-                <h2 class="section-title">
-                    📍 기본 정보
+                <h2 class="all-section-title">
+                    📍  기본정보
                 </h2>
 
-                <div class="basic-info-layout">
-                <div class="basic-info-text">
+                <div class="all-section-content basic-info-layout">
 
-                <table class="info-table">
+                    <div class="basic-info-text">
 
-                    <tr>
-                        <th>위치</th>
-                        <td>
-                            {{ place.country }}
-                            {{ place.region }}
-                            {{ place.place }}
-                        </td>
-                    </tr>
+                        <div class="basic-info-row">
+                            <span class="basic-info-label">위치</span>
 
-                    <tr>
-                        <th>카테고리</th>
-                        <td>{{ place.category }}</td>
-                    </tr>
-
-                    <tr>
-                        <th>한줄 소개</th>
-                        <td>{{ place.intro }}</td>
-                    </tr>
-
-                </table>
-
+                            <span>
+                                {{ place.country }}
+                                {{ place.region }}
+                                {{ place.place }}
+                            </span>
                         </div>
+
+                        <div class="basic-info-row">
+                            <span class="basic-info-label">카테고리</span>
+
+                            <span>
+                                {{ place.category }}
+                            </span>
+                        </div>
+
+                        <div class="basic-info-row">
+                            <span class="basic-info-label">한줄 소개</span>
+
+                            <span>
+                                {{ place.intro }}
+                            </span>
+                        </div>
+
+                    </div>
+
 
                     {% if place.latitude is not none and place.longitude is not none %}
                     <div class="detail-map-link">
@@ -309,93 +413,225 @@
 
                     </div>
                     {% endif %}
+
                 </div>
-            </div>
-
-
-
-            <!-- 등록 이유 -->
-            <div class="info-group">
-
-                <h2 class="section-title">
-                    📖 등록하는 이유 & 소개
-                </h2>
-
-                <p class="intro-text">
-                    {{ place.reason }}
-                </p>
 
             </div>
 
 
-            <!-- 맛집 -->
-            <div class="info-group">
+            <!-- 여행자가 전하는 정보 -->
+            <div class="all-info-section traveler-info-section">
 
-                <h2 class="section-title">
-                    🍴 주변 맛집 정보
+                <h2 class="all-section-title">
+                    💬 여행자가 전하는 정보
                 </h2>
 
-                {% if place.restaurant %}
+                <div class="traveler-info-layout">
 
-                    <p class="intro-text">
-                        {{ place.restaurant }}
-                    </p>
+                    <div class="traveler-info-text">
+                        {{ place.reason }}
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- 주변 맛집 정보 -->
+            <div class="all-info-section">
+
+                <h2 class="all-section-title">
+                    🍽️ 주변 맛집 정보
+                </h2>
+
+                {% if place.restaurant or restaurant_photos %}
+
+                <div class="registered-info-layout">
+
+                    <div class="registered-info-text">
+                        {% if place.restaurant %}
+                            {{ place.restaurant }}
+                        {% else %}
+                            <span class="registered-info-no-text">
+                                등록된 설명이 없습니다.
+                            </span>
+                        {% endif %}
+                    </div>
 
                     {% if restaurant_photos %}
-                    <div class="related-images">
-                        {% for photo in restaurant_photos %}
-                        <div class="thumb-image">
+                    <div class="registered-photo-slider"
+                         data-photo-slider>
+
+                        <button type="button"
+                                class="registered-photo-arrow registered-photo-prev">
+                            ‹
+                        </button>
+
+                        <div class="registered-photo-view">
+
+                            {% for photo in restaurant_photos %}
                             <img
                                 src="{{ url_for('static', filename='uploads/' + photo) }}"
                                 alt="주변 맛집 사진"
-                                class="gallery-image">
+                                class="gallery-image registered-slide-photo
+                                       {% if loop.first %}active{% endif %}">
+                            {% endfor %}
+
                         </div>
-                        {% endfor %}
+
+                        <button type="button"
+                                class="registered-photo-arrow registered-photo-next">
+                            ›
+                        </button>
+
+                        {% if restaurant_photos|length > 1 %}
+                        <div class="registered-photo-count">
+                            <span class="registered-photo-current">1</span>
+                            /
+                            {{ restaurant_photos|length }}
+                        </div>
+                        {% endif %}
+
                     </div>
                     {% endif %}
 
+                </div>
+
                 {% else %}
 
-                    <p class="empty-message">
-                        등록된 주변 맛집 정보가 없습니다.
-                    </p>
+                <p class="registered-info-empty">
+                    등록된 주변 맛집 정보가 없습니다.
+                </p>
 
                 {% endif %}
 
             </div>
 
 
-            <!-- 볼거리 -->
-            <div class="info-group">
+            <!-- 주변 볼거리 / 즐길거리 -->
+            <div class="all-info-section">
 
-                <h2 class="section-title">
-                    📷 주변 볼거리 / 즐길거리
+                <h2 class="all-section-title">
+                    🎡 주변 볼거리 / 즐길거리
                 </h2>
 
-                {% if place.nearby %}
+                {% if place.nearby or nearby_photos %}
 
-                    <p class="intro-text">
-                        {{ place.nearby }}
-                    </p>
+                <div class="registered-info-layout">
+
+                    <div class="registered-info-text">
+                        {% if place.nearby %}
+                            {{ place.nearby }}
+                        {% else %}
+                            <span class="registered-info-no-text">
+                                등록된 설명이 없습니다.
+                            </span>
+                        {% endif %}
+                    </div>
 
                     {% if nearby_photos %}
-                    <div class="related-images">
-                        {% for photo in nearby_photos %}
-                        <div class="thumb-image">
+                    <div class="registered-photo-slider"
+                         data-photo-slider>
+
+                        <button type="button"
+                                class="registered-photo-arrow registered-photo-prev">
+                            ‹
+                        </button>
+
+                        <div class="registered-photo-view">
+
+                            {% for photo in nearby_photos %}
                             <img
                                 src="{{ url_for('static', filename='uploads/' + photo) }}"
                                 alt="주변 볼거리 사진"
-                                class="gallery-image">
+                                class="gallery-image registered-slide-photo
+                                       {% if loop.first %}active{% endif %}">
+                            {% endfor %}
+
                         </div>
-                        {% endfor %}
+
+                        <button type="button"
+                                class="registered-photo-arrow registered-photo-next">
+                            ›
+                        </button>
+
+                        {% if nearby_photos|length > 1 %}
+                        <div class="registered-photo-count">
+                            <span class="registered-photo-current">1</span>
+                            /
+                            {{ nearby_photos|length }}
+                        </div>
+                        {% endif %}
+
                     </div>
                     {% endif %}
 
+                </div>
+
                 {% else %}
 
-                    <p class="empty-message">
-                        등록된 주변 볼거리 정보가 없습니다.
-                    </p>
+                <p class="registered-info-empty">
+                    등록된 주변 볼거리 정보가 없습니다.
+                </p>
+
+                {% endif %}
+
+            </div>
+                    <!-- 10km 내 주변 여행지 -->
+            <div class="all-info-section nearby-place-section">
+
+                <h2 class="all-section-title">
+                    🧭 반경 10km 내 주변 여행지
+                </h2>
+
+                {% if nearby_places %}
+
+                <div class="nearby-place-list">
+
+                    {% for item in nearby_places %}
+                    <a href="{{ url_for('trip_location.trip_location_detail', place_id=item.place.id) }}"
+                       class="nearby-place-card">
+
+                        <div class="nearby-place-image">
+
+                            {% if item.place.photos %}
+                                {% set nearby_photo = item.place.photos.split(',')[0].strip() %}
+
+                                <img src="{{ url_for('static', filename='uploads/' + nearby_photo) }}"
+                                     alt="{{ item.place.place }}">
+                            {% else %}
+                                <div class="nearby-place-no-image">
+                                    사진 없음
+                                </div>
+                            {% endif %}
+
+                        </div>
+
+                        <div class="nearby-place-info">
+
+                            <strong class="nearby-place-name">
+                                {{ item.place.place }}
+                            </strong>
+
+                            <span class="nearby-place-region">
+                                {{ item.place.country }} · {{ item.place.region }}
+                            </span>
+
+                            <span class="nearby-place-distance">
+                                📍 현재 여행지에서 약 {{ item.distance }}km 떨어진 곳
+                            </span>
+
+                        </div>
+
+                    </a>
+                    {% endfor %}
+
+                </div>
+
+                {% else %}
+
+                <p class="registered-info-empty">
+                    10km 내에 등록된 다른 여행지가 없습니다.
+                </p>
 
                 {% endif %}
 
@@ -625,7 +861,7 @@
         type="button"
         class="image-modal-arrow image-modal-prev"
         id="imageModalPrev">
-        &lt;
+        ‹
     </button>
 
     <!-- 큰 이미지 영역 -->
@@ -649,7 +885,7 @@
         type="button"
         class="image-modal-arrow image-modal-next"
         id="imageModalNext">
-        &gt;
+        ›
     </button>
 
 </div>
@@ -685,5 +921,8 @@
     };
 </script>
 <script src="{{ url_for('static', filename='js/trip_location.js') }}"></script>
+<script src="{{ url_for('static', filename='js/trip_location_all.js') }}"></script>
+<script src="{{ url_for('static', filename='js/trip_location_review.js') }}"></script>
+<script src="{{ url_for('static', filename='js/trip_location_talk.js') }}"></script>
 </body>
 </html>

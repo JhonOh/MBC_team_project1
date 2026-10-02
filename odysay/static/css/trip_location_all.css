@@ -1,0 +1,433 @@
+
+.thumb-image {
+    position: relative;
+
+    width: 100%;
+    height: 180px;
+
+    background-color: #f2f4f7;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    cursor: pointer;
+}
+
+.thumb-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center;
+
+    border-radius: 10px;
+
+    transition: transform 0.25s ease;
+}
+
+.thumb-image:hover img {
+    transform: scale(1.04);
+}
+
+/* =========================================
+   전체 탭 - 기본 레이아웃
+========================================= */
+
+.all-info-section {
+    margin-bottom: 28px;
+}
+
+.all-section-title {
+    margin: 0 0 30px;
+    padding-bottom: 10px;
+
+    border-bottom: 1px solid #d9dee7;
+
+    color: #17263d;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================================
+   기본정보
+========================================= */
+
+.all-section-content {
+    padding: 0 10px;
+}
+
+.basic-info-layout {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+
+    gap: 50px;
+
+    align-items: start;
+}
+
+.basic-info-text {
+    display: flex;
+    flex-direction: column;
+
+    gap: 12px;
+
+    margin: 0;
+    padding: 0;
+
+    align-items: flex-start;
+    justify-content: center;
+
+    min-height: 100px;
+}
+
+.basic-info-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    font-size: 15px;
+}
+
+.basic-info-label {
+    width: 70px;
+    flex-shrink: 0;
+
+    color: #718096;
+
+    font-weight: 600;
+}
+
+
+/* =========================================
+   여행자가 전하는 정보
+========================================= */
+
+.traveler-info-layout {
+    display: block;
+
+    margin: 0;
+    padding: 0 10px;
+}
+
+.traveler-info-text {
+    margin: 0;
+    padding: 0;
+
+    color: #334155;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    text-align: left;
+}
+
+/* =========================================
+   등록페이지에서 가져온 추가 정보
+========================================= */
+
+.registered-info-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 50px;
+
+    margin: 0;
+    padding: 0 10px;
+}
+
+.registered-info-text {
+    flex: 1;
+
+    margin: 0;
+    padding: 0;
+
+    color: #334155;
+
+    font-size: 16px;
+    line-height: 1.7;
+
+    text-align: left;
+}
+
+.registered-photo-slider {
+    position: relative;
+
+    flex-shrink: 0;
+
+    width: 300px;
+
+    margin: 0;
+    padding: 0;
+}
+
+.registered-photo-view {
+    position: relative;
+
+    width: 300px;
+    height: 180px;
+
+    overflow: hidden;
+
+    border-radius: 8px;
+}
+
+.registered-slide-photo {
+    display: none;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    cursor: pointer;
+}
+
+.registered-slide-photo.active {
+    display: block;
+}
+
+.registered-photo-arrow {
+    position: absolute;
+    top: 50%;
+
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: rgba(20, 30, 45, 0.28);
+    color: rgba(255, 255, 255, 0.95);
+
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.14);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.registered-photo-arrow:hover {
+    background: rgba(20, 30, 45, 0.48);
+    transform: translateY(-50%) scale(1.06);
+}
+
+.registered-photo-prev {
+    left: 10px;
+}
+
+.registered-photo-next {
+    right: 10px;
+}
+
+.registered-photo-count {
+    position: absolute;
+
+    right: 10px;
+    bottom: 10px;
+
+    padding: 4px 8px;
+
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    color: white;
+
+    font-size: 12px;
+}
+
+.registered-info-no-text {
+    color: #9aa4b5;
+}
+
+.registered-photo-slider:has(
+    .registered-slide-photo:only-child
+) .registered-photo-arrow {
+    display: none;
+}
+
+.registered-info-empty {
+    margin: 0;
+    padding: 0 10px;
+
+    color: #9aa4b5;
+
+    font-size: 15px;
+}
+
+.registered-slide-photo {
+    transition: transform 0.3s ease;
+}
+
+.registered-slide-photo.active:hover {
+    transform: scale(1.04);
+}
+
+/* =========================================
+   10km 내 주변 여행지
+========================================= */
+
+.nearby-place-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    padding: 0 10px;
+}
+
+.nearby-place-card {
+    display: block;
+
+    color: #17263d;
+    text-decoration: none;
+
+    border: 1px solid #e3e8ef;
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    background: #fff;
+
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nearby-place-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+.nearby-place-image {
+    width: 100%;
+    height: 170px;
+
+    overflow: hidden;
+
+    background: #f2f4f7;
+}
+
+.nearby-place-image img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.nearby-place-card:hover .nearby-place-image img {
+    transform: scale(1.04);
+}
+
+.nearby-place-no-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    color: #9aa4b5;
+    font-size: 14px;
+}
+
+.nearby-place-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    padding: 13px 14px 15px;
+}
+
+.nearby-place-name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.nearby-place-distance {
+    color: #2563eb;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.nearby-place-region {
+    color: #718096;
+    font-size: 13px;
+}
+
+
+/* 주변 여행지 반응형 */
+@media (max-width: 900px) {
+
+    .nearby-place-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .nearby-place-list {
+        grid-template-columns: 1fr;
+    }
+
+    .nearby-place-image {
+        height: 190px;
+    }
+}
+
+/* 상세페이지 기본정보 지도 반응형 */
+@media (max-width: 900px) {
+
+    .basic-info-layout {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .detail-map {
+        height: 210px;
+    }
+
+    #restaurant-tab .info-group,
+    #nearby-tab .info-group {
+        grid-template-columns: 1fr;
+        row-gap: 14px;
+    }
+
+    #restaurant-tab .related-images,
+    #nearby-tab .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        margin-top: 0;
+    }
+
+    #restaurant-tab .thumb-image,
+    #nearby-tab .thumb-image {
+        height: 130px;
+    }
+}
+
+
+
+@media (max-width: 600px) {
+
+    .detail-map {
+        height: 190px;
+    }
+}
+
+

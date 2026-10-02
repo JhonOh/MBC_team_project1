@@ -19,93 +19,81 @@ document.addEventListener("DOMContentLoaded", function () {
     const countryInput = document.getElementById("country");
     const countryResults = document.getElementById("countryResults");
 
-    if (
-        countrySearch &&
-        countryInput &&
-        countryResults &&
-        typeof countries !== "undefined"
-    ) {
-        // 나라 검색창을 클릭하면 전체 나라 목록 보여주기
-        countrySearch.addEventListener("focus", function () {
+    if (countrySearch && countryInput && countryResults && typeof countries !== "undefined") {
 
-            countryResults.innerHTML = "";
+        const CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
+        let filtered = [];
+        let index = -1;
 
-            countries.forEach(function (country) {
+        // 초성 변환
+        const getCho = text =>
+            [...text].map(c => {
+                const code = c.charCodeAt(0) - 44032;
+                return code >= 0 && code <= 11171
+                    ? CHO[Math.floor(code / 588)]
+                    : c;
+            }).join("");
 
-                const item = document.createElement("div");
+        // 목록 출력
+        function show(list) {
+            filtered = list;
+            index = -1;
 
-                item.classList.add("country-result-item");
-                item.textContent = country;
-
-                item.addEventListener("click", function () {
-
-                    countrySearch.value = country;
-                    countryInput.value = country;
-
-                    countryResults.innerHTML = "";
-                    countryResults.style.display = "none";
-                });
-
-                countryResults.appendChild(item);
-            });
+            countryResults.innerHTML = list.length
+                ? list.map(c => `<div class="country-result-item">${c}</div>`).join("")
+                : `<div class="country-no-result">검색 결과가 없습니다.</div>`;
 
             countryResults.style.display = "block";
+        }
+
+        // 클릭하면 선택
+        countryResults.addEventListener("click", e => {
+            if (!e.target.classList.contains("country-result-item")) return;
+
+            countrySearch.value = e.target.textContent;
+            countryInput.value = e.target.textContent;
+            countryResults.style.display = "none";
         });
 
+        // 클릭하면 전체 목록
+        countrySearch.addEventListener("focus", () => show(countries));
+
+        // 검색 + 초성 검색
         countrySearch.addEventListener("input", function () {
-
-            const keyword = this.value.trim().toLowerCase();
-
-            // 검색어를 다시 입력하면 기존 선택값 초기화
             countryInput.value = "";
-            countryResults.innerHTML = "";
 
-            if (keyword === "") {
-                countryResults.style.display = "none";
-                return;
-            }
+            const word = this.value.trim().toLowerCase();
 
-            const filteredCountries = countries.filter(function (country) {
-                return country.toLowerCase().includes(keyword);
-            });
-
-            if (filteredCountries.length === 0) {
-                countryResults.innerHTML =
-                    '<div class="country-no-result">검색 결과가 없습니다.</div>';
-
-                countryResults.style.display = "block";
-                return;
-            }
-
-            filteredCountries.forEach(function (country) {
-
-                const item = document.createElement("div");
-
-                item.classList.add("country-result-item");
-                item.textContent = country;
-
-                item.addEventListener("click", function () {
-
-                    countrySearch.value = country;
-                    countryInput.value = country;
-
-                    countryResults.innerHTML = "";
-                    countryResults.style.display = "none";
-                });
-
-                countryResults.appendChild(item);
-            });
-
-            countryResults.style.display = "block";
+            show(countries.filter(c =>
+                c.toLowerCase().includes(word) ||
+                getCho(c).includes(word)
+            ));
         });
 
-        // 검색창 바깥 클릭 시 결과 닫기
-        document.addEventListener("click", function (event) {
+        // ↑ ↓ Enter
+        countrySearch.addEventListener("keydown", e => {
+            const items = countryResults.querySelectorAll(".country-result-item");
+            if (!items.length) return;
 
-            if (!event.target.closest(".country-search-wrapper")) {
+            if (e.key === "ArrowDown") index = (index + 1) % items.length;
+            else if (e.key === "ArrowUp") index = (index - 1 + items.length) % items.length;
+            else if (e.key === "Enter" && index >= 0) {
+                e.preventDefault();
+                items[index].click();
+                return;
+            } else return;
+
+            e.preventDefault();
+
+            items.forEach(i => i.classList.remove("active"));
+            items[index].classList.add("active");
+            items[index].scrollIntoView({ block: "nearest" });
+        });
+
+        // 바깥 클릭하면 닫기
+        document.addEventListener("click", e => {
+            if (!e.target.closest(".country-search-wrapper"))
                 countryResults.style.display = "none";
-            }
-
         });
     }
 
