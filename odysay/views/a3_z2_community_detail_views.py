@@ -1,8 +1,12 @@
-
 from flask import Blueprint, render_template, abort, request, jsonify, session, g
+
 # [수정] PostLike 모델 추가 import
-from odysay.models import db, Post, User, Comment, PostLike ,TripLocationmd
+
 from werkzeug.exceptions import HTTPException
+
+from odysay.models import db, Post, User, Comment, PostLike, TripLocationmd
+from odysay import csrf
+
 from datetime import datetime
 from odysay.moderation import protect_hidden_descendants
 
@@ -18,7 +22,7 @@ def get_current_user_id():
 def detail(post_type, item_id):
     current_user_id = get_current_user_id()
 
-    # 여행 팁 및 자유게시판 (Post 모델)
+    # 1. 여행 팁 및 자유게시판 (Post 모델)
     if post_type == 'post':
         item = Post.query.get_or_404(item_id)
         author_name = "익명 작성자"
@@ -30,6 +34,11 @@ def detail(post_type, item_id):
         photo_list = [p.strip() for p in item.photos.split(',') if p.strip()] if item.photos else []
         comments = getattr(item, 'comments', [])
 
+        # 현재 사용자의 좋아요 여부 확인
+        is_liked = False
+        if current_user_id:
+            is_liked = PostLike.query.filter_by(user_id=current_user_id, post_id=item_id).first() is not None
+
         return render_template(
             'community_detail.html',
             item=item,
@@ -39,12 +48,11 @@ def detail(post_type, item_id):
             post_type=post_type,
             item_id=item_id,
             is_post=True,
-            current_user_id=current_user_id
+            current_user_id=current_user_id,
+            is_liked=is_liked
         )
 
-
     # 2. 여행 후기 (TripLocationmd)
-
     elif post_type == 'place':
         item = TripLocationmd.query.get_or_404(item_id)
         author_name = "지구여행자"
@@ -65,7 +73,8 @@ def detail(post_type, item_id):
             post_type=post_type,
             item_id=item_id,
             is_post=False,
-            current_user_id=current_user_id
+            current_user_id=current_user_id,
+            is_liked=False
         )
 
     else:
@@ -73,7 +82,7 @@ def detail(post_type, item_id):
 
 
 # -----------------------------------------------------------
-# 1. 좋아요 토글 API (자유게시판/여행팁 전용 DB 기반 1회 제한)
+# 1. 좋아요 토글 API (추가/취소 기능 지원)
 # -----------------------------------------------------------
 @bp.route('/api/like/<string:post_type>/<int:item_id>', methods=['POST'])
 def toggle_like(post_type, item_id):
@@ -81,29 +90,38 @@ def toggle_like(post_type, item_id):
     if not user_id:
         return jsonify({'success': False, 'message': '로그인 후 좋아요를 누를 수 있습니다.'}), 401
 
-    # 자유게시판/여행팁만 이 API에서 처리
     if post_type != 'post':
         return jsonify({'success': False, 'message': '올바르지 않은 요청입니다.'}), 400
 
     try:
         item = Post.query.get_or_404(item_id)
-
-        # DB에서 해당 유저가 이미 좋아요를 눌렀는지 확인
-        existing_like = PostLike.query.filter_by(user_id=user_id, post_id=item_id).first()
-        if existing_like:
-            return jsonify({'success': False, 'message': '이미 좋아요를 누르셨습니다.'}), 400
-
-        # DB에 좋아요 이력 추가
-        new_like = PostLike(user_id=user_id, post_id=item_id)
-        db.session.add(new_like)
-
-        # Post 테이블의 likes 카운트 1 증가
         current_likes = item.likes if item.likes is not None else 0
-        item.likes = current_likes + 1
 
-        db.session.commit()
+        existing_like = PostLike.query.filter_by(user_id=user_id, post_id=item_id).first()
 
-        return jsonify({'success': True, 'likes': item.likes, 'message': '좋아요를 눌렀습니다.'})
+        if existing_like:
+            # 좋아요 취소 처리
+            db.session.delete(existing_like)
+            item.likes = max(0, current_likes - 1)
+            db.session.commit()
+            return jsonify({
+                'success': True,
+                'liked': False,
+                'likes': item.likes,
+                'message': '좋아요를 취소했습니다.'
+            })
+        else:
+            # 좋아요 추가 처리
+            new_like = PostLike(user_id=user_id, post_id=item_id)
+            db.session.add(new_like)
+            item.likes = current_likes + 1
+            db.session.commit()
+            return jsonify({
+                'success': True,
+                'liked': True,
+                'likes': item.likes,
+                'message': '좋아요를 눌렀습니다.'
+            })
 
     except HTTPException:
         db.session.rollback()
@@ -170,7 +188,7 @@ def add_comment(post_type, item_id):
 
 
 # -----------------------------------------------------------
-# 3. 댓글 수정 API (PUT, POST 및 delete 다중 경로 지원)
+# 3. 댓글 수정 API
 # -----------------------------------------------------------
 @bp.route('/api/comment/<int:comment_id>', methods=['PUT', 'POST'])
 def update_comment(comment_id):
@@ -190,19 +208,31 @@ def update_comment(comment_id):
         return jsonify({'success': False, 'message': '수정할 내용을 입력해주세요.'}), 400
 
     try:
+        now = datetime.now()
         comment.content = content
+        if hasattr(comment, 'updated_at'):
+            comment.updated_at = now
+
         db.session.commit()
-        return jsonify({'success': True, 'comment': {'id': comment.id, 'content': comment.content}})
-    except HTTPException:
-        db.session.rollback()
-        raise
+
+
+
+        return jsonify({
+            'success': True,
+            'comment': {
+                'id': comment.id,
+                'content': comment.content,
+                'updated_at': now.strftime('%Y.%m.%d %H:%M')
+            }
+        })
+
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'댓글 수정 실패: {str(e)}'}), 500
 
 
 # -----------------------------------------------------------
-# 4. 댓글 삭제 API (DELETE, POST 모두 지원 및 /delete/ 주소 호환)
+# 4. 댓글 삭제 API
 # -----------------------------------------------------------
 @bp.route('/api/comment/<int:comment_id>', methods=['DELETE'])
 @bp.route('/api/comment/delete/<int:comment_id>', methods=['POST', 'DELETE'])
@@ -229,7 +259,60 @@ def delete_comment(comment_id):
 
 
 # -----------------------------------------------------------
-# 5. 게시글 삭제 API
+# 5. 게시글 수정 API
+# -----------------------------------------------------------
+@bp.route('/api/post/update/<string:post_type>/<int:item_id>', methods=['POST', 'PUT'])
+
+def update_post(post_type, item_id):
+    user_id = get_current_user_id()
+    if not user_id:
+        return jsonify({'success': False, 'message': '로그인이 필요합니다.'}), 401
+
+    if post_type == 'post':
+        item = Post.query.get_or_404(item_id)
+    elif post_type == 'place':
+        item = TripLocationmd.query.get_or_404(item_id)
+    else:
+        return jsonify({'success': False, 'message': '올바르지 않은 게시글 유형입니다.'}), 400
+
+    if str(item.user_id) != str(user_id):
+        return jsonify({'success': False, 'message': '작성자만 게시글을 수정할 수 있습니다.'}), 403
+
+    data = request.get_json() or {}
+
+    try:
+        now = datetime.now()
+        if post_type == 'post':
+            title = data.get('title', '').strip()
+            content = data.get('content', '').strip()
+            if not title or not content:
+                return jsonify({'success': False, 'message': '제목과 내용을 모두 입력해주세요.'}), 400
+            item.title = title
+            item.content = content
+        else:  # place
+            intro = data.get('intro', '').strip()
+            reason = data.get('reason', '').strip()
+            if not intro or not reason:
+                return jsonify({'success': False, 'message': '소개와 추천 이유를 모두 입력해주세요.'}), 400
+            item.intro = intro
+            item.reason = reason
+
+        if hasattr(item, 'updated_at'):
+            item.updated_at = now
+
+        db.session.commit()
+        return jsonify({
+            'success': True,
+            'message': '게시글이 수정되었습니다.',
+            'updated_at': now.strftime('%Y.%m.%d %H:%M')
+        })
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'success': False, 'message': f'게시글 수정 실패: {str(e)}'}), 500
+
+
+# -----------------------------------------------------------
+# 6. 게시글 삭제 API
 # -----------------------------------------------------------
 @bp.route('/api/post/delete/<string:post_type>/<int:item_id>', methods=['DELETE', 'POST'])
 def delete_post(post_type, item_id):

@@ -27,18 +27,21 @@
     <header class="header">
     <div class="header-inner">
 
-        <a href="{{ url_for('homepage.homepage') }}" class="logo">
+
+        <a href="/homepage/sjw" class="logo">
+
+
             <span class="logo-symbol">△△</span>
 
             <div class="logo-text">
                 <strong>어딧세이</strong>
-                <span>ODYSAY</span>
+                <small>ODYSAY</small>
             </div>
         </a>
 
         <nav class="gnb">
             <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="#">커뮤니티</a>
+            <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
             <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
             <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
         </nav>
@@ -48,13 +51,13 @@
 
             </button>
 
+
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
-
             <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
-
             {% endif %}
+
         </div>
 
     </div>
@@ -254,11 +257,11 @@
 
                 <div class="form-group">
                     <label for="reason">
-                        등록하는 이유 <span>*</span>
+                        여행지 정보 공유 <span>*</span>
                     </label>
 
                     <textarea name="reason" id="reason" class="form-control" maxlength="500"
-                              placeholder="이 여행지를 추천하는 이유는 무엇인가요? 직접 경험한 내용을 바탕으로 자유롭게 작성해주세요."
+                              placeholder="이곳의 매력, 영업시간, 방문 팁 등 여행자에게 알려주고 싶은 정보를 자유롭게 작성해주세요."
                               required>{{ place.reason if edit_mode else '' }}</textarea>
 
                     <div class="counter">
@@ -436,7 +439,7 @@
 
                 <button type="button"
                         class="cancel-button"
-                        onclick="window.location.href='{% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.main') }}{% endif %}'">
+                        onclick="window.location.href='{% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.homepage') }}{% endif %}'">
                     취소하기
                 </button>
 
@@ -477,7 +480,7 @@
         <div class="guide-box">
             <h3>02. 여행지 정보를 자세하게 작성해주세요.</h3>
             <p>
-                나라, 지역, 여행지명과 함께 추천하는 이유를 작성해주세요.
+                나라, 지역, 여행지명과 함께 다른 여행자에게 도움이 되는 정보를 작성해주세요.
             </p>
         </div>
 

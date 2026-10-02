@@ -20,13 +20,15 @@
 
         <div class="header-inner">
 
-            <a href="{{ url_for('homepage.main') }}" class="logo">
+
+             <a href="{{ url_for('homepage.homepage') }}" class="logo">
+
                 <span class="logo-icon">△</span>
                 <span>어디갈까?</span>
             </a>
 
             <nav class="main-menu">
-                <a href="{{ url_for('homepage.main') }}">홈</a>
+                <a href="{{ url_for('homepage.homepage') }}">홈</a>
                 <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
                 <a href="{{ url_for('community.community_review') }}">여행 후기</a>
                 <a href="{{ url_for('upload.upload') }}">여행지 등록</a>

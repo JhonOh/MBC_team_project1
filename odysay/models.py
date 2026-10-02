@@ -125,6 +125,22 @@ class Review(db.Model):
     rating = db.Column(db.Integer, nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)
+
+# ==========================================
+# 상세페이지 리뷰 추천
+# ==========================================
+class ReviewRecommend(db.Model):
+    __tablename__ = 'review_recommends'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    review_id = db.Column(db.Integer, db.ForeignKey('reviews.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'review_id', name='uq_review_recommend_user_review'),
+    )
 
 
 # ==========================================
@@ -139,7 +155,22 @@ class TravelTalk(db.Model):
     title = db.Column(db.String(60), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)
 
+# ==========================================
+# 상세페이지 여행톡 추천
+# ==========================================
+class TravelTalkRecommend(db.Model):
+    __tablename__ = 'travel_talk_recommends'
+
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    travel_talk_id = db.Column(db.Integer, db.ForeignKey('travel_talks.id'), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'travel_talk_id', name='uq_travel_talk_recommend_user_talk'),
+    )
 
 # ==========================================
 # 여행톡 댓글
@@ -152,6 +183,8 @@ class TravelTalkComment(db.Model):
     travel_talk_id = db.Column(db.Integer, db.ForeignKey('travel_talks.id'), nullable=False)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)
+    parent_id = db.Column(db.Integer, db.ForeignKey('travel_talk_comments.id'), nullable=True)
 
 
 # ==========================================
@@ -166,6 +199,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     photos = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)  # [수정] 수정일자 컬럼 추가
     likes = db.Column(db.Integer, default=0)
 
     # 작성자 (로그인 연동 시 사용)
@@ -205,6 +239,7 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     author = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)  # [수정] 수정일자 컬럼 추가
 
     # 작성자 회원 아이디 (로그인 및 수정/삭제 권한 확인용)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)

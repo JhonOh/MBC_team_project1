@@ -1,12 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
   let placesData = [];
 
-  // 1. HTML의 hidden input에서 현재 카테고리값 읽기
+  // 1. HTML의 hidden input에서 현재 카테고리값 및 초기 정렬값 읽기
   const categoryInput = document.getElementById('currentCategoryInput');
   let currentCategory = categoryInput ? categoryInput.value : 'ALL';
 
-  // 기본 정렬값
-  let currentSort = 'latest';
+  const sortInput = document.getElementById('initialSortInput');
+  let currentSort = sortInput ? sortInput.value : 'latest';
+
+  // 정렬 탭 버튼 UI 상태 초기화
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.sort === currentSort) {
+      btn.classList.add('active');
+    }
+  });
+
   let currentPage = 1;
   const ITEMS_PER_PAGE = 5;
 
@@ -57,20 +67,27 @@ document.addEventListener('DOMContentLoaded', () => {
       const timeA = a.raw_date ? new Date(a.raw_date).getTime() : 0;
       const timeB = b.raw_date ? new Date(b.raw_date).getTime() : 0;
 
+      const likesA = a.likes || 0;
+      const likesB = b.likes || 0;
+      const commentA = a.comment_count ?? a.comments_count ?? 0;
+      const commentB = b.comment_count ?? b.comments_count ?? 0;
+
       if (currentSort === 'popular') {
-        // 인기순 (좋아요 수 내림차순, 동일할 경우 최신순)
-        const likesA = a.likes || 0;
-        const likesB = b.likes || 0;
+        // 인기순: (좋아요 + 댓글) 합계 내림차순 -> 동율 시 좋아요 내림차순 -> 최신순
+        const totalA = likesA + commentA;
+        const totalB = likesB + commentB;
+
+        if (totalB !== totalA) {
+          return totalB - totalA;
+        }
         if (likesB !== likesA) {
           return likesB - likesA;
         }
         return timeB - timeA;
       } else if (currentSort === 'comments') {
-        // 댓글순 (댓글 수 내림차순, 동일할 경우 최신순)
-        const countA = a.comment_count ?? a.comments_count ?? 0;
-        const countB = b.comment_count ?? b.comments_count ?? 0;
-        if (countB !== countA) {
-          return countB - countA;
+        // 댓글순
+        if (commentB !== commentA) {
+          return commentB - commentA;
         }
         return timeB - timeA;
       } else {
@@ -196,13 +213,31 @@ document.addEventListener('DOMContentLoaded', () => {
     pagination.appendChild(nextBtn);
   }
 
-  // 6. 우측 상단 '지금 핫한 글' 렌더링
+  // 6. 우측 사이드바 '지금 핫한 글' Top 5 렌더링
   function renderHotList(items) {
     const hotList = document.getElementById('hotList');
     if (!hotList) return;
     hotList.innerHTML = '';
 
-    const sorted = [...items].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
+    const sorted = [...items].sort((a, b) => {
+      const likesA = a.likes || 0;
+      const likesB = b.likes || 0;
+      const commentA = a.comment_count ?? a.comments_count ?? 0;
+      const commentB = b.comment_count ?? b.comments_count ?? 0;
+
+      const totalA = likesA + commentA;
+      const totalB = likesB + commentB;
+
+      if (totalB !== totalA) {
+        return totalB - totalA;
+      }
+      if (likesB !== likesA) {
+        return likesB - likesA;
+      }
+      const timeA = a.raw_date ? new Date(a.raw_date).getTime() : 0;
+      const timeB = b.raw_date ? new Date(b.raw_date).getTime() : 0;
+      return timeB - timeA;
+    }).slice(0, 5);
 
     sorted.forEach((item, index) => {
       let hasPhoto = false;
@@ -220,6 +255,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ? `<img src="${thumbImg}" alt="thumb" class="hot-thumb" onerror="this.outerHTML='<div class=\\'hot-thumb no-img\\'><i class=\\'fa-regular fa-image\\'></i></div>'">`
         : `<div class="hot-thumb no-img"><i class="fa-regular fa-image"></i></div>`;
 
+      const commentCount = item.comment_count ?? item.comments_count ?? 0;
+
       const hotHtml = `
         <li>
           <a href="${item.detail_url}" class="hot-item">
@@ -229,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="hot-title">${item.title}</div>
               <div class="hot-stats">
                 <i class="fa-regular fa-heart"></i> ${item.likes || 0}
+                <i class="fa-regular fa-comment" style="margin-left:6px;"></i> ${commentCount}
               </div>
             </div>
           </a>
@@ -238,8 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. 정렬 탭 클릭 이벤트 (탭 클릭 시 data-sort 속성값 읽기)
-  const tabBtns = document.querySelectorAll('.tab-btn');
+  // 7. 정렬 탭 클릭 이벤트
   tabBtns.forEach(btn => {
     btn.addEventListener('click', (e) => {
       tabBtns.forEach(b => b.classList.remove('active'));
