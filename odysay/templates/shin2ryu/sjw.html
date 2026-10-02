@@ -6,37 +6,21 @@
 
     <title>어딧세이 | 여행의 시작</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
-
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
-
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
-
-<link rel="stylesheet"
-      href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- FontAwesome 아이콘 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
 </head>
 
 <body>
 
 <header class="header">
     <div class="header-inner">
-
-
-        <a href="/homepage/sjw" class="logo">
-
-
+        <a href="/homepage" class="logo">
             <span class="logo-symbol">△△</span>
-
             <div class="logo-text">
                 <strong>어딧세이</strong>
                 <small>ODYSAY</small>
@@ -51,22 +35,16 @@
         </nav>
 
         <div class="header-util">
-            <button type="button" class="search-button">
-
-            </button>
-
+            <button type="button" class="search-button"></button>
 
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
-            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
+            <a class="logout-button" href="{{ url_for('homepage.homepage') }}">로그인</a>
             {% endif %}
-
         </div>
-
     </div>
 </header>
-
 
 <main>
 
@@ -82,13 +60,16 @@
             여행의 시작, 사람들의 이야기로부터
         </p>
 
+        <!-- 검색 영역 -->
         <div class="travel-search">
             <input
                 type="text"
+                id="mainSearchInput"
                 aria-label="여행지 검색"
-                placeholder="어디로 떠나고 싶으신가요?"
+                placeholder="어디로 떠나고 싶으신가요? (나라)"
+                onkeydown="if(event.key === 'Enter') handleSearch();"
             >
-            <button type="button">검색</button>
+            <button type="button" onclick="handleSearch()">검색</button>
         </div>
 
         <nav class="travel-menu" aria-label="여행 카테고리">
@@ -112,75 +93,53 @@
 
     <div class="section-inner home-grid">
 
-        <!-- 추천 여행지 -->
+        <!-- 추천 여행지 (좋아요 순 동적 렌더링) -->
         <div class="recommend-section">
 
             <div class="sub-section-title">
                 <div>
-                    <h2>추천 여행지</h2>
-                    <p>어딧세이가 추천하는 특별한 여행지</p>
+                    <h2>인기 여행지</h2>
+                    <p>어딧세이에서 인기있는 특별한 여행지</p>
                 </div>
 
-                <a href="#">더보기 ›</a>
+                <!-- 1. 첫 번째 더보기: 여행후기 인기순 페이지로 이동 -->
+                <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
             </div>
 
-
             <div class="recommend-list">
+                {% if recommended_places %}
+                    {% for place in recommended_places %}
+                        <a href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}" class="recommend-card">
+                            <div class="recommend-image">
+                                {% if place.photos %}
+                                    {% set first_photo = place.photos.split(',')[0] %}
+                                    <img src="{{ url_for('static', filename='uploads/' ~ first_photo) }}"
+                                         alt="{{ place.place }}">
+                                {% else %}
+                                    <img src="{{ url_for('static', filename='images/recommend/rome.png') }}"
+                                         alt="{{ place.place }}">
+                                {% endif %}
+                            </div>
 
-                <a href="#" class="recommend-card">
-
-                    <div class="recommend-image">
-                        <img src="{{ url_for('static', filename='images/recommend/rome.png') }}"
-                            alt="로마">
-                    </div>
-
-                    <div class="recommend-info">
-                        <span>🇮🇹 이탈리아</span>
-                        <strong>로마</strong>
-
-                        <p>♡ 2,341</p>
-                    </div>
-
-                </a>
-
-
-                <a href="#" class="recommend-card">
-
-                    <div class="recommend-image">
-                        <img src="{{ url_for('static', filename='images/recommend/danang.png') }}">
-                    </div>
-
-                    <div class="recommend-info">
-                        <span>🇻🇳 베트남</span>
-                        <strong>다낭</strong>
-
-                        <p>♡ 1,982</p>
-                    </div>
-
-                </a>
-
-
-                <a href="#" class="recommend-card">
-
-                    <div class="recommend-image">
-                        <img src="{{ url_for('static', filename='images/recommend/jeju.png') }}">
-                    </div>
-
-                    <div class="recommend-info">
-                        <span>🇰🇷 대한민국</span>
-                        <strong>제주도</strong>
-
-                        <p>♡ 3,567</p>
-                    </div>
-
-                </a>
-
+                            <div class="recommend-info">
+                                <span>[{{ place.country }}]</span>
+                                <strong>{{ place.place }}</strong>
+                                {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
+                                <p class="recommend-like" style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
+                                    {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
+                                </p>
+                            </div>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <p style="padding: 20px 0; color: #888;">등록된 추천 여행지가 없습니다.</p>
+                {% endif %}
             </div>
 
         </div>
 
 
-        <!-- 최근 등록된 여행지 (요구사항 레이아웃 반영) -->
+        <!-- 최근 등록된 여행지 -->
         <div class="recent-section">
 
             <div class="sub-section-title">
@@ -189,9 +148,9 @@
                     <p>새로운 여행지를 확인해보세요!</p>
                 </div>
 
-                <a href="{{ url_for('community.community_review') }}">더보기 ›</a>
+                <!-- 2. 두 번째 더보기: 여행후기 최신순 페이지로 이동 -->
+                <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
             </div>
-
 
             <div class="recent-list">
 
@@ -210,17 +169,15 @@
                             {% endif %}
 
                             <div class="recent-info">
-                                <!-- 1. [나라/지역] 여행지명 -->
                                 <strong>[{{ place.country }}/{{ place.region }}] {{ place.place }}</strong>
 
-                                <div class="recent-meta-box" style="margin-top: 8px;">
-                                    <!-- 2. 오른쪽 끝 like 작게 -->
-                                    <div style="text-align: right; font-size: 0.82rem; color: #ff5a5f;">
-                                        ♡ {{ place.like_count if place.like_count is defined and place.like_count is not none else 0 }}
+                                <div class="recent-meta-box">
+                                    {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
+                                    <div class="recent-like-count" style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
+                                        {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
                                     </div>
 
-                                    <!-- 3. 왼쪽: 작성자, 오른쪽 끝: 날짜 -->
-                                    <div class="recent-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 0.85rem; color: #666;">
+                                    <div class="recent-bottom">
                                         <span>
                                             {% if place.author %}
                                                 {{ place.author }}
@@ -251,111 +208,21 @@
         </div>
 
 
-        <!-- 커뮤니티 인기글 -->
+        <!-- 커뮤니티 인기글 (전체 게시글 대상 하트+댓글 순 동적 연동) -->
         <div class="community-section">
 
             <div class="sub-section-title">
-
                 <div>
                     <h2>커뮤니티 인기글</h2>
+                    <p>다양한 이야기와 정보 공유</p> <!-- 설명 문구 추가로 상단 타이틀 높이 라인 완벽 일치 -->
                 </div>
 
-                <a href="#">더보기 ›</a>
-
+                <!-- 3. 세 번째 더보기: 전체 게시판 인기순 페이지로 이동 -->
+                <a href="/homepage/community/all?sort=popular">더보기 ›</a>
             </div>
 
-
-            <div class="community-list">
-
-                <a href="#" class="community-item">
-
-                    <div class="community-thumb">
-                        <img src="{{ url_for('static', filename='images/community/europe.png') }}"
-                            alt="유럽여행">
-                    </div>
-
-                    <div class="community-info">
-
-                        <span class="community-category">
-                            자유게시판
-                        </span>
-
-                        <strong>
-                            처음 간 유럽여행, 이것만은 꼭 알고 가세요!
-                        </strong>
-
-                        <div class="community-meta">
-
-                            <span>♡ 320 &nbsp; ♧ 24</span>
-
-                            <span>2026. 09. 16</span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-
-                <a href="#" class="community-item">
-
-                    <div class="community-thumb">
-                        <img src="{{ url_for('static', filename='images/community/santorini.png') }}"
-                            alt="산토리니 여행">
-                    </div>
-
-                    <div class="community-info">
-
-                        <span class="community-category">
-                            여행후기
-                        </span>
-
-                        <strong>
-                            산토리니 4박 5일 솔직 후기 ✈
-                        </strong>
-
-                        <div class="community-meta">
-
-                            <span>♡ 278 &nbsp; ♧ 17</span>
-
-                            <span>2026. 09. 15</span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
-
-                <a href="#" class="community-item">
-
-                    <div class="community-thumb">
-                        <img src="{{ url_for('static', filename='images/community/checklist.png') }}"
-                            alt="여행 준비물">
-                    </div>
-
-                    <div class="community-info">
-
-                        <span class="community-category">
-                            여행팁
-                        </span>
-
-                        <strong>
-                            여행 준비물 체크리스트 (해외편)
-                        </strong>
-
-                        <div class="community-meta">
-
-                            <span>♡ 256 &nbsp; ♧ 32</span>
-
-                            <span>2026. 09. 14</span>
-
-                        </div>
-
-                    </div>
-
-                </a>
-
+            <div class="community-list" id="mainCommunityList">
+                <!-- 동적 렌더링 영역 -->
             </div>
 
         </div>
@@ -369,7 +236,6 @@
 ======================================== -->
 <section class="bottom-banner">
     <div class="section-inner bottom-banner-inner">
-
         <p class="bottom-message">
             여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
         </p>
@@ -377,7 +243,6 @@
         <div class="bottom-brand">
             <div class="bottom-logo">
                 <span class="logo-symbol">△△</span>
-
                 <div>
                     <strong>어딧세이</strong>
                     <small>ODYSAY</small>
@@ -391,46 +256,47 @@
                 더 멀리.
             </p>
         </div>
-
     </div>
 </section>
-
 
 <!-- ========================================
      FOOTER
 ======================================== -->
 <footer class="footer">
-
     <div class="section-inner footer-inner">
-
         <div class="footer-left">
             <strong>어딧세이 ODYSAY</strong>
-
-            <p>
-                참여형 여행정보 커뮤니티
-            </p>
+            <p>참여형 여행정보 커뮤니티</p>
         </div>
 
         <div class="footer-right">
             <span>© 2026 ODYSAY</span>
             <span>Team Project</span>
         </div>
-
     </div>
-
 </footer>
 
-
 </main>
-
-
-<script src="{{ url_for('static', filename='js/main.js') }}"></script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 
 <script>
+// 검색 이동 함수
+function handleSearch() {
+    const input = document.getElementById('mainSearchInput');
+    const keyword = input ? input.value.trim() : '';
+    const targetUrl = "{{ url_for('homepage.trip_list') }}";
+
+    if (keyword) {
+        window.location.href = `${targetUrl}?keyword=${encodeURIComponent(keyword)}`;
+    } else {
+        window.location.href = targetUrl;
+    }
+}
+
 (async function () {
+    // 지도 처리
     const map = L.map('home-map', {
         minZoom: 2,
         maxZoom: 19,
@@ -452,67 +318,115 @@
     map.addLayer(markers);
 
     try {
-        const response = await fetch(
-            {{ url_for('homepage.get_places') | tojson }}
-        );
-
-        if (!response.ok) {
-            throw new Error('여행지 조회 실패');
-        }
-
+        const response = await fetch({{ url_for('homepage.get_places') | tojson }});
+        if (!response.ok) throw new Error('여행지 조회 실패');
         const places = await response.json();
 
-        if (!Array.isArray(places)) {
-            throw new Error('잘못된 여행지 응답');
-        }
+        if (Array.isArray(places)) {
+            for (const place of places) {
+                if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
-        for (const place of places) {
-            if (
-                !Number.isFinite(place.lat) ||
-                !Number.isFinite(place.lng) ||
-                Math.abs(place.lat) > 90 ||
-                Math.abs(place.lng) > 180
-            ) {
-                continue;
+                const popup = document.createElement('div');
+                const title = document.createElement('strong');
+                title.textContent = place.title;
+                const location = document.createElement('p');
+                location.textContent = [place.country, place.region].filter(Boolean).join(' ');
+                const intro = document.createElement('p');
+                intro.textContent = place.intro || '';
+                const link = document.createElement('a');
+                link.href = place.detail_url;
+                link.textContent = '상세보기';
+
+                popup.append(title, location, intro, link);
+                markers.addLayer(L.marker([place.lat, place.lng]).bindPopup(popup));
             }
 
-            const popup = document.createElement('div');
-
-            const title = document.createElement('strong');
-            title.textContent = place.title;
-
-            const location = document.createElement('p');
-            location.textContent = [place.country, place.region]
-                .filter(Boolean)
-                .join(' ');
-
-            const intro = document.createElement('p');
-            intro.textContent = place.intro || '';
-
-            const link = document.createElement('a');
-            link.href = place.detail_url;
-            link.textContent = '상세보기';
-
-            popup.append(title, location, intro, link);
-
-            markers.addLayer(
-                L.marker([place.lat, place.lng]).bindPopup(popup)
-            );
-        }
-
-        // 등록된 여행지가 보이도록 지도 범위 조정
-        if (markers.getLayers().length > 0) {
-            map.fitBounds(markers.getBounds(), {
-                padding: [40, 40],
-                maxZoom: 12
-            });
+            if (markers.getLayers().length > 0) {
+                map.fitBounds(markers.getBounds(), { padding: [40, 40], maxZoom: 12 });
+            }
         }
     } catch (error) {
         const message = document.getElementById('home-map-error');
-        message.textContent =
-            '여행지 목록을 불러오지 못했습니다. 새로고침해 주세요.';
+        message.textContent = '여행지 목록을 불러오지 못했습니다. 새로고침해 주세요.';
         message.hidden = false;
     }
+
+    // 커뮤니티 인기글 동적 연동 (전체 게시글: 여행후기 + 여행팁 + 자유게시판)
+    fetch('/homepage/community/api/places')
+        .then(res => res.json())
+        .then(data => {
+            const communityList = document.getElementById('mainCommunityList');
+            if (!communityList) return;
+
+            // 정렬 규칙: (좋아요 + 댓글) 내림차순 -> 동율시 좋아요 내림차순 -> 최신순
+            const sorted = data.sort((a, b) => {
+                const likesA = a.likes || 0;
+                const likesB = b.likes || 0;
+                const commentA = a.comment_count ?? a.comments_count ?? 0;
+                const commentB = b.comment_count ?? b.comments_count ?? 0;
+
+                const totalA = likesA + commentA;
+                const totalB = likesB + commentB;
+
+                if (totalB !== totalA) {
+                    return totalB - totalA; // 1순위: (하트 + 댓글) 합산 순
+                }
+                if (likesB !== likesA) {
+                    return likesB - likesA; // 2순위: 동율일 때 하트 수가 많은 순
+                }
+                const timeA = a.raw_date ? new Date(a.raw_date).getTime() : 0;
+                const timeB = b.raw_date ? new Date(b.raw_date).getTime() : 0;
+                return timeB - timeA;      // 3순위: 최신순
+            }).slice(0, 3); // 상위 3개 추출
+
+            if (sorted.length === 0) {
+                communityList.innerHTML = '<p style="padding: 20px 0; color: #888;">게시글이 없습니다.</p>';
+                return;
+            }
+
+            communityList.innerHTML = '';
+            sorted.forEach(item => {
+                let thumbImg = '/static/images/community/europe.png';
+                if (item.photos && item.photos.trim() !== '') {
+                    const firstPhoto = item.photos.split(',')[0].trim();
+                    if (firstPhoto) thumbImg = `/static/uploads/${firstPhoto}`;
+                }
+
+                const likeCount = item.likes || 0;
+                const commentCount = item.comment_count ?? item.comments_count ?? 0;
+                const createdDate = item.created_at || '';
+
+                // 하트 스타일 (0이면 빈 하트 ♡ 및 회색, 1 이상이면 빨간색 ♥)
+                const heartSymbol = likeCount > 0 ? '♥' : '♡';
+                const heartStyle = likeCount > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+
+                // 커뮤니티 댓글 아이콘 및 파란색 스타일
+                const commentStyle = commentCount > 0 ? 'color: #007bff; font-weight: bold;' : 'color: #aaa;';
+
+                const html = `
+                    <a href="${item.detail_url}" class="community-item">
+                        <div class="community-thumb">
+                            <img src="${thumbImg}" alt="${item.title}" onerror="this.src='/static/images/community/europe.png'">
+                        </div>
+                        <div class="community-info">
+                            <div class="community-top">
+                                <span class="community-category">${item.category || '커뮤니티'}</span>
+                                <strong>${item.title}</strong>
+                            </div>
+                            <div class="community-meta">
+                                <span>
+                                    <span style="${heartStyle}">${heartSymbol} ${likeCount}</span> &nbsp;
+                                    <span style="${commentStyle}"><i class="fa-regular fa-comment"></i> ${commentCount}</span>
+                                </span>
+                                <span>${createdDate}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                communityList.insertAdjacentHTML('beforeend', html);
+            });
+        })
+        .catch(err => console.error('커뮤니티 인기글 불러오기 실패:', err));
 })();
 </script>
 </body>

@@ -1,38 +1,51 @@
-from flask import Blueprint, render_template, redirect, url_for, jsonify ,g
-
-from odysay.models import User
-from odysay.models import TripLocationmd
-from odysay.forms import LoginForm
+from flask import Blueprint, render_template, redirect, url_for, jsonify, g
+from sqlalchemy import func
+from odysay.models import db, User, TripLocationmd, Bookmark
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
 
-
-@bp.route('/main')
-def main():
-    return render_template('map.html', login_form=LoginForm())
-
-
-@bp.route('/sjw')
+@bp.route('', strict_slashes=False)
 def homepage():
-    # DB에서 id 기준 내림차순(최신 등록순)으로 3개 조회
+    # 1. 최근 등록된 여행지 (최신순 3개)
     recent_places = TripLocationmd.query.order_by(TripLocationmd.id.desc()).limit(3).all()
 
-    # ★ a3처럼 각 place마다 작성자(author) 조회해서 author 속성 붙여주기
     for p in recent_places:
         author_name = "익명"
         if p.user_id:
             user = User.query.get(p.user_id)
             if user:
                 author_name = user.nickname or user.username
-        p.author = author_name  # 객체에 author 값 전달
+        p.author = author_name
+        p.like_count = Bookmark.query.filter_by(place_id=p.id).count()
 
-    # 템플릿으로 recent_places 변수 전달
-    return render_template('shin2ryu/sjw.html', recent_places=recent_places)
+    # 2. 추천 여행지: 여행후기(TripLocationmd) 중 좋아요(Bookmark 수)가 많은 순서 top 3
+    recommended_query = db.session.query(
+        TripLocationmd,
+        func.count(Bookmark.id).label('like_count')
+    ).outerjoin(
+        Bookmark, TripLocationmd.id == Bookmark.place_id
+    ).group_by(
+        TripLocationmd.id
+    ).order_by(
+        func.count(Bookmark.id).desc(),
+        TripLocationmd.id.desc()
+    ).limit(3).all()
+
+    recommended_places = []
+    for place, count in recommended_query:
+        place.like_count = count
+        recommended_places.append(place)
+
+    return render_template(
+        'shin2ryu/sjw.html',
+        recent_places=recent_places,
+        recommended_places=recommended_places
+    )
 
 
 @bp.route('/map')
 def map_page():
-    return redirect(url_for('homepage.main'))
+    return redirect(url_for('homepage.homepage'))
 
 
 @bp.route('/api/places')
@@ -53,6 +66,7 @@ def get_places():
             })
     return jsonify(results)
 
+
 # -----------------------------------------------------------
 # 여행지 목록 페이지
 # -----------------------------------------------------------
@@ -70,10 +84,11 @@ def community():
 def upload():
     return redirect(url_for('upload.upload'))
 
+
 @bp.route('/mypage')
 def mypage():
     if g.user is None:
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('homepage.homepage'))
 
     my_places_count = TripLocationmd.query.filter_by(
         user_id=g.user.id

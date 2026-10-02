@@ -14,7 +14,7 @@
 <header class="navbar">
     <div class="nav-container">
         <div class="logo">
-            <a href="/homepage/main">
+            <a href="/homepage">
                 <i class="fa-solid fa-mountain-sun"></i>
                 <span>어딧세이</span>
             </a>
@@ -60,15 +60,16 @@
                 <span>자유 게시판</span>
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
-            <a href="/homepage/community/check" class="menu-item {% if current_category == '출석' %}active{% endif %}">
-                <i class="fa-regular fa-calendar-check"></i>
-                <span>출석</span>
-                <i class="fa-solid fa-chevron-right arrow"></i>
-            </a>
+{#            <a href="/homepage/community/check" class="menu-item {% if current_category == '출석' %}active{% endif %}">#}
+{#                <i class="fa-regular fa-calendar-check"></i>#}
+{#                <span>출석</span>#}
+{#                <i class="fa-solid fa-chevron-right arrow"></i>#}
+{#            </a>#}
         </div>
 
-        <!-- 현재 카테고리를 JS에서 전달받을 수 있도록 hidden input 추가 -->
+        <!-- 현재 카테고리 및 정렬 값을 JS에서 전달받을 수 있도록 hidden input 추가 -->
         <input type="hidden" id="currentCategoryInput" value="{{ current_category if current_category else 'ALL' }}">
+        <input type="hidden" id="initialSortInput" value="{{ initial_sort if initial_sort else 'latest' }}">
 
         <!-- 좌측 하단 배너 -->
         <div class="promo-card">
@@ -138,7 +139,7 @@
         <div class="widget hot-widget">
             <div class="widget-header">
                 <h3><i class="fa-solid fa-fire text-orange"></i> 지금 핫한 글</h3>
-                <a href="#" class="more-link">더보기 &gt;</a>
+                <a href="/homepage/community/all?sort=popular" class="more-link">더보기 &gt;</a>
             </div>
             <ol class="hot-list" id="hotList">
                 <!-- JS에서 인기순 top 5를 동적으로 채웁니다 -->

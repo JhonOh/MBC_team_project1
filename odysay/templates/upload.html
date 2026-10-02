@@ -436,7 +436,7 @@
 
                 <button type="button"
                         class="cancel-button"
-                        onclick="window.location.href='{% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.main') }}{% endif %}'">
+                        onclick="window.location.href='{% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.homepage') }}{% endif %}'">
                     취소하기
                 </button>
 
