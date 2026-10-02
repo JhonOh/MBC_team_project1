@@ -1,0 +1,787 @@
+/* ================= 여행톡 ================= */
+
+.travel-talk-section {
+    width: 100%;
+}
+
+.travel-talk-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+.travel-talk-description {
+    margin-top: -5px;
+
+    color: #7b8794;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* 여행톡 작성 */
+
+.travel-talk-write {
+    display: none;
+
+    margin-bottom: 22px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+.travel-talk-write.active {
+    display: block;
+}
+
+.travel-talk-write input {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: none;
+    border-bottom: 1px solid #edf0f3;
+    outline: none;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.travel-talk-write textarea {
+    display: block;
+
+    width: 100%;
+    height: 130px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.travel-talk-write-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+
+    padding: 10px 12px;
+
+    border-top: 1px solid #f0f2f5;
+}
+
+.travel-talk-counter {
+    color: #9aa4b5;
+    font-size: 12px;
+}
+
+.travel-talk-submit {
+    padding: 8px 18px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* N Lounge 형태 글 목록 */
+
+.travel-talk-list {
+    margin-top: 10px;
+}
+
+.travel-talk-item {
+    padding: 20px 8px;
+
+    border-bottom: 1px solid #edf0f3;
+}
+
+.travel-talk-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 9px;
+}
+
+.travel-talk-user-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.travel-talk-post-title {
+    margin: 0 0 7px 38px;
+
+    color: #1f2937;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    word-break: break-word;
+}
+
+.travel-talk-text {
+    margin-left: 38px;
+
+    color: #4f5f6f;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.travel-talk-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+
+    margin-top: 13px;
+    margin-left: 38px;
+}
+
+.travel-talk-action-button {
+    padding: 0;
+
+    color: #929ba5;
+
+    font-size: 12px;
+}
+
+.travel-talk-action-button.liked {
+    color: #e45b69;
+}
+
+.travel-talk-more {
+    margin-left: auto;
+
+    color: #929ba5;
+
+    font-size: 18px;
+}
+
+
+/* ================= 여행톡 댓글 ================= */
+
+
+/* ================= 작성자 수정 / 삭제 메뉴 ================= */
+
+.travel-talk-owner-menu,
+.comment-owner-menu {
+    position: relative;
+    margin-left: auto;
+}
+
+.travel-talk-more-menu,
+.comment-more-menu {
+    position: absolute;
+    right: 0;
+    bottom: 28px;
+
+    display: none;
+
+    min-width: 82px;
+
+    padding: 5px;
+
+    border: 1px solid #e2e7ed;
+    border-radius: 8px;
+
+    background: #fff;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+
+    z-index: 20;
+}
+
+.travel-talk-more-menu.active,
+.comment-more-menu.active {
+    display: block;
+}
+
+.travel-talk-more-menu button,
+.comment-more-menu button {
+    display: block;
+
+    width: 100%;
+
+    padding: 7px 10px;
+
+    border-radius: 5px;
+
+    color: #4f5f6f;
+    font-size: 12px;
+    text-align: left;
+}
+
+.travel-talk-more-menu button:hover,
+.comment-more-menu button:hover {
+    background: #f5f7fa;
+}
+
+.travel-talk-delete-button,
+.comment-delete-button {
+    color: #e25555 !important;
+}
+
+
+/* ================= 여행톡 게시글 수정 ================= */
+
+
+/* 수정할 때 게시글 안에 나타나는 작성 폼 */
+
+.travel-talk-post-inline-edit {
+    margin: 14px 0 14px 38px;
+
+    border: 1px solid #cfd8e3;
+    border-radius: 10px;
+
+    background: #f8fafc;
+
+    overflow: hidden;
+}
+
+
+/* 수정 제목 */
+
+.travel-talk-post-edit-title {
+    display: block;
+
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: none;
+    border-bottom: 1px solid #e3e8ee;
+    outline: none;
+
+    background: #ffffff;
+
+    color: #1f2937;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+
+/* 수정 내용 */
+
+.travel-talk-post-edit-text {
+    display: block;
+
+    width: 100%;
+    height: 130px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    background: #ffffff;
+
+    resize: none;
+
+    color: #4f5f6f;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* 수정폼 하단 */
+
+.travel-talk-post-edit-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 10px 12px;
+
+    border-top: 1px solid #e3e8ee;
+
+    background: #ffffff;
+}
+
+
+/* 글자수 */
+
+.travel-talk-post-edit-count {
+    margin-right: auto;
+    color: #9aa4b5;
+}
+
+.travel-talk-post-edit-counter {
+    color: #9aa4b5;
+    font-size: 12px;
+}
+
+
+/* 취소 */
+
+.travel-talk-post-edit-cancel {
+    padding: 8px 16px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 6px;
+
+    background: #ffffff;
+
+    color: #66778a;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* 수정 완료 */
+
+.travel-talk-post-edit-save {
+    padding: 8px 18px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* 버튼 hover */
+
+.travel-talk-post-edit-cancel:hover {
+    background: #f5f7fa;
+}
+
+.travel-talk-post-edit-save:hover {
+    background: #1e2f40;
+}
+
+
+/* 댓글 ⋯ */
+
+.comment-more-button {
+    color: #9aa4b5;
+
+    font-size: 17px;
+
+    line-height: 1;
+}
+
+
+/* 기본 상태에서는 댓글 전체 숨김 */
+
+.travel-talk-comment-section {
+    display: none;
+
+    margin: 18px 0 0 38px;
+    padding: 16px 18px;
+
+    border-top: 1px solid #edf0f3;
+
+    background: #fafbfd;
+}
+
+
+/* 💬 버튼을 눌렀을 때만 표시 */
+
+.travel-talk-comment-section.active {
+    display: block;
+}
+
+
+/* 댓글 목록 */
+
+.travel-talk-comment-list {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* 댓글 없음 */
+
+.travel-talk-no-comment {
+    padding: 12px 0 18px;
+
+    color: #9aa4b5;
+
+    font-size: 12px;
+    text-align: center;
+}
+
+
+/* 댓글 하나 */
+
+.travel-talk-comment-item {
+    padding: 13px 0;
+
+    border-bottom: 1px solid #e9edf2;
+}
+
+.travel-talk-comment-item:last-child {
+    border-bottom: none;
+}
+
+
+/* 댓글 작성자 + 시간 */
+
+.travel-talk-comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-bottom: 7px;
+}
+
+.travel-talk-comment-user-area {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+.travel-talk-comment-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    border-radius: 50%;
+
+    background: #eaf2ff;
+
+    font-size: 12px;
+}
+
+.travel-talk-comment-user {
+    color: #26384a;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.travel-talk-comment-date {
+    color: #9aa4b5;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+
+/* 댓글 내용 */
+
+.travel-talk-comment-body {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    padding-left: 33px;
+}
+
+.travel-talk-comment-text {
+    flex: 1;
+
+    color: #4f5f6f;
+
+    font-size: 13px;
+    line-height: 1.6;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.travel-talk-comment-report {
+    flex-shrink: 0;
+
+    color: #9aa4b5;
+
+    font-size: 11px;
+}
+
+
+/* 댓글 작성창 */
+
+.travel-talk-comment-write {
+    margin-top: 14px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+.travel-talk-comment-input {
+    display: block;
+
+    width: 100%;
+    height: 70px;
+
+    padding: 11px 13px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    color: #4f5f6f;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.travel-talk-comment-write-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 10px;
+
+    border-top: 1px solid #edf0f3;
+}
+
+.travel-talk-comment-counter {
+    color: #9aa4b5;
+
+    font-size: 11px;
+}
+
+.travel-talk-comment-submit {
+    padding: 6px 14px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* ================= 댓글 수정창 ================= */
+
+/* ================= 댓글 수정창 ================= */
+
+.comment-inline-edit {
+    width: 100%;
+    margin-top: 10px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 8px;
+
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.comment-edit-text {
+    display: block;
+
+    width: 100%;
+    height: 70px;
+    min-height: 70px;
+
+    padding: 11px 13px;
+
+    border: none;
+    outline: none;
+
+    background: #ffffff;
+
+    color: #4f5f6f;
+    font-size: 13px;
+    line-height: 1.6;
+
+    resize: none;
+}
+
+.comment-edit-text:focus {
+    border: none;
+    outline: none;
+}
+
+.comment-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0;
+    padding: 8px 10px;
+
+    border-top: 1px solid #edf0f3;
+
+    background: #ffffff;
+}
+
+.comment-edit-cancel,
+.comment-edit-save {
+    padding: 6px 14px;
+
+    border-radius: 6px;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.comment-edit-cancel {
+    border: 1px solid #dfe4ea;
+
+    background: #ffffff;
+    color: #66778a;
+}
+
+.comment-edit-save {
+    border: none;
+
+    background: #26384a;
+    color: #ffffff;
+}
+
+.comment-edit-cancel:hover {
+    background: #f5f7fa;
+}
+
+.comment-edit-save:hover {
+    background: #1e2f40;
+}
+
+
+@media (max-width: 600px) {
+
+    .container {
+        margin-top: 18px;
+        padding: 0 14px;
+    }
+
+    .detail-top {
+        gap: 18px;
+    }
+
+    .title {
+        font-size: 24px;
+    }
+
+    .action-buttons {
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        min-width: calc(50% - 5px);
+    }
+
+    .tab-bar {
+        overflow-x: auto;
+    }
+
+    .tab-item {
+        flex: 0 0 auto;
+        min-width: 80px;
+        padding: 12px 14px;
+
+        white-space: nowrap;
+    }
+
+    .info-group {
+        padding: 18px;
+    }
+
+    .related-images {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .thumb-image {
+        height: 130px;
+    }
+
+    .info-table th {
+        width: 70px;
+    }
+
+    .image-slider {
+    height: 300px;
+}
+}
+
+/* 여행톡 추천 활성화 */
+.travel-talk-like.liked {
+    color: #ff3b30;
+}
+
+.travel-talk-like.liked .travel-talk-like-count {
+    color: #ff3b30;
+}
+
+/* BEST */
+.best-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 2px 7px;
+
+    border-radius: 10px;
+
+    background: #fff3cd;
+    color: #e08a00;
+
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* 작성자 / BEST 배지 정렬 */
+.author-badge,
+.best-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 20px;
+    padding: 0 7px;
+
+    border-radius: 10px;
+
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
+}
