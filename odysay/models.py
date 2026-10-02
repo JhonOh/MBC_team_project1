@@ -165,6 +165,7 @@ class Post(db.Model):
     content = db.Column(db.Text, nullable=False)
     photos = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)  # [수정] 수정일자 컬럼 추가
     likes = db.Column(db.Integer, default=0)
 
     # 작성자 (로그인 연동 시 사용)
@@ -204,6 +205,7 @@ class Comment(db.Model):
     content = db.Column(db.Text, nullable=False)
     author = db.Column(db.String(50), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
+    updated_at = db.Column(db.DateTime, nullable=True)  # [수정] 수정일자 컬럼 추가
 
     # 작성자 회원 아이디 (로그인 및 수정/삭제 권한 확인용)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=True)

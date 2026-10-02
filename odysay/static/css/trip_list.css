@@ -760,10 +760,16 @@ input {
     border-top: 1px solid #eef1f4;
 }
 
+/* 기본 상태 (좋아요 0개일 때) */
 .like {
     font-size: 11px;
+    color: #84909f; /* 기본 회색 */
+}
 
-    color: #84909f;
+/* 좋아요가 1개 이상일 때 */
+.like.has-like {
+    color: #ff4d4f; /* 빨간색 */
+    font-weight: 700;
 }
 
 .detail-text {

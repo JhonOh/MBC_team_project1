@@ -45,6 +45,7 @@ body {
   color: #5f6368;
   font-weight: 600;
   font-size: 15px;
+  white-space: nowrap;
 }
 .nav-menu a.active, .nav-menu a:hover {
   color: #1a73e8;
@@ -68,6 +69,7 @@ body {
   border-radius: 20px;
   text-decoration: none;
   font-size: 13px;
+  white-space: nowrap;
 }
 
 /* Layout */
@@ -155,6 +157,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-width: 0;
 }
 
 /* Search Box */
@@ -185,6 +188,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
 }
 .tab-group {
   display: flex;
@@ -199,6 +203,7 @@ body {
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
+  white-space: nowrap;
 }
 .tab-btn.active {
   background: #1a73e8;
@@ -212,6 +217,7 @@ body {
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Post List Item */
@@ -495,4 +501,118 @@ body {
 .banner-footer i {
   font-size: 28px;
   color: #0d47a1;
+}
+
+/* ========================================
+   반응형 스타일 (Responsive Web Design)
+======================================== */
+
+/* 태블릿 (1024px 이하) - 우측 사이드바 하단 배치 */
+@media (max-width: 1024px) {
+  .main-container {
+    grid-template-columns: 200px 1fr;
+  }
+  .sidebar-right {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .widget {
+    margin-bottom: 0;
+  }
+}
+
+/* 모바일/소형 태블릿 (768px 이하) - 1열 전면 세로 배치 */
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 16px;
+  }
+  .nav-menu {
+    gap: 16px;
+  }
+  .nav-menu a {
+    font-size: 14px;
+  }
+
+  .main-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0 12px;
+    margin: 16px auto;
+  }
+
+  /* 좌측 메뉴 카테고리 가로 스크롤 버튼 형태로 전환 */
+  .sidebar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .menu-list {
+    display: flex;
+    overflow-x: auto;
+    border-radius: 8px;
+    margin-bottom: 0;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+  }
+  .menu-list::-webkit-scrollbar {
+    display: none;
+  }
+  .menu-item {
+    border-bottom: none;
+    border-right: 1px solid #f2f4f6;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  .menu-item .arrow {
+    display: none;
+  }
+
+  .promo-card {
+    display: none; /* 모바일 시 프로모션 배너 숨김으로 가독성 향상 */
+  }
+
+  /* 사이드바 우측 1열 세로 전환 */
+  .sidebar-right {
+    grid-column: span 1;
+    grid-template-columns: 1fr;
+  }
+
+  /* 게시글 카드 레이아웃 모바일 최적화 */
+  .post-card {
+    padding: 12px 14px;
+    gap: 12px;
+  }
+  .post-thumb {
+    width: 80px;
+    height: 80px;
+  }
+  .post-title {
+    font-size: 14px;
+  }
+  .post-desc {
+    font-size: 12px;
+  }
+}
+
+/* 극소형 모바일 (480px 이하) */
+@media (max-width: 480px) {
+  .nav-menu {
+    display: none; /* 헤더 메뉴 숨김 처리 또는 모바일 햄버거 메뉴 영역 */
+  }
+  .filter-bar {
+    flex-wrap: wrap;
+  }
+  .btn-primary-write {
+    width: 100%;
+    text-align: center;
+  }
+  .post-card {
+    flex-direction: column; /* 아주 작은 화면에서는 섬네일이 위로 이동 */
+  }
+  .post-thumb {
+    width: 100%;
+    height: 140px;
+  }
 }

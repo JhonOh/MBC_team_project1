@@ -36,7 +36,7 @@ def load_logged_in_user():
 
     if g.user is None and request.endpoint in member_pages:
         flash('로그인이 필요합니다.')
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('homepage.homepage'))
 
 
 @bp.route('/signup/', methods=['GET', 'POST'])
@@ -68,14 +68,14 @@ def signup():
         session['user_id'] = user.id
 
         flash('회원가입이 완료되었습니다.')
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('first.map'))
 
     return render_template('signup.html', form=form)
 
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('homepage.homepage'))
 
     form = LoginForm()
 
@@ -100,7 +100,7 @@ def login():
             session.clear()
             session['user_id'] = user.id
 
-            return redirect(url_for('homepage.main'))
+            return redirect(url_for('first.map'))
 
     # 기존 입력 오류 안내 유지
     if form.errors:
@@ -108,14 +108,14 @@ def login():
             for error in errors:
                 flash(error)
 
-    return redirect(url_for('homepage.main'))
+    return redirect(url_for('homepage.homepage'))
 
 
 @bp.route('/logout/')
 def logout():
     session.clear()
 
-    return redirect(url_for('homepage.main'))
+    return redirect(url_for('first.map'))
 
 @bp.route('/check-nickname/', methods=['GET'])
 def check_nickname():
@@ -148,7 +148,7 @@ def withdraw():
     # 로그인한 회원인지 확인
     if g.user is None:
         flash('로그인이 필요합니다.')
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('first.map'))
 
     # 설정 화면에서 입력한 비밀번호
     password = request.form.get('password', '')
@@ -176,14 +176,14 @@ def withdraw():
     session.clear()
 
     flash('회원 탈퇴가 완료되었습니다.')
-    return redirect(url_for('homepage.main'))
+    return redirect(url_for('first.map'))
 
 @profile_bp.route('/profile_edit', methods=['GET', 'POST'])
 def profile_edit():
     # 로그인 여부 확인
     if g.user is None:
         flash('로그인이 필요합니다.')
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('homepage.homepage'))
 
     # 현재 회원의 닉네임을 기본값으로 표시
     form = ProfileEditForm(obj=g.user)
@@ -284,7 +284,7 @@ def profile_edit():
                 flash(
                     '비밀번호가 변경되었습니다. 다시 로그인해 주세요.'
                 )
-                return redirect(url_for('homepage.main'))
+                return redirect(url_for('homepage.homepage'))
 
             flash('닉네임이 수정되었습니다.')
             return redirect(url_for('homepage.mypage'))
