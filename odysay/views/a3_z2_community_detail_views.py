@@ -1,6 +1,7 @@
+
 from flask import Blueprint, render_template, abort, request, jsonify, session, g
 # [수정] PostLike 모델 추가 import
-from odysay.models import db, Post, TravelPlace, User, Comment, PostLike
+from odysay.models import db, Post, User, Comment, PostLike ,TripLocationmd
 from odysay import csrf
 from datetime import datetime
 
@@ -55,9 +56,11 @@ def detail(post_type, item_id):
             current_user_id=current_user_id
         )
 
-    # 여행 후기 (TravelPlace 모델)
+
+    # 2. 여행 후기 (TripLocationmd)
+
     elif post_type == 'place':
-        item = TravelPlace.query.get_or_404(item_id)
+        item = TripLocationmd.query.get_or_404(item_id)
         author_name = "지구여행자"
         if item.user_id:
             user = User.query.get(item.user_id)
@@ -242,7 +245,7 @@ def delete_post(post_type, item_id):
     if post_type == 'post':
         item = Post.query.get_or_404(item_id)
     elif post_type == 'place':
-        item = TravelPlace.query.get_or_404(item_id)
+        item = TripLocationmd.query.get_or_404(item_id)
     else:
         return jsonify({'success': False, 'message': '올바르지 않은 게시글 유형입니다.'}), 400
 

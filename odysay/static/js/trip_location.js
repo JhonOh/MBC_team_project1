@@ -241,248 +241,2841 @@ document.addEventListener('DOMContentLoaded', () => {
 
     });
 
+        // ==================================================
+        // 찜하기 DB 연동
+        // ==================================================
 
-    // 4. 리뷰 글자 수
+        const bookmarkButton = document.querySelector('.btn-jjim');
+        const bookmarkCount = document.getElementById('bookmarkCount');
 
-    const reviewInput = document.getElementById('reviewInput');
-    const reviewTextCount = document.getElementById('reviewTextCount');
-
-    reviewInput.addEventListener('input', function() {
-
-        reviewTextCount.textContent = reviewInput.value.length;
-
-    });
-
-
-    // 5. 리뷰 등록
-
-    const reviewSubmit = document.getElementById('reviewSubmit');
-    const reviewList = document.getElementById('reviewList');
-    const reviewCount = document.getElementById('reviewCount');
-    const noReviewMessage = document.getElementById('noReviewMessage');
-
-    let reviewTotal = 0;
+        const csrfToken = document.querySelector(
+            'meta[name="csrf-token"]'
+        ).content;
 
 
-    reviewSubmit.addEventListener('click', function() {
+        // 페이지 접속 시 찜 상태 불러오기
+        async function loadBookmarkStatus() {
 
-        // 입력한 리뷰
-        const reviewText = reviewInput.value.trim();
+            try {
+
+                const response = await fetch(
+                    `/homepage/trip_location/feature/bookmark/${placeId}`
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    return;
+                }
+
+                // 전체 찜 개수
+                if (bookmarkCount) {
+                    bookmarkCount.textContent = data.count;
+                }
+
+                // 현재 사용자의 찜 상태
+                if (bookmarkButton) {
+
+                    if (data.bookmarked) {
+                        bookmarkButton.textContent = '♥ 찜 취소';
+                        bookmarkButton.classList.add('active');
+                    } else {
+                        bookmarkButton.textContent = '♥ 찜하기';
+                        bookmarkButton.classList.remove('active');
+                    }
+                }
+
+            } catch (error) {
+                console.error('찜 상태 불러오기 실패:', error);
+            }
+        }
 
 
-        // 아무것도 입력하지 않았을 때
-        if (reviewText === '') {
+        // 찜하기 / 찜 취소
+        if (bookmarkButton) {
 
-            alert('리뷰 내용을 입력해주세요.');
+            bookmarkButton.addEventListener('click', async function () {
 
-            reviewInput.focus();
+                if (!currentUser || !currentUser.isLoggedIn) {
+                    alert('로그인 후 이용할 수 있습니다.');
+                    return;
+                }
+
+                try {
+
+                    const response = await fetch(
+                        `/homepage/trip_location/feature/bookmark/${placeId}`,
+                        {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': csrfToken
+                            }
+                        }
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        alert(data.message || '찜 처리 중 오류가 발생했습니다.');
+                        return;
+                    }
+
+                    // 찜 개수 변경
+                    if (bookmarkCount) {
+                        bookmarkCount.textContent = data.count;
+                    }
+
+                    // 버튼 변경
+                    if (data.bookmarked) {
+                        bookmarkButton.textContent = '♥ 찜 취소';
+                        bookmarkButton.classList.add('active');
+                    } else {
+                        bookmarkButton.textContent = '♥ 찜하기';
+                        bookmarkButton.classList.remove('active');
+                    }
+
+                } catch (error) {
+                    console.error(error);
+                    alert('찜 처리 중 오류가 발생했습니다.');
+                }
+
+            });
+
+        }
+
+
+        // 페이지가 열리면 DB에서 상태 조회
+        loadBookmarkStatus();
+
+        // ==================================================
+        // 4. 리뷰 / 여행톡 공통 기능
+        // ==================================================
+
+        function formatPostDate(date) {
+
+            return date.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+            });
+
+        }
+
+
+        function checkLogin() {
+
+            if (!currentUser || !currentUser.isLoggedIn) {
+
+                alert('로그인 후 이용할 수 있습니다.');
+
+                return false;
+            }
+
+            return true;
+        }
+
+
+        function getAuthorBadge() {
+
+            if (currentUser.isPlaceAuthor) {
+
+                return `
+                    <span class="author-badge">
+                        작성자
+                    </span>
+                `;
+            }
+
+            return '';
+        }
+
+
+
+        // ==================================================
+        // 5. 리뷰
+        // ==================================================
+
+        const reviewOpenButton =
+            document.getElementById('reviewOpenButton');
+
+        const reviewWrite =
+            document.getElementById('reviewWrite');
+
+        const reviewInput =
+            document.getElementById('reviewInput');
+
+        const reviewTextCount =
+            document.getElementById('reviewTextCount');
+
+        const reviewSubmit =
+            document.getElementById('reviewSubmit');
+
+        const reviewList =
+            document.getElementById('reviewList');
+
+        const reviewCount =
+            document.getElementById('reviewCount');
+
+        const reviewSummaryCount =
+            document.getElementById('reviewSummaryCount');
+
+        const reviewAverage =
+            document.getElementById('reviewAverage');
+
+        const noReviewMessage =
+            document.getElementById('noReviewMessage');
+
+        const reviewStars =
+            document.querySelectorAll('#reviewStars button');
+
+        const selectedScoreText =
+            document.getElementById('selectedScore');
+
+
+        let selectedReviewScore = 0;
+
+        // 현재 수정 중인 리뷰
+        let editingReviewItem = null;
+        let editingReviewOldScore = 0;
+
+        let reviewTotal = 0;
+
+        const reviewScoreCounts = {
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
+        };
+
+
+        // 리뷰 작성창 열기
+        if (reviewOpenButton && reviewWrite) {
+
+            reviewOpenButton.addEventListener('click', function() {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+                reviewWrite.classList.toggle('active');
+
+            });
+
+        }
+
+
+        // 리뷰 글자 수
+        if (reviewInput && reviewTextCount) {
+
+            reviewInput.addEventListener('input', function() {
+
+                reviewTextCount.textContent =
+                    reviewInput.value.length;
+
+            });
+
+        }
+
+
+        // 별점 선택
+        reviewStars.forEach(function(star) {
+
+            star.addEventListener('click', function() {
+
+                selectedReviewScore =
+                    Number(star.dataset.score);
+
+                selectedScoreText.textContent =
+                    selectedReviewScore.toFixed(1);
+
+
+                reviewStars.forEach(function(item) {
+
+                    const score =
+                        Number(item.dataset.score);
+
+                    item.classList.toggle(
+                        'active',
+                        score <= selectedReviewScore
+                    );
+
+                });
+
+            });
+
+        });
+
+
+        // 리뷰 평균 / 분포 업데이트
+        function updateReviewSummary() {
+
+            if (!reviewCount ||
+                !reviewSummaryCount ||
+                !reviewAverage) {
+                return;
+            }
+
+
+            reviewCount.textContent =
+                reviewTotal;
+
+            reviewSummaryCount.textContent =
+                reviewTotal;
+
+
+            let totalScore = 0;
+
+
+            for (let score = 1; score <= 5; score++) {
+
+                totalScore +=
+                    score * reviewScoreCounts[score];
+
+            }
+
+
+            const average =
+                reviewTotal === 0
+                    ? 0
+                    : totalScore / reviewTotal;
+
+
+            reviewAverage.textContent =
+                average.toFixed(1);
+
+
+            for (let score = 1; score <= 5; score++) {
+
+                const percentage =
+                    reviewTotal === 0
+                        ? 0
+                        : Math.round(
+                            reviewScoreCounts[score]
+                            / reviewTotal
+                            * 100
+                        );
+
+
+                const bar =
+                    document.getElementById(
+                        `scoreBar${score}`
+                    );
+
+                const percentText =
+                    document.getElementById(
+                        `scorePercent${score}`
+                    );
+
+
+                if (bar) {
+                    bar.style.width =
+                        `${percentage}%`;
+                }
+
+                if (percentText) {
+                    percentText.textContent =
+                        `${percentage}%`;
+                }
+
+            }
+
+        }
+
+        // ==================================================
+        // DB 리뷰 목록 불러오기
+        // ==================================================
+        async function loadReviews() {
+
+            if (!reviewList) {
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `/homepage/trip_location/feature/review/${placeId}`
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error('리뷰 조회 실패:', data);
+                    return;
+                }
+
+                // 기존 리뷰 목록 초기화
+                reviewList.innerHTML = '';
+
+                reviewTotal = 0;
+
+                for (let score = 1; score <= 5; score++) {
+                    reviewScoreCounts[score] = 0;
+                }
+
+
+                data.reviews.forEach(function(review) {
+
+                    const reviewItem =
+                        document.createElement('article');
+
+                    reviewItem.classList.add('review-item');
+
+                    reviewItem.dataset.reviewId = review.id;
+
+
+                    reviewItem.innerHTML = `
+                    <div class="review-header">
+
+                        <div class="review-user-area">
+                            <span class="review-avatar">👤</span>
+
+                            <div class="review-user-info">
+
+                                <div class="review-user-name-row">
+                                    <span class="review-user"></span>
+
+                                    <span class="review-rating">
+                                        <span class="review-rating-star">★</span>
+
+                                        <span class="review-rating-number">
+                                            ${Number(review.rating).toFixed(1)}
+                                        </span>
+                                    </span>
+                                </div>
+
+                                <span class="review-date"></span>
+
+                            </div>
+                        </div>
+
+                        ${
+                            review.is_owner
+                                ? `
+                                    <div class="review-owner-menu">
+
+                                        <button
+                                            type="button"
+                                            class="review-more-button"
+                                            aria-label="리뷰 메뉴">
+                                            ⋯
+                                        </button>
+
+                                        <div class="review-more-menu">
+
+                                            <button
+                                                type="button"
+                                                class="review-edit-button">
+                                                수정
+                                            </button>
+
+                                            <button
+                                                type="button"
+                                                class="review-delete-button">
+                                                삭제
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                `
+                                : ''
+                        }
+
+                    </div>
+
+
+                    <p class="review-text"></p>
+
+
+                    <div class="review-actions">
+
+                        <button
+                            type="button"
+                            class="review-action-button recommend-button">
+                            ♡ 추천
+                            <span class="recommend-count">0</span>
+                        </button>
+
+                        <button
+                            type="button"
+                            class="review-action-button report-button">
+                            🚨 신고
+                        </button>
+
+                    </div>
+                `;
+
+
+                    reviewItem.querySelector(
+                        '.review-user'
+                    ).textContent = review.nickname;
+
+
+                    reviewItem.querySelector(
+                        '.review-text'
+                    ).textContent = review.content;
+
+
+                    reviewItem.querySelector(
+                        '.review-date'
+                    ).textContent =
+                        formatPostDate(
+                            new Date(review.created_at)
+                        );
+
+
+                    reviewList.appendChild(reviewItem);
+
+
+                    reviewTotal++;
+
+                    if (reviewScoreCounts[review.rating] !== undefined) {
+                        reviewScoreCounts[review.rating]++;
+                    }
+
+                });
+
+
+                // 리뷰가 하나도 없을 때
+                if (noReviewMessage) {
+
+                    noReviewMessage.style.display =
+                        reviewTotal === 0
+                            ? ''
+                            : 'none';
+
+                }
+
+
+                // 평균 / 개수 / 별점 분포 다시 계산
+                updateReviewSummary();
+
+
+            } catch (error) {
+
+                console.error(
+                    '리뷰 목록 불러오기 실패:',
+                    error
+                );
+
+            }
+
+        }
+
+        // ==================================================
+        // 리뷰 등록 - DB 저장
+        // ==================================================
+        if (reviewSubmit) {
+
+            reviewSubmit.addEventListener('click', async function() {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+                const reviewText = reviewInput.value.trim();
+
+                if (selectedReviewScore === 0) {
+                    alert('별점을 선택해주세요.');
+                    return;
+                }
+
+                if (reviewText === '') {
+                    alert('리뷰 내용을 입력해주세요.');
+                    reviewInput.focus();
+                    return;
+                }
+
+                try {
+
+                    let reviewUrl =
+                        `/homepage/trip_location/feature/review/${placeId}`;
+
+                    if (editingReviewItem) {
+
+                        const reviewId =
+                            editingReviewItem.dataset.reviewId;
+
+                        reviewUrl =
+                            `/homepage/trip_location/feature/review/edit/${reviewId}`;
+                    }
+
+                    const response = await fetch(
+                        reviewUrl,
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+
+                            body: JSON.stringify({
+                                rating: selectedReviewScore,
+                                content: reviewText
+                            })
+                        }
+                    );
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        alert(data.message || '리뷰 등록 중 오류가 발생했습니다.');
+                        return;
+                    }
+
+                    // 입력창 초기화
+                    reviewInput.value = '';
+                    reviewTextCount.textContent = '0';
+
+                    selectedReviewScore = 0;
+                    selectedScoreText.textContent = '0.0';
+
+                    reviewStars.forEach(function(star) {
+                        star.classList.remove('active');
+                    });
+
+                    editingReviewItem = null;
+                    reviewSubmit.textContent = '등록';
+
+                    reviewWrite.classList.remove('active');
+
+                    // DB에서 리뷰 목록 다시 불러오기
+                    await loadReviews();
+
+                } catch (error) {
+
+                    console.error('리뷰 등록 실패:', error);
+                    alert('리뷰 등록 중 오류가 발생했습니다.');
+
+                }
+
+            });
+
+        }
+
+
+        // 리뷰 추천 / 신고
+        if (reviewList) {
+
+            reviewList.addEventListener('click', function(event) {
+
+                const moreButton =
+                    event.target.closest('.review-more-button');
+
+                if (moreButton) {
+
+                    const ownerMenu =
+                        moreButton.closest('.review-owner-menu');
+
+                    const moreMenu =
+                        ownerMenu.querySelector('.review-more-menu');
+
+                    moreMenu.classList.toggle('active');
+
+                    return;
+                }
+
+                // ==================================================
+                // 리뷰 수정 시작
+                // ==================================================
+                const editButton =
+                    event.target.closest('.review-edit-button');
+
+                if (editButton) {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+                    const reviewItem =
+                        editButton.closest('.review-item');
+
+                    const reviewId =
+                        reviewItem.dataset.reviewId;
+
+                    const reviewText =
+                        reviewItem.querySelector('.review-text')
+                            .textContent.trim();
+
+                    const reviewScore =
+                        Number(
+                            reviewItem.querySelector(
+                                '.review-rating-number'
+                            ).textContent
+                        );
+
+
+                    // 수정 중인 리뷰 정보 저장
+                    editingReviewItem = reviewItem;
+                    editingReviewItem.dataset.reviewId = reviewId;
+
+                    selectedReviewScore = reviewScore;
+
+
+                    // 작성창에 기존 내용 넣기
+                    reviewInput.value = reviewText;
+
+                    reviewTextCount.textContent =
+                        reviewText.length;
+
+
+                    // 기존 별점 표시
+                    selectedScoreText.textContent =
+                        reviewScore.toFixed(1);
+
+                    reviewStars.forEach(function(star) {
+
+                        const score =
+                            Number(star.dataset.score);
+
+                        star.classList.toggle(
+                            'active',
+                            score <= reviewScore
+                        );
+
+                    });
+
+
+                    // 작성창 열기
+                    reviewWrite.classList.add('active');
+
+                    // 버튼 이름 변경
+                    reviewSubmit.textContent = '수정 완료';
+
+
+                    // ⋯ 메뉴 닫기
+                    const menu =
+                        reviewItem.querySelector(
+                            '.review-more-menu'
+                        );
+
+                    if (menu) {
+                        menu.classList.remove('active');
+                    }
+
+
+                    reviewInput.focus();
+
+                    return;
+                }
+
+                // ==================================================
+                // 리뷰 삭제 - DB 삭제
+                // ==================================================
+                const deleteButton =
+                    event.target.closest('.review-delete-button');
+
+                if (deleteButton) {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+                    const reviewItem =
+                        deleteButton.closest('.review-item');
+
+                    const reviewId =
+                        reviewItem.dataset.reviewId;
+
+                    const result =
+                        confirm('리뷰를 삭제하시겠습니까?');
+
+                    if (!result) {
+                        return;
+                    }
+
+                    fetch(
+                        `/homepage/trip_location/feature/review/delete/${reviewId}`,
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'X-CSRFToken': csrfToken
+                            }
+                        }
+                    )
+                        .then(function(response) {
+                            return response.json().then(function(data) {
+                                return {
+                                    ok: response.ok,
+                                    data: data
+                                };
+                            });
+                        })
+
+                        .then(function(result) {
+
+                            if (!result.ok) {
+                                alert(
+                                    result.data.message ||
+                                    '리뷰 삭제 중 오류가 발생했습니다.'
+                                );
+
+                                return;
+                            }
+
+                            // DB에서 다시 불러오기
+                            loadReviews();
+
+                        })
+
+                        .catch(function(error) {
+
+                            console.error(
+                                '리뷰 삭제 실패:',
+                                error
+                            );
+
+                            alert(
+                                '리뷰 삭제 중 오류가 발생했습니다.'
+                            );
+
+                        });
+
+                    return;
+                }
+
+                const recommendButton =
+                    event.target.closest(
+                        '.recommend-button'
+                    );
+
+
+                if (recommendButton) {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+
+                    const count =
+                        recommendButton.querySelector(
+                            '.recommend-count'
+                        );
+
+
+                    const isRecommended =
+                        recommendButton.classList.toggle(
+                            'recommended'
+                        );
+
+
+                    recommendButton.firstChild.textContent =
+                        isRecommended
+                            ? '♥ 추천 '
+                            : '♡ 추천 ';
+
+
+                    count.textContent =
+                        isRecommended ? '1' : '0';
+
+                    return;
+                }
+
+
+                const reportButton =
+                    event.target.closest(
+                        '.report-button'
+                    );
+
+
+                if (reportButton) {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+
+                    const result =
+                        confirm(
+                            '이 리뷰를 신고하시겠습니까?'
+                        );
+
+
+                    if (result) {
+
+                        alert(
+                            '신고가 접수되었습니다.'
+                        );
+
+                        reportButton.textContent =
+                            '🚨 신고 완료';
+
+                        reportButton.disabled = true;
+
+                    }
+
+                }
+
+            });
+
+        }
+
+
+        loadReviews();
+
+
+
+        // ==================================================
+        // 6. 여행톡
+        // ==================================================
+
+        const travelTalkOpenButton =
+            document.getElementById(
+                'travelTalkOpenButton'
+            );
+
+        const travelTalkWrite =
+            document.getElementById(
+                'travelTalkWrite'
+            );
+
+        const travelTalkTitle =
+            document.getElementById(
+                'travelTalkTitle'
+            );
+
+        const travelTalkInput =
+            document.getElementById(
+                'travelTalkInput'
+            );
+
+        const travelTalkTextCount =
+            document.getElementById(
+                'travelTalkTextCount'
+            );
+
+        const travelTalkSubmit =
+            document.getElementById(
+                'travelTalkSubmit'
+            );
+
+        const travelTalkList =
+            document.getElementById(
+                'travelTalkList'
+            );
+
+        const travelTalkCount =
+            document.getElementById(
+                'travelTalkCount'
+            );
+
+        const noTravelTalkMessage =
+            document.getElementById(
+                'noTravelTalkMessage'
+            );
+
+        const travelTalkWriteCancel =
+            document.querySelector(
+                '#travelTalkWriteCancel'
+            );
+
+        let travelTalkTotal = 0;
+
+        let editingCommentItem = null;
+
+        // 댓글 수정 전 원래 위치 기억
+        let editingCommentOriginalParent = null;
+        let editingCommentOriginalNext = null;
+        let editingCommentTravelTalkItem = null;
+
+        // 글 작성창 열기
+        if (travelTalkOpenButton &&
+            travelTalkWrite) {
+
+            travelTalkOpenButton.addEventListener(
+                'click',
+                function() {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+                    travelTalkWrite.classList.toggle(
+                        'active'
+                    );
+                    if (travelTalkWrite.classList.contains('active')) {
+                        travelTalkWriteCancel.classList.add('active');
+                    } else {
+                        travelTalkWriteCancel.classList.remove('active');
+                    }
+
+                }
+            );
+            // ==========================================
+            // 여행톡 새 글 작성 취소
+            // ==========================================
+
+            if (travelTalkWriteCancel) {
+
+                travelTalkWriteCancel.addEventListener(
+                    'click',
+                    function() {
+
+                        travelTalkTitle.value = '';
+                        travelTalkInput.value = '';
+
+                        travelTalkTextCount.textContent = '0';
+
+                        travelTalkWrite.classList.remove(
+                            'active'
+                        );
+
+                        travelTalkWriteCancel.classList.remove(
+                            'active'
+                        );
+                    }
+                );
+
+            }
+
+        }
+
+
+        // 여행톡 글자 수
+        if (travelTalkInput &&
+            travelTalkTextCount) {
+
+            travelTalkInput.addEventListener(
+                'input',
+                function() {
+
+                    travelTalkTextCount.textContent =
+                        travelTalkInput.value.length;
+
+                }
+            );
+
+        }
+
+        // ==================================================
+        // DB 여행톡 목록 불러오기
+        // ==================================================
+        async function loadTravelTalks() {
+
+            if (!travelTalkList) {
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    `/homepage/trip_location/feature/travel-talk/${placeId}`
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    console.error('여행톡 조회 실패:', data);
+                    return;
+                }
+
+                // 기존 목록 비우기
+                travelTalkList
+                    .querySelectorAll('.travel-talk-item')
+                    .forEach(function(item) {
+                        item.remove();
+                    });
+
+                travelTalkTotal = data.travel_talks.length;
+
+                if (travelTalkCount) {
+                    travelTalkCount.textContent = travelTalkTotal;
+                }
+
+                // 여행톡이 없을 때
+                if (noTravelTalkMessage) {
+                    noTravelTalkMessage.style.display =
+                        travelTalkTotal === 0 ? '' : 'none';
+                }
+
+                data.travel_talks.forEach(function(talk) {
+
+                    const travelTalkItem =
+                        document.createElement('article');
+
+                    travelTalkItem.classList.add(
+                        'travel-talk-item'
+                    );
+
+                    travelTalkItem.dataset.travelTalkId =
+                        talk.id;
+
+                    travelTalkItem.innerHTML = `
+                        <div class="travel-talk-header">
+
+                            <div class="travel-talk-user-area">
+
+                                <span class="travel-talk-avatar">
+                                    👤
+                                </span>
+
+                                <div class="travel-talk-user-info">
+
+                                    <span class="travel-talk-user"></span>
+
+                                    <span class="travel-talk-date"></span>
+
+                                </div>
+
+                            </div>
+
+                            ${
+                                talk.is_owner
+                                    ? `
+                                        <div class="travel-talk-owner-menu">
+
+                                            <button
+                                                type="button"
+                                                class="travel-talk-more">
+                                                ⋯
+                                            </button>
+
+                                            <div class="travel-talk-more-menu">
+
+                                                <button
+                                                    type="button"
+                                                    class="travel-talk-edit-button">
+                                                    수정
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    class="travel-talk-delete-button">
+                                                    삭제
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    `
+                                    : ''
+                            }
+
+                        </div>
+
+                        <h4 class="travel-talk-post-title"></h4>
+
+                        <p class="travel-talk-text"></p>
+
+                        <div class="travel-talk-actions">
+
+                            <button
+                                type="button"
+                                class="travel-talk-like">
+                                ♡
+                                <span class="travel-talk-like-count">
+                                    0
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="travel-talk-comment">
+                                💬 댓글
+                                <span class="travel-talk-comment-count">
+                                    0
+                                </span>
+                            </button>
+
+                            <button
+                                type="button"
+                                class="travel-talk-report">
+                                🚨 신고
+                            </button>
+
+                        </div>
+
+                        <div class="travel-talk-comment-section">
+
+                            <div class="travel-talk-comment-list">
+
+                                <p class="travel-talk-no-comment">
+                                    아직 댓글이 없습니다.
+                                </p>
+
+                            </div>
+
+                            <div class="travel-talk-comment-write">
+
+                                <textarea
+                                    class="travel-talk-comment-input"
+                                    maxlength="500"
+                                    placeholder="댓글을 입력해주세요."
+                                ></textarea>
+
+                                <div class="travel-talk-comment-write-bottom">
+
+                                    <span>
+                                        <span class="travel-talk-comment-text-count">
+                                            0
+                                        </span>/500
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        class="travel-talk-comment-submit">
+                                        등록
+                                    </button>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `;
+
+                    travelTalkItem.querySelector(
+                        '.travel-talk-user'
+                    ).textContent = talk.nickname;
+
+                    travelTalkItem.querySelector(
+                        '.travel-talk-post-title'
+                    ).textContent = talk.title;
+
+                    travelTalkItem.querySelector(
+                        '.travel-talk-text'
+                    ).textContent = talk.content;
+
+                    travelTalkItem.querySelector(
+                        '.travel-talk-date'
+                    ).textContent =
+                        formatPostDate(
+                            new Date(talk.created_at)
+                        );
+
+                    travelTalkList.appendChild(
+                        travelTalkItem
+                    );
+
+                });
+
+            } catch (error) {
+
+                console.error(
+                    '여행톡 목록 불러오기 실패:',
+                    error
+                );
+            }
+        }
+        loadTravelTalks();
+
+        // ==================================================
+        // 여행톡 글 등록 - DB 저장
+        // ==================================================
+        if (travelTalkSubmit) {
+
+            travelTalkSubmit.addEventListener(
+                'click',
+                async function() {
+
+                    if (!checkLogin()) {
+                        return;
+                    }
+
+                    const title =
+                        travelTalkTitle.value.trim();
+
+                    const text =
+                        travelTalkInput.value.trim();
+
+
+                    if (title === '') {
+
+                        alert('제목을 입력해주세요.');
+
+                        travelTalkTitle.focus();
+
+                        return;
+                    }
+
+
+                    if (text === '') {
+
+                        alert('내용을 입력해주세요.');
+
+                        travelTalkInput.focus();
+
+                        return;
+                    }
+
+
+                    try {
+
+                        const response = await fetch(
+                            `/homepage/trip_location/feature/travel-talk/${placeId}`,
+                            {
+                                method: 'POST',
+
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': csrfToken
+                                },
+
+                                body: JSON.stringify({
+                                    title: title,
+                                    content: text
+                                })
+                            }
+                        );
+
+
+                        const data =
+                            await response.json();
+
+
+                        if (!response.ok) {
+
+                            alert(
+                                data.message ||
+                                '여행톡 등록 중 오류가 발생했습니다.'
+                            );
+
+                            return;
+                        }
+
+
+                        // 입력창 초기화
+                        travelTalkTitle.value = '';
+
+                        travelTalkInput.value = '';
+
+                        travelTalkTextCount.textContent = '0';
+
+
+                        // 작성창 닫기
+                        travelTalkWrite.classList.remove(
+                            'active'
+                        );
+
+
+                        if (travelTalkWriteCancel) {
+
+                            travelTalkWriteCancel.classList.remove(
+                                'active'
+                            );
+                        }
+
+
+                        // DB에서 여행톡 목록 다시 불러오기
+                        await loadTravelTalks();
+
+
+                    } catch (error) {
+
+                        console.error(
+                            '여행톡 등록 실패:',
+                            error
+                        );
+
+                        alert(
+                            '여행톡 등록 중 오류가 발생했습니다.'
+                        );
+                    }
+                }
+            );
+        }
+
+
+        // 여행톡 좋아요 / 신고
+        if (travelTalkList) {
+
+            travelTalkList.addEventListener(
+                'click',
+                function(event) {
+
+                    const likeButton =
+                        event.target.closest(
+                            '.travel-talk-like'
+                        );
+
+
+                    if (likeButton) {
+
+                        if (!checkLogin()) {
+                            return;
+                        }
+
+
+                        const count =
+                            likeButton.querySelector(
+                                '.travel-talk-like-count'
+                            );
+
+
+                        const liked =
+                            likeButton.classList.toggle(
+                                'liked'
+                            );
+
+
+                        likeButton.firstChild.textContent =
+                            liked ? '♥ ' : '♡ ';
+
+
+                        count.textContent =
+                            liked ? '1' : '0';
+
+                        return;
+                    }
+
+
+                    const reportButton =
+                        event.target.closest(
+                            '.travel-talk-report'
+                        );
+
+
+                    if (reportButton) {
+
+                        if (!checkLogin()) {
+                            return;
+                        }
+
+
+                        const result =
+                            confirm(
+                                '이 게시글을 신고하시겠습니까?'
+                            );
+
+
+                        if (result) {
+
+                            alert(
+                                '신고가 접수되었습니다.'
+                            );
+
+                            reportButton.textContent =
+                                '🚨 신고 완료';
+
+                            reportButton.disabled = true;
+
+                        }
+
+                    }
+
+                }
+            );
+
+        }
+
+    // ==================================================
+    // DB 여행톡 댓글 불러오기
+    // ==================================================
+    async function loadTravelTalkComments(
+        travelTalkItem
+    ) {
+
+        if (!travelTalkItem) {
+            return;
+        }
+
+        const talkId =
+            travelTalkItem.dataset.travelTalkId;
+
+        const commentList =
+            travelTalkItem.querySelector(
+                '.travel-talk-comment-list'
+            );
+
+        const commentCount =
+            travelTalkItem.querySelector(
+                '.travel-talk-comment-count'
+            );
+
+        const noComment =
+            travelTalkItem.querySelector(
+                '.travel-talk-no-comment'
+            );
+
+        if (!commentList) {
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `/homepage/trip_location/feature/travel-talk/comment/${talkId}`
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                console.error(
+                    '댓글 조회 실패:',
+                    data
+                );
+                return;
+            }
+
+            // 기존 댓글만 제거
+            commentList
+                .querySelectorAll(
+                    '.travel-talk-comment-item'
+                )
+                .forEach(function(item) {
+                    item.remove();
+                });
+
+            data.comments.forEach(
+                function(comment) {
+
+                    const commentItem =
+                        document.createElement('div');
+
+                    commentItem.classList.add(
+                        'travel-talk-comment-item'
+                    );
+
+                    commentItem.dataset.commentId =
+                        comment.id;
+
+                    commentItem.innerHTML = `
+                        <div class="travel-talk-comment-header">
+
+                            <div class="travel-talk-comment-user-area">
+
+                                <span class="travel-talk-comment-avatar">
+                                    👤
+                                </span>
+
+                                <span class="travel-talk-comment-user"></span>
+
+                            </div>
+
+                            <span class="travel-talk-comment-date"></span>
+
+                        </div>
+
+                        <div class="travel-talk-comment-body">
+
+                            <p class="travel-talk-comment-text"></p>
+
+                            <button
+                                type="button"
+                                class="travel-talk-comment-report">
+                                🚨 신고
+                            </button>
+
+                            ${
+                                comment.is_owner
+                                    ? `
+                                        <div class="comment-owner-menu">
+
+                                            <button
+                                                type="button"
+                                                class="comment-more-button">
+                                                ⋯
+                                            </button>
+
+                                            <div class="comment-more-menu">
+
+                                                <button
+                                                    type="button"
+                                                    class="comment-edit-button">
+                                                    수정
+                                                </button>
+
+                                                <button
+                                                    type="button"
+                                                    class="comment-delete-button">
+                                                    삭제
+                                                </button>
+
+                                            </div>
+
+                                        </div>
+                                    `
+                                    : ''
+                            }
+
+                        </div>
+                    `;
+
+                    commentItem.querySelector(
+                        '.travel-talk-comment-user'
+                    ).textContent =
+                        comment.nickname;
+
+                    commentItem.querySelector(
+                        '.travel-talk-comment-text'
+                    ).textContent =
+                        comment.content;
+
+                    commentItem.querySelector(
+                        '.travel-talk-comment-date'
+                    ).textContent =
+                        formatPostDate(
+                            new Date(
+                                comment.created_at
+                            )
+                        );
+
+                    commentList.appendChild(
+                        commentItem
+                    );
+                }
+            );
+
+            if (commentCount) {
+                commentCount.textContent =
+                    data.comments.length;
+            }
+
+            if (noComment) {
+                noComment.style.display =
+                    data.comments.length === 0
+                        ? ''
+                        : 'none';
+            }
+
+        } catch (error) {
+
+            console.error(
+                '댓글 목록 불러오기 실패:',
+                error
+            );
+        }
+    }
+
+    // ==================================================
+    // 7. 여행톡 댓글
+    // ==================================================
+
+    if (travelTalkList) {
+
+        travelTalkList.addEventListener('click', function(event) {
+
+            // ------------------------------------------
+            // 댓글 버튼 클릭 → 댓글 영역 열기 / 닫기
+            // ------------------------------------------
+
+            const commentButton =
+                event.target.closest('.travel-talk-comment');
+
+
+            if (commentButton) {
+
+                const travelTalkItem =
+                    commentButton.closest('.travel-talk-item');
+
+                if (!travelTalkItem) {
+                    return;
+                }
+
+
+                const commentSection =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-section'
+                    );
+
+
+                if (!commentSection) {
+                    return;
+                }
+
+
+                commentSection.classList.toggle('active');
+
+
+                // 열렸을 때 DB 댓글 불러오기 + 입력창에 바로 커서
+                if (commentSection.classList.contains('active')) {
+
+                    loadTravelTalkComments(
+                        travelTalkItem
+                    );
+
+                    const commentInput =
+                        commentSection.querySelector(
+                            '.travel-talk-comment-input'
+                        );
+
+                    if (commentInput) {
+                        commentInput.focus();
+                    }
+                }
+                return;
+            }
+
+
+
+            // ------------------------------------------
+            // 댓글 등록
+            // ------------------------------------------
+
+            const commentSubmit =
+                event.target.closest(
+                    '.travel-talk-comment-submit'
+                );
+
+
+            if (commentSubmit) {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+
+                const travelTalkItem =
+                    commentSubmit.closest('.travel-talk-item');
+
+
+                if (!travelTalkItem) {
+                    return;
+                }
+
+
+                const commentInput =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-input'
+                    );
+
+                const commentList =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-list'
+                    );
+
+                const noComment =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-no-comment'
+                    );
+
+                const commentCount =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-count'
+                    );
+
+                const textCount =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-text-count'
+                    );
+
+
+                const commentText =
+                    commentInput.value.trim();
+
+
+                if (commentText === '') {
+
+                    alert('댓글 내용을 입력해주세요.');
+
+                    commentInput.focus();
+
+                    return;
+                }
+
+                // ==========================================
+                // 댓글 수정 완료 - DB 수정
+                // ==========================================
+                if (editingCommentItem) {
+
+                    const commentId =
+                        editingCommentItem.dataset.commentId;
+
+                    fetch(
+                        `/homepage/trip_location/feature/travel-talk/comment/edit/${commentId}`,
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRFToken': csrfToken
+                            },
+
+                            body: JSON.stringify({
+                                content: commentText
+                            })
+                        }
+                    )
+                        .then(function (response) {
+
+                            return response.json().then(
+                                function (data) {
+
+                                    return {
+                                        ok: response.ok,
+                                        data: data
+                                    };
+                                }
+                            );
+
+                        })
+
+                        .then(function (result) {
+
+                            if (!result.ok) {
+
+                                alert(
+                                    result.data.message ||
+                                    '댓글 수정 중 오류가 발생했습니다.'
+                                );
+
+                                return;
+                            }
+
+                            // 입력창 초기화
+                            commentInput.value = '';
+
+                            if (textCount) {
+                                textCount.textContent = '0';
+                            }
+
+                            commentSubmit.textContent = '등록';
+
+
+                            // 취소 버튼 제거
+                            const cancelButton =
+                                travelTalkItem.querySelector(
+                                    '.travel-talk-comment-edit-cancel'
+                                );
+
+                            if (cancelButton) {
+                                cancelButton.remove();
+                            }
+
+
+                            // 수정 상태 초기화
+                            editingCommentItem = null;
+                            editingCommentOriginalParent = null;
+                            editingCommentOriginalNext = null;
+                            editingCommentTravelTalkItem = null;
+
+
+                            // DB 댓글 다시 불러오기
+                            loadTravelTalkComments(
+                                travelTalkItem
+                            );
+
+                        })
+
+                        .catch(function (error) {
+
+                            console.error(
+                                '댓글 수정 실패:',
+                                error
+                            );
+
+                            alert(
+                                '댓글 수정 중 오류가 발생했습니다.'
+                            );
+
+                        });
+
+                    return;
+                }
+                            // ==========================================
+                            // 새 댓글 등록 - DB 저장
+                            // ==========================================
+
+                            const talkId =
+                                travelTalkItem.dataset.travelTalkId;
+
+                            fetch(
+                                `/homepage/trip_location/feature/travel-talk/comment/${talkId}`,
+                                {
+                                    method: 'POST',
+
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRFToken': csrfToken
+                                    },
+
+                                    body: JSON.stringify({
+                                        content: commentText
+                                    })
+                                }
+                            )
+                                .then(function(response) {
+
+                                    return response.json().then(
+                                        function(data) {
+
+                                            return {
+                                                ok: response.ok,
+                                                data: data
+                                            };
+                                        }
+                                    );
+
+                                })
+
+                                .then(function(result) {
+
+                                    if (!result.ok) {
+
+                                        alert(
+                                            result.data.message ||
+                                            '댓글 등록 중 오류가 발생했습니다.'
+                                        );
+
+                                        return;
+                                    }
+
+                                    // 입력창 초기화
+                                    commentInput.value = '';
+
+                                    if (textCount) {
+                                        textCount.textContent = '0';
+                                    }
+
+                                    // DB에서 댓글 다시 불러오기
+                                    loadTravelTalkComments(
+                                        travelTalkItem
+                                    );
+
+                                })
+
+                                .catch(function(error) {
+
+                                    console.error(
+                                        '댓글 등록 실패:',
+                                        error
+                                    );
+
+                                    alert(
+                                        '댓글 등록 중 오류가 발생했습니다.'
+                                    );
+
+                                });
+
+                            return;
+
+            }
+            // ------------------------------------------
+            // 댓글 신고
+            // ------------------------------------------
+
+            const commentReport =
+                event.target.closest(
+                    '.travel-talk-comment-report'
+                );
+
+
+            if (commentReport) {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+
+                const result =
+                    confirm('이 댓글을 신고하시겠습니까?');
+
+
+                if (result) {
+
+                    alert('신고가 접수되었습니다.');
+
+                    commentReport.textContent =
+                        '🚨 신고 완료';
+
+                    commentReport.disabled = true;
+
+                }
+
+            }
+
+
+        // ------------------------------------------
+        // 댓글 글자 수
+        // ------------------------------------------
+
+        travelTalkList.addEventListener('input', function(event) {
+
+            if (!event.target.classList.contains(
+                'travel-talk-comment-input'
+            )) {
+                return;
+            }
+
+
+            const commentSection =
+                event.target.closest(
+                    '.travel-talk-comment-section'
+                );
+
+
+            if (!commentSection) {
+                return;
+            }
+
+
+            const count =
+                commentSection.querySelector(
+                    '.travel-talk-comment-text-count'
+                );
+
+
+            if (count) {
+
+                count.textContent =
+                    event.target.value.length;
+
+            }
+
+        });
+            });
+
+    }
+
+        // ==========================================
+        // 여행톡 글 / 댓글 수정·삭제
+        // ==========================================
+
+        if (travelTalkList) {
+
+            travelTalkList.addEventListener(
+                'click',
+                function(event) {
+
+                // ==========================================
+                // 여행톡 글 ⋯ 메뉴 열기 / 닫기
+                // ==========================================
+
+                const travelTalkMore =
+                    event.target.closest('.travel-talk-more');
+
+                if (travelTalkMore) {
+
+                    const ownerMenu =
+                        travelTalkMore.closest(
+                            '.travel-talk-owner-menu'
+                        );
+
+                    const menu =
+                        ownerMenu.querySelector(
+                            '.travel-talk-more-menu'
+                        );
+
+                    menu.classList.toggle('active');
+
+                    return;
+                }
+
+
+        // ==========================================
+        // 여행톡 글 수정
+        // 선택한 게시글 자리에서 바로 수정
+        // ==========================================
+
+        const travelTalkEdit =
+            event.target.closest(
+                '.travel-talk-edit-button'
+            );
+
+        if (travelTalkEdit) {
+
+            const travelTalkItem =
+                travelTalkEdit.closest(
+                    '.travel-talk-item'
+                );
+
+            const titleElement =
+                travelTalkItem.querySelector(
+                    '.travel-talk-post-title'
+                );
+
+            const textElement =
+                travelTalkItem.querySelector(
+                    '.travel-talk-text'
+                );
+
+            // 이미 수정 중이면 중복 생성하지 않기
+            if (
+                travelTalkItem.querySelector(
+                    '.travel-talk-post-edit'
+                )
+            ) {
+                return;
+            }
+
+            const oldTitle =
+                titleElement.textContent.trim();
+
+            const oldText =
+                textElement.textContent.trim();
+
+
+            // 원래 제목 / 본문 숨기기
+            titleElement.style.display = 'none';
+            textElement.style.display = 'none';
+
+
+            // 수정폼 생성
+            const editBox =
+                document.createElement('div');
+
+            editBox.className =
+                'travel-talk-post-edit';
+
+            editBox.innerHTML = `
+                <input
+                    type="text"
+                    class="travel-talk-post-edit-title"
+                    maxlength="100"
+                    placeholder="제목을 입력해주세요."
+                >
+
+                <textarea
+                    class="travel-talk-post-edit-text"
+                    maxlength="500"
+                    placeholder="내용을 입력해주세요."
+                ></textarea>
+
+                <div class="travel-talk-post-edit-bottom">
+
+                    <span class="travel-talk-post-edit-counter">
+                        <span class="travel-talk-post-edit-count">
+                            ${oldText.length}
+                        </span>/500
+                    </span>
+
+                    <button
+                        type="button"
+                        class="travel-talk-post-edit-cancel">
+                        취소
+                    </button>
+
+                    <button
+                        type="button"
+                        class="travel-talk-post-edit-save">
+                        수정 완료
+                    </button>
+
+                </div>
+            `;
+
+
+            const editTitle =
+                editBox.querySelector(
+                    '.travel-talk-post-edit-title'
+                );
+
+            const editText =
+                editBox.querySelector(
+                    '.travel-talk-post-edit-text'
+                );
+
+
+            // 기존 글 내용 넣기
+            editTitle.value = oldTitle;
+            editText.value = oldText;
+
+
+            // 제목 자리에 수정폼 넣기
+            titleElement.before(editBox);
+
+
+            // ⋯ 메뉴 닫기
+            const menu =
+                travelTalkItem.querySelector(
+                    '.travel-talk-more-menu'
+                );
+
+            if (menu) {
+                menu.classList.remove('active');
+            }
+
+
+            editTitle.focus();
+
+            return;
+        }
+
+        // ==========================================
+        // 여행톡 글 수정 취소
+        // ==========================================
+
+        const travelTalkEditCancel =
+            event.target.closest(
+                '.travel-talk-post-edit-cancel'
+            );
+
+        if (travelTalkEditCancel) {
+
+            const travelTalkItem =
+                travelTalkEditCancel.closest(
+                    '.travel-talk-item'
+                );
+
+            travelTalkItem.querySelector(
+                '.travel-talk-post-title'
+            ).style.display = '';
+
+            travelTalkItem.querySelector(
+                '.travel-talk-text'
+            ).style.display = '';
+
+            travelTalkEditCancel
+                .closest('.travel-talk-post-edit')
+                .remove();
 
             return;
         }
 
 
-        // 기존 "리뷰가 없습니다" 문구 삭제
-        if (noReviewMessage) {
-            noReviewMessage.style.display = 'none';
-        }
+        // ==========================================
+        // 여행톡 글 수정 완료
+        // ==========================================
 
-
-        // 현재 날짜
-        const today = new Date();
-
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-
-        const reviewDate = `${month}.${day}`;
-
-
-        // 리뷰 하나 생성
-        const reviewItem = document.createElement('div');
-
-        reviewItem.classList.add('review-item');
-
-
-        // 리뷰 HTML
-        reviewItem.innerHTML = `
-            <div class="review-header">
-    
-                <span class="review-user">
-                    사용자
-                </span>
-    
-                <span class="review-date">
-                    ${reviewDate}
-                </span>
-    
-            </div>
-    
-    
-            <div class="review-text"></div>
-    
-    
-            <div class="review-actions">
-    
-                <button
-                    type="button"
-                    class="review-action-button recommend-button">
-    
-                    ♡ 추천
-                    <span class="recommend-count">0</span>
-    
-                </button>
-    
-    
-                <button
-                    type="button"
-                    class="review-action-button report-button">
-    
-                    🚨 신고
-    
-                </button>
-    
-            </div>
-        `;
-
-
-        // 리뷰 내용 넣기
-        reviewItem.querySelector('.review-text').textContent = reviewText;
-
-
-        // 리뷰 목록에 추가
-        reviewList.appendChild(reviewItem);
-
-
-        // 리뷰 개수 증가
-        reviewTotal++;
-
-        reviewCount.textContent = reviewTotal;
-
-
-        // 입력창 초기화
-        reviewInput.value = '';
-
-        reviewTextCount.textContent = '0';
-
-    });
-
-
-    // 6. 추천 / 추천 취소
-    reviewList.addEventListener('click', function(event) {
-
-        const recommendButton =
-            event.target.closest('.recommend-button');
-
-
-        if (recommendButton) {
-
-            const count =
-                recommendButton.querySelector('.recommend-count');
-
-
-            // 이미 추천한 경우 → 추천 취소
-            if (recommendButton.classList.contains('recommended')) {
-
-                recommendButton.classList.remove('recommended');
-
-                recommendButton.firstChild.textContent = '♡ 추천 ';
-
-                count.textContent = '0';
-
-            }
-
-            // 추천하지 않은 경우 → 추천
-            else {
-
-                recommendButton.classList.add('recommended');
-
-                recommendButton.firstChild.textContent = '♥ 추천 ';
-
-                count.textContent = '1';
-
-            }
-
-        }
-
-    });
-
-
-    // 7. 신고
-    reviewList.addEventListener('click', function(event) {
-
-        const reportButton =
-            event.target.closest('.report-button');
-
-
-        if (reportButton) {
-
-            const result = confirm(
-                '이 리뷰를 신고하시겠습니까?'
+        const travelTalkEditSave =
+            event.target.closest(
+                '.travel-talk-post-edit-save'
             );
 
+        if (travelTalkEditSave) {
 
-            if (result) {
+        const travelTalkItem =
+            travelTalkEditSave.closest(
+                '.travel-talk-item'
+            );
 
-                alert('신고가 접수되었습니다.');
+        const talkId =
+            travelTalkItem.dataset.travelTalkId;
 
-                reportButton.textContent = '🚨 신고 완료';
+        const editBox =
+            travelTalkEditSave.closest(
+                '.travel-talk-post-edit'
+            );
 
-                reportButton.disabled = true;
+        const newTitle =
+            editBox.querySelector(
+                '.travel-talk-post-edit-title'
+            ).value.trim();
 
-            }
+        const newText =
+            editBox.querySelector(
+                '.travel-talk-post-edit-text'
+            ).value.trim();
 
+
+        if (newTitle === '') {
+
+            alert('제목을 입력해주세요.');
+
+            editBox.querySelector(
+                '.travel-talk-post-edit-title'
+            ).focus();
+
+            return;
         }
 
-    });
 
-    // 8. 찜하기 / 찜 취소
-    const jjimButton = document.querySelector('.btn-jjim');
-    const likesCount = document.querySelector('.likes-count');
+        if (newText === '') {
 
-    let isJjim = false;
+            alert('내용을 입력해주세요.');
 
-    if (jjimButton && likesCount) {
+            editBox.querySelector(
+                '.travel-talk-post-edit-text'
+            ).focus();
 
-        // DB에서 화면에 출력된 기존 찜 개수 가져오기
-        let currentLikes =
-            parseInt(likesCount.textContent.replace(/[^0-9]/g, '')) || 0;
+            return;
+        }
 
 
-        jjimButton.addEventListener('click', function() {
+        fetch(
+            `/homepage/trip_location/feature/travel-talk/edit/${talkId}`,
+            {
+                method: 'POST',
 
-            // 아직 찜하지 않은 상태
-            if (!isJjim) {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
 
-                currentLikes++;
-
-                likesCount.textContent = `❤️ ${currentLikes}`;
-
-                jjimButton.textContent = '♥ 찜 취소';
-
-                jjimButton.classList.add('active');
-
-                isJjim = true;
-
+                body: JSON.stringify({
+                    title: newTitle,
+                    content: newText
+                })
             }
+        )
+            .then(function(response) {
 
-            // 이미 찜한 상태 → 취소
-            else {
+                return response.json().then(
+                    function(data) {
 
-                currentLikes--;
+                        return {
+                            ok: response.ok,
+                            data: data
+                        };
+                    }
+                );
 
-                likesCount.textContent = `❤️ ${currentLikes}`;
+            })
 
-                jjimButton.textContent = '♥ 찜하기';
+            .then(function(result) {
 
-                jjimButton.classList.remove('active');
+                if (!result.ok) {
 
-                isJjim = false;
+                    alert(
+                        result.data.message ||
+                        '여행톡 수정 중 오류가 발생했습니다.'
+                    );
 
-            }
+                    return;
+                }
 
-        });
+                // 수정된 DB 내용 다시 불러오기
+                loadTravelTalks();
 
+            })
+
+            .catch(function(error) {
+
+                console.error(
+                    '여행톡 수정 실패:',
+                    error
+                );
+
+                alert(
+                    '여행톡 수정 중 오류가 발생했습니다.'
+                );
+
+            });
+
+        return;
     }
 
+
+            // ==========================================
+            // 여행톡 글 삭제 - DB 삭제
+            // ==========================================
+
+            const travelTalkDelete =
+                event.target.closest(
+                    '.travel-talk-delete-button'
+                );
+
+            if (travelTalkDelete) {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+                const travelTalkItem =
+                    travelTalkDelete.closest(
+                        '.travel-talk-item'
+                    );
+
+                const talkId =
+                    travelTalkItem.dataset.travelTalkId;
+
+                const result =
+                    confirm('이 게시글을 삭제하시겠습니까?');
+
+                if (!result) {
+                    return;
+                }
+
+                fetch(
+                    `/homepage/trip_location/feature/travel-talk/delete/${talkId}`,
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    }
+                )
+                    .then(function(response) {
+
+                        return response.json().then(
+                            function(data) {
+
+                                return {
+                                    ok: response.ok,
+                                    data: data
+                                };
+                            }
+                        );
+
+                    })
+
+                    .then(function(result) {
+
+                        if (!result.ok) {
+
+                            alert(
+                                result.data.message ||
+                                '여행톡 삭제 중 오류가 발생했습니다.'
+                            );
+
+                            return;
+                        }
+
+                        // DB에서 여행톡 목록 다시 불러오기
+                        loadTravelTalks();
+
+                    })
+
+                    .catch(function(error) {
+
+                        console.error(
+                            '여행톡 삭제 실패:',
+                            error
+                        );
+
+                        alert(
+                            '여행톡 삭제 중 오류가 발생했습니다.'
+                        );
+
+                    });
+
+                return;
+            }
+
+
+
+            // ==========================================
+            // 댓글 ⋯ 메뉴
+            // ==========================================
+
+            const commentMore =
+                event.target.closest('.comment-more-button');
+
+
+            if (commentMore) {
+
+                const menu =
+                    commentMore
+                        .closest('.comment-owner-menu')
+                        .querySelector('.comment-more-menu');
+
+
+                menu.classList.toggle('active');
+
+                return;
+            }
+
+
+            // ==========================================
+            // 여행톡 게시글 수정 글자 수 실시간 표시
+            // ==========================================
+
+            if (travelTalkList) {
+
+                travelTalkList.addEventListener(
+                    'input',
+                    function(event) {
+
+                        if (
+                            !event.target.classList.contains(
+                                'travel-talk-post-edit-text'
+                            )
+                        ) {
+                            return;
+                        }
+
+                        const editBox =
+                            event.target.closest(
+                                '.travel-talk-post-edit'
+                            );
+
+                        const count =
+                            editBox.querySelector(
+                                '.travel-talk-post-edit-count'
+                            );
+
+                        if (count) {
+
+                            count.textContent =
+                                event.target.value.length;
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+            // ==========================================
+            // 댓글 수정
+            // 원래 댓글 등록폼 재사용
+            // ==========================================
+
+            const commentEdit =
+                event.target.closest('.comment-edit-button');
+
+
+            if (commentEdit) {
+
+                const commentItem =
+                    commentEdit.closest(
+                        '.travel-talk-comment-item'
+                    );
+
+                const travelTalkItem =
+                    commentEdit.closest(
+                        '.travel-talk-item'
+                    );
+
+
+                if (!commentItem || !travelTalkItem) {
+                    return;
+                }
+
+
+                const textElement =
+                    commentItem.querySelector(
+                        '.travel-talk-comment-text'
+                    );
+
+
+                const commentSection =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-section'
+                    );
+
+
+                const commentList =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-list'
+                    );
+
+
+                const commentWrite =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-write'
+                    );
+
+
+                const commentInput =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-input'
+                    );
+
+
+                const commentSubmit =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-submit'
+                    );
+
+
+                const textCount =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-text-count'
+                    );
+
+
+                if (
+                    !textElement ||
+                    !commentList ||
+                    !commentWrite ||
+                    !commentInput ||
+                    !commentSubmit
+                ) {
+                    return;
+                }
+
+
+                // ==========================================
+                // 이미 다른 댓글 수정 중이면
+                // 먼저 원래 자리로 돌려놓기
+                // ==========================================
+
+                if (
+                    editingCommentItem &&
+                    editingCommentItem !== commentItem &&
+                    editingCommentOriginalParent
+                ) {
+
+                    if (
+                        editingCommentOriginalNext &&
+                        editingCommentOriginalNext.parentNode ===
+                            editingCommentOriginalParent
+                    ) {
+
+                        editingCommentOriginalParent.insertBefore(
+                            editingCommentItem,
+                            editingCommentOriginalNext
+                        );
+
+                    } else {
+
+                        editingCommentOriginalParent.appendChild(
+                            editingCommentItem
+                        );
+                    }
+                }
+
+
+                // ==========================================
+                // 원래 댓글 위치 기억
+                // ==========================================
+
+                editingCommentItem = commentItem;
+
+                editingCommentOriginalParent =
+                    commentItem.parentNode;
+
+                editingCommentOriginalNext =
+                    commentItem.nextElementSibling;
+
+                editingCommentTravelTalkItem =
+                    travelTalkItem;
+
+
+                // 기존 댓글 내용
+                const oldText =
+                    textElement.textContent.trim();
+
+
+                // ==========================================
+                // 수정할 댓글을 등록폼 바로 위로 이동
+                // ==========================================
+
+                commentList.appendChild(
+                    commentItem
+                );
+
+
+                // 댓글 영역 열기
+                if (commentSection) {
+                    commentSection.classList.add('active');
+                }
+
+
+                // 원래 댓글 입력창에 내용 넣기
+                commentInput.value = oldText;
+
+
+                if (textCount) {
+                    textCount.textContent =
+                        oldText.length;
+                }
+
+
+                // 등록 → 수정 완료
+                commentSubmit.textContent =
+                    '수정 완료';
+
+
+                // 기존 취소 버튼 제거
+                const oldCancel =
+                    travelTalkItem.querySelector(
+                        '.travel-talk-comment-edit-cancel'
+                    );
+
+                if (oldCancel) {
+                    oldCancel.remove();
+                }
+
+
+                // ==========================================
+                // 취소 버튼 생성
+                // ==========================================
+
+                const cancelButton =
+                    document.createElement('button');
+
+                cancelButton.type = 'button';
+
+                cancelButton.className =
+                    'travel-talk-comment-edit-cancel';
+
+                cancelButton.textContent =
+                    '취소';
+
+
+                commentSubmit.before(
+                    cancelButton
+                );
+
+
+                // ==========================================
+                // 수정 취소
+                // ==========================================
+
+                cancelButton.addEventListener(
+                    'click',
+                    function() {
+
+                        // 댓글 원래 위치 복귀
+                        if (editingCommentOriginalParent) {
+
+                            if (
+                                editingCommentOriginalNext &&
+                                editingCommentOriginalNext.parentNode ===
+                                    editingCommentOriginalParent
+                            ) {
+
+                                editingCommentOriginalParent.insertBefore(
+                                    commentItem,
+                                    editingCommentOriginalNext
+                                );
+
+                            } else {
+
+                                editingCommentOriginalParent.appendChild(
+                                    commentItem
+                                );
+                            }
+                        }
+
+
+                        // 입력창 초기화
+                        commentInput.value = '';
+
+                        if (textCount) {
+                            textCount.textContent = '0';
+                        }
+
+                        commentSubmit.textContent =
+                            '등록';
+
+
+                        cancelButton.remove();
+
+
+                        // 수정 상태 초기화
+                        editingCommentItem = null;
+                        editingCommentOriginalParent = null;
+                        editingCommentOriginalNext = null;
+                        editingCommentTravelTalkItem = null;
+
+
+                        commentInput.focus();
+                    }
+                );
+
+
+                // ⋯ 메뉴 닫기
+                const menu =
+                    commentItem.querySelector(
+                        '.comment-more-menu'
+                    );
+
+                if (menu) {
+                    menu.classList.remove('active');
+                }
+
+
+                commentInput.focus();
+
+                return;
+            }
+
+
+
+            // ==========================================
+            // 댓글 삭제 - DB 삭제
+            // ==========================================
+
+            const commentDelete =
+                event.target.closest(
+                    '.comment-delete-button'
+                );
+
+
+            if (commentDelete) {
+
+                if (!checkLogin()) {
+                    return;
+                }
+
+
+                const commentItem =
+                    commentDelete.closest(
+                        '.travel-talk-comment-item'
+                    );
+
+
+                const travelTalkItem =
+                    commentDelete.closest(
+                        '.travel-talk-item'
+                    );
+
+
+                if (!commentItem || !travelTalkItem) {
+                    return;
+                }
+
+
+                const commentId =
+                    commentItem.dataset.commentId;
+
+
+                const result =
+                    confirm(
+                        '이 댓글을 삭제하시겠습니까?'
+                    );
+
+
+                if (!result) {
+                    return;
+                }
+
+
+                fetch(
+                    `/homepage/trip_location/feature/travel-talk/comment/delete/${commentId}`,
+                    {
+                        method: 'POST',
+
+                        headers: {
+                            'X-CSRFToken': csrfToken
+                        }
+                    }
+                )
+                    .then(function(response) {
+
+                        return response.json().then(
+                            function(data) {
+
+                                return {
+                                    ok: response.ok,
+                                    data: data
+                                };
+                            }
+                        );
+
+                    })
+
+                    .then(function(result) {
+
+                        if (!result.ok) {
+
+                            alert(
+                                result.data.message ||
+                                '댓글 삭제 중 오류가 발생했습니다.'
+                            );
+
+                            return;
+                        }
+
+
+                        // DB 댓글 다시 불러오기
+                        loadTravelTalkComments(
+                            travelTalkItem
+                        );
+
+                    })
+
+                    .catch(function(error) {
+
+                        console.error(
+                            '댓글 삭제 실패:',
+                            error
+                        );
+
+                        alert(
+                            '댓글 삭제 중 오류가 발생했습니다.'
+                        );
+
+                    });
+
+
+                return;
+            }
+                }
+            );
+
+        }
     // 9. 공유하기
     const shareButton = document.querySelector('.btn-share');
 
@@ -1209,5 +3802,55 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     }
                 );
+
+                // ================================
+                // 13. 상세페이지 기본정보 지도
+                // ================================
+
+                const detailMapElement =
+                    document.querySelector('.detail-map');
+
+                if (detailMapElement && typeof L !== 'undefined') {
+
+                    const latitude =
+                        parseFloat(detailMapElement.dataset.lat);
+
+                    const longitude =
+                        parseFloat(detailMapElement.dataset.lng);
+
+                    const placeTitle =
+                        detailMapElement.dataset.title || '여행지';
+
+                    if (
+                        Number.isFinite(latitude) &&
+                        Number.isFinite(longitude)
+                    ) {
+
+                        const detailMap =
+                            L.map(detailMapElement, {
+                                zoomControl: true,
+                                scrollWheelZoom: true,
+                                dragging: true,
+                                attributionControl: false
+                            }).setView(
+                                [latitude, longitude],
+                                15
+                            );
+
+                        L.tileLayer(
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            {
+                                maxZoom: 19
+                            }
+                        ).addTo(detailMap);
+
+                        L.marker(
+                            [latitude, longitude]
+                        )
+                            .addTo(detailMap)
+                            .bindPopup(placeTitle)
+                            .openPopup();
+                    }
+                }
 
     });  // ← DOMContentLoaded 끝

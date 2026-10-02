@@ -1,26 +1,25 @@
-from flask import Blueprint, redirect, url_for, jsonify
+from flask import Blueprint, jsonify
 from odysay.models import TripLocationmd
 
 
-bp = Blueprint('first', __name__, url_prefix='/first')
+bp = Blueprint(
+    'trip_list',
+    __name__,
+    url_prefix='/trip-list'
+)
 
 
-# 지도 화면
-@bp.route('/map')
-def _map():
-    return redirect(url_for('homepage.main'))
+# ==========================================
+# 여행지 목록 페이지 전용 API
+# ==========================================
 
-
-# 지도에 표시할 여행지 정보
 @bp.route('/places', methods=['GET'])
 def places():
-    # 위도와 경도가 모두 저장된 여행지만 조회
+
+    # 위도/경도 여부와 관계없이
+    # 등록된 모든 여행지를 가져온다.
     travel_places = (
         TripLocationmd.query
-        .filter(
-            TripLocationmd.latitude.isnot(None),
-            TripLocationmd.longitude.isnot(None)
-        )
         .order_by(TripLocationmd.id.asc())
         .all()
     )
@@ -28,11 +27,14 @@ def places():
     result = []
 
     for travel_place in travel_places:
+
         result.append({
             'id': travel_place.id,
             'country': travel_place.country,
             'region': travel_place.region,
             'place': travel_place.place,
+
+            # 좌표가 없어도 목록에는 표시 가능
             'latitude': travel_place.latitude,
             'longitude': travel_place.longitude
         })

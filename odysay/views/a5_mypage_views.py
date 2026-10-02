@@ -7,7 +7,7 @@ from flask import (
     flash,
 )
 
-from odysay.models import TravelPlace
+from odysay.models import TripLocationmd
 
 
 bp = Blueprint(
@@ -26,11 +26,11 @@ def my_places():
 
     # 본인이 작성한 여행지만 최신순으로 조회
     places = (
-        TravelPlace.query
+        TripLocationmd.query
         .filter_by(user_id=g.user.id)
         .order_by(
-            TravelPlace.created_at.desc(),
-            TravelPlace.id.desc()
+            TripLocationmd.created_at.desc(),
+            TripLocationmd.id.desc()
         )
         .all()
     )

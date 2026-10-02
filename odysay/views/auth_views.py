@@ -30,7 +30,7 @@ def load_logged_in_user():
     member_pages = {
         'homepage.mypage',
         'homepage.mypage_settings',
-        'homepage.profile_edit',
+        'profile.profile_edit',
 
     }
 
