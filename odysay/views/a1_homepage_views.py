@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, jsonify ,g
-from odysay.models import TravelPlace
+
+from odysay.models import User
+from odysay.models import TripLocationmd
 from odysay.forms import LoginForm
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
@@ -12,7 +14,20 @@ def main():
 
 @bp.route('/sjw')
 def homepage():
-    return render_template('shin2ryu/sjw.html')
+    # DB에서 id 기준 내림차순(최신 등록순)으로 3개 조회
+    recent_places = TripLocationmd.query.order_by(TripLocationmd.id.desc()).limit(3).all()
+
+    # ★ a3처럼 각 place마다 작성자(author) 조회해서 author 속성 붙여주기
+    for p in recent_places:
+        author_name = "익명"
+        if p.user_id:
+            user = User.query.get(p.user_id)
+            if user:
+                author_name = user.nickname or user.username
+        p.author = author_name  # 객체에 author 값 전달
+
+    # 템플릿으로 recent_places 변수 전달
+    return render_template('shin2ryu/sjw.html', recent_places=recent_places)
 
 
 @bp.route('/map')
@@ -22,7 +37,7 @@ def map_page():
 
 @bp.route('/api/places')
 def get_places():
-    places = TravelPlace.query.all()
+    places = TripLocationmd.query.all()
     results = []
     for p in places:
         if p.latitude and p.longitude:
@@ -60,7 +75,7 @@ def mypage():
     if g.user is None:
         return redirect(url_for('homepage.main'))
 
-    my_places_count = TravelPlace.query.filter_by(
+    my_places_count = TripLocationmd.query.filter_by(
         user_id=g.user.id
     ).count()
 
@@ -73,4 +88,3 @@ def mypage():
 @bp.route('/mypage/settings')
 def mypage_settings():
     return render_template('settings.html')
-

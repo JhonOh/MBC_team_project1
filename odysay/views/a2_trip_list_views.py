@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from odysay.models import TravelPlace
+from odysay.models import TripLocationmd
 
 
 bp = Blueprint(
@@ -19,8 +19,8 @@ def places():
     # 위도/경도 여부와 관계없이
     # 등록된 모든 여행지를 가져온다.
     travel_places = (
-        TravelPlace.query
-        .order_by(TravelPlace.id.asc())
+        TripLocationmd.query
+        .order_by(TripLocationmd.id.asc())
         .all()
     )
 

@@ -4,7 +4,6 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 import config
-import secrets
 
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
@@ -23,11 +22,6 @@ def create_app(test_config=None):
     app.config.from_object(config)
     if test_config:
         app.config.update(test_config)
-
-    # 로컬 개발용: 앱이 새로 시작될 때 세션 키 변경
-    if app.config.get('RESET_LOGIN_ON_RESTART', False):
-        app.config['SECRET_KEY'] = secrets.token_hex(32)
-
     if not app.config.get('SECRET_KEY'):
         raise RuntimeError('먼저 python setup_env.py를 실행해 로컬 .env를 생성하세요.')
     csrf.init_app(app)
@@ -52,21 +46,22 @@ def create_app(test_config=None):
 
     # 블루프린트 등록[cite: 11]
 
-    from .views import main_views, a1_mapmain_views, a2_trip_list_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views, a5_z1_mypage_views, sub_views, auth_views
-
+    from .views import (main_views, a0_mapmain_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views, a5_mypage_views, a1_homepage_views, auth_views , a2_trip_list_views,
+        a4_z1_z1_trip_location_feature_views)
 
     app.register_blueprint(main_views.bp)
-    app.register_blueprint(a1_mapmain_views.bp)
-    app.register_blueprint(a2_trip_list_views.bp)  # 추가
+    app.register_blueprint(a0_mapmain_views.bp)
     app.register_blueprint(a3_community_views.bp)
     app.register_blueprint(a3_z1_community_postwrite_views.bp)
     app.register_blueprint(a3_z2_community_detail_views.bp)
     app.register_blueprint(a4_upload_views.bp)
     app.register_blueprint(a4_z1_trip_location_views.bp)
-    app.register_blueprint(sub_views.bp)
+    app.register_blueprint(a5_mypage_views.bp)
+    app.register_blueprint(a1_homepage_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(auth_views.profile_bp)
-    app.register_blueprint(a5_z1_mypage_views.bp)
+    app.register_blueprint(a2_trip_list_views.bp)
+    app.register_blueprint(a4_z1_z1_trip_location_feature_views.bp)
 
     # # 라우트 설정[cite: 11]
     # @app.route('/')

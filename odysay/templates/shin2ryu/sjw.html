@@ -30,7 +30,11 @@
 
 <header class="header">
     <div class="header-inner">
+
+
         <a href="/homepage/sjw" class="logo">
+
+
             <span class="logo-symbol">△△</span>
 
             <div class="logo-text">
@@ -51,9 +55,13 @@
 
             </button>
 
-            <a href="{{ url_for('auth.logout') }}" class="logout-button">
-            로그아웃
-            </a>
+
+            {% if g.user %}
+            <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
+            {% else %}
+            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
+            {% endif %}
+
         </div>
 
     </div>
@@ -172,7 +180,7 @@
         </div>
 
 
-        <!-- 최근 등록된 여행지 -->
+        <!-- 최근 등록된 여행지 (요구사항 레이아웃 반영) -->
         <div class="recent-section">
 
             <div class="sub-section-title">
@@ -181,76 +189,62 @@
                     <p>새로운 여행지를 확인해보세요!</p>
                 </div>
 
-                <a href="#">더보기 ›</a>
+                <a href="{{ url_for('community.community_review') }}">더보기 ›</a>
             </div>
 
 
             <div class="recent-list">
 
-                <a href="#" class="recent-item">
+                {% if recent_places %}
+                    {% for place in recent_places %}
+                        <a href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}" class="recent-item">
 
-                    <img src="{{ url_for('static', filename='images/recent/interlaken.png') }}"
-                    alt="스위스 인터라켄">
+                            <!-- 등록된 첫 번째 대표 사진 -->
+                            {% if place.photos %}
+                                {% set first_photo = place.photos.split(',')[0] %}
+                                <img src="{{ url_for('static', filename='uploads/' ~ first_photo) }}"
+                                     alt="{{ place.place }}">
+                            {% else %}
+                                <img src="{{ url_for('static', filename='images/recent/interlaken.png') }}"
+                                     alt="{{ place.place }}">
+                            {% endif %}
 
-                    <div class="recent-info">
-                        <strong>스위스 인터라켄</strong>
+                            <div class="recent-info">
+                                <!-- 1. [나라/지역] 여행지명 -->
+                                <strong>[{{ place.country }}/{{ place.region }}] {{ place.place }}</strong>
 
-                        <div class="recent-bottom">
-                            <span>2026. 09. 17</span>
+                                <div class="recent-meta-box" style="margin-top: 8px;">
+                                    <!-- 2. 오른쪽 끝 like 작게 -->
+                                    <div style="text-align: right; font-size: 0.82rem; color: #ff5a5f;">
+                                        ♡ {{ place.like_count if place.like_count is defined and place.like_count is not none else 0 }}
+                                    </div>
 
-                            <div>
-                                ♡ 128
-                                &nbsp;
-                                ♧ 24
+                                    <!-- 3. 왼쪽: 작성자, 오른쪽 끝: 날짜 -->
+                                    <div class="recent-bottom" style="display: flex; justify-content: space-between; align-items: center; margin-top: 4px; font-size: 0.85rem; color: #666;">
+                                        <span>
+                                            {% if place.author %}
+                                                {{ place.author }}
+                                            {% else %}
+                                                익명
+                                            {% endif %}
+                                        </span>
+
+                                        <span>
+                                            {% if place.created_at %}
+                                                {{ place.created_at.strftime('%Y. %m. %d') }}
+                                            {% else %}
+                                                방금 전
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
 
-                </a>
-
-
-                <a href="#" class="recent-item">
-
-                    <img src="{{ url_for('static', filename='images/recent/banff.png') }}"
-                         alt="캐나다 밴프 국립공원">
-
-                    <div class="recent-info">
-                        <strong>캐나다 밴프 국립공원</strong>
-
-                        <div class="recent-bottom">
-                            <span>2026. 09. 16</span>
-
-                            <div>
-                                ♡ 96
-                                &nbsp;
-                                ♧ 12
-                            </div>
-                        </div>
-                    </div>
-
-                </a>
-
-
-                <a href="#" class="recent-item">
-
-                    <img src="{{ url_for('static', filename='images/recent/singapore.png') }}"
-                         alt="싱가포르 마리나 베이">
-
-                    <div class="recent-info">
-                        <strong>싱가포르 마리나 베이</strong>
-
-                        <div class="recent-bottom">
-                            <span>2026. 09. 15</span>
-
-                            <div>
-                                ♡ 142
-                                &nbsp;
-                                ♧ 18
-                            </div>
-                        </div>
-                    </div>
-
-                </a>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <p style="padding: 20px 0; color: #888;">최근 등록된 여행지가 없습니다.</p>
+                {% endif %}
 
             </div>
 

@@ -19,6 +19,11 @@
             padding-bottom: 20px;
             margin-bottom: 20px;
         }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .detail-badge {
             display: inline-block;
             background: #eef5ff;
@@ -28,6 +33,19 @@
             font-size: 14px;
             font-weight: bold;
             margin-bottom: 10px;
+        }
+        .btn-delete-post {
+            background: #ef4444;
+            color: #fff;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-delete-post:hover {
+            background: #dc2626;
         }
         .detail-title {
             font-size: 24px;
@@ -45,11 +63,8 @@
             font-size: 16px;
             line-height: 1.8;
             color: #444;
-            min-height: 200px;
+            min-height: 150px;
             white-space: pre-wrap;
-            margin-bottom: 30px;
-        }
-        .detail-images {
             margin-bottom: 30px;
         }
         .detail-images img {
@@ -57,6 +72,140 @@
             border-radius: 8px;
             margin-bottom: 15px;
         }
+
+        /* 좋아요 섹션 */
+        .like-section {
+            text-align: center;
+            margin: 30px 0;
+            padding-top: 20px;
+            border-top: 1px solid #f1f5f9;
+        }
+        .btn-like {
+            background: #fff0f3;
+            color: #ff4757;
+            border: 2px solid #ff4757;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .btn-like:hover {
+            background: #ff4757;
+            color: #fff;
+        }
+
+        /* 댓글 섹션 */
+        .comments-section {
+            margin-top: 40px;
+            border-top: 2px solid #f1f5f9;
+            padding-top: 30px;
+        }
+        .comments-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .comment-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+        .comment-form textarea, .comment-edit-input {
+            width: 100%;
+            height: 80px;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            resize: vertical;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        .comment-form-footer {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .btn-submit-comment {
+            background: #3b82f6;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-submit-comment:hover {
+            background: #2563eb;
+        }
+
+        /* 댓글 목록 */
+        .comment-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .comment-item {
+            padding: 16px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 6px;
+        }
+        .comment-author {
+            font-weight: bold;
+            color: #333;
+        }
+        .comment-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .btn-action {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+        }
+        .btn-edit-comment { color: #3b82f6; }
+        .btn-delete-comment { color: #ef4444; }
+
+        .edit-box {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .edit-btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+        }
+        .btn-save-edit {
+            background: #10b981;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .btn-cancel-edit {
+            background: #6b7280;
+            color: #fff;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
         .btn-back {
             display: inline-block;
             padding: 10px 20px;
@@ -65,6 +214,7 @@
             text-decoration: none;
             border-radius: 6px;
             font-weight: bold;
+            margin-top: 20px;
         }
         .btn-back:hover { background: #e2e8f0; }
     </style>
@@ -73,7 +223,12 @@
 
 <div class="detail-container">
     <div class="detail-header">
-        <span class="detail-badge">{{ item.category if is_post else '여행 후기' }}</span>
+        <div class="header-top">
+            <span class="detail-badge">{{ item.category if is_post else '여행 후기' }}</span>
+            {% if item.user_id and current_user_id and (item.user_id|string == current_user_id|string) %}
+            <button type="button" class="btn-delete-post" onclick="deletePost()">게시글 삭제</button>
+            {% endif %}
+        </div>
         <h1 class="detail-title">
             {% if is_post %}
                 {{ item.title }}
@@ -91,9 +246,7 @@
     {% if photo_list %}
     <div class="detail-images">
         {% for photo in photo_list %}
-            {% if photo.strip() %}
-                <img src="/static/uploads/{{ photo.strip() }}" alt="첨부사진">
-            {% endif %}
+            <img src="/static/uploads/{{ photo }}" alt="첨부사진">
         {% endfor %}
     </div>
     {% endif %}
@@ -108,8 +261,216 @@
         {% endif %}
     </div>
 
-    <a href="javascript:history.back()" class="btn-back"><i class="fa-solid fa-arrow-left"></i> 목록으로 돌아가기</a>
+    <!-- 좋아요 버튼 -->
+    <div class="like-section">
+        <button type="button" class="btn-like" id="likeBtn">
+            <i class="fa-regular fa-heart"></i> 좋아요 <span id="likeCount">{{ item.likes or 0 }}</span>
+        </button>
+    </div>
+
+    <!-- 댓글 섹션 -->
+    <div class="comments-section">
+        <h3 class="comments-title">댓글 (<span id="commentTotalCount">{{ comments|length }}</span>)</h3>
+
+        {% if current_user_id %}
+        <div class="comment-form">
+            <textarea id="commentContent" placeholder="댓글을 작성해 주세요."></textarea>
+            <div class="comment-form-footer">
+                <button type="button" class="btn-submit-comment" id="submitCommentBtn">댓글 등록</button>
+            </div>
+        </div>
+        {% else %}
+        <p style="color: #888; margin-bottom: 20px;">댓글을 작성하려면 로그인이 필요합니다.</p>
+        {% endif %}
+
+        <ul class="comment-list" id="commentList">
+            {% for comment in comments %}
+            <li class="comment-item" id="comment-{{ comment.id }}">
+                <div class="comment-header">
+                    <div>
+                        <span class="comment-author">{{ comment.author or '익명' }}</span>
+                        <span class="comment-date">{{ comment.created_at.strftime('%Y.%m.%d %H:%M') if comment.created_at else '' }}</span>
+                    </div>
+                    {% if comment.user_id and current_user_id and (comment.user_id|string == current_user_id|string) %}
+                    <div class="comment-actions">
+                        <button type="button" class="btn-action btn-edit-comment" onclick="showEditForm({{ comment.id }})">수정</button>
+                        <button type="button" class="btn-action btn-delete-comment" onclick="deleteComment({{ comment.id }})">삭제</button>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="comment-body" id="comment-body-{{ comment.id }}">
+                    <div class="comment-text" id="comment-text-{{ comment.id }}">{{ comment.content }}</div>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <a href="/homepage/community" class="btn-back"><i class="fa-solid fa-arrow-left"></i> 목록으로 돌아가기</a>
 </div>
+
+<script>
+    const postType = "{{ post_type }}";
+    const itemId = "{{ item_id }}";
+
+    // 1. 좋아요 처리
+    document.getElementById('likeBtn').addEventListener('click', (e) => {
+        e.preventDefault();
+
+        fetch(`/homepage/community/detail/api/like/${postType}/${itemId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            if (res.ok && data.success) {
+                document.getElementById('likeCount').innerText = data.likes;
+                alert(data.message || '좋아요를 눌렀습니다.');
+            } else {
+                alert(data.message || '좋아요 처리 중 오류가 발생했습니다.');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('좋아요 처리 중 통신 오류가 발생했습니다.');
+        });
+    });
+
+    // 2. 게시글 삭제 처리
+    function deletePost() {
+        if (!confirm('정말로 이 게시글을 삭제하시겠습니까? 관련 댓글도 함께 삭제됩니다.')) return;
+
+        fetch(`/homepage/community/detail/api/post/delete/${postType}/${itemId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            if (res.ok && data.success) {
+                alert('게시글이 성공적으로 삭제되었습니다.');
+                window.location.href = data.redirect_url;
+            } else {
+                alert(data.message || '게시글 삭제 실패');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('게시글 삭제 중 통신 오류가 발생했습니다.');
+        });
+    }
+
+    // 3. 댓글 등록 처리
+    const submitBtn = document.getElementById('submitCommentBtn');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const contentInput = document.getElementById('commentContent');
+            const content = contentInput.value.trim();
+
+            if (!content) {
+                alert('댓글 내용을 입력하세요.');
+                return;
+            }
+
+            fetch(`/homepage/community/detail/api/comment/${postType}/${itemId}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            })
+            .then(async (res) => {
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    location.reload();
+                } else {
+                    alert(data.message || '댓글 등록에 실패했습니다.');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('댓글 작성 중 통신 오류가 발생했습니다.');
+            });
+        });
+    }
+
+    // 4. 댓글 수정 폼 표시
+    function showEditForm(commentId) {
+        const textElem = document.getElementById(`comment-text-${commentId}`);
+        const currentText = textElem.innerText;
+        const bodyElem = document.getElementById(`comment-body-${commentId}`);
+
+        bodyElem.innerHTML = `
+            <div class="edit-box">
+                <textarea class="comment-edit-input" id="edit-input-${commentId}">${currentText}</textarea>
+                <div class="edit-btn-group">
+                    <button type="button" class="btn-save-edit" onclick="saveCommentEdit(${commentId})">완료</button>
+                    <button type="button" class="btn-cancel-edit" onclick="cancelCommentEdit(${commentId}, '${currentText.replace(/'/g, "\\'")}')">취소</button>
+                </div>
+            </div>
+        `;
+    }
+
+    // 5. 댓글 수정 저장
+    function saveCommentEdit(commentId) {
+        const updatedContent = document.getElementById(`edit-input-${commentId}`).value.trim();
+
+        if (!updatedContent) {
+            alert('수정할 내용을 입력하세요.');
+            return;
+        }
+
+        fetch(`/homepage/community/detail/api/comment/${commentId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ content: updatedContent })
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            if (res.ok && data.success) {
+                const bodyElem = document.getElementById(`comment-body-${commentId}`);
+                bodyElem.innerHTML = `<div class="comment-text" id="comment-text-${commentId}">${data.comment.content}</div>`;
+            } else {
+                alert(data.message || '댓글 수정 실패');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('댓글 수정 중 통신 오류가 발생했습니다.');
+        });
+    }
+
+    // 6. 댓글 수정 취소
+    function cancelCommentEdit(commentId, originalText) {
+        const bodyElem = document.getElementById(`comment-body-${commentId}`);
+        bodyElem.innerHTML = `<div class="comment-text" id="comment-text-${commentId}">${originalText}</div>`;
+    }
+
+    // 7. 댓글 삭제
+    function deleteComment(commentId) {
+        if (!confirm('댓글을 삭제하시겠습니까?')) return;
+
+        fetch(`/homepage/community/detail/api/comment/delete/${commentId}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(async (res) => {
+            const data = await res.json();
+            if (res.ok && data.success) {
+                const commentElem = document.getElementById(`comment-${commentId}`);
+                if (commentElem) commentElem.remove();
+
+                const countElem = document.getElementById('commentTotalCount');
+                const newCount = Math.max(0, parseInt(countElem.innerText || '0') - 1);
+                countElem.innerText = newCount;
+            } else {
+                alert(data.message || '댓글 삭제 실패');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            alert('댓글 삭제 중 통신 오류가 발생했습니다.');
+        });
+    }
+</script>
 
 </body>
 </html>

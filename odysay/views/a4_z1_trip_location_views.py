@@ -3,16 +3,16 @@ import time
 from datetime import datetime
 from flask import Blueprint, render_template, request, redirect, url_for, current_app, g
 from werkzeug.utils import secure_filename
-from odysay.models import db, TravelPlace, User
+from odysay.models import db, User, TripLocationmd
 
 bp = Blueprint('trip_location', __name__, url_prefix='/homepage/trip_location')
 
 # -----------------------------------------------------------
 # 여행지 상세 페이지
 # -----------------------------------------------------------
-@bp.route('/trip_location/<int:place_id>')
+@bp.route('/<int:place_id>')
 def trip_location_detail(place_id):
-    place_data = TravelPlace.query.get_or_404(place_id)
+    place_data = TripLocationmd.query.get_or_404(place_id)
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
     restaurant_photos = (
         [p.strip() for p in place_data.restaurant_photos.split(',') if p.strip()]
@@ -38,9 +38,9 @@ def trip_location_detail(place_id):
 # -----------------------------------------------------------
 # 여행지 수정 페이지
 # -----------------------------------------------------------
-@bp.route('/trip_location/<int:place_id>/edit', methods=['GET', 'POST'])
+@bp.route('/<int:place_id>/edit', methods=['GET', 'POST'])
 def trip_location_edit(place_id):
-    place_data = TravelPlace.query.get_or_404(place_id)
+    place_data = TripLocationmd.query.get_or_404(place_id)
 
     # 작성자 확인 및 로그인 체크
     if not g.user or place_data.user_id != g.user.id:
@@ -115,9 +115,9 @@ def trip_location_edit(place_id):
 # -----------------------------------------------------------
 # 최근 등록된 여행지 보기
 # -----------------------------------------------------------
-@bp.route('/trip_location')
+@bp.route('/')
 def trip_location():
-    place_data = TravelPlace.query.order_by(TravelPlace.id.desc()).first()
+    place_data = TripLocationmd.query.order_by(TripLocationmd.id.desc()).first()
 
     if not place_data:
         return "<script>alert('등록된 여행지가 없습니다. 먼저 여행지를 등록해주세요!'); location.href='/homepage/upload';</script>"
