@@ -36,6 +36,6 @@ def my_places():
     )
 
     return render_template(
-        'my_places.html',
+        'mypage_my_places.html',
         places=places
     )
