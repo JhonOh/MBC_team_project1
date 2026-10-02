@@ -1,0 +1,468 @@
+/* ================= 리뷰 ================= */
+
+.review-section {
+    width: 100%;
+}
+
+.review-summary {
+    display: grid;
+    grid-template-columns: 180px 1fr 160px;
+    gap: 35px;
+    align-items: center;
+
+    padding: 25px;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+.review-score-box {
+    text-align: center;
+}
+
+.review-big-score {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 32px;
+}
+
+.review-big-star {
+    color: #e45b69;
+}
+
+.review-score-box p {
+    margin-top: 5px;
+    color: #8a96a3;
+    font-size: 12px;
+}
+
+.review-score-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.score-row {
+    display: grid;
+    grid-template-columns: 30px 1fr 38px;
+    gap: 8px;
+    align-items: center;
+
+    color: #697786;
+    font-size: 12px;
+}
+
+.score-bar {
+    height: 7px;
+
+    border-radius: 10px;
+
+    background: #edf0f3;
+
+    overflow: hidden;
+}
+
+.score-bar i {
+    display: block;
+
+    width: 0;
+    height: 100%;
+
+    border-radius: 10px;
+
+    background: #e45b69;
+
+    transition: width 0.25s ease;
+}
+
+.review-open-button,
+.travel-talk-open-button {
+    padding: 11px 18px;
+
+    border-radius: 7px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.travel-talk-write-cancel {
+    display: none;
+
+    padding: 10px 16px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 7px;
+
+    background: #ffffff;
+    color: #66778a;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.travel-talk-write-cancel.active {
+    display: inline-block;
+}
+
+.travel-talk-write-cancel:hover {
+    background: #f5f7fa;
+}
+
+.travel-talk-write-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 리뷰 작성 */
+
+.review-write {
+    display: none;
+
+    margin-top: 18px;
+
+    border: 1px solid #dfe4ea;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    overflow: hidden;
+}
+
+.review-write.active {
+    display: block;
+}
+
+.review-star-select {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    border-bottom: 1px solid #edf0f3;
+
+    font-size: 13px;
+}
+
+#reviewStars {
+    display: flex;
+    gap: 2px;
+}
+
+#reviewStars button {
+    padding: 0;
+
+    color: #d8dde3;
+
+    font-size: 24px;
+}
+
+#reviewStars button.active {
+    color: #e45b69;
+}
+
+#selectedScore {
+    color: #26384a;
+}
+
+.review-write textarea {
+    display: block;
+
+    width: 100%;
+    height: 100px;
+
+    padding: 15px;
+
+    border: none;
+    outline: none;
+
+    resize: none;
+
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.review-write-bottom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 15px;
+
+    padding: 10px 12px;
+
+    border-top: 1px solid #f0f2f5;
+}
+
+.review-counter {
+    color: #9aa4b5;
+    font-size: 12px;
+}
+
+.review-submit {
+    padding: 8px 18px;
+
+    border-radius: 6px;
+
+    background: #26384a;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* 리뷰 목록 */
+
+.review-list {
+    margin-top: 22px;
+}
+
+.review-item {
+    margin-bottom: 10px;
+    padding: 16px 18px;
+
+    border: 1px solid #e3e8ee;
+    border-radius: 10px;
+
+    background: #ffffff;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 10px;
+}
+
+.review-user-area {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.review-avatar,
+.travel-talk-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #eaf2ff;
+
+    font-size: 15px;
+}
+
+.review-user,
+.travel-talk-user {
+    color: #26384a;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.author-badge {
+    padding: 2px 7px;
+
+    border-radius: 10px;
+
+    background: #fff0f2;
+    color: #e45b69;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.review-user-name-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.review-rating {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+
+    margin: 0;
+}
+
+.review-rating .review-rating-star {
+    color: #e45b69;
+    font-size: 13px;
+}
+
+.review-rating-number {
+    margin-left: 1px;
+
+    color: #e45b69;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.review-date,
+.travel-talk-date {
+    color: #9aa4b5;
+
+    font-size: 11px;
+
+    white-space: nowrap;
+}
+
+.author-badge {
+    padding: 2px 7px;
+
+    border-radius: 10px;
+
+    background: #fff0f2;
+    color: #e45b69;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.review-text {
+    margin: 10px 0 12px 37px;
+
+    color: #4f5f6f;
+
+    font-size: 14px;
+    line-height: 1.7;
+
+    white-space: pre-wrap;
+}
+
+.review-actions {
+    display: flex;
+    gap: 16px;
+
+    margin-left: 37px;
+}
+
+.review-action-button {
+    color: #8793a0;
+    font-size: 12px;
+}
+
+.review-action-button.recommended {
+    color: #e45b69;
+}
+/* 리뷰 작성자 메뉴 */
+
+.review-owner-menu {
+    position: relative;
+    margin-left: auto;
+}
+
+.review-more-button {
+    padding: 0 5px;
+
+    color: #929ba5;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.review-more-menu {
+    display: none;
+
+    position: absolute;
+    top: 26px;
+    right: 0;
+
+    min-width: 82px;
+    padding: 5px;
+
+    border: 1px solid #e2e7ed;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
+
+    z-index: 20;
+}
+
+.review-more-menu.active {
+    display: block;
+}
+
+.review-more-menu button {
+    display: block;
+
+    width: 100%;
+    padding: 7px 10px;
+
+    border-radius: 5px;
+
+    color: #4f5f6f;
+    font-size: 12px;
+    text-align: left;
+}
+
+.review-more-menu button:hover {
+    background: #f5f7fa;
+}
+
+.review-delete-button {
+    color: #e25555 !important;
+}
+
+.review-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* BEST */
+.best-badge {
+    display: inline-flex;
+    align-items: center;
+
+    padding: 2px 7px;
+
+    border-radius: 10px;
+
+    background: #fff3cd;
+    color: #e08a00;
+
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+/* 작성자 / BEST 배지 정렬 */
+.author-badge,
+.best-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 20px;
+    padding: 0 7px;
+
+    border-radius: 10px;
+
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    vertical-align: middle;
+}
