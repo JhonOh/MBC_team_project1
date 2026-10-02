@@ -20,7 +20,7 @@
 
         <div class="header-inner">
 
-             <a href="{{ url_for('homepage.main') }}" class="logo">
+            <a href="{{ url_for('homepage.main') }}" class="logo">
                 <span class="logo-icon">△</span>
                 <span>어디갈까?</span>
             </a>
@@ -73,7 +73,7 @@
                     </a>
                 </li>
 
-                               <li>
+                <li>
                     <a href="#">
                         <span class="menu-icon">♡</span>
                         <span>내가 찜한 여행지</span>
@@ -116,8 +116,14 @@
 
                 <div class="profile-left">
 
-                    <div class="profile-img">
-                        ♙
+                                        <div class="profile-img">
+                        {% if g.user.profile_image %}
+                            <img
+                                src="{{ url_for('static', filename=g.user.profile_image) }}"
+                                alt="{{ g.user.nickname or g.user.username }}님의 대표 이미지">
+                        {% else %}
+                            <span aria-label="기본 대표 이미지">♙</span>
+                        {% endif %}
                     </div>
 
                     <div class="profile-info">
@@ -134,8 +140,17 @@
 
                 </div>
 
-                 <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">프로필 수정
-               </a>
+                <div class="profile-actions">
+                    {% if is_admin() %}
+                        <a href="{{ url_for('admin.index') }}" class="profile-btn">
+                            콘텐츠 관리
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">
+                        프로필 수정
+                    </a>
+                </div>
 
             </div>
 
@@ -171,7 +186,7 @@
                 </div>
 
 
-                                <a href="{{ url_for('mypage.my_places') }}"
+                <a href="{{ url_for('mypage.my_places') }}"
                    class="stat-item">
 
                     <span class="stat-title">

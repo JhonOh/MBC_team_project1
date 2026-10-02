@@ -2,30 +2,16 @@
 from flask import Blueprint, render_template, abort, request, jsonify, session, g
 # [수정] PostLike 모델 추가 import
 from odysay.models import db, Post, User, Comment, PostLike ,TripLocationmd
-from odysay import csrf
+from werkzeug.exceptions import HTTPException
 from datetime import datetime
+from odysay.moderation import protect_hidden_descendants
 
 bp = Blueprint('detail', __name__, url_prefix='/homepage/community/detail')
 
 
 def get_current_user_id():
     """세션 및 g 객체에서 유저 ID를 안전하게 가져오기"""
-    uid = None
-    if hasattr(g, 'user') and g.user:
-        uid = getattr(g.user, 'id', None)
-    elif 'user_id' in session:
-        uid = session['user_id']
-    elif 'user' in session and isinstance(session['user'], dict):
-        uid = session['user'].get('id')
-    elif '_user_id' in session:
-        uid = session['_user_id']
-
-    if uid is not None:
-        try:
-            return int(uid)
-        except (ValueError, TypeError):
-            return uid
-    return None
+    return g.user.id if getattr(g, 'user', None) else None
 
 
 @bp.route('/<string:post_type>/<int:item_id>')
@@ -90,7 +76,6 @@ def detail(post_type, item_id):
 # 1. 좋아요 토글 API (자유게시판/여행팁 전용 DB 기반 1회 제한)
 # -----------------------------------------------------------
 @bp.route('/api/like/<string:post_type>/<int:item_id>', methods=['POST'])
-@csrf.exempt
 def toggle_like(post_type, item_id):
     user_id = get_current_user_id()
     if not user_id:
@@ -120,6 +105,9 @@ def toggle_like(post_type, item_id):
 
         return jsonify({'success': True, 'likes': item.likes, 'message': '좋아요를 눌렀습니다.'})
 
+    except HTTPException:
+        db.session.rollback()
+        raise
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'DB 오류 발생: {str(e)}'}), 500
@@ -129,7 +117,6 @@ def toggle_like(post_type, item_id):
 # 2. 댓글 등록 API
 # -----------------------------------------------------------
 @bp.route('/api/comment/<string:post_type>/<int:item_id>', methods=['POST'])
-@csrf.exempt
 def add_comment(post_type, item_id):
     try:
         user_id = get_current_user_id()
@@ -153,8 +140,10 @@ def add_comment(post_type, item_id):
         )
 
         if post_type == 'post':
+            Post.query.get_or_404(item_id)
             new_comment.post_id = item_id
         elif post_type == 'place':
+            TripLocationmd.query.get_or_404(item_id)
             new_comment.travel_place_id = item_id
         else:
             return jsonify({'success': False, 'message': '유효하지 않은 post_type입니다.'}), 400
@@ -172,6 +161,9 @@ def add_comment(post_type, item_id):
                 'created_at': new_comment.created_at.strftime('%Y.%m.%d %H:%M')
             }
         })
+    except HTTPException:
+        db.session.rollback()
+        raise
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'댓글 저장 중 DB 오류: {str(e)}'}), 500
@@ -181,7 +173,6 @@ def add_comment(post_type, item_id):
 # 3. 댓글 수정 API (PUT, POST 및 delete 다중 경로 지원)
 # -----------------------------------------------------------
 @bp.route('/api/comment/<int:comment_id>', methods=['PUT', 'POST'])
-@csrf.exempt
 def update_comment(comment_id):
     user_id = get_current_user_id()
     if not user_id:
@@ -202,6 +193,9 @@ def update_comment(comment_id):
         comment.content = content
         db.session.commit()
         return jsonify({'success': True, 'comment': {'id': comment.id, 'content': comment.content}})
+    except HTTPException:
+        db.session.rollback()
+        raise
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'댓글 수정 실패: {str(e)}'}), 500
@@ -212,7 +206,6 @@ def update_comment(comment_id):
 # -----------------------------------------------------------
 @bp.route('/api/comment/<int:comment_id>', methods=['DELETE'])
 @bp.route('/api/comment/delete/<int:comment_id>', methods=['POST', 'DELETE'])
-@csrf.exempt
 def delete_comment(comment_id):
     user_id = get_current_user_id()
     if not user_id:
@@ -227,6 +220,9 @@ def delete_comment(comment_id):
         db.session.delete(comment)
         db.session.commit()
         return jsonify({'success': True, 'message': '댓글이 삭제되었습니다.'})
+    except HTTPException:
+        db.session.rollback()
+        raise
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'댓글 삭제 실패: {str(e)}'}), 500
@@ -236,7 +232,6 @@ def delete_comment(comment_id):
 # 5. 게시글 삭제 API
 # -----------------------------------------------------------
 @bp.route('/api/post/delete/<string:post_type>/<int:item_id>', methods=['DELETE', 'POST'])
-@csrf.exempt
 def delete_post(post_type, item_id):
     user_id = get_current_user_id()
     if not user_id:
@@ -253,6 +248,7 @@ def delete_post(post_type, item_id):
         return jsonify({'success': False, 'message': '작성자만 게시글을 삭제할 수 있습니다.'}), 403
 
     try:
+        protect_hidden_descendants(post_type, item_id)
         Comment.query.filter(
             (Comment.post_id == item_id) if post_type == 'post' else (Comment.travel_place_id == item_id)
         ).delete()
@@ -260,6 +256,9 @@ def delete_post(post_type, item_id):
         db.session.delete(item)
         db.session.commit()
         return jsonify({'success': True, 'redirect_url': '/homepage/community'})
+    except HTTPException:
+        db.session.rollback()
+        raise
     except Exception as e:
         db.session.rollback()
         return jsonify({'success': False, 'message': f'게시글 삭제 실패: {str(e)}'}), 500

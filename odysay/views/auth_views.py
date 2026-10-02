@@ -1,10 +1,15 @@
-from flask import Blueprint, redirect, url_for, flash, session, g, render_template ,request ,jsonify ,current_app
+from flask import Blueprint, redirect, url_for, flash, session, g, render_template, request, jsonify, current_app
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy.exc import IntegrityError ,SQLAlchemyError
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from odysay import db
 from odysay.models import User
-from odysay.forms import UserCreateForm, LoginForm ,ProfileEditForm
+from odysay.forms import UserCreateForm, LoginForm, ProfileEditForm
+from io import BytesIO
+from pathlib import Path
+from uuid import uuid4
+import warnings
 
+from PIL import Image, ImageOps, UnidentifiedImageError
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 profile_bp = Blueprint('profile', __name__, url_prefix='/homepage')
@@ -72,6 +77,7 @@ def signup():
 
     return render_template('signup.html', form=form)
 
+
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -88,8 +94,8 @@ def login():
             flash('존재하지 않는 사용자입니다.')
 
         elif not check_password_hash(
-            user.password_hash,
-            form.password1.data
+                user.password_hash,
+                form.password1.data
         ):
             flash('비밀번호가 일치하지 않습니다.')
 
@@ -117,6 +123,7 @@ def logout():
 
     return redirect(url_for('homepage.main'))
 
+
 @bp.route('/check-nickname/', methods=['GET'])
 def check_nickname():
     nickname = request.args.get('nickname', '').strip()
@@ -143,6 +150,7 @@ def check_nickname():
 
     return response
 
+
 @bp.route('/withdraw/', methods=['POST'])
 def withdraw():
     # 로그인한 회원인지 확인
@@ -155,8 +163,8 @@ def withdraw():
 
     # 현재 비밀번호가 맞는지 확인
     if not password or not check_password_hash(
-        g.user.password_hash,
-        password
+            g.user.password_hash,
+            password
     ):
         flash('비밀번호가 일치하지 않습니다.')
         return redirect(url_for('homepage.mypage_settings'))
@@ -177,6 +185,57 @@ def withdraw():
 
     flash('회원 탈퇴가 완료되었습니다.')
     return redirect(url_for('homepage.main'))
+
+
+def save_profile_image(upload):
+    max_size = 5 * 1024 * 1024
+    data = upload.read(max_size + 1)
+
+    if len(data) > max_size:
+        raise ValueError('사진은 5MB 이하로 선택해 주세요.')
+
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter('error', Image.DecompressionBombWarning)
+
+            with Image.open(BytesIO(data)) as original:
+                if original.format not in {'JPEG', 'PNG', 'WEBP'}:
+                    raise ValueError('JPG, PNG, WEBP 사진만 가능합니다.')
+
+                if original.width * original.height > 25_000_000:
+                    raise ValueError('사진 크기가 너무 큽니다. 줄여서 등록해 주세요.')
+
+                # 휴대폰 사진의 회전 방향 반영
+                corrected = ImageOps.exif_transpose(original)
+                corrected.thumbnail((512, 512))
+
+                # 투명한 부분은 흰색으로 처리
+                rgba = corrected.convert('RGBA')
+                photo = Image.new('RGB', rgba.size, 'white')
+                photo.paste(rgba, mask=rgba.getchannel('A'))
+
+    except (
+            UnidentifiedImageError,
+            OSError,
+            Image.DecompressionBombError,
+            Image.DecompressionBombWarning,
+    ) as error:
+        raise ValueError('정상적인 이미지 파일을 선택해 주세요.') from error
+
+    folder = Path(current_app.static_folder) / 'uploads' / 'profiles'
+    folder.mkdir(parents=True, exist_ok=True)
+
+    filename = f'{uuid4().hex}.jpg'
+    destination = folder / filename
+
+    try:
+        photo.save(destination, format='JPEG', quality=85)
+    except OSError:
+        destination.unlink(missing_ok=True)
+        raise
+
+    return f'uploads/profiles/{filename}'
+
 
 @profile_bp.route('/profile_edit', methods=['GET', 'POST'])
 def profile_edit():
@@ -219,8 +278,8 @@ def profile_edit():
                     '현재 비밀번호를 입력해 주세요.'
                 )
             elif not check_password_hash(
-                g.user.password_hash,
-                current_password
+                    g.user.password_hash,
+                    current_password
             ):
                 form.current_password.errors.append(
                     '현재 비밀번호가 일치하지 않습니다.'
@@ -231,8 +290,8 @@ def profile_edit():
                     '새 비밀번호를 입력해 주세요.'
                 )
             elif check_password_hash(
-                g.user.password_hash,
-                new_password
+                    g.user.password_hash,
+                    new_password
             ):
                 form.new_password.errors.append(
                     '현재 비밀번호와 다른 비밀번호를 입력해 주세요.'
@@ -254,6 +313,30 @@ def profile_edit():
                 form=form,
                 save_error=save_error
             )
+        new_image_path = None
+
+        if form.avatar.data:
+            try:
+                new_image_path = save_profile_image(form.avatar.data)
+
+            except ValueError as error:
+                form.avatar.errors.append(str(error))
+                return render_template(
+                    'profile_edit.html',
+                    form=form,
+                    save_error=None
+                )
+
+            except OSError:
+                current_app.logger.exception('대표 이미지 저장 실패')
+                return render_template(
+                    'profile_edit.html',
+                    form=form,
+                    save_error='사진을 저장하지 못했습니다. 다시 시도해 주세요.'
+                )
+
+        if new_image_path:
+            g.user.profile_image = new_image_path
 
         g.user.nickname = nickname
 
@@ -270,6 +353,14 @@ def profile_edit():
             form.nickname.errors.append(
                 '이미 사용 중인 닉네임입니다.'
             )
+            if new_image_path:
+                try:
+                    image_path = (
+                            Path(current_app.static_folder) / new_image_path
+                    )
+                    image_path.unlink(missing_ok=True)
+                except OSError:
+                    current_app.logger.exception('실패한 업로드 파일 정리 오류')
 
         except SQLAlchemyError:
             db.session.rollback()
@@ -277,6 +368,14 @@ def profile_edit():
             save_error = (
                 '저장하지 못했습니다. 잠시 후 다시 시도해 주세요.'
             )
+            if new_image_path:
+                try:
+                    image_path = (
+                            Path(current_app.static_folder) / new_image_path
+                    )
+                    image_path.unlink(missing_ok=True)
+                except OSError:
+                    current_app.logger.exception('실패한 업로드 파일 정리 오류')
 
         else:
             if changing_password:
@@ -286,7 +385,7 @@ def profile_edit():
                 )
                 return redirect(url_for('homepage.main'))
 
-            flash('닉네임이 수정되었습니다.')
+            flash('프로필이 수정되었습니다.')
             return redirect(url_for('homepage.mypage'))
 
     return render_template(
@@ -294,3 +393,9 @@ def profile_edit():
         form=form,
         save_error=save_error
     )
+
+
+def start_login_session(user):
+    session.clear()
+    session.permanent = False
+    session['user_id'] = user.id

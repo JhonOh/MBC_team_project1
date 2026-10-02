@@ -2,6 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ item.title if is_post else item.place }} - 어딧세이</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
@@ -319,7 +320,7 @@
 
         fetch(`/homepage/community/detail/api/like/${postType}/${itemId}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content }
         })
         .then(async (res) => {
             const data = await res.json();
@@ -342,7 +343,7 @@
 
         fetch(`/homepage/community/detail/api/post/delete/${postType}/${itemId}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content }
         })
         .then(async (res) => {
             const data = await res.json();
@@ -374,7 +375,7 @@
 
             fetch(`/homepage/community/detail/api/comment/${postType}/${itemId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content },
                 body: JSON.stringify({ content })
             })
             .then(async (res) => {
@@ -420,7 +421,7 @@
 
         fetch(`/homepage/community/detail/api/comment/${commentId}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content },
             body: JSON.stringify({ content: updatedContent })
         })
         .then(async (res) => {
@@ -450,7 +451,7 @@
 
         fetch(`/homepage/community/detail/api/comment/delete/${commentId}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
+            headers: { 'Content-Type': 'application/json', 'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content }
         })
         .then(async (res) => {
             const data = await res.json();

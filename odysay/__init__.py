@@ -63,6 +63,13 @@ def create_app(test_config=None):
     app.register_blueprint(a2_trip_list_views.bp)
     app.register_blueprint(a4_z1_z1_trip_location_feature_views.bp)
 
+    from .views import admin_views
+    from .moderation import is_admin
+    from .admin_commands import register_commands
+    app.register_blueprint(admin_views.bp)
+    app.context_processor(lambda: {'is_admin': is_admin})
+    register_commands(app)
+
     # # 라우트 설정[cite: 11]
     # @app.route('/')
     # def index():

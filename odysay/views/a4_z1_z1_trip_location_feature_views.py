@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify, g, request
+from odysay.moderation import protect_hidden_descendants
 from odysay.models import db, Bookmark, TripLocationmd, Review, User, TravelTalk, TravelTalkComment
 
 bp = Blueprint('feature', __name__, url_prefix='/homepage/trip_location/feature')
@@ -425,6 +426,7 @@ def travel_talk_delete(talk_id):
             'message': '삭제 권한이 없습니다.'
         }), 403
 
+    protect_hidden_descendants('talk', talk.id)
     TravelTalkComment.query.filter_by(
         travel_talk_id=talk.id
     ).delete()
