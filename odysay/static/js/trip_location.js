@@ -629,83 +629,83 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     reviewItem.innerHTML = `
                     <div class="review-header">
-                
+
                         <div class="review-user-area">
                             <span class="review-avatar">👤</span>
-                
+
                             <div class="review-user-info">
 
                                 <div class="review-user-name-row">
                                     <span class="review-user"></span>
-                            
+
                                     <span class="review-rating">
                                         <span class="review-rating-star">★</span>
-                            
+
                                         <span class="review-rating-number">
                                             ${Number(review.rating).toFixed(1)}
                                         </span>
                                     </span>
                                 </div>
-                            
+
                                 <span class="review-date"></span>
-                            
+
                             </div>
                         </div>
-                
+
                         ${
                             review.is_owner
                                 ? `
                                     <div class="review-owner-menu">
-                
+
                                         <button
                                             type="button"
                                             class="review-more-button"
                                             aria-label="리뷰 메뉴">
                                             ⋯
                                         </button>
-                
+
                                         <div class="review-more-menu">
-                
+
                                             <button
                                                 type="button"
                                                 class="review-edit-button">
                                                 수정
                                             </button>
-                
+
                                             <button
                                                 type="button"
                                                 class="review-delete-button">
                                                 삭제
                                             </button>
-                
+
                                         </div>
-                
+
                                     </div>
                                 `
                                 : ''
                         }
-                
+
                     </div>
-                
-                
+
+
                     <p class="review-text"></p>
-                
-                
+
+
                     <div class="review-actions">
-                
+
                         <button
                             type="button"
                             class="review-action-button recommend-button">
                             ♡ 추천
                             <span class="recommend-count">0</span>
                         </button>
-                
+
                         <button
                             type="button"
                             class="review-action-button report-button">
                             🚨 신고
                         </button>
-                
+
                     </div>
                 `;
 
@@ -1308,63 +1308,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     travelTalkItem.innerHTML = `
                         <div class="travel-talk-header">
-        
+
                             <div class="travel-talk-user-area">
-        
+
                                 <span class="travel-talk-avatar">
                                     👤
                                 </span>
-        
+
                                 <div class="travel-talk-user-info">
-        
+
                                     <span class="travel-talk-user"></span>
-        
+
                                     <span class="travel-talk-date"></span>
-        
+
                                 </div>
-        
+
                             </div>
-        
+
                             ${
                                 talk.is_owner
                                     ? `
                                         <div class="travel-talk-owner-menu">
-        
+
                                             <button
                                                 type="button"
                                                 class="travel-talk-more">
                                                 ⋯
                                             </button>
-        
+
                                             <div class="travel-talk-more-menu">
-        
+
                                                 <button
                                                     type="button"
                                                     class="travel-talk-edit-button">
                                                     수정
                                                 </button>
-        
+
                                                 <button
                                                     type="button"
                                                     class="travel-talk-delete-button">
                                                     삭제
                                                 </button>
-        
+
                                             </div>
-        
+
                                         </div>
                                     `
                                     : ''
                             }
-        
+
                         </div>
-        
+
                         <h4 class="travel-talk-post-title"></h4>
-        
+
                         <p class="travel-talk-text"></p>
-        
+
                         <div class="travel-talk-actions">
-        
+
                             <button
                                 type="button"
                                 class="travel-talk-like">
@@ -1373,7 +1373,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     0
                                 </span>
                             </button>
-        
+
                             <button
                                 type="button"
                                 class="travel-talk-comment">
@@ -1382,51 +1382,51 @@ document.addEventListener('DOMContentLoaded', () => {
                                     0
                                 </span>
                             </button>
-        
+
                             <button
                                 type="button"
                                 class="travel-talk-report">
                                 🚨 신고
                             </button>
-        
+
                         </div>
-        
+
                         <div class="travel-talk-comment-section">
-        
+
                             <div class="travel-talk-comment-list">
-        
+
                                 <p class="travel-talk-no-comment">
                                     아직 댓글이 없습니다.
                                 </p>
-        
+
                             </div>
-        
+
                             <div class="travel-talk-comment-write">
-        
+
                                 <textarea
                                     class="travel-talk-comment-input"
                                     maxlength="500"
                                     placeholder="댓글을 입력해주세요."
                                 ></textarea>
-        
+
                                 <div class="travel-talk-comment-write-bottom">
-        
+
                                     <span>
                                         <span class="travel-talk-comment-text-count">
                                             0
                                         </span>/500
                                     </span>
-        
+
                                     <button
                                         type="button"
                                         class="travel-talk-comment-submit">
                                         등록
                                     </button>
-        
+
                                 </div>
-        
+
                             </div>
-        
+
                         </div>
                     `;
 
@@ -1737,63 +1737,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     commentItem.innerHTML = `
                         <div class="travel-talk-comment-header">
-    
+
                             <div class="travel-talk-comment-user-area">
-    
+
                                 <span class="travel-talk-comment-avatar">
                                     👤
                                 </span>
-    
+
                                 <span class="travel-talk-comment-user"></span>
-    
+
                             </div>
-    
+
                             <span class="travel-talk-comment-date"></span>
-    
+
                         </div>
-    
+
                         <div class="travel-talk-comment-body">
-    
+
                             <p class="travel-talk-comment-text"></p>
-    
+
                             <button
                                 type="button"
                                 class="travel-talk-comment-report">
                                 🚨 신고
                             </button>
-    
+
                             ${
                                 comment.is_owner
                                     ? `
                                         <div class="comment-owner-menu">
-    
+
                                             <button
                                                 type="button"
                                                 class="comment-more-button">
                                                 ⋯
                                             </button>
-    
+
                                             <div class="comment-more-menu">
-    
+
                                                 <button
                                                     type="button"
                                                     class="comment-edit-button">
                                                     수정
                                                 </button>
-    
+
                                                 <button
                                                     type="button"
                                                     class="comment-delete-button">
                                                     삭제
                                                 </button>
-    
+
                                             </div>
-    
+
                                         </div>
                                     `
                                     : ''
                             }
-    
+
                         </div>
                     `;
 
@@ -2320,33 +2320,33 @@ document.addEventListener('DOMContentLoaded', () => {
                     maxlength="100"
                     placeholder="제목을 입력해주세요."
                 >
-        
+
                 <textarea
                     class="travel-talk-post-edit-text"
                     maxlength="500"
                     placeholder="내용을 입력해주세요."
                 ></textarea>
-        
+
                 <div class="travel-talk-post-edit-bottom">
-        
+
                     <span class="travel-talk-post-edit-counter">
                         <span class="travel-talk-post-edit-count">
                             ${oldText.length}
                         </span>/500
                     </span>
-        
+
                     <button
                         type="button"
                         class="travel-talk-post-edit-cancel">
                         취소
                     </button>
-        
+
                     <button
                         type="button"
                         class="travel-talk-post-edit-save">
                         수정 완료
                     </button>
-        
+
                 </div>
             `;
 

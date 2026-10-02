@@ -1,13 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
   let placesData = [];
 
-  // 1. HTML의 hidden input에서 현재 카테고리값 읽기
+  // 1. HTML의 hidden input에서 현재 카테고리값 및 초기 정렬값 읽기
   const categoryInput = document.getElementById('currentCategoryInput');
   let currentCategory = categoryInput ? categoryInput.value : 'ALL';
 
-  let currentSort = 'latest';
+  const sortInput = document.getElementById('initialSortInput');
+  let currentSort = sortInput ? sortInput.value : 'latest';
+
+  // 정렬 탭 버튼 UI 상태 초기화
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  tabBtns.forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.sort === currentSort) {
+      btn.classList.add('active');
+    }
+  });
+
   let currentPage = 1;
-  const ITEMS_PER_PAGE = 5; // 1페이지당 5개 게시물
+  const ITEMS_PER_PAGE = 5;
 
   // 2. 백엔드 API로부터 데이터 가져오기
   fetchPlaces();
@@ -33,10 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentCategory !== 'ALL') {
       filtered = filtered.filter(item => {
         if (!item.category) return false;
-
         const targetCategory = currentCategory.replace(/\s+/g, '');
         const itemCategory = item.category.replace(/\s+/g, '');
-
         return itemCategory.includes(targetCategory);
       });
     }
@@ -53,12 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // [정렬]
-    if (currentSort === 'popular') {
-      filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
-    } else {
-      filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-    }
+    // [정렬 기능: 인기순 / 댓글순 / 최신순]
+    filtered.sort((a, b) => {
+      const timeA = a.raw_date ? new Date(a.raw_date).getTime() : 0;
+      const timeB = b.raw_date ? new Date(b.raw_date).getTime() : 0;
+
+      const likesA = a.likes || 0;
+      const likesB = b.likes || 0;
+      const commentA = a.comment_count ?? a.comments_count ?? 0;
+      const commentB = b.comment_count ?? b.comments_count ?? 0;
+
+      if (currentSort === 'popular') {
+        // 인기순: (좋아요 + 댓글) 합계 내림차순 -> 동율 시 좋아요 내림차순 -> 최신순
+        const totalA = likesA + commentA;
+        const totalB = likesB + commentB;
+
+        if (totalB !== totalA) {
+          return totalB - totalA;
+        }
+        if (likesB !== likesA) {
+          return likesB - likesA;
+        }
+        return timeB - timeA;
+      } else if (currentSort === 'comments') {
+        // 댓글순
+        if (commentB !== commentA) {
+          return commentB - commentA;
+        }
+        return timeB - timeA;
+      } else {
+        // 최신순 (기본값)
+        return timeB - timeA;
+      }
+    });
 
     // [페이지네이션 계산]
     const totalItems = filtered.length;
@@ -90,32 +126,42 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     items.forEach(item => {
-      let thumbImg = 'https://via.placeholder.com/100?text=Odysay';
-      if (item.photos) {
+      let hasPhoto = false;
+      let thumbImg = '';
+
+      if (item.photos && item.photos.trim() !== '') {
         const photoArray = item.photos.split(',');
         if (photoArray.length > 0 && photoArray[0].trim() !== '') {
           thumbImg = `/static/uploads/${photoArray[0].trim()}`;
+          hasPhoto = true;
         }
       }
 
+      const imageHtml = hasPhoto
+        ? `<img src="${thumbImg}" alt="${item.title}" class="post-thumb" onerror="this.outerHTML='<div class=\\'post-thumb no-img\\'><i class=\\'fa-regular fa-image\\'></i><span>Odysay</span></div>'">`
+        : `<div class="post-thumb no-img"><i class="fa-regular fa-image"></i><span>Odysay</span></div>`;
+
+      const commentCount = item.comment_count ?? item.comments_count ?? 0;
+
       const cardHtml = `
         <a href="${item.detail_url}" class="post-card">
-          <img src="${thumbImg}" alt="${item.title}" class="post-thumb" onerror="this.src='https://via.placeholder.com/100?text=Odysay'">
+          ${imageHtml}
           <div class="post-info">
-            <div>
-              <div class="post-header">
-                <span class="badge">${item.category || '일반'}</span>
-                <span class="post-title">[${item.country || '어딧세이'}/${item.region || '게시판'}] ${item.title}</span>
+            <div class="post-body-wrap">
+              <span class="badge">${item.category || '일반'}</span>
+              <div class="post-main-content">
+                <h3 class="post-title">[${item.country || '어딧세이'}/${item.region || '게시판'}] ${item.title}</h3>
+                <p class="post-desc">${item.intro || '등록된 내용이 없습니다.'}</p>
               </div>
-              <p class="post-desc">${item.intro || '등록된 내용이 없습니다.'}</p>
             </div>
             <div class="post-meta">
-              <div class="author-time">
-                <span class="author"><i class="fa-regular fa-user"></i> ${item.author}</span>
-                <span class="time">${item.created_at}</span>
-              </div>
-              <div class="stats">
-                <span><i class="fa-regular fa-heart"></i> ${item.likes}</span>
+              <span class="author"><i class="fa-regular fa-user"></i> ${item.author}</span>
+              <div class="meta-right">
+                <div class="meta-stats">
+                  <span class="like-count"><i class="fa-regular fa-heart"></i> ${item.likes || 0}</span>
+                  <span class="comment-count"><i class="fa-regular fa-comment"></i> ${commentCount}</span>
+                </div>
+                <span class="time">${item.created_at || ''}</span>
               </div>
             </div>
           </div>
@@ -167,32 +213,60 @@ document.addEventListener('DOMContentLoaded', () => {
     pagination.appendChild(nextBtn);
   }
 
-  // 6. 우측 상단 '지금 핫한 글' 렌더링
+  // 6. 우측 사이드바 '지금 핫한 글' Top 5 렌더링
   function renderHotList(items) {
     const hotList = document.getElementById('hotList');
     if (!hotList) return;
     hotList.innerHTML = '';
 
-    const sorted = [...items].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
+    const sorted = [...items].sort((a, b) => {
+      const likesA = a.likes || 0;
+      const likesB = b.likes || 0;
+      const commentA = a.comment_count ?? a.comments_count ?? 0;
+      const commentB = b.comment_count ?? b.comments_count ?? 0;
+
+      const totalA = likesA + commentA;
+      const totalB = likesB + commentB;
+
+      if (totalB !== totalA) {
+        return totalB - totalA;
+      }
+      if (likesB !== likesA) {
+        return likesB - likesA;
+      }
+      const timeA = a.raw_date ? new Date(a.raw_date).getTime() : 0;
+      const timeB = b.raw_date ? new Date(b.raw_date).getTime() : 0;
+      return timeB - timeA;
+    }).slice(0, 5);
 
     sorted.forEach((item, index) => {
-      let thumbImg = 'https://via.placeholder.com/44?text=Odysay';
-      if (item.photos) {
+      let hasPhoto = false;
+      let thumbImg = '';
+
+      if (item.photos && item.photos.trim() !== '') {
         const photoArray = item.photos.split(',');
         if (photoArray.length > 0 && photoArray[0].trim() !== '') {
           thumbImg = `/static/uploads/${photoArray[0].trim()}`;
+          hasPhoto = true;
         }
       }
+
+      const hotImageHtml = hasPhoto
+        ? `<img src="${thumbImg}" alt="thumb" class="hot-thumb" onerror="this.outerHTML='<div class=\\'hot-thumb no-img\\'><i class=\\'fa-regular fa-image\\'></i></div>'">`
+        : `<div class="hot-thumb no-img"><i class="fa-regular fa-image"></i></div>`;
+
+      const commentCount = item.comment_count ?? item.comments_count ?? 0;
 
       const hotHtml = `
         <li>
           <a href="${item.detail_url}" class="hot-item">
             <span class="hot-rank">${index + 1}</span>
-            <img src="${thumbImg}" alt="thumb" class="hot-thumb" onerror="this.src='https://via.placeholder.com/44?text=Odysay'">
+            ${hotImageHtml}
             <div class="hot-details">
               <div class="hot-title">${item.title}</div>
               <div class="hot-stats">
-                <i class="fa-regular fa-heart"></i> ${item.likes}
+                <i class="fa-regular fa-heart"></i> ${item.likes || 0}
+                <i class="fa-regular fa-comment" style="margin-left:6px;"></i> ${commentCount}
               </div>
             </div>
           </a>
@@ -202,14 +276,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 7. 정렬 탭 클릭
-  const tabBtns = document.querySelectorAll('.tab-btn');
+  // 7. 정렬 탭 클릭 이벤트
   tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
       tabBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      currentSort = btn.dataset.sort;
+      const targetBtn = e.currentTarget;
+      targetBtn.classList.add('active');
+      currentSort = targetBtn.dataset.sort || 'latest';
       currentPage = 1;
       applyFilterAndRender();
     });

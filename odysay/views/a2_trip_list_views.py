@@ -1,12 +1,8 @@
 from flask import Blueprint, jsonify
-from odysay.models import TravelPlace
+from odysay.models import TripLocationmd, Bookmark
 
 
-bp = Blueprint(
-    'trip_list',
-    __name__,
-    url_prefix='/trip-list'
-)
+bp = Blueprint('trip_list', __name__, url_prefix='/trip-list')
 
 
 # ==========================================
@@ -19,14 +15,16 @@ def places():
     # 위도/경도 여부와 관계없이
     # 등록된 모든 여행지를 가져온다.
     travel_places = (
-        TravelPlace.query
-        .order_by(TravelPlace.id.asc())
+        TripLocationmd.query
+        .order_by(TripLocationmd.id.asc())
         .all()
     )
 
     result = []
 
     for travel_place in travel_places:
+        # 해당 여행지의 전체 찜 개수 조회
+        like_count = Bookmark.query.filter_by(place_id=travel_place.id).count()
 
         result.append({
             'id': travel_place.id,
@@ -36,7 +34,10 @@ def places():
 
             # 좌표가 없어도 목록에는 표시 가능
             'latitude': travel_place.latitude,
-            'longitude': travel_place.longitude
+            'longitude': travel_place.longitude,
+
+            # 찜 개수 연동
+            'like_count': like_count
         })
 
     return jsonify(result)

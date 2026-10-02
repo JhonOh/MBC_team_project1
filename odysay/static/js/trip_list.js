@@ -8,7 +8,7 @@
    1. 국가 기본 데이터
 ========================================================= */
 
-    const countries = [
+const countries = [
     // =========================
     // 아시아
     // =========================
@@ -221,23 +221,15 @@
     { name: "튀니지", flag: "🇹🇳", continent: "africa" }
 ];
 
-    /* =========================================================
+/* =========================================================
    국기 이모지 → ISO 국가코드 변환
-   예: 🇰🇷 → kr / 🇯🇵 → jp / 🇺🇸 → us
 ========================================================= */
 
 function flagToCountryCode(flag) {
+    if (!flag) return "";
 
-    if (!flag) {
-        return "";
-    }
-
-    const codePoints = [...flag]
-        .map(char => char.codePointAt(0));
-
-    if (codePoints.length !== 2) {
-        return "";
-    }
+    const codePoints = [...flag].map(char => char.codePointAt(0));
+    if (codePoints.length !== 2) return "";
 
     return codePoints
         .map(code => String.fromCharCode(code - 127397))
@@ -251,11 +243,8 @@ function flagToCountryCode(flag) {
 ========================================================= */
 
 let travelPlaces = [];
-
 let selectedCountry = null;
-
 let selectedContinent = "all";
-
 let searchKeyword = "";
 
 
@@ -263,32 +252,15 @@ let searchKeyword = "";
    3. DOM
 ========================================================= */
 
-const countryList =
-    document.getElementById("countryList");
-
-const countrySearch =
-    document.getElementById("countrySearch");
-
-const destinationGrid =
-    document.getElementById("destinationGrid");
-
-const destinationCount =
-    document.getElementById("destinationCount");
-
-const selectedCountryFlag =
-    document.getElementById("selectedCountryFlag");
-
-const selectedCountryName =
-    document.getElementById("selectedCountryName");
-
-const selectedCountryDescription =
-    document.getElementById("selectedCountryDescription");
-
-const emptyState =
-    document.getElementById("emptyState");
-
-const continentButtons =
-    document.querySelectorAll(".continent-btn");
+const countryList = document.getElementById("countryList");
+const countrySearch = document.getElementById("countrySearch");
+const destinationGrid = document.getElementById("destinationGrid");
+const destinationCount = document.getElementById("destinationCount");
+const selectedCountryFlag = document.getElementById("selectedCountryFlag");
+const selectedCountryName = document.getElementById("selectedCountryName");
+const selectedCountryDescription = document.getElementById("selectedCountryDescription");
+const emptyState = document.getElementById("emptyState");
+const continentButtons = document.querySelectorAll(".continent-btn");
 
 
 /* =========================================================
@@ -296,68 +268,25 @@ const continentButtons =
 ========================================================= */
 
 async function loadTravelPlaces() {
-
     try {
-
-        /*
-            팀에서 만든 TravelPlace API.
-
-            a1_mapmain_views.py에 있는:
-
-            @bp.route('/places')
-
-            때문에 주소는 /first/places
-        */
-
-        const response =
-            await fetch("/first/places");
-
+        const response = await fetch("/trip-list/places");
 
         if (!response.ok) {
-
-            throw new Error(
-                `여행지 데이터를 불러오지 못했습니다. (${response.status})`
-            );
-
+            throw new Error(`여행지 데이터를 불러오지 못했습니다. (${response.status})`);
         }
 
-
-        travelPlaces =
-            await response.json();
-
-
-        console.log(
-            "여행지 DB 데이터:",
-            travelPlaces
-        );
-
+        travelPlaces = await response.json();
+        console.log("여행지 DB 데이터:", travelPlaces);
 
         renderCountryList();
-
         renderDestinations();
-
 
     } catch (error) {
-
-        console.error(
-            "여행지 불러오기 실패:",
-            error
-        );
-
-
-        /*
-            API 오류가 나더라도
-            국가 선택 UI 자체는 표시
-        */
-
+        console.error("여행지 불러오기 실패:", error);
         travelPlaces = [];
-
         renderCountryList();
-
         renderDestinations();
-
     }
-
 }
 
 
@@ -366,14 +295,9 @@ async function loadTravelPlaces() {
 ========================================================= */
 
 function getCountryCount(countryName) {
-
     return travelPlaces.filter(place =>
-
-        normalizeCountry(place.country) ===
-        normalizeCountry(countryName)
-
+        normalizeCountry(place.country) === normalizeCountry(countryName)
     ).length;
-
 }
 
 
@@ -382,18 +306,11 @@ function getCountryCount(countryName) {
 ========================================================= */
 
 function normalizeCountry(country) {
+    if (!country) return "";
 
-    if (!country) {
-        return "";
-    }
-
-
-    const value =
-        String(country).trim();
-
+    const value = String(country).trim();
 
     const countryAliases = {
-
         "한국": "대한민국",
         "대한민국": "대한민국",
         "Korea": "대한민국",
@@ -431,12 +348,9 @@ function normalizeCountry(country) {
 
         "싱가포르": "싱가포르",
         "Singapore": "싱가포르"
-
     };
 
-
     return countryAliases[value] || value;
-
 }
 
 
@@ -444,22 +358,14 @@ function normalizeCountry(country) {
    7. 국가 목록 출력
 ========================================================= */
 
-/* =========================================================
-   7. 국가 목록 출력
-========================================================= */
-
 function renderCountryList() {
-
-    if (!countryList) {
-        return;
-    }
+    if (!countryList) return;
 
     countryList.innerHTML = "";
 
     // 대륙 + 검색어로 국가 필터링
     const filteredCountries = countries
         .filter(country => {
-
             const continentMatch =
                 selectedContinent === "all" ||
                 country.continent === selectedContinent;
@@ -471,40 +377,29 @@ function renderCountryList() {
 
             return continentMatch && searchMatch;
         })
-        .sort((a, b) =>
-            a.name.localeCompare(b.name, "ko")
-        );
-
-    console.log("국가 개수:", filteredCountries.length);
+        .sort((a, b) => a.name.localeCompare(b.name, "ko"));
 
     // 국가 버튼 생성
     filteredCountries.forEach(country => {
-
-        const button =
-            document.createElement("button");
-
+        const button = document.createElement("button");
         button.type = "button";
         button.className = "country-item";
-
+        button.setAttribute("data-country", country.name);
 
         // 현재 선택된 국가
         if (selectedCountry === country.name) {
             button.classList.add("active");
         }
 
-
         // 해당 국가에 등록된 여행지 개수
-        const count =
-            getCountryCount(country.name);
-
+        const count = getCountryCount(country.name);
 
         button.innerHTML = `
-
             <span class="country-flag">
                 <img
-                src="https://flagcdn.com/w40/${flagToCountryCode(country.flag)}.png"
-                alt="${country.name} 국기"
-                loading="lazy"
+                    src="https://flagcdn.com/w40/${flagToCountryCode(country.flag)}.png"
+                    alt="${country.name} 국기"
+                    loading="lazy"
                 >
             </span>
 
@@ -515,29 +410,19 @@ function renderCountryList() {
             <span class="country-count">
                 ${count}
             </span>
-
         `;
 
-
-        // 국가 선택
-        button.addEventListener(
-            "click",
-            () => {
-                selectCountry(country.name);
-            }
-        );
-
+        // 국가 선택 클릭
+        button.addEventListener("click", () => {
+            selectCountry(country.name);
+        });
 
         countryList.appendChild(button);
-
     });
-
 
     // 검색 결과 없음
     if (filteredCountries.length === 0) {
-
         countryList.innerHTML = `
-
             <div style="
                 padding: 40px 15px;
                 text-align: center;
@@ -546,11 +431,8 @@ function renderCountryList() {
             ">
                 검색 결과가 없습니다.
             </div>
-
         `;
-
     }
-
 }
 
 
@@ -559,15 +441,9 @@ function renderCountryList() {
 ========================================================= */
 
 function selectCountry(countryName) {
-
-    selectedCountry =
-        countryName;
-
-
+    selectedCountry = countryName;
     renderCountryList();
-
     renderDestinations();
-
 }
 
 
@@ -576,96 +452,41 @@ function selectCountry(countryName) {
 ========================================================= */
 
 function renderDestinations() {
-
-    if (!destinationGrid) {
-        return;
-    }
-
+    if (!destinationGrid) return;
 
     destinationGrid.innerHTML = "";
 
+    let filteredPlaces = travelPlaces;
 
-    let filteredPlaces =
-        travelPlaces;
-
-
-    /*
-        국가를 선택했다면 해당 국가만
-    */
-
+    /* 국가를 선택했다면 해당 국가만 */
     if (selectedCountry) {
-
-        filteredPlaces =
-            travelPlaces.filter(place =>
-
-                normalizeCountry(
-                    place.country
-                ) ===
-                normalizeCountry(
-                    selectedCountry
-                )
-
-            );
-
+        filteredPlaces = travelPlaces.filter(place =>
+            normalizeCountry(place.country) === normalizeCountry(selectedCountry)
+        );
     }
 
+    updateSelectedCountryHeader(filteredPlaces.length);
 
-    updateSelectedCountryHeader(
-        filteredPlaces.length
-    );
-
-
-    /*
-        여행지가 없는 경우
-    */
-
-    if (
-        filteredPlaces.length === 0
-    ) {
-
-        destinationGrid.style.display =
-            "none";
-
+    /* 여행지가 없는 경우 */
+    if (filteredPlaces.length === 0) {
+        destinationGrid.style.display = "none";
 
         if (emptyState) {
-
-            emptyState.style.display =
-                "block";
-
+            emptyState.style.display = "block";
         }
-
-
         return;
-
     }
 
-
-    destinationGrid.style.display =
-        "grid";
-
+    destinationGrid.style.display = "grid";
 
     if (emptyState) {
-
-        emptyState.style.display =
-            "none";
-
+        emptyState.style.display = "none";
     }
 
-
     filteredPlaces.forEach(place => {
-
-        const card =
-            createDestinationCard(
-                place
-            );
-
-
-        destinationGrid.appendChild(
-            card
-        );
-
+        const card = createDestinationCard(place);
+        destinationGrid.appendChild(card);
     });
-
 }
 
 
@@ -674,44 +495,20 @@ function renderDestinations() {
 ========================================================= */
 
 function createDestinationCard(place) {
+    const card = document.createElement("article");
+    card.className = "destination-card";
 
-    const card =
-        document.createElement("article");
+    const imagePath = getPlaceImage(place);
+    const countryName = normalizeCountry(place.country);
+    const region = place.region || "";
+    const placeName = place.place || "여행지";
 
-
-    card.className =
-        "destination-card";
-
-
-    /*
-        DB에서 image 필드가 아직 없다면
-        기존에 저장했던 이미지 이름을
-        여행지 이름으로 연결
-    */
-
-    const imagePath =
-        getPlaceImage(place);
-
-
-    const countryName =
-        normalizeCountry(
-            place.country
-        );
-
-
-    const region =
-        place.region || "";
-
-
-    const placeName =
-        place.place ||
-        "여행지";
-
+    const likesCount = getPlaceLikes(place);
+    const hasLikeClass = likesCount > 0 ? "has-like" : "";
+    const heartIcon = likesCount > 0 ? "♥" : "♡";
 
     card.innerHTML = `
-
         <div class="card-image">
-
             <img
                 src="${imagePath}"
                 alt="${placeName}"
@@ -720,51 +517,37 @@ function createDestinationCard(place) {
                     this.src='/static/images/trip/default.png';
                 "
             >
-
             <span class="country-badge">
                 ${countryName}
             </span>
-
         </div>
 
-
         <div class="card-content">
-
             <div class="card-location">
                 ${region}
             </div>
-
 
             <h3 class="card-title">
                 ${placeName}
             </h3>
 
-
             <p class="card-description">
                 ${getPlaceDescription(place)}
             </p>
 
-
             <div class="card-bottom">
-
-                <span class="like">
-                    ♡ ${getPlaceLikes(place)}
+                <span class="like ${hasLikeClass}">
+                    ${heartIcon} ${likesCount}
                 </span>
-
 
                 <span class="detail-text">
                     자세히 보기 →
                 </span>
-
             </div>
-
         </div>
-
     `;
 
-
     return card;
-
 }
 
 
@@ -773,121 +556,35 @@ function createDestinationCard(place) {
 ========================================================= */
 
 function getPlaceImage(place) {
-
-    const name =
-        String(
-            place.place || ""
-        )
-        .replace(/\s/g, "")
-        .toLowerCase();
-
-
-    /*
-        지금까지 우리가 저장한 이미지와 연결.
-
-        실제 파일명과 다르면
-        여기 파일명만 수정하면 됨.
-    */
+    const name = String(place.place || "").replace(/\s/g, "").toLowerCase();
 
     const imageMap = {
-
-        /* 대한민국 */
-
-        "경복궁":
-            "/static/images/trip/gyeongbokgung.png",
-
-        "남산서울타워":
-            "/static/images/trip/namsan.png",
-
-        "수원화성":
-            "/static/images/trip/suwon.png",
-
-        "두물머리":
-            "/static/images/trip/dumulmeori.png",
-
-        "강릉경포해변":
-            "/static/images/trip/gangneung.png",
-
-        "설악산":
-            "/static/images/trip/seoraksan.png",
-
-        "단양도담삼봉":
-            "/static/images/trip/dodamsambong.png",
-
-        "공주공산성":
-            "/static/images/trip/gongsanseong.png",
-
-        "전주한옥마을":
-            "/static/images/trip/jeonju.png",
-
-        "제주도":
-            "/static/images/trip/jeju.png",
-
-
-        /* 일본 */
-
-        "후지산":
-            "/static/images/trip/fuji.png",
-
-        "도쿄":
-            "/static/images/trip/tokyo.png",
-
-        "오사카":
-            "/static/images/trip/osaka.png",
-
-
-        /* 베트남 */
-
-        "다낭":
-            "/static/images/trip/danang.png",
-
-
-        /* 싱가포르 */
-
-        "마리나베이":
-            "/static/images/trip/singapore.png",
-
-        "마리나베이샌즈":
-            "/static/images/trip/singapore.png",
-
-
-        /* 미국 */
-
-        "뉴욕":
-            "/static/images/trip/newyork.png",
-
-
-        /* 호주 */
-
-        "시드니":
-            "/static/images/trip/sydney.png",
-
-
-        /* 스위스 */
-
-        "인터라켄":
-            "/static/images/trip/interlaken.png"
-
+        "경복궁": "/static/images/trip/gyeongbokgung.png",
+        "남산서울타워": "/static/images/trip/namsan.png",
+        "수원화성": "/static/images/trip/suwon.png",
+        "두물머리": "/static/images/trip/dumulmeori.png",
+        "강릉경포해변": "/static/images/trip/gangneung.png",
+        "설악산": "/static/images/trip/seoraksan.png",
+        "단양도담삼봉": "/static/images/trip/dodamsambong.png",
+        "공주공산성": "/static/images/trip/gongsanseong.png",
+        "전주한옥마을": "/static/images/trip/jeonju.png",
+        "제주도": "/static/images/trip/jeju.png",
+        "후지산": "/static/images/trip/fuji.png",
+        "도쿄": "/static/images/trip/tokyo.png",
+        "오사카": "/static/images/trip/osaka.png",
+        "다낭": "/static/images/trip/danang.png",
+        "마리나베이": "/static/images/trip/singapore.png",
+        "마리나베이샌즈": "/static/images/trip/singapore.png",
+        "뉴욕": "/static/images/trip/newyork.png",
+        "시드니": "/static/images/trip/sydney.png",
+        "인터라켄": "/static/images/trip/interlaken.png"
     };
 
-
-    /*
-        매칭되는 이미지가 있으면 사용
-    */
-
     if (imageMap[name]) {
-
         return imageMap[name];
-
     }
 
-
-    /*
-        이미지가 없으면 기본 이미지
-    */
-
     return "/static/images/trip/default.png";
-
 }
 
 
@@ -896,61 +593,28 @@ function getPlaceImage(place) {
 ========================================================= */
 
 function getPlaceDescription(place) {
-
-    /*
-        API에서 description을 보내주게 되면
-        자동으로 DB 설명 사용
-    */
-
     if (place.description) {
-
         return place.description;
-
     }
 
-
-    /*
-        현재 API에 설명이 없다면 임시 문구
-    */
-
-    const region =
-        place.region || "";
-
-
+    const region = place.region || "";
     if (region) {
-
         return `${region}에서 만나볼 수 있는 특별한 여행지입니다.`;
-
     }
-
 
     return "어딧세이에서 추천하는 특별한 여행지입니다.";
-
 }
 
 
 /* =========================================================
-   13. 좋아요
+   13. 좋아요 (하트 개수)
 ========================================================= */
 
 function getPlaceLikes(place) {
-
-    /*
-        나중에 DB likes 필드가 들어오면 사용
-    */
-
-    if (
-        place.likes !== undefined &&
-        place.likes !== null
-    ) {
-
-        return place.likes;
-
+    if (place.like_count !== undefined && place.like_count !== null) {
+        return place.like_count;
     }
-
-
     return 0;
-
 }
 
 
@@ -958,203 +622,115 @@ function getPlaceLikes(place) {
    14. 선택 국가 HEADER
 ========================================================= */
 
-function updateSelectedCountryHeader(
-    count
-) {
-
+function updateSelectedCountryHeader(count) {
     if (destinationCount) {
-
-        destinationCount.textContent =
-            count;
-
+        destinationCount.textContent = count;
     }
-
-
-    /*
-        전체 여행지
-    */
 
     if (!selectedCountry) {
-
-        if (selectedCountryFlag) {
-
-            selectedCountryFlag.textContent =
-                "🌏";
-
-        }
-
-
-        if (selectedCountryName) {
-
-            selectedCountryName.textContent =
-                "전체 여행지";
-
-        }
-
-
-        if (selectedCountryDescription) {
-
-            selectedCountryDescription.textContent =
-                "다양한 나라의 여행지를 둘러보세요.";
-
-        }
-
-
+        if (selectedCountryFlag) selectedCountryFlag.textContent = "🌏";
+        if (selectedCountryName) selectedCountryName.textContent = "전체 여행지";
+        if (selectedCountryDescription) selectedCountryDescription.textContent = "다양한 나라의 여행지를 둘러보세요.";
         return;
-
     }
 
-
-    /*
-        선택한 국가 찾기
-    */
-
-    const country =
-        countries.find(item =>
-
-            item.name ===
-            selectedCountry
-
-        );
-
+    const country = countries.find(item => item.name === selectedCountry);
 
     if (selectedCountryFlag) {
-
-    if (country) {
-
-        const countryCode =
-            flagToCountryCode(country.flag);
-
-        selectedCountryFlag.innerHTML = `
-            <img
-                src="https://flagcdn.com/w80/${countryCode}.png"
-                alt="${country.name} 국기"
-            >
-        `;
-
-    } else {
-
-        selectedCountryFlag.textContent = "🌏";
-
+        if (country) {
+            const countryCode = flagToCountryCode(country.flag);
+            selectedCountryFlag.innerHTML = `
+                <img
+                    src="https://flagcdn.com/w80/${countryCode}.png"
+                    alt="${country.name} 국기"
+                >
+            `;
+        } else {
+            selectedCountryFlag.textContent = "🌏";
+        }
     }
-
-}
-
 
     if (selectedCountryName) {
-
-        selectedCountryName.textContent =
-            selectedCountry;
-
+        selectedCountryName.textContent = selectedCountry;
     }
-
 
     if (selectedCountryDescription) {
-
-        selectedCountryDescription.textContent =
-            `${selectedCountry}에서 등록된 여행지를 둘러보세요.`;
-
+        selectedCountryDescription.textContent = `${selectedCountry}에서 등록된 여행지를 둘러보세요.`;
     }
-
 }
 
 
 /* =========================================================
-   15. 국가 검색
+   15. URL 파라미터 자동 선택 처리
+========================================================= */
+
+function handleUrlParams() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const query = urlParams.get("keyword") || urlParams.get("country");
+
+    if (!query) return;
+
+    const normalizedQuery = normalizeCountry(query.trim());
+
+    if (countrySearch) {
+        countrySearch.value = query.trim();
+        searchKeyword = query.trim();
+    }
+
+    // 통일된 국가명이 countries 목록에 정확히 존재하는지 검사
+    const targetCountry = countries.find(c => c.name === normalizedQuery || c.name === query.trim());
+
+    if (targetCountry) {
+        selectCountry(targetCountry.name);
+    } else {
+        renderCountryList();
+    }
+}
+
+
+/* =========================================================
+   16. 이벤트 리스너 등록
 ========================================================= */
 
 if (countrySearch) {
+    countrySearch.addEventListener("input", event => {
+        searchKeyword = event.target.value.trim();
 
-    countrySearch.addEventListener(
-        "input",
-        event => {
-
-            searchKeyword =
-                event.target.value.trim();
-
-
-            renderCountryList();
-
+        // 사용자 직접 검색 시 URL의 쿼리 스트링(?keyword=... 또는 ?country=...) 제거
+        if (window.location.search) {
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
         }
-    );
 
+        renderCountryList();
+    });
 }
 
+continentButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        selectedContinent = button.dataset.continent;
 
-/* =========================================================
-   16. 대륙 필터
-========================================================= */
+        continentButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
 
-continentButtons.forEach(
-    button => {
-
-        button.addEventListener(
-            "click",
-            () => {
-
-
-                selectedContinent =
-                    button.dataset.continent;
-
-
-                /*
-                    active 제거
-                */
-
-                continentButtons.forEach(
-                    btn => {
-
-                        btn.classList.remove(
-                            "active"
-                        );
-
-                    }
-                );
-
-
-                /*
-                    클릭한 버튼 active
-                */
-
-                button.classList.add(
-                    "active"
-                );
-
-
-                renderCountryList();
-
-            }
-        );
-
-    }
-);
+        renderCountryList();
+    });
+});
 
 
 /* =========================================================
    17. 페이지 시작
 ========================================================= */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("어딧세이 trip_list.js 연결 성공!");
 
-        console.log(
-            "어딧세이 trip_list.js 연결 성공!"
-        );
+    // 1. URL 검색어/국가 파라미터 파싱 및 적용
+    handleUrlParams();
 
+    // 2. 초기 국가 목록 표시
+    renderCountryList();
 
-        /*
-            국가 목록 먼저 표시
-        */
-
-        renderCountryList();
-
-
-        /*
-            DB 여행지 불러오기
-        */
-
-        loadTravelPlaces();
-
-    }
-);
+    // 3. DB 여행지 데이터 불러오기
+    loadTravelPlaces();
+});
