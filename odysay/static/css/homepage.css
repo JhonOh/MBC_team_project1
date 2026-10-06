@@ -1,225 +1,4 @@
 /* ==============================
-   HEADER
-============================== */
-
-.header {
-    width: 100%;
-    height: 76px;
-    background: #ffffff;
-}
-
-.header-inner {
-    height: 100%;
-    display: flex;
-    align-items: center;
-}
-
-/* 로고 */
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-right: 80px;
-}
-
-.logo-symbol {
-    font-size: 28px;
-    font-weight: 700;
-    color: #14233b;
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-}
-
-.logo-text strong {
-    font-size: 22px;
-    font-weight: 700;
-}
-
-.logo-text span {
-    margin-top: 2px;
-    font-size: 9px;
-    letter-spacing: 4px;
-}
-
-/* =========================
-   헤더 검색 버튼
-========================= */
-
-.search-button {
-    position: relative;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-}
-
-/* 돋보기 원 */
-.search-button::before {
-    content: "";
-    position: absolute;
-    width: 15px;
-    height: 15px;
-    border: 2px solid #10233f;
-    border-radius: 50%;
-    top: 9px;
-    left: 8px;
-    box-sizing: border-box;
-}
-
-/* 돋보기 손잡이 */
-.search-button::after {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 2px;
-    background: #10233f;
-    border-radius: 2px;
-    top: 23px;
-    left: 21px;
-    transform: rotate(45deg);
-    transform-origin: left center;
-}
-
-/* 마우스를 올렸을 때 */
-.search-button:hover {
-    opacity: 0.6;
-}
-
-
-/* ==============================
-   NAVIGATION
-============================== */
-
-.gnb {
-    display: flex;
-    align-items: center;
-    gap: 55px;
-}
-
-.gnb a {
-    font-size: 15px;
-    font-weight: 600;
-    color: #26364d;
-    text-decoration: none;
-    transition: 0.2s;
-}
-
-.gnb a:hover {
-    color: #557ba8;
-}
-
-
-/* 오른쪽 메뉴 */
-
-.header-util {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-}
-
-.search-icon {
-    position: relative;
-    display: inline-block;
-    width: 19px;
-    height: 19px;
-    border: 1.8px solid #12233d;
-    border-radius: 50%;
-    box-sizing: border-box;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.search-icon::after {
-    content: "";
-    position: absolute;
-    width: 7px;
-    height: 1.8px;
-    background: #12233d;
-    border-radius: 10px;
-    right: -5px;
-    bottom: -2px;
-    transform: rotate(45deg);
-}
-
-.search-icon:hover {
-    opacity: 0.55;
-    transform: scale(1.05);
-}
-
-.logout-button {
-    padding: 12px 24px;
-    background: #152238;
-    color: white;
-    border-radius: 30px;
-    font-size: 14px;
-}
-
-
-/* ==============================
-   HERO
-============================== */
-
-.hero {
-    width: 100%;
-    height: 500px;
-    position: relative;
-    background:
-        linear-gradient(
-            rgba(11, 27, 48, 0.25),
-            rgba(11, 27, 48, 0.45)
-        ),
-        url("../images/main-bg.png");
-    background-size: cover;
-    background-position: center;
-    color: white;
-}
-
-
-/* Hero 내부 */
-
-.hero-inner {
-    width: 1200px;
-    max-width: calc(100% - 80px);
-    height: 100%;
-    margin: 0 auto;
-    padding-top: 75px;
-}
-
-
-/* 작은 문구 */
-
-.hero-small-text {
-    font-size: 15px;
-    margin-bottom: 15px;
-    opacity: 0.9;
-}
-
-
-/* 메인 제목 */
-
-.hero h1 {
-    font-size: 34px;
-    font-weight: 700;
-    margin-bottom: 10px;
-}
-
-
-/* 설명 */
-
-.hero-description {
-    font-size: 16px;
-    opacity: 0.9;
-}
-
-
-/* ==============================
    검색창
 ============================== */
 
@@ -360,9 +139,6 @@
     margin-top: 25px;
 }
 
-
-/* 카드 */
-
 .hot-card {
     position: relative;
     background: #ffffff;
@@ -372,9 +148,6 @@
     box-shadow: 0 4px 15px rgba(15, 30, 50, 0.08);
     transition: 0.25s;
 }
-
-
-/* 마우스를 올렸을 때 */
 
 .hot-card:hover {
     transform: translateY(-5px);
@@ -427,29 +200,23 @@
     z-index: 2;
 }
 
-/* 1위 - 금 */
 .hot-rank.rank-1 {
     background: linear-gradient(135deg, #FFD86A, #E6A72D);
     color: #fff;
     box-shadow: 0 4px 12px rgba(230, 167, 45, 0.35);
 }
 
-/* 2위 - 은 */
 .hot-rank.rank-2 {
     background: linear-gradient(135deg, #DDE3EA, #929CA8);
     color: #fff;
     box-shadow: 0 4px 12px rgba(120, 130, 140, 0.25);
 }
 
-/* 3위 - 동 */
 .hot-rank.rank-3 {
     background: linear-gradient(135deg, #D79564, #A85F36);
     color: #fff;
     box-shadow: 0 4px 12px rgba(168, 95, 54, 0.30);
 }
-
-
-/* 1위만 금색 */
 
 .hot-card:first-child .hot-rank {
     background: linear-gradient(
@@ -469,9 +236,6 @@
     padding: 12px 14px 15px;
 }
 
-
-/* 국가 */
-
 .hot-country {
     display: flex;
     align-items: center;
@@ -481,18 +245,12 @@
     color: #68778d;
 }
 
-
-/* 여행지 이름 */
-
 .hot-card-content h3 {
     margin-bottom: 6px;
     font-size: 16px;
     font-weight: 700;
     color: #152238;
 }
-
-
-/* 지역명 */
 
 .hot-location {
     font-size: 12px;
@@ -537,28 +295,25 @@
 
 
 /* ========================================
-   HOME CONTENT (정확한 3등분 고정 및 높이 통일)
+   HOME CONTENT (3등분 고정)
 ======================================== */
 
 .home-content {
     padding: 50px 0 45px;
 }
 
-/* 정확히 1:1:1 비율로 3등분 고정 */
 .home-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 25px;
 }
 
-/* 각 그리드 섹션의 너비를 내부 콘텐츠에 의해 확장되지 않도록 고정 */
 .recommend-section,
 .recent-section,
 .community-section {
     min-width: 0;
 }
 
-/* 가운데 / 오른쪽 구분선 */
 .recent-section,
 .community-section {
     border-left: 1px solid #e4e8ee;
@@ -567,7 +322,7 @@
 
 
 /* ========================================
-   공통 제목 (더보기 및 타이틀 수평 라인 통일)
+   공통 제목
 ======================================== */
 
 .sub-section-title {
@@ -575,7 +330,7 @@
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 15px;
-    min-height: 44px; /* 서브문구 유무와 상관없이 수평 라인 고정 */
+    min-height: 44px;
 }
 
 .sub-section-title > div {
@@ -606,6 +361,20 @@
     padding-top: 3px;
     margin: 0;
     white-space: nowrap;
+}
+
+
+/* ========================================
+   사진 없을 때 대체되는 이미지 전용 (.no-photo-img)
+======================================== */
+
+.no-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    padding: 10px;
+    box-sizing: border-box;
 }
 
 
@@ -670,7 +439,6 @@
     text-overflow: ellipsis;
 }
 
-/* 추천 여행지 제목 두 줄 말줄임 */
 .recommend-info strong {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -683,7 +451,6 @@
     max-height: 2.6em;
 }
 
-/* 인기 여행지 하트 위치 정렬 */
 .recommend-info .recommend-like {
     margin-top: auto;
     padding-top: 8px;
@@ -706,9 +473,9 @@
 .community-item {
     display: flex;
     gap: 14px;
-    padding-bottom: 8px; /* 하단 구분선과의 적절한 간격 */
+    padding-bottom: 8px;
     border-bottom: 1px solid #edf0f4;
-    align-items: stretch; /* 내부 텍스트 영역이 이미지 높이만큼 가득 차도록 설정 */
+    align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
 }
@@ -719,7 +486,6 @@
     padding-bottom: 0;
 }
 
-/* 이미지 크기 고정 (100px x 84px) */
 .recent-item img,
 .community-thumb img {
     width: 100px;
@@ -736,11 +502,10 @@
     min-width: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* 상단 제목과 하단 정보를 양 끝으로 밀어냄 */
+    justify-content: space-between;
     padding: 2px 0;
 }
 
-/* 제목 2줄 말줄임 및 연속 문자 깨짐 방지 */
 .recent-info strong,
 .community-info strong {
     display: -webkit-box;
@@ -752,14 +517,14 @@
     color: #26364d;
     line-height: 1.35;
     word-break: break-all;
-    max-height: 2.7em; /* 2줄 이상 영역을 벗어나지 않도록 고정 */
+    max-height: 2.7em;
 }
 
 .recent-meta-box {
     display: flex;
     flex-direction: column;
     gap: 3px;
-    margin-top: auto; /* 상단 제목이 짧아도 최하단에 밀착 */
+    margin-top: auto;
 }
 
 .recent-like-count {
@@ -767,7 +532,6 @@
     font-size: 0.82rem;
 }
 
-/* 하단 메타 정보 (작성자, 작성일, 좋아요/댓글 수 등) */
 .recent-bottom,
 .community-meta {
     display: flex;
@@ -775,11 +539,10 @@
     align-items: center;
     font-size: 11px;
     color: #8490a2;
-    margin-top: auto; /* 하단 구분선 쪽으로 밀어냄 */
+    margin-top: auto;
     padding-top: 2px;
 }
 
-/* 카테고리 + 제목 상단 그룹 */
 .community-top {
     display: flex;
     flex-direction: column;
@@ -863,12 +626,6 @@
     color: #12233d;
 }
 
-.logo-symbol {
-    font-size: 30px;
-    letter-spacing: -10px;
-    margin-right: 8px;
-}
-
 .bottom-logo strong {
     display: block;
     font-size: 18px;
@@ -892,42 +649,6 @@
     line-height: 1.8;
     color: #68778b;
 }
-
-
-/* ========================================
-   FOOTER
-======================================== */
-
-.footer {
-    border-top: 1px solid #e8ecf1;
-    padding: 25px 0 30px;
-    background: #ffffff;
-}
-
-.footer-inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.footer-left strong {
-    font-size: 14px;
-    color: #26364d;
-}
-
-.footer-left p {
-    margin-top: 5px;
-    font-size: 10px;
-    color: #929dad;
-}
-
-.footer-right {
-    display: flex;
-    gap: 20px;
-    font-size: 10px;
-    color: #9aa4b2;
-}
-
 
 /* 모바일 */
 
@@ -1089,7 +810,6 @@
     line-height: 1;
 }
 
-/* 좁은 화면에서는 패널을 지도 아래에 배치 */
 @media (max-width: 700px) {
     #home-map {
         height: 360px;

@@ -1,13 +1,3 @@
-* {box-sizing: border-box;}
-
-body {
-    margin: 0;
-    background: #f5f8fc;
-    color: #142443;
-    font-family: Arial, "Noto Sans KR", sans-serif;
-}
-
-
 /* ================= LAYOUT ================= */
 
 .page-container {
