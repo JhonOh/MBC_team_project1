@@ -14,38 +14,12 @@
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/inquiry.css') }}">
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/header_search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
 </head>
 
 <body class="inquiry-page">
 
-<header class="navbar with-search">
-    <div class="nav-container search-header-layout">
-        <div class="logo">
-            <a href="{{ url_for('homepage.homepage') }}">
-                <i class="fa-solid fa-mountain-sun"></i>
-                <span>어딧세이</span>
-            </a>
-        </div>
-
-        <nav class="nav-menu">
-            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="{{ url_for('community.community_all') }}">커뮤니티</a>
-            <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
-            <a href="{{ url_for('homepage.mypage') }}" class="active">
-                마이페이지
-            </a>
-        </nav>
-
-        <div class="nav-right search-header-actions">
-            {% include "components/header_search.html" %}
-            <a href="{{ url_for('auth.logout') }}" class="btn-logout">
-                로그아웃
-            </a>
-        </div>
-    </div>
-</header>
+{% include 'header.html' %}
 
 <main class="main-container">
     <!-- 왼쪽 메뉴 -->
@@ -58,9 +32,9 @@
             </a>
 
             <a href="{{ url_for('inquiry.index') }}"
-               class="menu-item {% if request.endpoint in ['inquiry.index', 'inquiry.detail', 'inquiry.answer'] %}active{% endif %}">
+               class="menu-item {% if request.endpoint in ['inquiry.index', 'inquiry.detail', 'inquiry.answer', 'reports.index'] %}active{% endif %}">
                 <i class="fa-regular fa-comments"></i>
-                <span>{{ '문의 관리' if is_admin() else '내 문의 목록' }}</span>
+                <span>{{ '문의 관리 및 신고 관리' if is_admin() else '내 문의 목록' }}</span>
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
 
@@ -88,7 +62,19 @@
                 {{ message }}
             </div>
         {% endfor %}
+        {% if is_admin() %}
+            <nav class="management-tabs" aria-label="문의 및 신고 관리">
+                <a href="{{ url_for('inquiry.index') }}"
+                   class="{{ 'active' if request.blueprint == 'inquiry' else '' }}">
+                    문의
+                </a>
 
+                <a href="{{ url_for('reports.index') }}"
+                   class="{{ 'active' if request.blueprint == 'reports' else '' }}">
+                    신고
+                </a>
+            </nav>
+        {% endif %}
         {% block content %}{% endblock %}
     </section>
 
@@ -114,6 +100,7 @@
         </div>
     </aside>
 </main>
+{% include 'footer.html' %}
 <script src="{{ url_for('static', filename='js/header_search.js') }}"></script>
 </body>
 </html>

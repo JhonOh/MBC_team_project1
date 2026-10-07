@@ -28,16 +28,94 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
     // 1. 지도 초기화
     const mapElement = document.getElementById('home-map');
     if (mapElement) {
+        // 스크린샷과 비슷한 범위.
+// 경도 180도 동쪽의 아메리카 지역을 180~335도로 표현합니다.
+        const allowedBounds = L.latLngBounds(
+            [-60, -25],  // 남서쪽: 위도, 경도
+            [80, 335]    // 북동쪽: 위도, 경도
+        );
+
         const map = L.map('home-map', {
-            minZoom: 2,
+            minZoom: 0,
             maxZoom: 19,
-            scrollWheelZoom: true
-        }).setView([20, 0], 2);
+
+            maxBounds: allowedBounds,
+            maxBoundsViscosity: 1.0,
+
+            zoomSnap: 0.25,
+            zoomDelta: 0.5,
+
+            scrollWheelZoom: true,
+            bounceAtZoomLimits: false,
+            inertia: false,
+
+            // 경계 부근에서 애니메이션 도중 빈 영역이 보이는 것을 줄임
+            zoomAnimation: false,
+            fadeAnimation: false
+        }).setView([25, 155], 2);
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+
+            // 날짜변경선 동쪽까지 이어서 표시해야 하므로
+            // noWrap: true는 사용하지 않습니다.
+            attribution:
+                '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
+
+
+// 현재 지도 크기에서 경계 바깥이 보이지 않는 최소 줌 계산
+        function updateMapLimits(resetView = false) {
+            map.invalidateSize({pan: false, animate: false});
+
+            const size = map.getSize();
+
+            if (!size.x || !size.y) {
+                return;
+            }
+
+            const northWest = map.project(allowedBounds.getNorthWest(), 0);
+            const southEast = map.project(allowedBounds.getSouthEast(), 0);
+
+            const boundsWidth = Math.abs(southEast.x - northWest.x);
+            const boundsHeight = Math.abs(southEast.y - northWest.y);
+
+            const scale = Math.max(
+                size.x / boundsWidth,
+                size.y / boundsHeight
+            );
+
+            // 0.25 단위로 올림하여 지도 영역이 경계 안에 들어오도록 함
+            const minimumZoom = Math.max(
+                0,
+                Math.ceil(Math.log2(scale) * 4) / 4
+            );
+
+            map.setMinZoom(minimumZoom);
+
+            if (resetView) {
+                // 화면에 투영되는 좌표 기준으로 가운데 계산
+                const center = map.unproject(
+                    northWest.add(southEast).divideBy(2),
+                    0
+                );
+
+                map.setView(center, minimumZoom, {animate: false});
+            } else if (map.getZoom() < minimumZoom) {
+                map.setZoom(minimumZoom, {animate: false});
+            }
+
+            map.panInsideBounds(allowedBounds, {animate: false});
+        }
+
+        updateMapLimits(true);
+
+// 창 크기나 반응형 레이아웃이 바뀌어도 최소 줌을 다시 계산
+        const mapResizeObserver = new ResizeObserver(() => {
+            updateMapLimits();
+        });
+
+        mapResizeObserver.observe(document.getElementById('home-map'));
 
         const markers = L.markerClusterGroup({
             showCoverageOnHover: false,
@@ -70,12 +148,22 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
                             link.textContent = '상세보기';
 
                             popup.append(title, location, intro, link);
-                            markers.addLayer(L.marker([place.lat, place.lng]).bindPopup(popup));
+                            // 같은 장소를 현재 표시하는 세계 지도의 경도 범위로 맞춤
+                            let displayLng = place.lng;
+
+                            if (displayLng < allowedBounds.getWest()) {
+                                displayLng += 360;
+                            }
+
+// 지정한 지도 범위 안의 여행지만 표시
+                            if (allowedBounds.contains([place.lat, displayLng])) {
+                                markers.addLayer(
+                                    L.marker([place.lat, displayLng]).bindPopup(popup)
+                                );
+                            }
                         }
 
-                        if (markers.getLayers().length > 0) {
-                            map.fitBounds(markers.getBounds(), { padding: [40, 40], maxZoom: 12 });
-                        }
+
                     }
                 }
             }
@@ -235,14 +323,37 @@ const openModal = (id, e) => {
 };
 const closeModal = id => $(id)?.classList.remove('active');
 
-function openExchangeModal(e) { openModal('exchangeModal', e); }
-function closeExchangeModal() { closeModal('exchangeModal'); }
-function openTimeModal(e) { openModal('timeModal', e); }
-function closeTimeModal() { closeModal('timeModal'); }
-function openRouteModal(e) { openModal('routeModal', e); }
-function closeRouteModal() { closeModal('routeModal'); }
-function openWeatherModal(e) { openModal('weatherModal', e); }
-function closeWeatherModal() { closeModal('weatherModal'); }
+function openExchangeModal(e) {
+    openModal('exchangeModal', e);
+}
+
+function closeExchangeModal() {
+    closeModal('exchangeModal');
+}
+
+function openTimeModal(e) {
+    openModal('timeModal', e);
+}
+
+function closeTimeModal() {
+    closeModal('timeModal');
+}
+
+function openRouteModal(e) {
+    openModal('routeModal', e);
+}
+
+function closeRouteModal() {
+    closeModal('routeModal');
+}
+
+function openWeatherModal(e) {
+    openModal('weatherModal', e);
+}
+
+function closeWeatherModal() {
+    closeModal('weatherModal');
+}
 
 
 /* ===== 국가 검색 ===== */
@@ -319,7 +430,7 @@ function countrySearch(inputId, listId, cityBoxId, cityId) {
 
         items.forEach(item => item.classList.remove('selected'));
         items[index].classList.add('selected');
-        items[index].scrollIntoView({ block: 'nearest' });
+        items[index].scrollIntoView({block: 'nearest'});
     };
 }
 
@@ -364,9 +475,9 @@ function showExchange(amount, result, from, to, rate, date = '') {
     $('exchangeResult').innerHTML = `
         <div class="exchange-result">
             <small>환전 예상 금액</small>
-            <strong>${result.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${to}</strong>
-            <span>${amount.toLocaleString()} ${from} → ${result.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${to}</span>
-            <p>1 ${from} = ${rate.toLocaleString(undefined, { maximumFractionDigits: 6 })} ${to}${date ? ` · 기준일 ${date}` : ''}</p>
+            <strong>${result.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}</strong>
+            <span>${amount.toLocaleString()} ${from} → ${result.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}</span>
+            <p>1 ${from} = ${rate.toLocaleString(undefined, {maximumFractionDigits: 6})} ${to}${date ? ` · 기준일 ${date}` : ''}</p>
             <p class="exchange-notice">※ 최근 환율 기준이며, 실제 환전 시 차이가 있을 수 있습니다.</p>
         </div>`;
 }
@@ -394,7 +505,7 @@ function checkTime() {
     }).format(now);
 
     const offset = z =>
-        Math.round((new Date(now.toLocaleString('en-US', { timeZone: z })) - now) / 60000);
+        Math.round((new Date(now.toLocaleString('en-US', {timeZone: z})) - now) / 60000);
 
     const gmt = z => {
         const s = new Intl.DateTimeFormat('en-US', {
@@ -524,4 +635,4 @@ document.addEventListener('wheel', e => {
 
     e.preventDefault();
     box.scrollLeft += e.deltaY;
-}, { passive: false });
+}, {passive: false});

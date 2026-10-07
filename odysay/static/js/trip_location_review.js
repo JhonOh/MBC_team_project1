@@ -795,32 +795,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 if (reportButton) {
-
-                    if (!checkLogin()) {
-                        return;
+                        if (!checkLogin()) return;
+                        window.submitContentReport(reportButton, 'review',
+                            reportButton.closest('.review-item').dataset.reviewId);
                     }
-
-
-                    const result =
-                        confirm(
-                            '이 리뷰를 신고하시겠습니까?'
-                        );
-
-
-                    if (result) {
-
-                        alert(
-                            '신고가 접수되었습니다.'
-                        );
-
-                        reportButton.textContent =
-                            '🚨 신고 완료';
-
-                        reportButton.disabled = true;
-
-                    }
-
-                }
 
             });
 

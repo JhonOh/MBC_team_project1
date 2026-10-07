@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/travel_tags.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
 
 
 </head>
@@ -92,6 +91,7 @@
               method="POST"
 
               action="
+
 
 
                       {% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
