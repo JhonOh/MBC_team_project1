@@ -74,6 +74,7 @@
 
         <!-- 3. 우측 유틸리티 (로그인/로그아웃) -->
         <div class="header-util">
+            {% include 'theme_toggle.html' %}
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}

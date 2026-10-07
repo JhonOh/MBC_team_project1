@@ -12,10 +12,10 @@
 
     padding: 25px;
 
-    border: 1px solid #e5eaf0;
+    border: 1px solid var(--odysay-border, #e5eaf0);
     border-radius: 12px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 .review-score-box {
@@ -32,12 +32,12 @@
 }
 
 .review-big-star {
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
 }
 
 .review-score-box p {
     margin-top: 5px;
-    color: #8a96a3;
+    color: var(--odysay-muted, #8a96a3);
     font-size: 12px;
 }
 
@@ -53,7 +53,7 @@
     gap: 8px;
     align-items: center;
 
-    color: #697786;
+    color: var(--odysay-muted, #697786);
     font-size: 12px;
 }
 
@@ -62,7 +62,7 @@
 
     border-radius: 10px;
 
-    background: #edf0f3;
+    background: var(--odysay-surface-muted, #edf0f3);
 
     overflow: hidden;
 }
@@ -98,11 +98,11 @@
 
     padding: 10px 16px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 7px;
 
-    background: #ffffff;
-    color: #66778a;
+    background: var(--odysay-surface, #ffffff);
+    color: var(--odysay-muted, #66778a);
 
     font-size: 13px;
     font-weight: 600;
@@ -113,7 +113,7 @@
 }
 
 .travel-talk-write-cancel:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .travel-talk-write-buttons {
@@ -130,10 +130,10 @@
 
     margin-top: 18px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 10px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     overflow: hidden;
 }
@@ -149,7 +149,7 @@
 
     padding: 13px 15px;
 
-    border-bottom: 1px solid #edf0f3;
+    border-bottom: 1px solid var(--odysay-border, #edf0f3);
 
     font-size: 13px;
 }
@@ -162,17 +162,17 @@
 #reviewStars button {
     padding: 0;
 
-    color: #d8dde3;
+    color: var(--odysay-muted, #d8dde3);
 
     font-size: 24px;
 }
 
 #reviewStars button.active {
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
 }
 
 #selectedScore {
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 }
 
 .review-write textarea {
@@ -200,11 +200,11 @@
 
     padding: 10px 12px;
 
-    border-top: 1px solid #f0f2f5;
+    border-top: 1px solid var(--odysay-border, #f0f2f5);
 }
 
 .review-counter {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
 }
 
@@ -231,10 +231,10 @@
     margin-bottom: 10px;
     padding: 16px 18px;
 
-    border: 1px solid #e3e8ee;
+    border: 1px solid var(--odysay-border, #e3e8ee);
     border-radius: 10px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 .review-header {
@@ -267,14 +267,14 @@
 
     border-radius: 50%;
 
-    background: #eaf2ff;
+    background: var(--odysay-surface-tint, #eaf2ff);
 
     font-size: 15px;
 }
 
 .review-user,
 .travel-talk-user {
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 
     font-size: 13px;
     font-weight: 700;
@@ -285,8 +285,8 @@
 
     border-radius: 10px;
 
-    background: #fff0f2;
-    color: #e45b69;
+    background: var(--odysay-surface-muted, #fff0f2);
+    color: var(--odysay-danger, #e45b69);
 
     font-size: 10px;
     font-weight: 700;
@@ -307,21 +307,21 @@
 }
 
 .review-rating .review-rating-star {
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
     font-size: 13px;
 }
 
 .review-rating-number {
     margin-left: 1px;
 
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
     font-size: 12px;
     font-weight: 700;
 }
 
 .review-date,
 .travel-talk-date {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 11px;
 
@@ -333,8 +333,8 @@
 
     border-radius: 10px;
 
-    background: #fff0f2;
-    color: #e45b69;
+    background: var(--odysay-surface-muted, #fff0f2);
+    color: var(--odysay-danger, #e45b69);
 
     font-size: 10px;
     font-weight: 700;
@@ -343,7 +343,7 @@
 .review-text {
     margin: 10px 0 12px 37px;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 14px;
     line-height: 1.7;
@@ -359,12 +359,12 @@
 }
 
 .review-action-button {
-    color: #8793a0;
+    color: var(--odysay-muted, #8793a0);
     font-size: 12px;
 }
 
 .review-action-button.recommended {
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
 }
 /* 리뷰 작성자 메뉴 */
 
@@ -376,7 +376,7 @@
 .review-more-button {
     padding: 0 5px;
 
-    color: #929ba5;
+    color: var(--odysay-muted, #929ba5);
     font-size: 20px;
     line-height: 1;
 }
@@ -391,10 +391,10 @@
     min-width: 82px;
     padding: 5px;
 
-    border: 1px solid #e2e7ed;
+    border: 1px solid var(--odysay-border, #e2e7ed);
     border-radius: 8px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
 
@@ -413,17 +413,17 @@
 
     border-radius: 5px;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
     font-size: 12px;
     text-align: left;
 }
 
 .review-more-menu button:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .review-delete-button {
-    color: #e25555 !important;
+    color: var(--odysay-danger, #e25555) !important;
 }
 
 .review-user-info {
@@ -441,8 +441,8 @@
 
     border-radius: 10px;
 
-    background: #fff3cd;
-    color: #e08a00;
+    background: var(--odysay-surface-tint, #fff3cd);
+    color: var(--odysay-warning, #e08a00);
 
     font-size: 10px;
     font-weight: 700;

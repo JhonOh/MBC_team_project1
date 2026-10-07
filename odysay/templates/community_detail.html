@@ -7,9 +7,10 @@
     <title>{{ item.title or item.place }} - 커뮤니티 상세</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_detail.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
-
+{% include 'theme_head.html' %}
 </head>
 <body>
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 
 <div class="container">
     <!-- 게시글 헤더 -->

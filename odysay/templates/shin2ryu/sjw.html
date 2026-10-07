@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_search.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 
 <body>
@@ -36,6 +37,7 @@
         </nav>
 
         <div class="header-util search-header-actions">
+            {% include 'theme_toggle.html' %}
             {% include "components/header_search.html" %}
 
             {% if g.user %}
@@ -184,14 +186,14 @@
                                     <strong>{{ place.place }}</strong>
                                     {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
                                     <p class="recommend-like"
-                                       style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
+                                       style="{% if count > 0 %}color: var(--odysay-danger, #ff5a5f); font-weight: bold;{% else %}color: var(--odysay-muted, #aaa);{% endif %}">
                                         {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
                                     </p>
                                 </div>
                             </a>
                         {% endfor %}
                     {% else %}
-                        <p style="padding: 20px 0; color: #888;">등록된 추천 여행지가 없습니다.</p>
+                        <p style="padding: 20px 0; color: var(--odysay-muted, #888);">등록된 추천 여행지가 없습니다.</p>
                     {% endif %}
                 </div>
 
@@ -234,7 +236,7 @@
                                     <div class="recent-meta-box">
                                         {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
                                         <div class="recent-like-count"
-                                             style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
+                                             style="{% if count > 0 %}color: var(--odysay-danger, #ff5a5f); font-weight: bold;{% else %}color: var(--odysay-muted, #aaa);{% endif %}">
                                             {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
                                         </div>
 
@@ -261,7 +263,7 @@
                             </a>
                         {% endfor %}
                     {% else %}
-                        <p style="padding: 20px 0; color: #888;">최근 등록된 여행지가 없습니다.</p>
+                        <p style="padding: 20px 0; color: var(--odysay-muted, #888);">최근 등록된 여행지가 없습니다.</p>
                     {% endif %}
 
                 </div>
@@ -710,7 +712,7 @@
                 }).slice(0, 3); // 상위 3개 추출
 
                 if (sorted.length === 0) {
-                    communityList.innerHTML = '<p style="padding: 20px 0; color: #888;">게시글이 없습니다.</p>';
+                    communityList.innerHTML = '<p style="padding: 20px 0; color: var(--odysay-muted, #888);">게시글이 없습니다.</p>';
                     return;
                 }
 
@@ -728,10 +730,10 @@
 
                     // 하트 스타일 (0이면 빈 하트 ♡ 및 회색, 1 이상이면 빨간색 ♥)
                     const heartSymbol = likeCount > 0 ? '♥' : '♡';
-                    const heartStyle = likeCount > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+                    const heartStyle = likeCount > 0 ? 'color: var(--odysay-danger, #ff5a5f); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
 
                     // 커뮤니티 댓글 아이콘 및 파란색 스타일
-                    const commentStyle = commentCount > 0 ? 'color: #007bff; font-weight: bold;' : 'color: #aaa;';
+                    const commentStyle = commentCount > 0 ? 'color: var(--odysay-accent, #007bff); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
 
                     const html = `
                     <a href="${item.detail_url}" class="community-item">

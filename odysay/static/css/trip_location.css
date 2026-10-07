@@ -7,8 +7,8 @@
 }
 
 body {
-    background-color: #ffffff;
-    color: #333333;
+    background-color: var(--odysay-surface, #ffffff);
+    color: var(--odysay-text, #333333);
 }
 
 a {
@@ -40,7 +40,7 @@ button {
 /* 메인 이미지 슬라이더 */
 .image-slider {
     position: relative;
-    background-color: #f2f4f7;
+    background-color: var(--odysay-surface-muted, #f2f4f7);
     border-radius: 8px;
     height: 420px;
     display: flex;
@@ -121,7 +121,7 @@ button {
 
 .placeholder-image {
     text-align: center;
-    color: #bdc3c7;
+    color: var(--odysay-muted, #bdc3c7);
 }
 
 .mountains-icon {
@@ -171,7 +171,7 @@ button {
     flex-shrink: 0;
     object-fit: cover;
     object-position: center;
-    border: 2px solid rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--odysay-border, rgba(255, 255, 255, 0.9));
     border-radius: 6px;
     cursor: pointer;
     transition: transform 0.2s ease, opacity 0.2s ease;
@@ -230,7 +230,7 @@ button {
 }
 
 .subtitle {
-    color: #7f8c8d;
+    color: var(--odysay-muted, #7f8c8d);
     font-size: 15px;
     margin-bottom: 15px;
 }
@@ -244,11 +244,11 @@ button {
 
     padding: 12px 14px;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
     border-radius: 8px;
 
     font-size: 13px;
-    color: #66717d;
+    color: var(--odysay-muted, #66717d);
 }
 
 .place-meta p {
@@ -261,7 +261,7 @@ button {
     width: 46px;
     flex-shrink: 0;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
 }
 
@@ -273,7 +273,7 @@ button {
 
     font-size: 14px;
     font-weight: 600;
-    color: #555;
+    color: var(--odysay-muted, #555);
 }
 
 .action-buttons {
@@ -284,12 +284,12 @@ button {
 
 .btn-action {
     flex: 1;
-    border: 1px solid #dcdde1;
+    border: 1px solid var(--odysay-border, #dcdde1);
     padding: 10px;
     border-radius: 6px;
     font-size: 14px;
     text-align: center;
-    background-color: #fff;
+    background-color: var(--odysay-surface, #fff);
     font-weight: 500;
 }
 
@@ -319,7 +319,7 @@ button {
 }
 
 .title-bookmark-count {
-    color: #ff5964;
+    color: var(--odysay-danger, #ff5964);
 
     font-size: 14px;
     font-weight: 600;
@@ -347,17 +347,17 @@ button {
 
     padding: 0 18px;
 
-    border: 1px solid #dcdde1;
+    border: 1px solid var(--odysay-border, #dcdde1);
     border-radius: 6px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     font-size: 13px;
 }
 
 .owner-delete {
-    color: #e74c3c;
-    border-color: #e57373;
+    color: var(--odysay-danger, #e74c3c);
+    border-color: var(--odysay-accent, #e57373);
 }
 
 
@@ -368,7 +368,7 @@ button {
 }
 
 .place-category {
-    color: #536273;
+    color: var(--odysay-muted, #536273);
 
     font-size: 13px;
 }
@@ -376,7 +376,7 @@ button {
 .place-intro {
     margin-top: 10px;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 14px;
     line-height: 1.6;
@@ -400,7 +400,7 @@ button {
     width: 46px;
     flex-shrink: 0;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
     font-weight: 500;
     white-space: nowrap;
@@ -441,7 +441,7 @@ button {
 /* 중간 메뉴 탭 바 */
 .tab-bar {
     display: flex;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid var(--odysay-border, #e0e0e0);
     margin-bottom: 25px;
 }
 
@@ -450,13 +450,13 @@ button {
     padding: 12px 0;
     text-align: center;
     font-size: 15px;
-    color: #7f8c8d;
+    color: var(--odysay-muted, #7f8c8d);
     font-weight: 500;
 }
 
 .tab-item.active {
-    color: #000000;
-    border-bottom: 2px solid #000000;
+    color: var(--odysay-text, #000000);
+    border-bottom: 2px solid var(--odysay-border, #000000);
     font-weight: bold;
 }
 
@@ -465,10 +465,10 @@ button {
     margin-bottom: 24px;
     padding: 18px 20px;
 
-    border: 1px solid #edf0f3;
+    border: 1px solid var(--odysay-border, #edf0f3);
     border-radius: 12px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 .section-title {
@@ -477,7 +477,7 @@ button {
     font-size: 18px;
     font-weight: 700;
 
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 }
 
 .info-table {
@@ -488,14 +488,14 @@ button {
 .info-table th {
     width: 80px;
     text-align: left;
-    color: #7f8c8d;
+    color: var(--odysay-muted, #7f8c8d);
     font-size: 14px;
     padding: 8px 0;
     vertical-align: top;
 }
 
 .info-table td {
-    color: #333;
+    color: var(--odysay-text, #333);
     font-size: 14px;
     padding: 8px 0;
 }
@@ -523,12 +523,12 @@ button {
 
     min-width: 0;
 
-    border: 1px solid #e3e8ee;
+    border: 1px solid var(--odysay-border, #e3e8ee);
     border-radius: 10px;
 
     overflow: hidden;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     transition:
         border-color 0.2s ease,
@@ -537,7 +537,7 @@ button {
 }
 
 .detail-map-link:hover {
-    border-color: #b9c5d1;
+    border-color: var(--odysay-border, #b9c5d1);
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
 }
@@ -546,7 +546,7 @@ button {
     width: 100%;
     height: 165px;
 
-    background: #f2f4f7;
+    background: var(--odysay-surface-muted, #f2f4f7);
 
     cursor: pointer;
 }
@@ -563,12 +563,12 @@ button {
 
     padding: 7px 12px;
 
-    border: 1px solid #e3e8ee;
+    border: 1px solid var(--odysay-border, #e3e8ee);
     border-radius: 8px;
 
-    background: rgba(255, 255, 255, 0.94);
+    background: var(--odysay-surface, rgba(255, 255, 255, 0.94));
 
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 
     font-size: 12px;
     font-weight: 700;
@@ -577,14 +577,14 @@ button {
 }
 
 .detail-map-link:hover .detail-map-caption {
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 }
 
 .intro-text {
     font-size: 14px;
     line-height: 1.8;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     white-space: pre-line;
     word-break: keep-all;
@@ -618,10 +618,10 @@ button {
 .empty-message {
     padding: 30px 15px;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
     border-radius: 8px;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 14px;
     text-align: center;
@@ -638,7 +638,7 @@ button {
 /* 하단 푸터 바 */
 .footer {
     background-color: #2c3e50;
-    color: #b2bec3;
+    color: var(--odysay-muted, #b2bec3);
     padding: 30px 0;
     margin-top: 60px;
     font-size: 13px;
@@ -654,7 +654,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #34495e;
+    border-bottom: 1px solid var(--odysay-border, #34495e);
     padding-bottom: 15px;
     margin-bottom: 15px;
 }
@@ -676,14 +676,14 @@ button {
 
 .footer-bottom {
     font-size: 11px;
-    color: #7f8c8d;
+    color: var(--odysay-muted, #7f8c8d);
 }
 
 /* ================= 찜하기 ================= */
 
 .btn-jjim.active {
-    background: #ff5a67;
-    border-color: #ff5a67;
+    background: var(--odysay-surface-tint, #ff5a67);
+    border-color: var(--odysay-accent, #ff5a67);
     color: #ffffff;
 }
 
@@ -712,9 +712,9 @@ button {
 
     padding: 18px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 10px;
 
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
@@ -738,7 +738,7 @@ button {
     font-size: 15px;
     font-weight: 700;
 
-    color: #222;
+    color: var(--odysay-text, #222);
 }
 
 
@@ -758,12 +758,12 @@ button {
 
     margin-bottom: 18px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 7px;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
 
-    color: #333;
+    color: var(--odysay-text, #333);
 
     font-size: 13px;
 
@@ -771,7 +771,7 @@ button {
 }
 
 .share-app-button:hover {
-    background: #f0f4f8;
+    background: var(--odysay-surface-tint, #f0f4f8);
 }
 
 
@@ -780,7 +780,7 @@ button {
 .share-link-title {
     margin-bottom: 7px;
 
-    color: #6f7b88;
+    color: var(--odysay-muted, #6f7b88);
 
     font-size: 12px;
 }
@@ -793,7 +793,7 @@ button {
 
     width: 100%;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 6px;
 
     overflow: hidden;
@@ -810,9 +810,9 @@ button {
     border: none;
     outline: none;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
 
-    color: #66717d;
+    color: var(--odysay-muted, #66717d);
 
     font-size: 11px;
 }
@@ -824,11 +824,11 @@ button {
     padding: 0 13px;
 
     border: none;
-    border-left: 1px solid #dfe4ea;
+    border-left: 1px solid var(--odysay-border, #dfe4ea);
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    color: #2c3e50;
+    color: var(--odysay-text, #2c3e50);
 
     font-size: 12px;
     font-weight: 600;
@@ -838,7 +838,7 @@ button {
 
 
 .share-link-box button:hover {
-    background: #f5f7f9;
+    background: var(--odysay-surface-muted, #f5f7f9);
 }
 
 
@@ -849,7 +849,7 @@ button {
 
     margin: 8px 0 0;
 
-    color: #66717d;
+    color: var(--odysay-muted, #66717d);
 
     font-size: 11px;
     text-align: right;
@@ -884,7 +884,7 @@ button {
 
     cursor: pointer;
 
-    color: #555;
+    color: var(--odysay-muted, #555);
 }
 
 
@@ -927,7 +927,7 @@ button {
 
 .kakao-icon {
     background: #FEE500;
-    color: #191919;
+    color: var(--odysay-text, #191919);
 }
 
 
@@ -1023,7 +1023,7 @@ button {
 
     border-radius: 8px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 
@@ -1116,7 +1116,7 @@ button {
 .image-modal-thumbnails img.active {
     opacity: 1;
 
-    border-color: #ffffff;
+    border-color: var(--odysay-border, #ffffff);
 }
 
 
@@ -1272,10 +1272,10 @@ button {
     font-size: 11px;
     font-weight: 600;
 
-    color: #1473ff;
-    background: #eef5ff;
+    color: var(--odysay-accent, #1473ff);
+    background: var(--odysay-surface-tint, #eef5ff);
 
-    border: 1px solid #cfe0ff;
+    border: 1px solid var(--odysay-border, #cfe0ff);
     border-radius: 10px;
 }
 

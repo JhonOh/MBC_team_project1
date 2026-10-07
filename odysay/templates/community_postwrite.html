@@ -6,8 +6,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_postwrite.css') }}">
     <link rel="stylesheet"
       href="{{ url_for('static', filename='css/travel_tags.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 <body>
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 
 <div class="editor-container">
     <!-- 파일 업로드를 위해 enctype="multipart/form-data" 추가 -->

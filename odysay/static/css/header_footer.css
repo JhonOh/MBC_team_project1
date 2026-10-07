@@ -26,8 +26,8 @@ body > :not(.header):not(.footer) {
     position: relative; /* mega-dropdown의 정렬 기준 */
     width: 100%;
     height: 76px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8ecf1;
+    background: var(--odysay-surface, #ffffff);
+    border-bottom: 1px solid var(--odysay-border, #e8ecf1);
     z-index: 1000;
     flex-shrink: 0; /* 높이 줄어듦 방지 */
 }
@@ -67,14 +67,14 @@ body > :not(.header):not(.footer) {
 .logo-text strong {
     font-size: 20px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     line-height: 1.1;
 }
 
 .logo-text small {
     margin-top: 2px;
     font-size: 9px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     letter-spacing: 3px;
     margin-right: -3px;
     text-align: center;
@@ -104,7 +104,7 @@ body > :not(.header):not(.footer) {
 .gnb-link {
     font-size: 16px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     text-decoration: none;
     padding: 26px 5px;
     display: inline-block;
@@ -113,7 +113,7 @@ body > :not(.header):not(.footer) {
 
 .gnb-link:hover,
 .gnb-link.active {
-    color: #557ba8;
+    color: var(--odysay-muted, #557ba8);
 }
 
 /* ==============================
@@ -125,8 +125,8 @@ body > :not(.header):not(.footer) {
     left: 50%;
     transform: translateX(-50%);
     min-width: 150px;
-    background: #ffffff;
-    border: 1px solid #e8ecf1;
+    background: var(--odysay-surface, #ffffff);
+    border: 1px solid var(--odysay-border, #e8ecf1);
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     padding: 12px 0;
@@ -154,15 +154,15 @@ body > :not(.header):not(.footer) {
     display: block;
     padding: 8px 18px;
     font-size: 13.5px;
-    color: #4a5568;
+    color: var(--odysay-muted, #4a5568);
     text-decoration: none;
     white-space: nowrap;
     transition: background 0.2s, color 0.2s;
 }
 
 .sub-menu a:hover {
-    background: #f7fafc;
-    color: #152238;
+    background: var(--odysay-surface-muted, #f7fafc);
+    color: var(--odysay-text, #152238);
     font-weight: 600;
 }
 
@@ -204,11 +204,11 @@ body > :not(.header):not(.footer) {
     left: 0;
     width: 100%;
 
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--odysay-surface, rgba(255, 255, 255, 0.96));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 
-    border-bottom: 1px solid rgba(232, 236, 241, 0.8);
+    border-bottom: 1px solid var(--odysay-border, rgba(232, 236, 241, 0.8));
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 
     /* 기본 상태: 숨김 */
@@ -244,7 +244,7 @@ body > :not(.header):not(.footer) {
 
 .sub-column {
     padding: 0 30px;
-    border-left: 1px solid #f0f3f7;
+    border-left: 1px solid var(--odysay-border, #f0f3f7);
 }
 
 .sub-column:first-child {
@@ -255,10 +255,10 @@ body > :not(.header):not(.footer) {
     display: block;
     font-size: 15px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 2px solid #152238;
+    border-bottom: 2px solid var(--odysay-accent, #152238);
 }
 
 .sub-list {
@@ -272,14 +272,14 @@ body > :not(.header):not(.footer) {
 
 .sub-list a {
     font-size: 13.5px;
-    color: #616f82;
+    color: var(--odysay-muted, #616f82);
     text-decoration: none;
     transition: color 0.2s, transform 0.2s;
     display: inline-block;
 }
 
 .sub-list a:hover {
-    color: #152238;
+    color: var(--odysay-text, #152238);
     font-weight: 600;
     transform: translateX(3px);
 }
@@ -288,6 +288,9 @@ body > :not(.header):not(.footer) {
    4. 우측 유틸리티 (로그인/로그아웃)
 ============================== */
 .header-util {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     flex-shrink: 0;
 }
 
@@ -310,9 +313,9 @@ body > :not(.header):not(.footer) {
    5. FOOTER (공통)
 ============================== */
 .footer {
-    border-top: 1px solid #e8ecf1;
+    border-top: 1px solid var(--odysay-border, #e8ecf1);
     padding: 30px 0 35px;
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
     flex-shrink: 0; /* 화면이 작아지거나 콘텐츠가 적어도 푸터 높이가 압축되지 않도록 설정 */
 }
 
@@ -327,19 +330,19 @@ body > :not(.header):not(.footer) {
 
 .footer-left strong {
     font-size: 15px;
-    color: #26364d;
+    color: var(--odysay-text, #26364d);
     font-weight: 700;
 }
 
 .footer-left p {
     margin-top: 5px;
     font-size: 10px;
-    color: #929dad;
+    color: var(--odysay-muted, #929dad);
 }
 
 .footer-right {
     display: flex;
     gap: 20px;
     font-size: 10px;
-    color: #9aa4b2;
+    color: var(--odysay-muted, #9aa4b2);
 }

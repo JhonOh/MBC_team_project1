@@ -9,8 +9,10 @@
           href="{{ url_for('static', filename='css/community.css') }}">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/header_search.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 <body>
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 
 <header class="navbar with-search">
     <div class="nav-container search-header-layout">

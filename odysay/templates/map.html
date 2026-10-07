@@ -24,9 +24,12 @@
     rel="stylesheet"
     href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}"
 >
+    {% include 'theme_head.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map_place_popup.css') }}">
 </head>
 
 <body class="m-0 overflow-hidden">
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 
 <!-- 세계 지도 -->
 <div
@@ -159,6 +162,7 @@
 
 
 <!-- Leaflet 지도 + 팀원의 마커 클러스터 기능 -->
+<script src="{{ url_for('static', filename='js/map_place_popup.js') }}"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 <script>
@@ -214,16 +218,8 @@
             for (const place of places) {
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
                     Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
-                const popup = document.createElement('div');
-                const title = document.createElement('strong');
-                title.textContent = place.title;
-                const location = document.createElement('p');
-                location.textContent = [place.country, place.region].filter(Boolean).join(' ');
-                const intro = document.createElement('p');
-                intro.textContent = place.intro || '';
-                const link = document.createElement('a');
-                link.href = place.detail_url;
-                link.textContent = '상세보기';
+                const popup = createMapPlacePopup(place);
+                const link = popup.querySelector('.map-place-card__link');
 
                 {% if g.user is none %}
                     link.addEventListener('click', function (event) {
@@ -231,8 +227,13 @@
                         showSignupNotice();
                     });
                 {% endif %}
-                popup.append(title, location, intro, link);
-                const marker = L.marker([place.lat, place.lng]).bindPopup(popup);
+                const marker = L.marker([place.lat, place.lng]).bindPopup(popup, {
+                    className: 'map-place-popup',
+                    maxWidth: 288,
+                    minWidth: 0,
+                    autoPanPaddingTopLeft: [24, 88],
+                    autoPanPaddingBottomRight: [24, 96]
+                });
                 markers.addLayer(marker);
 
             }

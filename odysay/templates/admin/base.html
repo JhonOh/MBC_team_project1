@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}콘텐츠 관리{% endblock %} | 어딧세이</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 <body>
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 <header><a class="brand" href="{{ url_for('admin.index') }}">어딧세이 <span>콘텐츠 관리</span></a>
 <nav>
     <a href="{{ url_for('admin.index') }}">전체 콘텐츠</a>

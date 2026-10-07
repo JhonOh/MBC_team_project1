@@ -1,0 +1,175 @@
+/* Existing styles retain their original light colors through var() fallbacks.
+   Prefix tokens to avoid collisions with page and Bootstrap variables. */
+:root { color-scheme: light; }
+
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --odysay-page: #121518;
+    --odysay-surface: #1b2026;
+    --odysay-surface-muted: #242b33;
+    --odysay-surface-tint: #26313b;
+    --odysay-text: #e6e9ed;
+    --odysay-muted: #a3adb8;
+    --odysay-border: #343d47;
+    --odysay-accent: #9dbbdb;
+    --odysay-danger: #f28e91;
+    --odysay-warning: #dfbf85;
+    --odysay-success: #95c9b0;
+}
+
+:root[data-theme="dark"] body {
+    background-color: var(--odysay-page);
+    color: var(--odysay-text);
+}
+
+button.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 40px;
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid var(--odysay-border, #dce3eb);
+    border-radius: 50%;
+    background: var(--odysay-surface, #fff);
+    color: var(--odysay-text, #152238);
+    font-family: system-ui, sans-serif;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+}
+button.theme-toggle:hover { background: var(--odysay-surface-muted, #edf1f5); }
+button.theme-toggle:focus-visible {
+    outline: 3px solid var(--odysay-accent, #2878c8);
+    outline-offset: 3px;
+}
+
+/* Below Bootstrap modals, above Leaflet controls. */
+.theme-toolbar {
+    position: fixed;
+    right: max(20px, env(safe-area-inset-right));
+    bottom: max(20px, env(safe-area-inset-bottom));
+    z-index: 1040;
+    display: flex;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+}
+.theme-toolbar .theme-toggle { box-shadow: 0 2px 12px rgb(0 0 0 / 18%); }
+
+/* Keep the same button reachable when an existing desktop header overflows. */
+@media (max-width: 900px) {
+    .header-util > .theme-toggle {
+        position: fixed;
+        right: max(20px, env(safe-area-inset-right));
+        bottom: max(20px, env(safe-area-inset-bottom));
+        z-index: 1040;
+        box-shadow: 0 2px 12px rgb(0 0 0 / 18%);
+    }
+}
+
+/* Low specificity lets page-specific control styles take precedence. */
+:where(html[data-theme="dark"]) :where(
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="submit"]):not([type="button"]),
+    textarea, select
+) {
+    background-color: var(--odysay-surface);
+    color: var(--odysay-text);
+    border-color: var(--odysay-border);
+}
+:root[data-theme="dark"] ::placeholder { color: var(--odysay-muted); opacity: 1; }
+
+/* Fixed Bootstrap utilities do not respond to data-bs-theme. */
+:root[data-theme="dark"] .bg-white { background-color: var(--odysay-surface) !important; }
+:root[data-theme="dark"] .bg-light { background-color: var(--odysay-page) !important; }
+:root[data-theme="dark"] .text-secondary,
+:root[data-theme="dark"] .text-muted { color: var(--odysay-muted) !important; }
+:root[data-theme="dark"] .btn-outline-dark {
+    --bs-btn-color: var(--odysay-text);
+    --bs-btn-border-color: var(--odysay-border);
+    --bs-btn-hover-color: var(--odysay-text);
+    --bs-btn-hover-bg: var(--odysay-surface-muted);
+    --bs-btn-hover-border-color: var(--odysay-muted);
+    --bs-btn-active-color: var(--odysay-text);
+    --bs-btn-active-bg: var(--odysay-surface-muted);
+    --bs-btn-active-border-color: var(--odysay-muted);
+    --bs-btn-disabled-color: var(--odysay-muted);
+    --bs-btn-disabled-border-color: var(--odysay-border);
+}
+
+/* Filter only map tiles, never photos, markers or page images. */
+:root[data-theme="dark"] .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(.8) contrast(.85);
+}
+:root[data-theme="dark"] .leaflet-container { background: var(--odysay-page); }
+:root[data-theme="dark"] .leaflet-popup-content-wrapper,
+:root[data-theme="dark"] .leaflet-popup-tip,
+:root[data-theme="dark"] .leaflet-bar a,
+:root[data-theme="dark"] .leaflet-control-layers,
+:root[data-theme="dark"] .leaflet-control-attribution {
+    background-color: var(--odysay-surface);
+    color: var(--odysay-text);
+    border-color: var(--odysay-border);
+}
+:root[data-theme="dark"] .leaflet-bar a:hover { background-color: var(--odysay-surface-muted); }
+:root[data-theme="dark"] .leaflet-container a.leaflet-popup-close-button,
+:root[data-theme="dark"] .leaflet-control-attribution a { color: var(--odysay-accent); }
+:root[data-theme="dark"] .all-menu-icon { filter: invert(1); }
+
+/* Align the existing homepage banners with the shared charcoal/navy palette.
+   Override the light gradient explicitly; it is not a solid-color token. */
+:root[data-theme="dark"] .bottom-banner-inner {
+    background: linear-gradient(110deg, #202b37 0%, #1c252f 55%, #192127 100%);
+    box-shadow: inset 0 0 0 1px #35414e;
+}
+:root[data-theme="dark"] .bottom-message,
+:root[data-theme="dark"] .bottom-logo {
+    color: #e0e6ed;
+}
+:root[data-theme="dark"] .bottom-slogan { color: #a9b7c6; }
+:root[data-theme="dark"] .bottom-divider { background: #455261; }
+
+:root[data-theme="dark"] .map-banner {
+    background: rgba(27, 36, 47, .96);
+    border-color: #3a4757;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 22%);
+}
+:root[data-theme="dark"] .map-banner .travel-search {
+    background: #141c25;
+}
+:root[data-theme="dark"] .map-banner .travel-search button,
+:root[data-theme="dark"] .logout-button {
+    background: #30465e;
+    color: #edf1f5;
+}
+:root[data-theme="dark"] .map-banner .travel-search button:hover,
+:root[data-theme="dark"] .logout-button:hover { background: #3b536e; }
+:root[data-theme="dark"] .map-banner .travel-menu {
+    background: rgba(157, 187, 219, .08);
+}
+:root[data-theme="dark"] .footer { background: #171c22; }
+
+/* Upload side banners keep their bright photo backgrounds in both themes.
+   Use the original light-palette fallbacks inside these two banners only,
+   including the selected navigation item's light background/dark label. */
+:root[data-theme="dark"] .page-container > .left-menu,
+:root[data-theme="dark"] .page-container > .right-info {
+    --odysay-text: initial;
+    --odysay-muted: initial;
+    --odysay-surface: initial;
+    color: #26364d;
+}
+
+/* Trip-list photo stays bright: keep dark, readable copy over the image. */
+:root[data-theme="dark"] .travel-hero {
+    --odysay-text: #1f3048;
+    --odysay-muted: #40536a;
+}
+
+/* The country summary is a UI panel, so its light gradient follows the theme. */
+:root[data-theme="dark"] .travel-container .selected-country {
+    background: linear-gradient(135deg, var(--odysay-surface), #202a34);
+}

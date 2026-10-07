@@ -6,8 +6,8 @@
 .inquiry-page .inquiry-panel {
     margin-bottom: 20px;
     padding: 28px;
-    background: #fff;
-    border: 1px solid #e5e9ef;
+    background: var(--odysay-surface, #fff);
+    border: 1px solid var(--odysay-border, #e5e9ef);
     border-radius: 14px;
 }
 
@@ -25,13 +25,13 @@
     margin: 0;
     font-size: 24px;
     line-height: 1.4;
-    color: #243447;
+    color: var(--odysay-text, #243447);
     overflow-wrap: anywhere;
 }
 
 .inquiry-page .inquiry-description {
     margin: 10px 0 0;
-    color: #6b7785;
+    color: var(--odysay-muted, #6b7785);
     font-size: 14px;
     line-height: 1.7;
 }
@@ -40,8 +40,8 @@
     margin-bottom: 18px;
     padding: 14px 18px;
     border-radius: 10px;
-    background: #edf5ff;
-    color: #245d96;
+    background: var(--odysay-surface-tint, #edf5ff);
+    color: var(--odysay-accent, #245d96);
     line-height: 1.6;
 }
 
@@ -52,7 +52,7 @@
     justify-content: center;
     gap: 8px;
     padding: 11px 18px;
-    border: 1px solid #245d96;
+    border: 1px solid var(--odysay-accent, #245d96);
     border-radius: 8px;
     background: #245d96;
     color: #fff;
@@ -68,17 +68,17 @@
 }
 
 .inquiry-page .inquiry-button-secondary {
-    background: #fff;
-    color: #245d96;
+    background: var(--odysay-surface, #fff);
+    color: var(--odysay-accent, #245d96);
 }
 
 .inquiry-page .inquiry-button-secondary:hover {
-    background: #edf5ff;
+    background: var(--odysay-surface-tint, #edf5ff);
 }
 
 .inquiry-page a:focus-visible,
 .inquiry-page button:focus-visible {
-    outline: 3px solid #75a9dc;
+    outline: 3px solid var(--odysay-accent, #75a9dc);
     outline-offset: 3px;
 }
 
@@ -86,7 +86,7 @@
 .inquiry-page .inquiry-row {
     display: block;
     padding: 20px 0;
-    border-bottom: 1px solid #edf0f4;
+    border-bottom: 1px solid var(--odysay-border, #edf0f4);
     color: inherit;
     text-decoration: none;
 }
@@ -100,7 +100,7 @@
 }
 
 .inquiry-page .inquiry-row:hover .inquiry-row-title {
-    color: #245d96;
+    color: var(--odysay-accent, #245d96);
 }
 
 .inquiry-page .inquiry-row-top {
@@ -126,13 +126,13 @@
 }
 
 .inquiry-page .inquiry-status-waiting {
-    background: #fff4df;
-    color: #855700;
+    background: var(--odysay-surface-tint, #fff4df);
+    color: var(--odysay-text, #855700);
 }
 
 .inquiry-page .inquiry-status-done {
-    background: #e9f6ef;
-    color: #246443;
+    background: var(--odysay-surface-tint, #e9f6ef);
+    color: var(--odysay-text, #246443);
 }
 
 .inquiry-page .inquiry-meta {
@@ -141,7 +141,7 @@
     align-items: center;
     gap: 10px;
     margin-top: 12px;
-    color: #6b7785;
+    color: var(--odysay-muted, #6b7785);
     font-size: 13px;
     line-height: 1.6;
 }
@@ -154,7 +154,7 @@
 .inquiry-page .inquiry-field label {
     display: block;
     margin-bottom: 9px;
-    color: #243447;
+    color: var(--odysay-text, #243447);
     font-size: 14px;
     font-weight: 600;
 }
@@ -164,10 +164,10 @@
     box-sizing: border-box;
     width: 100%;
     padding: 12px 14px;
-    border: 1px solid #cbd4de;
+    border: 1px solid var(--odysay-border, #cbd4de);
     border-radius: 8px;
-    background: #fff;
-    color: #243447;
+    background: var(--odysay-surface, #fff);
+    color: var(--odysay-text, #243447);
     font: inherit;
     font-size: 15px;
     line-height: 1.7;
@@ -180,9 +180,9 @@
 
 .inquiry-page .inquiry-input:focus,
 .inquiry-page .inquiry-textarea:focus {
-    outline: 2px solid #75a9dc;
+    outline: 2px solid var(--odysay-accent, #75a9dc);
     outline-offset: 2px;
-    border-color: #245d96;
+    border-color: var(--odysay-accent, #245d96);
 }
 
 .inquiry-page .inquiry-actions {
@@ -196,7 +196,7 @@
 /* 문의와 답변 본문 */
 .inquiry-page .inquiry-message {
     margin-top: 24px;
-    color: #374553;
+    color: var(--odysay-text, #374553);
     line-height: 1.9;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -204,21 +204,21 @@
 
 .inquiry-page .inquiry-answer-title {
     margin: 0;
-    color: #243447;
+    color: var(--odysay-text, #243447);
     font-size: 20px;
 }
 
 .inquiry-page .inquiry-answer-form {
     margin-top: 28px;
     padding-top: 24px;
-    border-top: 1px solid #e5e9ef;
+    border-top: 1px solid var(--odysay-border, #e5e9ef);
 }
 
 /* 빈 목록 */
 .inquiry-page .inquiry-empty {
     padding: 44px 12px;
     text-align: center;
-    color: #6b7785;
+    color: var(--odysay-muted, #6b7785);
     line-height: 1.8;
 }
 
@@ -232,18 +232,18 @@
 }
 
 .inquiry-page .inquiry-pagination a {
-    color: #245d96;
+    color: var(--odysay-accent, #245d96);
     text-decoration: none;
 }
 
 .inquiry-page .inquiry-page-number {
-    color: #6b7785;
+    color: var(--odysay-muted, #6b7785);
     font-size: 14px;
 }
 
 /* 오른쪽 안내 */
 .inquiry-page .inquiry-guide {
-    color: #6b7785;
+    color: var(--odysay-muted, #6b7785);
     font-size: 14px;
     line-height: 1.8;
 }

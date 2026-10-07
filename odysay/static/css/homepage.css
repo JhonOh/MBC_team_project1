@@ -10,7 +10,7 @@
     width: 620px;
     height: 58px;
     margin: 35px auto 0;
-    background: white;
+    background: var(--odysay-surface, white);
     border-radius: 40px;
     display: flex;
     align-items: center;
@@ -23,7 +23,7 @@
     border: none;
     outline: none;
     padding: 0 25px;
-    color: #333;
+    color: var(--odysay-text, #333);
     font-size: 14px;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .section-title p {
-    color: #8490a2;
+    color: var(--odysay-muted, #8490a2);
     font-size: 14px;
 }
 
@@ -115,14 +115,14 @@
     height: 40px;
     padding: 3px;
     display: flex;
-    background: #f2f4f7;
+    background: var(--odysay-surface-muted, #f2f4f7);
     border-radius: 25px;
 }
 
 .ranking-filter button {
     flex: 1;
     border-radius: 22px;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
     font-size: 14px;
 }
 
@@ -145,10 +145,10 @@
 
 .hot-card {
     position: relative;
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
     border-radius: 10px;
     overflow: hidden;
-    border: 1px solid #e8ebef;
+    border: 1px solid var(--odysay-border, #e8ebef);
     box-shadow: 0 4px 15px rgba(15, 30, 50, 0.08);
     transition: 0.25s;
 }
@@ -205,13 +205,13 @@
 }
 
 .hot-rank.rank-1 {
-    background: linear-gradient(135deg, #FFD86A, #E6A72D);
+    background: linear-gradient(135deg, var(--odysay-surface-tint, #FFD86A), #E6A72D);
     color: #fff;
     box-shadow: 0 4px 12px rgba(230, 167, 45, 0.35);
 }
 
 .hot-rank.rank-2 {
-    background: linear-gradient(135deg, #DDE3EA, #929CA8);
+    background: linear-gradient(135deg, var(--odysay-surface-muted, #DDE3EA), #929CA8);
     color: #fff;
     box-shadow: 0 4px 12px rgba(120, 130, 140, 0.25);
 }
@@ -246,19 +246,19 @@
     gap: 6px;
     margin-bottom: 7px;
     font-size: 12px;
-    color: #68778d;
+    color: var(--odysay-muted, #68778d);
 }
 
 .hot-card-content h3 {
     margin-bottom: 6px;
     font-size: 16px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
 }
 
 .hot-location {
     font-size: 12px;
-    color: #96a0af;
+    color: var(--odysay-muted, #96a0af);
 }
 
 
@@ -273,7 +273,7 @@
     gap: 5px;
     margin-top: 10px;
     font-size: 12px;
-    color: #74849a;
+    color: var(--odysay-muted, #74849a);
 }
 
 .hot-score .fire {
@@ -320,7 +320,7 @@
 
 .recent-section,
 .community-section {
-    border-left: 1px solid #e4e8ee;
+    border-left: 1px solid var(--odysay-border, #e4e8ee);
     padding-left: 25px;
 }
 
@@ -346,21 +346,21 @@
 .sub-section-title h2 {
     font-size: 20px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     line-height: 1.2;
     margin: 0 0 4px 0;
 }
 
 .sub-section-title p {
     font-size: 12px;
-    color: #8b98aa;
+    color: var(--odysay-muted, #8b98aa);
     line-height: 1.2;
     margin: 0;
 }
 
 .sub-section-title > a {
     font-size: 12px;
-    color: #748299;
+    color: var(--odysay-muted, #748299);
     line-height: 1.2;
     padding-top: 3px;
     margin: 0;
@@ -376,7 +376,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain;
-    background-color: #f8f9fa;
+    background-color: var(--odysay-surface-muted, #f8f9fa);
     padding: 10px;
     box-sizing: border-box;
 }
@@ -395,9 +395,9 @@
 .recommend-card {
     min-width: 0;
     overflow: hidden;
-    border: 1px solid #e9edf2;
+    border: 1px solid var(--odysay-border, #e9edf2);
     border-radius: 8px;
-    background: white;
+    background: var(--odysay-surface, white);
     transition: 0.25s;
     display: flex;
     flex-direction: column;
@@ -436,7 +436,7 @@
 .recommend-info span {
     display: block;
     font-size: 11px;
-    color: #68778d;
+    color: var(--odysay-muted, #68778d);
     margin-bottom: 6px;
     overflow: hidden;
     white-space: nowrap;
@@ -450,7 +450,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 14px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     line-height: 1.3;
     max-height: 2.6em;
 }
@@ -478,7 +478,7 @@
     display: flex;
     gap: 14px;
     padding-bottom: 8px;
-    border-bottom: 1px solid #edf0f4;
+    border-bottom: 1px solid var(--odysay-border, #edf0f4);
     align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
@@ -518,7 +518,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     font-size: 13.5px;
-    color: #26364d;
+    color: var(--odysay-text, #26364d);
     line-height: 1.35;
     word-break: break-all;
     max-height: 2.7em;
@@ -542,7 +542,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 11px;
-    color: #8490a2;
+    color: var(--odysay-muted, #8490a2);
     margin-top: auto;
     padding-top: 2px;
 }
@@ -559,8 +559,8 @@
     padding: 2px 6px;
     margin-bottom: 3px;
     border-radius: 4px;
-    background: #f0f3f7;
-    color: #616f82;
+    background: var(--odysay-surface-tint, #f0f3f7);
+    color: var(--odysay-muted, #616f82);
     font-size: 10.5px;
     font-weight: 600;
 }
@@ -578,7 +578,7 @@
     .recent-section,
     .community-section {
         border-left: none;
-        border-top: 1px solid #e4e8ee;
+        border-top: 1px solid var(--odysay-border, #e4e8ee);
         padding-left: 0;
         padding-top: 25px;
     }
@@ -612,7 +612,7 @@
 .bottom-message {
     font-size: 17px;
     font-weight: 500;
-    color: #35465e;
+    color: var(--odysay-text, #35465e);
     letter-spacing: 0.5px;
 }
 
@@ -626,7 +626,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
-    color: #12233d;
+    color: var(--odysay-text, #12233d);
 }
 
 .bottom-logo strong {
@@ -644,13 +644,13 @@
 .bottom-divider {
     width: 1px;
     height: 42px;
-    background: #bdc7d3;
+    background: var(--odysay-surface-muted, #bdc7d3);
 }
 
 .bottom-slogan {
     font-size: 11px;
     line-height: 1.8;
-    color: #68778b;
+    color: var(--odysay-muted, #68778b);
 }
 
 /* 모바일 */
@@ -698,8 +698,8 @@
     margin: 0;
     padding: 12px 16px;
     border-radius: 8px;
-    background: #fff3cd;
-    color: #664d03;
+    background: var(--odysay-surface-tint, #fff3cd);
+    color: var(--odysay-text, #664d03);
 }
 
 /* 지도 오른쪽 위의 작은 배너 */
@@ -750,7 +750,7 @@
     box-sizing: border-box;
     margin: 16px 0 12px;
     padding: 4px;
-    background: #fff;
+    background: var(--odysay-surface, #fff);
     border-radius: 24px;
 }
 
@@ -763,7 +763,7 @@
     border: 0;
     border-radius: 20px;
     font-size: 12px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     background: transparent;
 }
 
@@ -848,7 +848,7 @@ a {
     margin-top: 10px;
     padding: 11px;
     box-sizing: border-box;
-    border: 1px solid #dce3ec;
+    border: 1px solid var(--odysay-border, #dce3ec);
     border-radius: 8px;
 }
 
@@ -856,21 +856,21 @@ a {
     margin-top: 15px;
     padding: 18px;
     border-radius: 12px;
-    background: #f4f7fb;
+    background: var(--odysay-surface-muted, #f4f7fb);
 }
 
 .exchange-result small,
 .exchange-result span,
 .exchange-result p {
     display: block;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
 }
 
 .exchange-result strong {
     display: block;
     margin: 6px 0;
     font-size: 23px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
 }
 
 .exchange-result p {
@@ -883,7 +883,7 @@ a {
     justify-content: center;
     align-items: center;
     height: 28px;
-    color: #7183a3;
+    color: var(--odysay-muted, #7183a3);
     font-size: 15px;
 }
 
@@ -895,7 +895,7 @@ a {
     width: 100%;
     height: 50px;
     padding: 0 18px 0 65px;
-    border: 1px solid #d7dfeb;
+    border: 1px solid var(--odysay-border, #d7dfeb);
     border-radius: 10px;
     font-size: 15px;
     outline: none;
@@ -903,7 +903,7 @@ a {
 }
 
 .route-field input:focus {
-    border-color: #7183a3;
+    border-color: var(--odysay-border, #7183a3);
 }
 
 .route-label {
@@ -911,7 +911,7 @@ a {
     left: 18px;
     top: 50%;
     transform: translateY(-50%);
-    color: #7183a3;
+    color: var(--odysay-muted, #7183a3);
     font-size: 13px;
     font-weight: 700;
     z-index: 1;
@@ -922,12 +922,12 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #7183a3;
+    color: var(--odysay-muted, #7183a3);
 }
 
 .route-notice {
     margin-top: 14px;
-    color: #7183a3;
+    color: var(--odysay-muted, #7183a3);
     font-size: 12px;
     text-align: center;
 }
@@ -949,7 +949,7 @@ a {
     position: relative;
     width: 360px;
     padding: 28px;
-    background: white;
+    background: var(--odysay-surface, white);
     border-radius: 15px;
 }
 
@@ -973,7 +973,7 @@ a {
     margin-top: 10px;
     box-sizing: border-box;
     border-radius: 8px;
-    border: 1px solid #dce3ec;
+    border: 1px solid var(--odysay-border, #dce3ec);
 }
 
 .country-list {
@@ -982,8 +982,8 @@ a {
     width: 100%;
     max-height: 160px;
     overflow-y: auto;
-    background: white;
-    border: 1px solid #ddd;
+    background: var(--odysay-surface, white);
+    border: 1px solid var(--odysay-border, #ddd);
     z-index: 10;
 }
 
@@ -996,7 +996,7 @@ a {
 
 .country-option:hover,
 .country-option.selected {
-    background: #eef3fa;
+    background: var(--odysay-surface-tint, #eef3fa);
 }
 
 .time-check {
@@ -1020,21 +1020,21 @@ a {
 .time-card {
     flex: 1;
     padding: 16px;
-    background: #f4f7fb;
+    background: var(--odysay-surface-muted, #f4f7fb);
     border-radius: 12px;
 }
 
 .time-card span,
 .time-card small {
     display: block;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
 }
 
 .time-card b {
     display: block;
     margin: 5px 0;
     font-size: 21px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
 }
 
 .time-card small {
@@ -1047,25 +1047,25 @@ a {
     gap: 14px;
     margin-top: 10px;
     padding: 15px;
-    background: #eef4fa;
+    background: var(--odysay-surface-tint, #eef4fa);
     border-radius: 12px;
 }
 
 .time-gap > span {
     font-size: 25px;
-    color: #557ba8;
+    color: var(--odysay-muted, #557ba8);
 }
 
 .time-gap small {
     display: block;
     margin-bottom: 3px;
     font-size: 9px;
-    color: #8b98aa;
+    color: var(--odysay-muted, #8b98aa);
 }
 
 .time-gap strong {
     font-size: 13px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
 }
 
 .weather-city-input {
@@ -1073,7 +1073,7 @@ a {
     padding: 11px;
     margin-top: 10px;
     box-sizing: border-box;
-    border: 1px solid #dce3ec;
+    border: 1px solid var(--odysay-border, #dce3ec);
     border-radius: 8px;
 }
 
@@ -1081,7 +1081,7 @@ a {
     margin-top: 15px;
     padding: 18px;
     border-radius: 12px;
-    background: #f4f7fb;
+    background: var(--odysay-surface-muted, #f4f7fb);
 }
 
 .weather-current {
@@ -1101,7 +1101,7 @@ a {
 
 .weather-result p {
     margin: 0;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
     font-size: 13px;
 }
 
@@ -1123,7 +1123,7 @@ a {
     flex: 0 0 65px;
     padding: 10px 5px;
     border-radius: 10px;
-    background: white;
+    background: var(--odysay-surface, white);
     text-align: center;
 }
 
@@ -1136,7 +1136,7 @@ a {
 
 .weather-hour span {
     font-size: 11px;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
 }
 
 .weather-hour b {
@@ -1150,13 +1150,13 @@ a {
 
 .weather-hour small {
     margin-top: 6px;
-    color: #718096;
+    color: var(--odysay-muted, #718096);
     font-size: 10px;
 }
 
 .weather-notice {
     margin-top: 12px !important;
     font-size: 11px !important;
-    color: #8a94a6 !important;
+    color: var(--odysay-muted, #8a94a6) !important;
     line-height: 1.5;
 }

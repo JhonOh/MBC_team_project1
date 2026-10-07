@@ -10,9 +10,11 @@
           href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 
 <body class="my-places-page">
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
        <div class="travel-page">
 
         <!-- 상단 메뉴 -->

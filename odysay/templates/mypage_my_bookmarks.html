@@ -6,8 +6,10 @@
     <title>내가 찜한 여행지 | 어딧세이</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 <body class="my-places-page">
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 <header class="header">
     <div class="header-inner">
         <a href="{{ url_for('homepage.homepage') }}" class="logo">

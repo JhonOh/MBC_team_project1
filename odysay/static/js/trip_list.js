@@ -426,7 +426,7 @@ function renderCountryList() {
             <div style="
                 padding: 40px 15px;
                 text-align: center;
-                color: #9aa4b1;
+                color: var(--odysay-muted, #9aa4b1);
                 font-size: 12px;
             ">
                 검색 결과가 없습니다.
@@ -499,9 +499,9 @@ function createDestinationCard(place) {
     card.className = "destination-card";
 
     const imagePath = getPlaceImage(place);
-    const countryName = normalizeCountry(place.country);
-    const region = place.region || "";
-    const placeName = place.place || "여행지";
+    const countryName = escapeCardText(normalizeCountry(place.country));
+    const region = escapeCardText(place.region || "");
+    const placeName = escapeCardText(place.place || "여행지");
 
     const likesCount = getPlaceLikes(place);
     const hasLikeClass = likesCount > 0 ? "has-like" : "";
@@ -510,12 +510,9 @@ function createDestinationCard(place) {
     card.innerHTML = `
         <div class="card-image">
             <img
-                src="${imagePath}"
                 alt="${placeName}"
-                onerror="
-                    this.onerror=null;
-                    this.src='/static/images/trip/default.png';
-                "
+                loading="lazy"
+                decoding="async"
             >
             <span class="country-badge">
                 ${countryName}
@@ -532,7 +529,7 @@ function createDestinationCard(place) {
             </h3>
 
             <p class="card-description">
-                ${getPlaceDescription(place)}
+                ${escapeCardText(getPlaceDescription(place))}
             </p>
 
             <div class="card-bottom">
@@ -547,7 +544,24 @@ function createDestinationCard(place) {
         </div>
     `;
 
+    const photo = card.querySelector('img');
+    const showFallback = () => {
+        photo.classList.add('destination-photo-fallback');
+        photo.src = '/static/images/logo.png';
+    };
+    photo.addEventListener('error', showFallback, { once: true });
+    if (place.photo_url) {
+        photo.src = imagePath;
+    } else {
+        showFallback();
+    }
     return card;
+}
+
+function escapeCardText(value) {
+    return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[char]);
 }
 
 
@@ -556,35 +570,7 @@ function createDestinationCard(place) {
 ========================================================= */
 
 function getPlaceImage(place) {
-    const name = String(place.place || "").replace(/\s/g, "").toLowerCase();
-
-    const imageMap = {
-        "경복궁": "/static/images/trip/gyeongbokgung.png",
-        "남산서울타워": "/static/images/trip/namsan.png",
-        "수원화성": "/static/images/trip/suwon.png",
-        "두물머리": "/static/images/trip/dumulmeori.png",
-        "강릉경포해변": "/static/images/trip/gangneung.png",
-        "설악산": "/static/images/trip/seoraksan.png",
-        "단양도담삼봉": "/static/images/trip/dodamsambong.png",
-        "공주공산성": "/static/images/trip/gongsanseong.png",
-        "전주한옥마을": "/static/images/trip/jeonju.png",
-        "제주도": "/static/images/trip/jeju.png",
-        "후지산": "/static/images/trip/fuji.png",
-        "도쿄": "/static/images/trip/tokyo.png",
-        "오사카": "/static/images/trip/osaka.png",
-        "다낭": "/static/images/trip/danang.png",
-        "마리나베이": "/static/images/trip/singapore.png",
-        "마리나베이샌즈": "/static/images/trip/singapore.png",
-        "뉴욕": "/static/images/trip/newyork.png",
-        "시드니": "/static/images/trip/sydney.png",
-        "인터라켄": "/static/images/trip/interlaken.png"
-    };
-
-    if (imageMap[name]) {
-        return imageMap[name];
-    }
-
-    return "/static/images/trip/default.png";
+    return place.photo_url || "/static/images/logo.png";
 }
 
 

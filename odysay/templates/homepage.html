@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map_place_popup.css') }}">
+{% include 'theme_head.html' %}
 </head>
 
 <body>
@@ -170,6 +171,7 @@
     };
 </script>
 
+<script src="{{ url_for('static', filename='js/map_place_popup.js') }}"></script>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </body>
 </html>

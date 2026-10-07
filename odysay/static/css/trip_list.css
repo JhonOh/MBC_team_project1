@@ -20,6 +20,19 @@
 
     text-align: center;
 
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+/* Zoom the photo independently so the copy and surrounding layout stay still. */
+.travel-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+
     background:
         linear-gradient(
             rgba(255, 255, 255, 0.30),
@@ -30,6 +43,20 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
+    transform: scale(1);
+    transition: transform 800ms cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .travel-hero:hover::before {
+        transform: scale(1.045);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .travel-hero::before {
+        transition: none;
+    }
 }
 
 .hero-label {
@@ -40,7 +67,7 @@
 
     letter-spacing: 2px;
 
-    color: #687b94;
+    color: var(--odysay-muted, #687b94);
 }
 
 .travel-hero h1 {
@@ -51,7 +78,7 @@
 
     letter-spacing: -1.4px;
 
-    color: #1f3048;
+    color: var(--odysay-text, #1f3048);
 }
 
 .hero-description {
@@ -60,7 +87,7 @@
     font-size: 15px;
     line-height: 1.8;
 
-    color: #7a8798;
+    color: var(--odysay-muted, #7a8798);
 }
 
 
@@ -100,10 +127,10 @@
 .country-panel {
     overflow: hidden;
 
-    border: 1px solid #e1e6ed;
+    border: 1px solid var(--odysay-border, #e1e6ed);
     border-radius: 16px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     box-shadow:
         0 8px 28px
@@ -122,7 +149,7 @@
 
     letter-spacing: 1.5px;
 
-    color: #8a98aa;
+    color: var(--odysay-muted, #8a98aa);
 }
 
 .country-panel-header h2 {
@@ -133,7 +160,7 @@
 
     letter-spacing: -0.5px;
 
-    color: #24364d;
+    color: var(--odysay-text, #24364d);
 }
 
 
@@ -153,14 +180,14 @@
 
     padding: 0 14px 0 40px;
 
-    border: 1px solid #dfe5ec;
+    border: 1px solid var(--odysay-border, #dfe5ec);
     border-radius: 10px;
 
     outline: none;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
 
-    color: #34445a;
+    color: var(--odysay-text, #34445a);
 
     font-size: 13px;
 
@@ -168,13 +195,13 @@
 }
 
 .country-search input::placeholder {
-    color: #a0a9b5;
+    color: var(--odysay-muted, #a0a9b5);
 }
 
 .country-search input:focus {
-    border-color: #8292a6;
+    border-color: var(--odysay-border, #8292a6);
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     box-shadow:
         0 0 0 3px
@@ -207,18 +234,18 @@
 
     padding: 0 18px 17px;
 
-    border-bottom: 1px solid #edf0f4;
+    border-bottom: 1px solid var(--odysay-border, #edf0f4);
 }
 
 .continent-btn {
     padding: 7px 10px;
 
-    border: 1px solid #e0e5eb;
+    border: 1px solid var(--odysay-border, #e0e5eb);
     border-radius: 15px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    color: #6c7888;
+    color: var(--odysay-muted, #6c7888);
 
     font-size: 11px;
     font-weight: 600;
@@ -229,13 +256,13 @@
 }
 
 .continent-btn:hover {
-    border-color: #aeb9c7;
+    border-color: var(--odysay-border, #aeb9c7);
 
-    color: #263b57;
+    color: var(--odysay-text, #263b57);
 }
 
 .continent-btn.active {
-    border-color: #263b57;
+    border-color: var(--odysay-border, #263b57);
 
     background: #263b57;
 
@@ -267,13 +294,13 @@
 }
 
 .country-list::-webkit-scrollbar-thumb {
-    background: #d5dce5;
+    background: var(--odysay-surface-muted, #d5dce5);
 
     border-radius: 10px;
 }
 
 .country-list::-webkit-scrollbar-thumb:hover {
-    background: #b9c4d0;
+    background: var(--odysay-surface-muted, #b9c4d0);
 }
 
 
@@ -296,7 +323,7 @@
 
     background: transparent;
 
-    color: #536174;
+    color: var(--odysay-muted, #536174);
 
     cursor: pointer;
 
@@ -304,13 +331,13 @@
 }
 
 .country-item:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .country-item.active {
-    background: #eef2f7;
+    background: var(--odysay-surface-tint, #eef2f7);
 
-    color: #20344f;
+    color: var(--odysay-text, #20344f);
 }
 
 .country-flag {
@@ -354,9 +381,9 @@
 
     border-radius: 10px;
 
-    background: #f0f3f7;
+    background: var(--odysay-surface-tint, #f0f3f7);
 
-    color: #8591a0;
+    color: var(--odysay-muted, #8591a0);
 
     text-align: center;
 
@@ -365,9 +392,9 @@
 }
 
 .country-item.active .country-count {
-    background: #dfe6ee;
+    background: var(--odysay-surface-tint, #dfe6ee);
 
-    color: #344a66;
+    color: var(--odysay-muted, #344a66);
 }
 
 
@@ -396,7 +423,7 @@
 
     gap: 20px;
 
-    border: 1px solid #e1e6ed;
+    border: 1px solid var(--odysay-border, #e1e6ed);
     border-radius: 15px;
 
     background:
@@ -426,7 +453,7 @@
 
     border-radius: 14px;
 
-    background: #edf2f7;
+    background: var(--odysay-surface-tint, #edf2f7);
 
     font-size: 29px;
 }
@@ -439,7 +466,7 @@
 
     letter-spacing: 1.4px;
 
-    color: #8b98a8;
+    color: var(--odysay-muted, #8b98a8);
 }
 
 .selected-country h2 {
@@ -450,7 +477,7 @@
 
     letter-spacing: -0.5px;
 
-    color: #24364d;
+    color: var(--odysay-text, #24364d);
 }
 
 .selected-country-info > div > p:last-child {
@@ -458,7 +485,7 @@
 
     font-size: 12px;
 
-    color: #8793a2;
+    color: var(--odysay-muted, #8793a2);
 }
 
 .destination-count {
@@ -466,13 +493,13 @@
 
     font-size: 12px;
 
-    color: #8995a3;
+    color: var(--odysay-muted, #8995a3);
 }
 
 .destination-count strong {
     font-size: 15px;
 
-    color: #263b57;
+    color: var(--odysay-text, #263b57);
 }
 
 
@@ -497,10 +524,10 @@
 .destination-card {
     overflow: hidden;
 
-    border: 1px solid #e5e9ef;
+    border: 1px solid var(--odysay-border, #e5e9ef);
     border-radius: 13px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     cursor: pointer;
 
@@ -510,10 +537,16 @@
         border-color 0.25s;
 }
 
+.card-image img.destination-photo-fallback {
+    object-fit: contain;
+    padding: 28px;
+    background: var(--odysay-surface-muted, #edf1f5);
+}
+
 .destination-card:hover {
     transform: translateY(-5px);
 
-    border-color: #cfd7e1;
+    border-color: var(--odysay-border, #cfd7e1);
 
     box-shadow:
         0 13px 28px
@@ -533,7 +566,7 @@
 
     overflow: hidden;
 
-    background: #edf0f4;
+    background: var(--odysay-surface-muted, #edf0f4);
 }
 
 .card-image img {
@@ -592,7 +625,7 @@
     font-size: 10px;
     font-weight: 700;
 
-    color: #8793a3;
+    color: var(--odysay-muted, #8793a3);
 }
 
 .card-title {
@@ -603,7 +636,7 @@
 
     letter-spacing: -0.3px;
 
-    color: #24364d;
+    color: var(--odysay-text, #24364d);
 }
 
 .card-description {
@@ -621,7 +654,7 @@
     font-size: 12px;
     line-height: 1.6;
 
-    color: #7c8998;
+    color: var(--odysay-muted, #7c8998);
 }
 
 .card-bottom {
@@ -632,18 +665,18 @@
     align-items: center;
     justify-content: space-between;
 
-    border-top: 1px solid #eef1f4;
+    border-top: 1px solid var(--odysay-border, #eef1f4);
 }
 
 /* 기본 상태 (좋아요 0개일 때) */
 .like {
     font-size: 11px;
-    color: #84909f; /* 기본 회색 */
+    color: var(--odysay-muted, #84909f); /* 기본 회색 */
 }
 
 /* 좋아요가 1개 이상일 때 */
 .like.has-like {
-    color: #ff4d4f; /* 빨간색 */
+    color: var(--odysay-danger, #ff4d4f); /* 빨간색 */
     font-weight: 700;
 }
 
@@ -651,7 +684,7 @@
     font-size: 11px;
     font-weight: 700;
 
-    color: #536982;
+    color: var(--odysay-muted, #536982);
 }
 
 
@@ -668,10 +701,10 @@
 
     text-align: center;
 
-    border: 1px dashed #dce2e9;
+    border: 1px dashed var(--odysay-border, #dce2e9);
     border-radius: 14px;
 
-    background: #fafbfc;
+    background: var(--odysay-surface, #fafbfc);
 }
 
 .empty-icon {
@@ -685,7 +718,7 @@
 
     font-size: 17px;
 
-    color: #45566c;
+    color: var(--odysay-muted, #45566c);
 }
 
 .empty-state p {
@@ -694,7 +727,7 @@
     font-size: 12px;
     line-height: 1.7;
 
-    color: #929ca9;
+    color: var(--odysay-muted, #929ca9);
 }
 
 

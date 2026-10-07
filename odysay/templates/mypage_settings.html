@@ -8,9 +8,11 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 
 <body>
+<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
 
 <div class="mypage-wrap">
 
