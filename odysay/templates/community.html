@@ -4,33 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어딧세이 - 커뮤니티</title>
+
     <!-- FontAwesome 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+
 </head>
 <body>
 
 <!-- 헤더 (Navbar) -->
-<header class="navbar">
-    <div class="nav-container">
-        <div class="logo">
-            <a href="/homepage">
-                <i class="fa-solid fa-mountain-sun"></i>
-                <span>어딧세이</span>
-            </a>
-        </div>
-        <nav class="nav-menu">
-            <a href="/homepage/map">여행지</a>
-            <a href="/homepage/community" class="active">커뮤니티</a>
-            <a href="/homepage/upload">여행지 등록</a>
-            <a href="/homepage/mypage">마이페이지</a>
-        </nav>
-        <div class="nav-right">
-            <button class="icon-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
-            <a href="/auth/logout" class="btn-logout">로그아웃</a>
-        </div>
-    </div>
-</header>
+{% include 'header.html' %}
 
 <!-- 메인 컨테이너 -->
 <main class="main-container">
@@ -158,6 +144,8 @@
     </aside>
 
 </main>
+
+{% include 'footer.html' %}
 
 <script src="{{ url_for('static', filename='js/community.js') }}?v=2"></script>
 </body>

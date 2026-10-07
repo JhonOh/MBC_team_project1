@@ -81,7 +81,7 @@ def create_app(test_config=None):
     #
     # @app.route('/sjw')
     # def sjw():
-    #     return render_template('shin2ryu/sjw.html')
+    #     return render_template('shin2ryu/homepage.html')
     #
     # @app.route('/map.html')
     # def map():

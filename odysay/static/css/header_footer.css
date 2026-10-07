@@ -1,0 +1,345 @@
+/* ==============================
+   0. Layout Reset & Sticky Footer Base
+============================== */
+html {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 본문 영역: header와 footer 사이의 모든 형제 요소가 남은 유휴 공간을 분할/확장하여 차지 */
+/* main 태그나 페이지별 본문 컨테이너 클래스가 무엇이든 자동으로 바닥으로 밀어냅니다. */
+body > :not(.header):not(.footer) {
+    flex: 1 0 auto;
+}
+
+/* ==============================
+   HEADER (공통 기본)
+============================== */
+.header {
+    position: relative; /* mega-dropdown의 정렬 기준 */
+    width: 100%;
+    height: 76px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8ecf1;
+    z-index: 1000;
+    flex-shrink: 0; /* 높이 줄어듦 방지 */
+}
+
+.header-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* 1. 로고 */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.logo-img {
+    height: 70px;
+    width: auto;
+    object-fit: contain;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo-text strong {
+    font-size: 20px;
+    font-weight: 700;
+    color: #152238;
+    line-height: 1.1;
+}
+
+.logo-text small {
+    margin-top: 2px;
+    font-size: 9px;
+    color: #152238;
+    letter-spacing: 3px;
+    margin-right: -3px;
+    text-align: center;
+    line-height: 1;
+}
+
+/* 2. 중앙 GNB 배치 */
+.gnb {
+    margin: 0 auto;
+}
+
+.gnb-list {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.gnb-item {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.gnb-link {
+    font-size: 16px;
+    font-weight: 700;
+    color: #152238;
+    text-decoration: none;
+    padding: 26px 5px;
+    display: inline-block;
+    transition: color 0.2s ease;
+}
+
+.gnb-link:hover,
+.gnb-link.active {
+    color: #557ba8;
+}
+
+/* ==============================
+   2-A. 개별 카테고리 단일 드롭다운
+============================== */
+.single-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 150px;
+    background: #ffffff;
+    border: 1px solid #e8ecf1;
+    border-radius: 8px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    padding: 12px 0;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 1010;
+}
+
+.gnb-item:hover .single-dropdown {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sub-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sub-menu a {
+    display: block;
+    padding: 8px 18px;
+    font-size: 13.5px;
+    color: #4a5568;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
+}
+
+.sub-menu a:hover {
+    background: #f7fafc;
+    color: #152238;
+    font-weight: 600;
+}
+
+/* ==============================
+   2-B. [마이페이지 오른쪽] 줄 세 개 (allmenu.png) 버튼
+============================== */
+.all-menu-wrap {
+    display: flex;
+    align-items: center;
+}
+
+.all-menu-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 20px 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.all-menu-icon {
+    width: 22px;
+    height: auto;
+    object-fit: contain;
+    transition: opacity 0.2s ease;
+}
+
+.all-menu-btn:hover .all-menu-icon {
+    opacity: 0.6;
+}
+
+/* ==============================
+   3. 쿠우쿠우 스타일 메가 드롭다운 (전체 창)
+============================== */
+.mega-dropdown {
+    position: absolute; /* header 기준 위치 */
+    top: 100%; /* header 바로 밑 (76px 위치) */
+    left: 0;
+    width: 100%;
+
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid rgba(232, 236, 241, 0.8);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+    /* 기본 상태: 숨김 */
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    z-index: 1005;
+}
+
+/* 마이페이지 오른쪽 줄 세 개 Wrap 영역 호버 또는 메가드롭다운 자체 호버 시 펼침 */
+.all-menu-wrap:hover ~ .mega-dropdown,
+.all-menu-wrap:has(:hover) ~ .mega-dropdown,
+.mega-dropdown:hover {
+    max-height: 320px;
+    opacity: 1;
+}
+
+/* 마우스 올릴 때 닿는 범위를 편하게 하기 위해 선택자 보강 */
+.header:has(.all-menu-wrap:hover) .mega-dropdown {
+    max-height: 320px;
+    opacity: 1;
+}
+
+.mega-dropdown-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    margin: 0 auto;
+    padding: 30px 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.sub-column {
+    padding: 0 30px;
+    border-left: 1px solid #f0f3f7;
+}
+
+.sub-column:first-child {
+    border-left: none;
+}
+
+.sub-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #152238;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid #152238;
+}
+
+.sub-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sub-list a {
+    font-size: 13.5px;
+    color: #616f82;
+    text-decoration: none;
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.sub-list a:hover {
+    color: #152238;
+    font-weight: 600;
+    transform: translateX(3px);
+}
+
+/* ==============================
+   4. 우측 유틸리티 (로그인/로그아웃)
+============================== */
+.header-util {
+    flex-shrink: 0;
+}
+
+.logout-button {
+    padding: 9px 20px;
+    background: #152238;
+    color: #ffffff;
+    border-radius: 30px;
+    font-size: 13.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+.logout-button:hover {
+    background: #283a58;
+}
+
+/* ==============================
+   5. FOOTER (공통)
+============================== */
+.footer {
+    border-top: 1px solid #e8ecf1;
+    padding: 30px 0 35px;
+    background: #ffffff;
+    flex-shrink: 0; /* 화면이 작아지거나 콘텐츠가 적어도 푸터 높이가 압축되지 않도록 설정 */
+}
+
+.footer-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-left strong {
+    font-size: 15px;
+    color: #26364d;
+    font-weight: 700;
+}
+
+.footer-left p {
+    margin-top: 5px;
+    font-size: 10px;
+    color: #929dad;
+}
+
+.footer-right {
+    display: flex;
+    gap: 20px;
+    font-size: 10px;
+    color: #9aa4b2;
+}

@@ -4,21 +4,16 @@ from odysay.models import db, User, TripLocationmd, Bookmark
 
 bp = Blueprint('homepage', __name__, url_prefix='/homepage')
 
+
 @bp.route('', strict_slashes=False)
 def homepage():
-    # 1. 최근 등록된 여행지 (최신순 3개)
-    recent_places = TripLocationmd.query.order_by(TripLocationmd.id.desc()).limit(3).all()
+    # 비동기로 데이터를 불러오므로 단순 템플릿 렌더링만 진행
+    return render_template('homepage.html')
 
-    for p in recent_places:
-        author_name = "익명"
-        if p.user_id:
-            user = User.query.get(p.user_id)
-            if user:
-                author_name = user.nickname or user.username
-        p.author = author_name
-        p.like_count = Bookmark.query.filter_by(place_id=p.id).count()
 
-    # 2. 추천 여행지: 여행후기(TripLocationmd) 중 좋아요(Bookmark 수)가 많은 순서 top 3
+@bp.route('/api/recommended')
+def get_recommended_places():
+    """인기 여행지 (좋아요 순 TOP 3) API"""
     recommended_query = db.session.query(
         TripLocationmd,
         func.count(Bookmark.id).label('like_count')
@@ -31,16 +26,48 @@ def homepage():
         TripLocationmd.id.desc()
     ).limit(3).all()
 
-    recommended_places = []
+    results = []
     for place, count in recommended_query:
-        place.like_count = count
-        recommended_places.append(place)
+        results.append({
+            'id': place.id,
+            'place': place.place,
+            'country': place.country,
+            'region': place.region,
+            'photos': place.photos or '',
+            'like_count': count,
+            'detail_url': url_for('trip_location.trip_location_detail', place_id=place.id)
+        })
+    return jsonify(results)
 
-    return render_template(
-        'shin2ryu/sjw.html',
-        recent_places=recent_places,
-        recommended_places=recommended_places
-    )
+
+@bp.route('/api/recent')
+def get_recent_places():
+    """최근 등록된 여행지 (최신순 TOP 3) API"""
+    recent_places = TripLocationmd.query.order_by(TripLocationmd.id.desc()).limit(3).all()
+
+    results = []
+    for p in recent_places:
+        author_name = "익명"
+        if p.user_id:
+            user = User.query.get(p.user_id)
+            if user:
+                author_name = user.nickname or user.username
+
+        like_count = Bookmark.query.filter_by(place_id=p.id).count()
+        created_at_str = p.created_at.strftime('%Y. %m. %d') if hasattr(p, 'created_at') and p.created_at else '방금 전'
+
+        results.append({
+            'id': p.id,
+            'place': p.place,
+            'country': p.country,
+            'region': p.region,
+            'photos': p.photos or '',
+            'author': author_name,
+            'like_count': like_count,
+            'created_at': created_at_str,
+            'detail_url': url_for('trip_location.trip_location_detail', place_id=p.id)
+        })
+    return jsonify(results)
 
 
 @bp.route('/map')
