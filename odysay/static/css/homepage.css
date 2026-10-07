@@ -1,0 +1,1162 @@
+/* ==============================
+
+   HEADER
+============================== */
+/*=============================
+   검색창
+============================== */
+
+.travel-search {
+    width: 620px;
+    height: 58px;
+    margin: 35px auto 0;
+    background: white;
+    border-radius: 40px;
+    display: flex;
+    align-items: center;
+    padding: 6px;
+}
+
+.travel-search input {
+    flex: 1;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0 25px;
+    color: #333;
+    font-size: 14px;
+}
+
+.travel-search button {
+    width: 110px;
+    height: 46px;
+    border-radius: 30px;
+    background: #152238;
+    color: white;
+}
+
+
+/* ==============================
+   여행 카테고리
+============================== */
+
+.travel-menu {
+    width: 720px;
+    height: 110px;
+    margin: 30px auto 0;
+    background: rgba(15, 25, 39, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.travel-menu a {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+}
+
+.travel-menu a + a {
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.travel-menu span {
+    font-size: 25px;
+}
+
+.travel-menu a:hover {
+    opacity: 0.7;
+}
+
+
+/* ==============================
+   실시간 핫플
+============================== */
+
+.hot-place {
+    padding: 45px 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section-title > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.section-title h2 {
+    font-size: 27px;
+    font-weight: 700;
+}
+
+.section-title p {
+    color: #8490a2;
+    font-size: 14px;
+}
+
+
+/* ==============================
+   오늘 / 주간 / 월간
+============================== */
+
+.ranking-filter {
+    width: 310px;
+    height: 40px;
+    padding: 3px;
+    display: flex;
+    background: #f2f4f7;
+    border-radius: 25px;
+}
+
+.ranking-filter button {
+    flex: 1;
+    border-radius: 22px;
+    color: #718096;
+    font-size: 14px;
+}
+
+.ranking-filter button.active {
+    background: #152238;
+    color: white;
+}
+
+
+/* ========================================
+   실시간 핫플 여행지 카드
+======================================== */
+
+.hot-list {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-top: 25px;
+}
+
+.hot-card {
+    position: relative;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #e8ebef;
+    box-shadow: 0 4px 15px rgba(15, 30, 50, 0.08);
+    transition: 0.25s;
+}
+
+.hot-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(15, 30, 50, 0.15);
+}
+
+
+/* ==============================
+   여행지 이미지
+============================== */
+
+.hot-card-image {
+    position: relative;
+    width: 100%;
+    height: 190px;
+    overflow: hidden;
+}
+
+.hot-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s;
+}
+
+.hot-card:hover .hot-card-image img {
+    transform: scale(1.05);
+}
+
+
+/* ==============================
+   순위 숫자
+============================== */
+
+.hot-rank {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(20, 34, 56, 0.80);
+    color: #ffffff;
+    font-size: 19px;
+    font-weight: 700;
+    backdrop-filter: blur(5px);
+    z-index: 2;
+}
+
+.hot-rank.rank-1 {
+    background: linear-gradient(135deg, #FFD86A, #E6A72D);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(230, 167, 45, 0.35);
+}
+
+.hot-rank.rank-2 {
+    background: linear-gradient(135deg, #DDE3EA, #929CA8);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(120, 130, 140, 0.25);
+}
+
+.hot-rank.rank-3 {
+    background: linear-gradient(135deg, #D79564, #A85F36);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(168, 95, 54, 0.30);
+}
+
+.hot-card:first-child .hot-rank {
+    background: linear-gradient(
+            135deg,
+            #e2ad3b,
+            #f4c866
+    );
+    box-shadow: 0 5px 15px rgba(226, 173, 59, 0.35);
+}
+
+
+/* ==============================
+   카드 내용
+============================== */
+
+.hot-card-content {
+    padding: 12px 14px 15px;
+}
+
+.hot-country {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 7px;
+    font-size: 12px;
+    color: #68778d;
+}
+
+.hot-card-content h3 {
+    margin-bottom: 6px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #152238;
+}
+
+.hot-location {
+    font-size: 12px;
+    color: #96a0af;
+}
+
+
+/* ==============================
+   인기 지수
+============================== */
+
+.hot-score {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #74849a;
+}
+
+.hot-score .fire {
+    font-size: 14px;
+}
+
+
+/* ==============================
+   반응형
+============================== */
+
+@media (max-width: 1000px) {
+    .hot-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
+    .hot-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+/* ========================================
+   HOME CONTENT (3등분 고정)
+======================================== */
+
+.home-content {
+    padding: 50px 0 45px;
+}
+
+.home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.recommend-section,
+.recent-section,
+.community-section {
+    min-width: 0;
+}
+
+.recent-section,
+.community-section {
+    border-left: 1px solid #e4e8ee;
+    padding-left: 25px;
+}
+
+
+/* ========================================
+   공통 제목
+======================================== */
+
+.sub-section-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+    min-height: 44px;
+}
+
+.sub-section-title > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.sub-section-title h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #152238;
+    line-height: 1.2;
+    margin: 0 0 4px 0;
+}
+
+.sub-section-title p {
+    font-size: 12px;
+    color: #8b98aa;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.sub-section-title > a {
+    font-size: 12px;
+    color: #748299;
+    line-height: 1.2;
+    padding-top: 3px;
+    margin: 0;
+    white-space: nowrap;
+}
+
+
+/* ========================================
+   사진 없을 때 대체되는 이미지 전용 (.no-photo-img)
+======================================== */
+
+.no-photo-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background-color: #f8f9fa;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+
+/* ========================================
+   추천 여행지
+======================================== */
+
+.recommend-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.recommend-card {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e9edf2;
+    border-radius: 8px;
+    background: white;
+    transition: 0.25s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.recommend-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(15, 30, 50, 0.10);
+}
+
+.recommend-image {
+    height: 125px;
+    overflow: hidden;
+}
+
+.recommend-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: 0.4s;
+}
+
+.recommend-card:hover img {
+    transform: scale(1.06);
+}
+
+.recommend-info {
+    padding: 10px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.recommend-info span {
+    display: block;
+    font-size: 11px;
+    color: #68778d;
+    margin-bottom: 6px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.recommend-info strong {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    color: #152238;
+    line-height: 1.3;
+    max-height: 2.6em;
+}
+
+.recommend-info .recommend-like {
+    margin-top: auto;
+    padding-top: 8px;
+    font-size: 11px;
+}
+
+
+/* ========================================
+   최근 등록된 여행지 & 커뮤니티 인기글
+======================================== */
+
+.recent-list,
+.community-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.recent-item,
+.community-item {
+    display: flex;
+    gap: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #edf0f4;
+    align-items: stretch;
+    min-height: 84px;
+    box-sizing: border-box;
+}
+
+.recent-item:last-child,
+.community-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.recent-item img,
+.community-thumb img {
+    width: 100px;
+    height: 84px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+}
+
+.recent-info,
+.community-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2px 0;
+}
+
+.recent-info strong,
+.community-info strong {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 13.5px;
+    color: #26364d;
+    line-height: 1.35;
+    word-break: break-all;
+    max-height: 2.7em;
+}
+
+.recent-meta-box {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: auto;
+}
+
+.recent-like-count {
+    text-align: right;
+    font-size: 0.82rem;
+}
+
+.recent-bottom,
+.community-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #8490a2;
+    margin-top: auto;
+    padding-top: 2px;
+}
+
+.community-top {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2px;
+}
+
+.community-category {
+    display: inline-block;
+    padding: 2px 6px;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    background: #f0f3f7;
+    color: #616f82;
+    font-size: 10.5px;
+    font-weight: 600;
+}
+
+
+/* ========================================
+   반응형 (모바일/태블릿)
+======================================== */
+
+@media (max-width: 1000px) {
+    .home-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .recent-section,
+    .community-section {
+        border-left: none;
+        border-top: 1px solid #e4e8ee;
+        padding-left: 0;
+        padding-top: 25px;
+    }
+}
+
+
+/* ========================================
+   하단 브랜드 배너
+======================================== */
+
+.bottom-banner {
+    margin-top: 10px;
+    margin-bottom: 25px;
+}
+
+.bottom-banner-inner {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 25px 40px;
+    border-radius: 14px;
+    background: linear-gradient(
+            90deg,
+            rgba(238, 243, 248, 0.96),
+            rgba(220, 230, 240, 0.90)
+    );
+    overflow: hidden;
+}
+
+.bottom-message {
+    font-size: 17px;
+    font-weight: 500;
+    color: #35465e;
+    letter-spacing: 0.5px;
+}
+
+.bottom-brand {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.bottom-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #12233d;
+}
+
+.bottom-logo strong {
+    display: block;
+    font-size: 18px;
+}
+
+.bottom-logo small {
+    display: block;
+    margin-top: 2px;
+    font-size: 8px;
+    letter-spacing: 4px;
+}
+
+.bottom-divider {
+    width: 1px;
+    height: 42px;
+    background: #bdc7d3;
+}
+
+.bottom-slogan {
+    font-size: 11px;
+    line-height: 1.8;
+    color: #68778b;
+}
+
+/* 모바일 */
+
+@media (max-width: 700px) {
+    .bottom-banner-inner {
+        padding: 22px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 25px;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
+/* 홈페이지 여행 지도 */
+.home-map-section {
+    position: relative;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    isolation: isolate;
+    overflow: hidden;
+}
+
+#home-map {
+    display: block;
+    width: 100%;
+    height: 500px;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#home-map-error {
+    position: absolute;
+    top: 16px;
+    left: 60px;
+    right: 16px;
+    z-index: 1000;
+    margin: 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fff3cd;
+    color: #664d03;
+}
+
+/* 지도 오른쪽 위의 작은 배너 */
+.map-banner {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 800;
+    width: 360px;
+    max-width: calc(100% - 80px);
+    box-sizing: border-box;
+    padding: 18px;
+    color: #fff;
+    background: rgba(21, 34, 56, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(15, 30, 50, 0.2);
+}
+
+.map-banner-caption {
+    margin: 0 0 8px;
+    font-size: 11px;
+    opacity: 0.8;
+}
+
+.map-banner h1 {
+    margin: 0 0 6px;
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.map-banner-description {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+/* 검색창 축소 */
+.map-banner .travel-search {
+    position: static;
+    transform: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    max-width: none;
+    height: 42px;
+    box-sizing: border-box;
+    margin: 16px 0 12px;
+    padding: 4px;
+    background: #fff;
+    border-radius: 24px;
+}
+
+.map-banner .travel-search input {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+    height: 100%;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #152238;
+    background: transparent;
+}
+
+.map-banner .travel-search button {
+    position: static;
+    transform: none;
+    flex: 0 0 58px;
+    width: 58px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    font-size: 12px;
+    color: #fff;
+    background: #152238;
+    cursor: pointer;
+}
+
+/* 카테고리 메뉴 축소 */
+.map-banner .travel-menu {
+    position: static;
+    transform: none;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin: 0;
+    padding: 10px 0;
+    border: 0;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.map-banner .travel-menu a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: auto;
+    min-width: 0;
+    margin: 0;
+    padding: 0 2px;
+    color: #fff;
+    font-size: 10px;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.map-banner .travel-menu a span {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1;
+}
+
+@media (max-width: 700px) {
+    #home-map {
+        height: 360px;
+    }
+
+    .map-banner {
+        position: relative;
+        top: auto;
+        right: auto;
+        width: 100%;
+        max-width: none;
+        border-radius: 0;
+        box-shadow: none;
+    }
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* 환율 */
+#exchangeModal select,
+#exchangeModal input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 11px;
+    box-sizing: border-box;
+    border: 1px solid #dce3ec;
+    border-radius: 8px;
+}
+
+.exchange-result {
+    margin-top: 15px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f4f7fb;
+}
+
+.exchange-result small,
+.exchange-result span,
+.exchange-result p {
+    display: block;
+    color: #718096;
+}
+
+.exchange-result strong {
+    display: block;
+    margin: 6px 0;
+    font-size: 23px;
+    color: #152238;
+}
+
+.exchange-result p {
+    margin: 8px 0 0;
+    font-size: 11px;
+}
+
+.exchange-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 28px;
+    color: #7183a3;
+    font-size: 15px;
+}
+
+.route-field {
+    position: relative;
+}
+
+.route-field input {
+    width: 100%;
+    height: 50px;
+    padding: 0 18px 0 65px;
+    border: 1px solid #d7dfeb;
+    border-radius: 10px;
+    font-size: 15px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.route-field input:focus {
+    border-color: #7183a3;
+}
+
+.route-label {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7183a3;
+    font-size: 13px;
+    font-weight: 700;
+    z-index: 1;
+}
+
+.route-arrow {
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #7183a3;
+}
+
+.route-notice {
+    margin-top: 14px;
+    color: #7183a3;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* 시차 */
+.time-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,.45);
+    align-items: center;
+    justify-content: center;
+}
+
+.time-modal.active { display: flex; }
+
+.time-box {
+    position: relative;
+    width: 360px;
+    padding: 28px;
+    background: white;
+    border-radius: 15px;
+}
+
+.time-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    border: 0;
+    background: none;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.country-search { position: relative; }
+
+.country-search input,
+.city-box select,
+.time-check {
+    width: 100%;
+    padding: 11px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    border: 1px solid #dce3ec;
+}
+
+.country-list {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 160px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    z-index: 10;
+}
+
+.country-list.active { display: block; }
+
+.country-option {
+    padding: 8px 10px;
+    cursor: pointer;
+}
+
+.country-option:hover,
+.country-option.selected {
+    background: #eef3fa;
+}
+
+.time-check {
+    border: 0;
+    background: #152238;
+    color: white;
+    cursor: pointer;
+}
+
+#timeResult {
+    margin-top: 15px;
+    line-height: 1.7;
+}
+
+.time-result-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.time-card {
+    flex: 1;
+    padding: 16px;
+    background: #f4f7fb;
+    border-radius: 12px;
+}
+
+.time-card span,
+.time-card small {
+    display: block;
+    color: #718096;
+}
+
+.time-card b {
+    display: block;
+    margin: 5px 0;
+    font-size: 21px;
+    color: #152238;
+}
+
+.time-card small {
+    font-size: 12px;
+}
+
+.time-gap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 10px;
+    padding: 15px;
+    background: #eef4fa;
+    border-radius: 12px;
+}
+
+.time-gap > span {
+    font-size: 25px;
+    color: #557ba8;
+}
+
+.time-gap small {
+    display: block;
+    margin-bottom: 3px;
+    font-size: 9px;
+    color: #8b98aa;
+}
+
+.time-gap strong {
+    font-size: 13px;
+    color: #152238;
+}
+
+.weather-city-input {
+    width: 100%;
+    padding: 11px;
+    margin-top: 10px;
+    box-sizing: border-box;
+    border: 1px solid #dce3ec;
+    border-radius: 8px;
+}
+
+.weather-result {
+    margin-top: 15px;
+    padding: 18px;
+    border-radius: 12px;
+    background: #f4f7fb;
+}
+
+.weather-current {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.weather-current strong {
+    font-size: 23px;
+}
+
+.weather-current b {
+    font-size: 14px;
+}
+
+.weather-result p {
+    margin: 0;
+    color: #718096;
+    font-size: 13px;
+}
+
+.weather-hour-title {
+    margin-top: 18px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.weather-hourly {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 5px;
+}
+
+.weather-hour {
+    flex: 0 0 65px;
+    padding: 10px 5px;
+    border-radius: 10px;
+    background: white;
+    text-align: center;
+}
+
+.weather-hour span,
+.weather-hour strong,
+.weather-hour small,
+.weather-hour b {
+    display: block;
+}
+
+.weather-hour span {
+    font-size: 11px;
+    color: #718096;
+}
+
+.weather-hour b {
+    margin: 7px 0;
+    font-size: 20px;
+}
+
+.weather-hour strong {
+    font-size: 14px;
+}
+
+.weather-hour small {
+    margin-top: 6px;
+    color: #718096;
+    font-size: 10px;
+}
+
+.weather-notice {
+    margin-top: 12px !important;
+    font-size: 11px !important;
+    color: #8a94a6 !important;
+    line-height: 1.5;
+}

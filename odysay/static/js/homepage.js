@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 // static/js/main.js
+=======
+// static/js/homepage.js
+>>>>>>> main
 
 function handleSearch() {
     const input = document.getElementById('mainSearchInput');
     const keyword = input ? input.value.trim() : '';
+<<<<<<< HEAD
     // HTML에서 설정한 글로벌 변수 사용
+=======
+>>>>>>> main
     const targetUrl = window.APP_CONFIG?.tripListUrl || '/homepage/trip_list';
 
     if (keyword) {
@@ -13,6 +20,7 @@ function handleSearch() {
     }
 }
 
+<<<<<<< HEAD
 (async function () {
     const mapElement = document.getElementById('home-map');
     if (!mapElement) return;
@@ -78,6 +86,160 @@ function handleSearch() {
     }
 
     // 3. 커뮤니티 인기글 동적 연동
+=======
+// 헬퍼: 사진 유무에 따른 HTML 반환 (업로드 이미지 or 대체 로고 이미지)
+function renderImageOrPlaceholder(photos, altText, customClass = '') {
+    if (photos && photos.trim() !== '') {
+        const firstPhoto = photos.split(',')[0].trim();
+        if (firstPhoto) {
+            return `<img src="/static/uploads/${firstPhoto}" alt="${altText}">`;
+        }
+    }
+    // 사진이 없을 때 logo-img 대신 no-photo-img 클래스 적용
+    return `<img src="/static/images/logo.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
+}
+
+(async function () {
+    // 1. 지도 초기화
+    const mapElement = document.getElementById('home-map');
+    if (mapElement) {
+        const map = L.map('home-map', {
+            minZoom: 2,
+            maxZoom: 19,
+            scrollWheelZoom: true
+        }).setView([20, 0], 2);
+
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        }).addTo(map);
+
+        const markers = L.markerClusterGroup({
+            showCoverageOnHover: false,
+            zoomToBoundsOnClick: true,
+            spiderfyOnMaxZoom: true
+        });
+
+        map.addLayer(markers);
+
+        // 지도 마커 조회 API 호출
+        try {
+            const placesApiUrl = window.APP_CONFIG?.getPlacesUrl;
+            if (placesApiUrl) {
+                const response = await fetch(placesApiUrl);
+                if (response.ok) {
+                    const places = await response.json();
+                    if (Array.isArray(places)) {
+                        for (const place of places) {
+                            if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
+
+                            const popup = document.createElement('div');
+                            const title = document.createElement('strong');
+                            title.textContent = place.title;
+                            const location = document.createElement('p');
+                            location.textContent = [place.country, place.region].filter(Boolean).join(' ');
+                            const intro = document.createElement('p');
+                            intro.textContent = place.intro || '';
+                            const link = document.createElement('a');
+                            link.href = place.detail_url;
+                            link.textContent = '상세보기';
+
+                            popup.append(title, location, intro, link);
+                            markers.addLayer(L.marker([place.lat, place.lng]).bindPopup(popup));
+                        }
+
+                        if (markers.getLayers().length > 0) {
+                            map.fitBounds(markers.getBounds(), { padding: [40, 40], maxZoom: 12 });
+                        }
+                    }
+                }
+            }
+        } catch (error) {
+            const message = document.getElementById('home-map-error');
+            if (message) {
+                message.textContent = '여행지 목록을 불러오지 못했습니다. 새로고침해 주세요.';
+                message.hidden = false;
+            }
+        }
+    }
+
+    // 2. 인기 여행지 비동기 로드
+    fetch('/homepage/api/recommended')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('recommendedList');
+            if (!container) return;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="padding: 20px 0; color: #888;">등록된 추천 여행지가 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = data.map(place => {
+                const imgHtml = renderImageOrPlaceholder(place.photos, place.place);
+                const count = place.like_count || 0;
+                const heartSymbol = count > 0 ? '♥' : '♡';
+                const heartStyle = count > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+
+                return `
+                    <a href="${place.detail_url}" class="recommend-card">
+                        <div class="recommend-image">
+                            ${imgHtml}
+                        </div>
+                        <div class="recommend-info">
+                            <span>[${place.country}]</span>
+                            <strong>${place.place}</strong>
+                            <p class="recommend-like" style="${heartStyle}">
+                                ${heartSymbol} ${count}
+                            </p>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        })
+        .catch(err => console.error('인기 여행지 불러오기 실패:', err));
+
+    // 3. 최근 등록된 여행지 비동기 로드
+    fetch('/homepage/api/recent')
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById('recentList');
+            if (!container) return;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="padding: 20px 0; color: #888;">최근 등록된 여행지가 없습니다.</p>';
+                return;
+            }
+
+            container.innerHTML = data.map(place => {
+                const imgHtml = renderImageOrPlaceholder(place.photos, place.place);
+                const count = place.like_count || 0;
+                const heartSymbol = count > 0 ? '♥' : '♡';
+                const heartStyle = count > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+
+                return `
+                    <a href="${place.detail_url}" class="recent-item">
+                        ${imgHtml}
+                        <div class="recent-info">
+                            <strong>[${place.country}/${place.region}] ${place.place}</strong>
+                            <div class="recent-meta-box">
+                                <div class="recent-like-count" style="${heartStyle}">
+                                    ${heartSymbol} ${count}
+                                </div>
+                                <div class="recent-bottom">
+                                    <span>${place.author}</span>
+                                    <span>${place.created_at}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                `;
+            }).join('');
+        })
+        .catch(err => console.error('최근 등록된 여행지 불러오기 실패:', err));
+
+    // 4. 커뮤니티 인기글 비동기 로드
+>>>>>>> main
     fetch('/homepage/community/api/places')
         .then(res => res.json())
         .then(data => {
@@ -105,6 +267,7 @@ function handleSearch() {
                 return;
             }
 
+<<<<<<< HEAD
             communityList.innerHTML = '';
             sorted.forEach(item => {
                 let thumbImg = '/static/images/community/europe.png';
@@ -113,6 +276,10 @@ function handleSearch() {
                     if (firstPhoto) thumbImg = `/static/uploads/${firstPhoto}`;
                 }
 
+=======
+            communityList.innerHTML = sorted.map(item => {
+                const imgHtml = renderImageOrPlaceholder(item.photos, item.title);
+>>>>>>> main
                 const likeCount = item.likes || 0;
                 const commentCount = item.comment_count ?? item.comments_count ?? 0;
                 const createdDate = item.created_at || '';
@@ -121,10 +288,17 @@ function handleSearch() {
                 const heartStyle = likeCount > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
                 const commentStyle = commentCount > 0 ? 'color: #007bff; font-weight: bold;' : 'color: #aaa;';
 
+<<<<<<< HEAD
                 const html = `
                     <a href="${item.detail_url}" class="community-item">
                         <div class="community-thumb">
                             <img src="${thumbImg}" alt="${item.title}" onerror="this.src='/static/images/community/europe.png'">
+=======
+                return `
+                    <a href="${item.detail_url}" class="community-item">
+                        <div class="community-thumb">
+                            ${imgHtml}
+>>>>>>> main
                         </div>
                         <div class="community-info">
                             <div class="community-top">
@@ -141,8 +315,12 @@ function handleSearch() {
                         </div>
                     </a>
                 `;
+<<<<<<< HEAD
                 communityList.insertAdjacentHTML('beforeend', html);
             });
+=======
+            }).join('');
+>>>>>>> main
         })
         .catch(err => console.error('커뮤니티 인기글 불러오기 실패:', err));
 })();

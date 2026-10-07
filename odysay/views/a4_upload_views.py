@@ -4,13 +4,16 @@ import requests
 import json
 from datetime import datetime
 from dotenv import load_dotenv
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, g ,flash
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, g, flash, abort
 from werkzeug.utils import secure_filename
 from geopy.geocoders import Nominatim
 from google import genai
 from google.genai import types
-
 from odysay.models import db, Uploadmd, TripLocationmd
+from odysay.travel_tags import (
+    TRAVEL_TAG_CHOICES,
+    validate_travel_tags,
+)
 
 bp = Blueprint('upload', __name__, url_prefix='/homepage/upload')
 
@@ -146,6 +149,13 @@ def upload():
         return redirect(url_for('homepage.homepage'))
 
     if request.method == 'POST':
+        try:
+            selected_tags = validate_travel_tags(
+                request.form.getlist('travel_tags')
+            )
+        except ValueError as error:
+            abort(400, description=str(error))
+
         country = request.form.get('country', '')
         region = request.form.get('region', '')
         place = request.form.get('place', '')
@@ -265,7 +275,8 @@ def upload():
                 latitude=new_upload.latitude,
                 longitude=new_upload.longitude,
 
-                user_id=new_upload.user_id
+                user_id=new_upload.user_id,
+                travel_tags=selected_tags,
             )
 
             db.session.add(new_trip_location)
@@ -286,4 +297,7 @@ def upload():
             print(f"[DB 저장 실패 및 롤백]: {e}")
             return f"DB 저장 중 오류가 발생했습니다. (잠시 후 다시 시도해 주세요): {e}", 500
 
-    return render_template('upload.html')
+    return render_template(
+        'upload.html',
+        travel_tag_choices=TRAVEL_TAG_CHOICES,
+    )

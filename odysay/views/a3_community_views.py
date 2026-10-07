@@ -1,5 +1,5 @@
 import os
-from flask import Blueprint, render_template, request, jsonify, url_for
+from flask import Blueprint, render_template, request, jsonify, url_for ,g
 from odysay.models import db, TripLocationmd, User, Post, Bookmark, TravelTalk
 
 bp = Blueprint('community', __name__, url_prefix='/homepage/community')

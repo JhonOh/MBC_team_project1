@@ -3,8 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ item.title or item.place }} - 커뮤니티 상세</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_detail.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
+
 </head>
 <body>
 
@@ -34,13 +37,16 @@
             </div>
 
             {% if current_user_id and item.user_id and (current_user_id|string == item.user_id|string) %}
-            <div class="action-buttons" id="post-action-buttons">
-                <button class="btn" onclick="enablePostEdit()">수정</button>
-                <button class="btn btn-danger" onclick="deletePost()">삭제</button>
-            </div>
+                <div class="action-buttons" id="post-action-buttons">
+                    <button class="btn" onclick="enablePostEdit()">수정</button>
+                    <button class="btn btn-danger" onclick="deletePost()">삭제</button>
+                </div>
             {% endif %}
         </div>
     </div>
+    {% with display_travel_tags=item.travel_tags or [] %}
+        {% include "components/travel_tag_badges.html" %}
+    {% endwith %}
 
     <!-- 게시글 본문 -->
     <div id="post-content-display" class="post-content">
@@ -54,12 +60,16 @@
 
     <!-- 게시글 수정 폼 -->
     <div id="post-edit-form" style="display: none; margin-bottom: 30px;">
+        {% include "components/travel_tag_fields.html" %}
         {% if is_post %}
-            <input type="text" id="edit-post-title" class="edit-input" value="{{ item.title }}" style="margin-bottom: 10px;">
+            <input type="text" id="edit-post-title" class="edit-input" value="{{ item.title }}"
+                   style="margin-bottom: 10px;">
             <textarea id="edit-post-content" class="edit-input" style="height: 150px;">{{ item.content }}</textarea>
         {% else %}
-            <input type="text" id="edit-place-intro" class="edit-input" value="{{ item.intro }}" style="margin-bottom: 10px;" placeholder="소개">
-            <textarea id="edit-place-reason" class="edit-input" style="height: 150px;" placeholder="추천 이유">{{ item.reason }}</textarea>
+            <input type="text" id="edit-place-intro" class="edit-input" value="{{ item.intro }}"
+                   style="margin-bottom: 10px;" placeholder="소개">
+            <textarea id="edit-place-reason" class="edit-input" style="height: 150px;"
+                      placeholder="추천 이유">{{ item.reason }}</textarea>
         {% endif %}
         <div style="text-align: right; margin-top: 10px;">
             <button class="btn" onclick="cancelPostEdit()">취소</button>
@@ -69,19 +79,20 @@
 
     <!-- 사진 갤러리 -->
     {% if photo_list %}
-    <div class="photo-gallery">
-        {% for photo in photo_list %}
-            <img src="{{ photo }}" alt="첨부 이미지">
-        {% endfor %}
-    </div>
+        <div class="photo-gallery">
+            {% for photo in photo_list %}
+                <img src="{{ photo }}" alt="첨부 이미지">
+            {% endfor %}
+        </div>
     {% endif %}
 
     <!-- 좋아요 섹션 -->
     <div class="like-section">
         {% if is_post %}
-        <button id="like-btn" class="btn-like {% if is_liked %}active{% endif %}" onclick="toggleLike()">
-            <span id="like-icon">{% if is_liked %}❤️{% else %}🤍{% endif %}</span> 좋아요 <span id="like-count">{{ item.likes or 0 }}</span>
-        </button>
+            <button id="like-btn" class="btn-like {% if is_liked %}active{% endif %}" onclick="toggleLike()">
+                <span id="like-icon">{% if is_liked %}❤️{% else %}🤍{% endif %}</span> 좋아요 <span
+                    id="like-count">{{ item.likes or 0 }}</span>
+            </button>
         {% endif %}
     </div>
 
@@ -98,41 +109,43 @@
 
         <ul class="comment-list" id="comment-list">
             {% for comment in comments %}
-            <li class="comment-item" id="comment-item-{{ comment.id }}">
-                <div class="comment-header">
-                    <div>
-                        <strong>{{ comment.author }}</strong>
+                <li class="comment-item" id="comment-item-{{ comment.id }}">
+                    <div class="comment-header">
+                        <div>
+                            <strong>{{ comment.author }}</strong>
 
-                        {% if item.user_id and comment.user_id and (item.user_id|string == comment.user_id|string) %}
-                            <span class="author-badge">작성자</span>
-                        {% endif %}
+                            {% if item.user_id and comment.user_id and (item.user_id|string == comment.user_id|string) %}
+                                <span class="author-badge">작성자</span>
+                            {% endif %}
 
-                        <span id="comment-date-{{ comment.id }}" style="margin-left: 8px;">
+                            <span id="comment-date-{{ comment.id }}" style="margin-left: 8px;">
                             {% if comment.updated_at %}
-                                {{ comment.updated_at.strftime('%Y.%m.%d %H:%M') }} <span class="edited-tag">(수정됨)</span>
+                                {{ comment.updated_at.strftime('%Y.%m.%d %H:%M') }}
+                                <span class="edited-tag">(수정됨)</span>
                             {% else %}
                                 {{ comment.created_at.strftime('%Y.%m.%d %H:%M') if comment.created_at else '' }}
                             {% endif %}
                         </span>
+                        </div>
+                        {% if current_user_id and comment.user_id and (current_user_id|string == comment.user_id|string) %}
+                            <div class="action-buttons">
+                                <button class="btn" onclick="showEditCommentForm({{ comment.id }})">수정</button>
+                                <button class="btn btn-danger" onclick="deleteComment({{ comment.id }})">삭제</button>
+                            </div>
+                        {% endif %}
                     </div>
-                    {% if current_user_id and comment.user_id and (current_user_id|string == comment.user_id|string) %}
-                    <div class="action-buttons">
-                        <button class="btn" onclick="showEditCommentForm({{ comment.id }})">수정</button>
-                        <button class="btn btn-danger" onclick="deleteComment({{ comment.id }})">삭제</button>
-                    </div>
-                    {% endif %}
-                </div>
 
-                <div class="comment-content" id="comment-text-{{ comment.id }}">{{ comment.content }}</div>
+                    <div class="comment-content" id="comment-text-{{ comment.id }}">{{ comment.content }}</div>
 
-                <div class="comment-edit-form" id="comment-edit-form-{{ comment.id }}" style="display: none;">
-                    <textarea class="edit-input" id="comment-edit-input-{{ comment.id }}">{{ comment.content }}</textarea>
-                    <div class="edit-form-buttons">
-                        <button class="btn" onclick="hideEditCommentForm({{ comment.id }})">취소</button>
-                        <button class="btn btn-primary" onclick="submitEditComment({{ comment.id }})">저장</button>
+                    <div class="comment-edit-form" id="comment-edit-form-{{ comment.id }}" style="display: none;">
+                        <textarea class="edit-input"
+                                  id="comment-edit-input-{{ comment.id }}">{{ comment.content }}</textarea>
+                        <div class="edit-form-buttons">
+                            <button class="btn" onclick="hideEditCommentForm({{ comment.id }})">취소</button>
+                            <button class="btn btn-primary" onclick="submitEditComment({{ comment.id }})">저장</button>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
             {% endfor %}
         </ul>
     </div>
@@ -150,7 +163,7 @@
         try {
             const response = await fetch(`/homepage/community/detail/api/like/${postType}/${itemId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {'Content-Type': 'application/json'}
             });
             const data = await response.json();
 
@@ -166,13 +179,16 @@
                     likeBtn.classList.remove('active');
                     likeIcon.innerText = '🤍';
                 }
+
             } else {
                 alert(data.message || '좋아요 처리에 실패하였습니다.');
             }
+
         } catch (error) {
             console.error('Error:', error);
             alert('통신 중 오류가 발생했습니다.');
         }
+
     }
 
     // 2. 게시글 수정 UI 전환
@@ -200,7 +216,7 @@
                 alert('제목과 내용을 모두 입력해 주세요.');
                 return;
             }
-            payload = { title, content };
+            payload = {title, content};
         } else {
             const intro = document.getElementById('edit-place-intro').value.trim();
             const reason = document.getElementById('edit-place-reason').value.trim();
@@ -208,14 +224,33 @@
                 alert('소개와 추천 이유를 모두 입력해 주세요.');
                 return;
             }
-            payload = { intro, reason };
+            payload = {intro, reason};
+        }
+        const selectedTags = Array.from(
+            document.querySelectorAll(
+                '#post-edit-form input[name="travel_tags"]:checked'
+            ),
+            function (input) {
+                return input.value;
+            }
+        );
+
+        if (selectedTags.length > 3) {
+            alert("여행 스타일은 최대 3개까지 선택할 수 있습니다.");
+            return;
         }
 
+        payload.travel_tags = selectedTags;
         try {
             const response = await fetch(`/homepage/community/detail/api/post/update/${postType}/${itemId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+                },
                 body: JSON.stringify(payload)
+
             });
             const data = await response.json();
 
@@ -238,7 +273,10 @@
         try {
             const response = await fetch(`/homepage/community/detail/api/post/delete/${postType}/${itemId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+                }
             });
             const data = await response.json();
 
@@ -264,11 +302,15 @@
             return;
         }
 
+
         try {
             const response = await fetch(`/homepage/community/detail/api/comment/${postType}/${itemId}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({content})
             });
             const data = await response.json();
 
@@ -306,8 +348,11 @@
         try {
             const response = await fetch(`/homepage/community/detail/api/comment/${commentId}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({content})
             });
             const data = await response.json();
 
@@ -320,6 +365,7 @@
                 }
 
                 hideEditCommentForm(commentId);
+
             } else {
                 alert(data.message || '댓글 수정 실패');
             }
@@ -333,12 +379,17 @@
     async function deleteComment(commentId) {
         if (!confirm('댓글을 삭제하시겠습니까?')) return;
 
+
         try {
             const response = await fetch(`/homepage/community/detail/api/comment/${commentId}`, {
                 method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' }
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': document.querySelector('meta[name="csrf-token"]').content
+                }
             });
             const data = await response.json();
+
 
             if (response.ok && data.success) {
                 const itemElem = document.getElementById(`comment-item-${commentId}`);
@@ -352,5 +403,6 @@
         }
     }
 </script>
+<script src="{{ url_for('static', filename='js/travel_tags.js') }}"></script>
 </body>
 </html>

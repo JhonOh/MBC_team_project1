@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>설정</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
+</head>
+
+<body>
+
+<div class="mypage-wrap">
+
+    <!-- HEADER -->
+    <header class="header">
+
+        <div class="header-inner">
+
+            <a href="#" class="logo">
+                <span class="logo-icon">△</span>
+                <span>어디갈까?</span>
+            </a>
+
+            <nav class="main-menu">
+                <a href="{{ url_for('homepage.homepage') }}">홈</a>
+                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
+                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
+                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+            </nav>
+
+            <button type="button" class="search-btn">
+                ⌕
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="content">
+
+        <!-- LEFT SIDE MENU -->
+        <aside class="side-menu">
+
+            <div class="side-title">
+                마이페이지
+            </div>
+
+            <ul class="side-list">
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage') }}">
+                        <span class="menu-icon">♙</span>
+                        <span>내 정보</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♧</span>
+                        <span>내가 쓴 글</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♡</span>
+                        <span>내가 찜한 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage_settings') }}"
+                       class="active">
+                        <span class="menu-icon">⚙</span>
+                        <span>설정</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </aside>
+
+
+        <!-- RIGHT CONTENT -->
+        <section class="mypage-main">
+
+            <h1 class="page-title">
+                설정
+            </h1>
+
+
+            <!-- 회원 탈퇴 -->
+            <div class="withdraw-box" id ="withdraw">
+
+                <div class="withdraw-header">
+                    <h2>회원 탈퇴</h2>
+                </div>
+
+                <div class="withdraw-content">
+
+                    <p class="withdraw-description">
+                        탈퇴하면 계정이 비활성화되고 로그아웃됩니다.
+                        <br>
+                        회원정보와 기존 게시물은 삭제되지 않고 보관됩니다.
+                    </p>
+
+                    <div class="withdraw-warning">
+                        <strong>탈퇴 전 확인해 주세요.</strong>
+
+                        <ul>
+                            <li>
+                                탈퇴 후에는 로그인 및 회원 기능을
+                                이용할 수 없습니다.
+                            </li>
+                            <li>
+                                다른 기기의 로그인도 다음 요청부터
+                                해제됩니다.
+                            </li>
+                            <li>
+                                동일한 아이디·이메일·닉네임으로
+                                재가입할 수 없습니다.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 서버에서 전달한 안내 및 오류 -->
+                    {% for message in get_flashed_messages() %}
+                        <p class="withdraw-error" role="alert">
+                            {{ message }}
+                        </p>
+                    {% endfor %}
+
+                    <form
+                            method="post"
+                            action="{{ url_for('auth.withdraw') }}"
+                            onsubmit="return confirm('회원 탈퇴를 진행하시겠습니까? 탈퇴 후에는 로그인할 수 없습니다.');"
+                    >
+                        <input
+                                type="hidden"
+                                name="csrf_token"
+                                value="{{ csrf_token() }}"
+                        >
+
+                        <div class="withdraw-password-field">
+                            <label for="withdraw-password">
+                                현재 비밀번호
+                            </label>
+
+                            <input
+                                    type="password"
+                                    id="withdraw-password"
+                                    name="password"
+                                    placeholder="현재 비밀번호를 입력해 주세요"
+                                    autocomplete="current-password"
+                                    required
+                            >
+                        </div>
+
+                        <div class="withdraw-actions">
+                            <a
+                                    href="{{ url_for('homepage.mypage') }}"
+                                    class="withdraw-cancel"
+                            >
+                                취소
+                            </a>
+
+                            <button
+                                    type="submit"
+                                    class="withdraw-btn"
+                            >
+                                회원 탈퇴
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-logo">
+                △ 어디갈까?
+            </div>
+
+            <div class="footer-menu">
+
+                <a href="#">
+                    이용약관
+                </a>
+
+                <a href="#">
+                    개인정보처리방침
+                </a>
+
+                <a href="#">
+                    고객센터
+                </a>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 어디갈까? All rights reserved.
+            </div>
+
+        </div>
+
+    </footer>
+
+</div>
+
+
+</body>
+</html>

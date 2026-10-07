@@ -65,23 +65,30 @@ document.addEventListener("DOMContentLoaded", function () {
             const word = this.value.trim().toLowerCase();
 
             show(countries.filter(c =>
-                c.toLowerCase().includes(word) ||
-                getCho(c).includes(word)
+                c.toLowerCase().startsWith(word) ||
+                getCho(c).startsWith(word)
             ));
         });
 
         // ↑ ↓ Enter
         countrySearch.addEventListener("keydown", e => {
             const items = countryResults.querySelectorAll(".country-result-item");
+
             if (!items.length) return;
 
-            if (e.key === "ArrowDown") index = (index + 1) % items.length;
-            else if (e.key === "ArrowUp") index = (index - 1 + items.length) % items.length;
-            else if (e.key === "Enter" && index >= 0) {
+            if (e.key === "ArrowDown") {
+                index = (index + 1) % items.length;
+            } else if (e.key === "ArrowUp") {
+                index = (index - 1 + items.length) % items.length;
+            } else if (e.key === "Enter") {
                 e.preventDefault();
-                items[index].click();
+
+                const selectedIndex = index >= 0 ? index : 0;
+                items[selectedIndex].click();
                 return;
-            } else return;
+            } else {
+                return;
+            }
 
             e.preventDefault();
 
@@ -435,6 +442,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
+            // 3. 메인 사진 필수 확인
+            const existingPhotoCount =
+                document.querySelectorAll("#existingPhotos .existing-photo").length;
+
+            const newPhotoCount =
+                photosInput ? photosInput.files.length : 0;
+
+            if (existingPhotoCount + newPhotoCount === 0) {
+                alert("메인 사진을 1장 이상 등록해주세요.");
+
+                if (photosInput) {
+                    photosInput.closest(".form-section")?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "center"
+                    });
+                }
+
+                return;
+            }
+
             // 나라 검색창 값을 실제 country 값에 넣기
             if (countrySearch && countryInput) {
                 countryInput.value = countrySearch.value.trim();
@@ -458,6 +485,26 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    const mobileUploadMenu = document.getElementById("mobileUploadMenu");
+    const mobileGuideMenu = document.getElementById("mobileGuideMenu");
+
+    mobileUploadMenu?.addEventListener("click", function () {
+        uploadContent.style.display = "block";
+        guideContent.style.display = "none";
+
+        mobileUploadMenu.classList.add("selected");
+        mobileGuideMenu.classList.remove("selected");
+    });
+
+    mobileGuideMenu?.addEventListener("click", function () {
+        guideChecked = true;
+        uploadContent.style.display = "none";
+        guideContent.style.display = "block";
+
+        mobileGuideMenu.classList.add("selected");
+        mobileUploadMenu.classList.remove("selected");
+    });
+
     // 메뉴 전환
     uploadMenu.addEventListener("click", function(event) {
         event.preventDefault();
@@ -471,6 +518,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     guideMenu.addEventListener("click", function(event) {
         event.preventDefault();
+
+        guideChecked = true;
 
         uploadContent.style.display = "none";
         guideContent.style.display = "block";

@@ -6,14 +6,17 @@
 
     <title>어딧세이 | 여행의 시작</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <!-- FontAwesome 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+
 </head>
 
 <body>
@@ -68,7 +71,7 @@
 
     <div class="section-inner home-grid">
 
-        <!-- 추천 여행지 (좋아요 순 동적 렌더링) -->
+        <!-- 추천 여행지 (인기 여행지 동적 렌더링) -->
         <div class="recommend-section">
 
             <div class="sub-section-title">
@@ -76,45 +79,16 @@
                     <h2>인기 여행지</h2>
                     <p>어딧세이에서 인기있는 특별한 여행지</p>
                 </div>
-
-                <!-- 1. 첫 번째 더보기: 여행후기 인기순 페이지로 이동 -->
                 <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
             </div>
 
-            <div class="recommend-list">
-                {% if recommended_places %}
-                    {% for place in recommended_places %}
-                        <a href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}" class="recommend-card">
-                            <div class="recommend-image">
-                                {% if place.photos %}
-                                    {% set first_photo = place.photos.split(',')[0] %}
-                                    <img src="{{ url_for('static', filename='uploads/' ~ first_photo) }}"
-                                         alt="{{ place.place }}">
-                                {% else %}
-                                    <img src="{{ url_for('static', filename='images/recommend/rome.png') }}"
-                                         alt="{{ place.place }}">
-                                {% endif %}
-                            </div>
-
-                            <div class="recommend-info">
-                                <span>[{{ place.country }}]</span>
-                                <strong>{{ place.place }}</strong>
-                                {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
-                                <p class="recommend-like" style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
-                                    {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
-                                </p>
-                            </div>
-                        </a>
-                    {% endfor %}
-                {% else %}
-                    <p style="padding: 20px 0; color: #888;">등록된 추천 여행지가 없습니다.</p>
-                {% endif %}
-            </div>
+            <!-- JS 동적 렌더링 영역 -->
+            <div class="recommend-list" id="recommendedList"></div>
 
         </div>
 
 
-        <!-- 최근 등록된 여행지 -->
+        <!-- 최근 등록된 여행지 (동적 렌더링) -->
         <div class="recent-section">
 
             <div class="sub-section-title">
@@ -122,83 +96,28 @@
                     <h2>최근 등록된 여행지</h2>
                     <p>새로운 여행지를 확인해보세요!</p>
                 </div>
-
-                <!-- 2. 두 번째 더보기: 여행후기 최신순 페이지로 이동 -->
                 <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
             </div>
 
-            <div class="recent-list">
-
-                {% if recent_places %}
-                    {% for place in recent_places %}
-                        <a href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}" class="recent-item">
-
-                            <!-- 등록된 첫 번째 대표 사진 -->
-                            {% if place.photos %}
-                                {% set first_photo = place.photos.split(',')[0] %}
-                                <img src="{{ url_for('static', filename='uploads/' ~ first_photo) }}"
-                                     alt="{{ place.place }}">
-                            {% else %}
-                                <img src="{{ url_for('static', filename='images/recent/interlaken.png') }}"
-                                     alt="{{ place.place }}">
-                            {% endif %}
-
-                            <div class="recent-info">
-                                <strong>[{{ place.country }}/{{ place.region }}] {{ place.place }}</strong>
-
-                                <div class="recent-meta-box">
-                                    {% set count = place.like_count if place.like_count is defined and place.like_count is not none else 0 %}
-                                    <div class="recent-like-count" style="{% if count > 0 %}color: #ff5a5f; font-weight: bold;{% else %}color: #aaa;{% endif %}">
-                                        {% if count > 0 %}♥{% else %}♡{% endif %} {{ count }}
-                                    </div>
-
-                                    <div class="recent-bottom">
-                                        <span>
-                                            {% if place.author %}
-                                                {{ place.author }}
-                                            {% else %}
-                                                익명
-                                            {% endif %}
-                                        </span>
-
-                                        <span>
-                                            {% if place.created_at %}
-                                                {{ place.created_at.strftime('%Y. %m. %d') }}
-                                            {% else %}
-                                                방금 전
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </a>
-                    {% endfor %}
-                {% else %}
-                    <p style="padding: 20px 0; color: #888;">최근 등록된 여행지가 없습니다.</p>
-                {% endif %}
-
-            </div>
+            <!-- JS 동적 렌더링 영역 -->
+            <div class="recent-list" id="recentList"></div>
 
         </div>
 
 
-        <!-- 커뮤니티 인기글 (전체 게시글 대상 하트+댓글 순 동적 연동) -->
+        <!-- 커뮤니티 인기글 (동적 렌더링) -->
         <div class="community-section">
 
             <div class="sub-section-title">
                 <div>
                     <h2>커뮤니티 인기글</h2>
-                    <p>다양한 이야기와 정보 공유</p> <!-- 설명 문구 추가로 상단 타이틀 높이 라인 완벽 일치 -->
+                    <p>다양한 이야기와 정보 공유</p>
                 </div>
-
-                <!-- 3. 세 번째 더보기: 전체 게시판 인기순 페이지로 이동 -->
                 <a href="/homepage/community/all?sort=popular">더보기 ›</a>
             </div>
 
-            <div class="community-list" id="mainCommunityList">
-                <!-- 동적 렌더링 영역 -->
-            </div>
+            <!-- JS 동적 렌더링 영역 -->
+            <div class="community-list" id="mainCommunityList"></div>
 
         </div>
 
@@ -234,10 +153,11 @@
     </div>
 </section>
 
-<!-- 2. FOOTER 분리 포함 -->
-{% include 'footer.html' %}
 
 </main>
+
+<!-- 2. FOOTER 분리 포함 -->
+{% include 'footer.html' %}
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>

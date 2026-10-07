@@ -1,28 +1,128 @@
 <header class="header">
     <div class="header-inner">
+        <!-- 1. 로고 (좌측) -->
         <a href="/homepage" class="logo">
-            <span class="logo-symbol">△△</span>
+            <img src="{{ url_for('static', filename='images/logo.png') }}" alt="어딧세이 로고" class="logo-img">
             <div class="logo-text">
                 <strong>어딧세이</strong>
                 <small>ODYSAY</small>
             </div>
         </a>
 
+        <!-- 2. 중앙 GNB -->
         <nav class="gnb">
-            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
-            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
-            <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+            <ul class="gnb-list">
+                <!-- 2-1. 여행지 -->
+                <li class="gnb-item">
+                    <a href="{{ url_for('homepage.trip_list') }}" class="gnb-link">여행지</a>
+                    <div class="single-dropdown">
+                        <ul class="sub-menu">
+                            <li><a href="{{ url_for('homepage.trip_list') }}?category=domestic">국내 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?category=overseas">해외 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?sort=popular">인기 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?sort=recommended">추천 코스</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- 2-2. 커뮤니티 -->
+                <li class="gnb-item">
+                    <a href="{{ url_for('homepage.community') }}" class="gnb-link">커뮤니티</a>
+                    <div class="single-dropdown">
+                        <ul class="sub-menu">
+                            <li><a href="/homepage/community/all">전체 게시판</a></li>
+                            <li><a href="{{ url_for('community.community_review') }}">여행후기</a></li>
+                            <li><a href="{{ url_for('community.community_tip') }}">여행팁</a></li>
+                            <li><a href="{{ url_for('community.community_free') }}">자유게시판</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- 2-3. 여행지 등록 -->
+                <li class="gnb-item">
+                    <a href="{{ url_for('homepage.upload') }}" class="gnb-link">여행지 등록</a>
+                    <div class="single-dropdown">
+                        <ul class="sub-menu">
+                            <li><a href="{{ url_for('homepage.upload') }}">새 여행지 등록</a></li>
+                            <li><a href="#">등록 가이드</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- 2-4. 마이페이지 -->
+                <li class="gnb-item">
+                    <a href="{{ url_for('homepage.mypage') }}" class="gnb-link">마이페이지</a>
+                    <div class="single-dropdown">
+                        <ul class="sub-menu">
+                            <li><a href="{{ url_for('homepage.mypage') }}?tab=info">내정보</a></li>
+                            <li><a href="{{ url_for('homepage.mypage') }}?tab=posts">내가 쓴 글</a></li>
+                            <li><a href="{{ url_for('homepage.mypage') }}?tab=bookmarks">내가 찜한 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.mypage') }}?tab=my_trips">내가 만든 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.mypage_settings') }}">설정</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!-- 2-5. [마이페이지 오른쪽] 줄 세 개(allmenu.png) 아이콘 -->
+                <li class="gnb-item all-menu-wrap">
+                    <button type="button" class="all-menu-btn" aria-label="전체 메뉴">
+                        <img src="{{ url_for('static', filename='images/allmenu.png') }}" alt="전체 메뉴 아이콘" class="all-menu-icon">
+                    </button>
+                </li>
+            </ul>
         </nav>
 
+        <!-- 3. 우측 유틸리티 (로그인/로그아웃) -->
         <div class="header-util">
-            <button type="button" class="search-button"></button>
-
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
             <a class="logout-button" href="{{ url_for('homepage.homepage') }}">로그인</a>
             {% endif %}
+        </div>
+    </div>
+
+    <!-- 4. 전체 메가 드롭다운 (header 직속 자식으로 배치) -->
+    <div class="mega-dropdown">
+        <div class="mega-dropdown-inner">
+            <div class="sub-column">
+                <strong class="sub-title">여행지</strong>
+                <ul class="sub-list">
+                    <li><a href="{{ url_for('homepage.trip_list') }}?category=domestic">국내 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?category=overseas">해외 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?sort=popular">인기 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?sort=recommended">추천 코스</a></li>
+                </ul>
+            </div>
+
+            <div class="sub-column">
+                <strong class="sub-title">커뮤니티</strong>
+                <ul class="sub-list">
+                    <li><a href="/homepage/community/all">전체 게시판</a></li>
+                    <li><a href="{{ url_for('community.community_review') }}">여행후기</a></li>
+                    <li><a href="{{ url_for('community.community_tip') }}">여행팁</a></li>
+                    <li><a href="{{ url_for('community.community_free') }}">자유게시판</a></li>
+                </ul>
+            </div>
+
+            <div class="sub-column">
+                <strong class="sub-title">여행지 등록</strong>
+                <ul class="sub-list">
+                    <li><a href="{{ url_for('homepage.upload') }}">새 여행지 등록</a></li>
+                    <li><a href="#">등록 가이드</a></li>
+                </ul>
+            </div>
+
+            <div class="sub-column">
+                <strong class="sub-title">마이페이지</strong>
+                <ul class="sub-list">
+                    <li><a href="{{ url_for('homepage.mypage') }}?tab=info">내정보</a></li>
+                    <li><a href="{{ url_for('homepage.mypage') }}?tab=posts">내가 쓴 글</a></li>
+                    <li><a href="{{ url_for('homepage.mypage') }}?tab=bookmarks">내가 찜한 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.mypage') }}?tab=my_trips">내가 만든 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.mypage_settings') }}">설정</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 </header>
