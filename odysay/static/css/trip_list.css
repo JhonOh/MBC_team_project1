@@ -291,7 +291,8 @@
     transition: 0.18s;
 }
 
-.country-item:hover {
+.country-item:hover,
+.country-item.keyboard-active {
     background: #f5f7fa;
 }
 

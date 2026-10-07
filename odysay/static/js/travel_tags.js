@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 if (selectedCount > 3) {
                     checkbox.checked = false;
-                    message.textContent =
+                    message.textContent = window.OdysayLanguage?.t?.('tags.maxSelected') ||
                         "여행 스타일은 최대 3개까지 선택할 수 있습니다.";
                     return;
                 }

@@ -1,25 +1,32 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 사용자 접속 기준 로컬 시간 변환 기능
     const timeElements = document.querySelectorAll('.created-time, .updated-time');
-    timeElements.forEach(el => {
-        const rawTime = el.getAttribute('data-utc');
-        if (!rawTime) return;
+    function renderLocalTimes() {
+        timeElements.forEach(el => {
+            const rawTime = el.getAttribute('data-utc');
+            if (!rawTime) return;
 
-        // 브라우저가 접속한 사용자의 Local Timezone으로 자동 계산
-        const date = new Date(rawTime);
+            // 브라우저가 접속한 사용자의 Local Timezone으로 자동 계산
+            const date = new Date(rawTime);
 
-        // 사용자의 디바이스 설정에 맞춰 일시 포맷팅 (예: 2026. 09. 23. 오전 10:41)
-        const localFormatted = date.toLocaleString(navigator.language, {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: true
+            // 선택 언어의 형식으로 표시하고, 언어 전환 시에도 갱신한다.
+            const localFormatted = date.toLocaleString(
+                window.OdysayLanguage?.getLocale?.() || navigator.language,
+                {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }
+            );
+
+            el.textContent = localFormatted;
         });
-
-        el.textContent = localFormatted;
-    });
+    }
+    renderLocalTimes();
+    window.addEventListener('odysay:languagechange', renderLocalTimes);
 
     // 2. 이미지 슬라이더 기능
     const mainImage = document.getElementById('mainImage');
@@ -247,6 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const bookmarkButton = document.querySelector('.btn-jjim');
         const bookmarkCount = document.getElementById('bookmarkCount');
 
+        function renderBookmarkLabel() {
+            if (!bookmarkButton) return;
+            const saved = bookmarkButton.classList.contains('active');
+            bookmarkButton.dataset.i18n = saved ? 'detail.unsave' : 'detail.save';
+            bookmarkButton.textContent = window.OdysayLanguage?.t(bookmarkButton.dataset.i18n)
+                || (saved ? '♥ 찜 취소' : '♥ 찜하기');
+        }
+
+        renderBookmarkLabel();
+        window.addEventListener('odysay:languagechange', renderBookmarkLabel);
+
         const csrfToken = document.querySelector(
             'meta[name="csrf-token"]'
         ).content;
@@ -276,12 +294,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (bookmarkButton) {
 
                     if (data.bookmarked) {
-                        bookmarkButton.textContent = '♥ 찜 취소';
                         bookmarkButton.classList.add('active');
                     } else {
-                        bookmarkButton.textContent = '♥ 찜하기';
                         bookmarkButton.classList.remove('active');
                     }
+                    renderBookmarkLabel();
                 }
 
             } catch (error) {
@@ -326,12 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // 버튼 변경
                     if (data.bookmarked) {
-                        bookmarkButton.textContent = '♥ 찜 취소';
                         bookmarkButton.classList.add('active');
                     } else {
-                        bookmarkButton.textContent = '♥ 찜하기';
                         bookmarkButton.classList.remove('active');
                     }
+                    renderBookmarkLabel();
 
                 } catch (error) {
                     console.error(error);
@@ -352,7 +368,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function formatPostDate(date) {
 
-            return date.toLocaleString('ko-KR', {
+            return date.toLocaleString(window.OdysayLanguage?.getLocale?.() || 'ko-KR', {
                 year: 'numeric',
                 month: '2-digit',
                 day: '2-digit',
@@ -406,12 +422,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyMessage = document.getElementById('copyMessage');
 
     // 현재 페이지 주소
-    const currentUrl = window.location.href;
+    let currentUrl = window.location.href;
 
     // 링크 입력칸에 현재 주소 넣기
     if (shareLink) {
         shareLink.value = currentUrl;
     }
+
+    window.addEventListener('odysay:languagechange', () => {
+        currentUrl = window.location.href;
+        if (shareLink) shareLink.value = currentUrl;
+    });
 
     // 공유 버튼
     if (shareButton && sharePopup) {

@@ -808,12 +808,13 @@
     position: static;
     transform: none;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 8px;
     width: 100%;
     max-width: none;
     height: auto;
     margin: 0;
-    padding: 10px 0;
+    padding: 10px;
     border: 0;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.08);
@@ -828,10 +829,14 @@
     width: auto;
     min-width: 0;
     margin: 0;
-    padding: 0 2px;
+    padding: 9px 6px;
+    min-height: 68px;
     color: #fff;
-    font-size: 10px;
-    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
     text-decoration: none;
 }
 
@@ -915,7 +920,7 @@ a {
 .route-field input {
     width: 100%;
     height: 50px;
-    padding: 0 18px 0 65px;
+    padding: 12px 14px;
     border: 1px solid #d7dfeb;
     border-radius: 10px;
     font-size: 15px;
@@ -928,10 +933,8 @@ a {
 }
 
 .route-label {
-    position: absolute;
-    left: 18px;
-    top: 50%;
-    transform: translateY(-50%);
+    display: block;
+    margin: 0 0 8px;
     color: #7183a3;
     font-size: 13px;
     font-weight: 700;
@@ -970,8 +973,11 @@ a {
 
 .time-box {
     position: relative;
-    width: 360px;
-    padding: 28px;
+    width: min(100%, 480px);
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 32px;
     background: white;
     border-radius: 15px;
 }
@@ -1046,6 +1052,8 @@ a {
 
 .time-card {
     flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
     padding: 16px;
     background: #f4f7fb;
     border-radius: 12px;
@@ -1113,6 +1121,7 @@ a {
 
 .weather-current {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     margin: 8px 0;
@@ -1147,7 +1156,7 @@ a {
 }
 
 .weather-hour {
-    flex: 0 0 65px;
+    flex: 0 0 82px;
     padding: 10px 5px;
     border-radius: 10px;
     background: white;
@@ -1188,6 +1197,27 @@ a {
     line-height: 1.5;
 }
 
+
+/* Travel tools allow longer labels in either language. */
+.time-modal { padding: 20px; box-sizing: border-box; }
+.time-box h2 {
+    margin: 0 24px 22px 0;
+    font-size: 22px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+.time-box input, .time-box select, .time-box button {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.time-box .time-check { margin-top: 20px; padding: 13px 16px; }
+@media (max-width: 480px) {
+    .time-modal { padding: 12px; }
+    .time-box { padding: 26px 20px; max-height: calc(100dvh - 24px); }
+    .time-result-row { flex-direction: column; }
+    .time-box h2 { font-size: 20px; }
+}
+
 .home-map-stage {
     position: relative;
 }
@@ -1202,3 +1232,4 @@ a {
     transform-origin: center bottom;
     white-space: nowrap;
 }
+

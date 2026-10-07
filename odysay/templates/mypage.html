@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>마이페이지</title>
+    {% include 'components/language_assets.html' %}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
@@ -316,11 +317,13 @@
                             </div>
 
                             <div class="overview-place-body">
-                                <h4>{{ place.place }}</h4>
+                                <h4 data-translate-place="{{ place.id }}"
+                                    data-translate-field="place"
+                                    data-place-country="{{ place.country }}">{{ place.place }}</h4>
 
                                 <p>
                                     {{ place.category or '여행지' }}
-                                    · {{ place.country or '국가 미등록' }}
+                                    · {% if place.country %}<span data-country-name="{{ place.country }}">{{ place.country }}</span>{% else %}국가 미등록{% endif %}
                                 </p>
 
                                 <span class="overview-place-count">
@@ -376,12 +379,18 @@
                             </div>
 
                             <div class="overview-place-body">
-                                <h4>{{ place.place }}</h4>
+                                <h4 data-translate-place="{{ place.id }}"
+                                    data-translate-field="place"
+                                    data-place-country="{{ place.country }}">{{ place.place }}</h4>
 
                                 <p>
                                     {{ place.category or '여행지' }}
-                                    · {{ place.country or '국가 미등록' }}
-                                    {% if place.region %} · {{ place.region }}{% endif %}
+                                    · {% if place.country %}<span data-country-name="{{ place.country }}">{{ place.country }}</span>{% else %}국가 미등록{% endif %}
+                                    {% if place.region %}
+                                        · <span data-translate-place="{{ place.id }}"
+                                                data-translate-field="region"
+                                                data-place-country="{{ place.country }}">{{ place.region }}</span>
+                                    {% endif %}
                                 </p>
 
                                 <span class="overview-place-count">
@@ -421,4 +430,10 @@
 <script src="{{ url_for('static', filename='js/header_search.js') }}"></script>
 
 </body>
+
 </html>
+
+
+</body>
+</html>
+
