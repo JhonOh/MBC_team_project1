@@ -51,11 +51,30 @@
         </div>
 
         <nav class="travel-menu" aria-label="여행 카테고리">
-            <a href="#"><span>⌂</span>국내여행</a>
-            <a href="#"><span>◎</span>해외여행</a>
-            <a href="#"><span>☆</span>인기여행지</a>
-            <a href="#"><span>♧</span>추천코스</a>
-            <a href="#"><span>☼</span>여행꿀팁</a>
+            <a href="#" onclick="openExchangeModal(event)">
+                <span><i class="fa-solid fa-coins"></i></span>
+                환율
+            </a>
+
+            <a href="#" onclick="openTimeModal(event)">
+                <span><i class="fa-regular fa-clock"></i></span>
+                시차
+            </a>
+
+            <a href="#" onclick="openRouteModal(event)">
+                <span><i class="fa-solid fa-route"></i></span>
+                길찾기
+            </a>
+
+            <a href="#" onclick="openWeatherModal(event)">
+                <span><i class="fa-solid fa-sun"></i></span>
+                날씨
+            </a>
+
+            <a href="#">
+                <span><i class="fa-regular fa-comments"></i></span>
+                QnA
+            </a>
         </nav>
     </div>
 
@@ -156,6 +175,182 @@
 
 </main>
 
+<!-- ================= 환율 ================= -->
+<div id="exchangeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeExchangeModal()">×</button>
+
+        <h2>💰 국가별 환율</h2>
+
+        <div class="country-search">
+            <input id="exchangeCountry1"
+                   type="text"
+                   placeholder="첫 번째 국가"
+                   autocomplete="off">
+            <div id="exchangeCountryList1"
+                 class="country-list"></div>
+        </div>
+
+        <div class="exchange-arrow">
+            <i class="fa-solid fa-arrow-down"></i>
+        </div>
+
+        <div class="country-search">
+            <input id="exchangeCountry2"
+                   type="text"
+                   placeholder="두 번째 국가"
+                   autocomplete="off">
+            <div id="exchangeCountryList2"
+                 class="country-list"></div>
+        </div>
+
+        <input id="exchangeAmount"
+               type="text"
+               inputmode="numeric"
+               placeholder="금액 입력">
+
+        <button type="button"
+                class="time-check"
+                onclick="checkExchange()">
+            환율 계산
+        </button>
+
+        <div id="exchangeResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 시차 ================= -->
+<div id="timeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeTimeModal()">×</button>
+
+        <h2>🕐 국가별 시차</h2>
+
+        <div class="country-search">
+            <input id="country1"
+                   type="text"
+                   placeholder="첫 번째 국가"
+                   autocomplete="off">
+            <div id="countryList1" class="country-list"></div>
+        </div>
+
+        <div id="cityBox1" class="city-box" hidden>
+            <select id="city1"></select>
+        </div>
+
+        <div class="country-search">
+            <input id="country2"
+                   type="text"
+                   placeholder="두 번째 국가"
+                   autocomplete="off">
+            <div id="countryList2" class="country-list"></div>
+        </div>
+
+        <div id="cityBox2" class="city-box" hidden>
+            <select id="city2"></select>
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="checkTime()">
+            시차 확인
+        </button>
+
+        <div id="timeResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 날씨 ================= -->
+<div id="weatherModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeWeatherModal()">×</button>
+
+        <h2>☀️ 날씨</h2>
+
+        <div class="country-search">
+            <input id="weatherCountry"
+                   type="text"
+                   placeholder="국가를 선택해주세요"
+                   autocomplete="off">
+
+            <div id="weatherCountryList"
+                 class="country-list"></div>
+        </div>
+
+        <div class="country-search">
+            <input id="weatherCity"
+                   class="weather-city-input"
+                   type="text"
+                   placeholder="도시 또는 지역을 입력해주세요"
+                   autocomplete="off">
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="checkWeather()">
+            날씨 확인
+        </button>
+
+        <div id="weatherResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 길찾기 ================= -->
+<div id="routeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeRouteModal()">×</button>
+
+        <h2>📍 길찾기</h2>
+
+        <div class="route-field">
+            <span class="route-label">출발</span>
+            <input id="routeStart"
+                   type="text"
+                   placeholder="출발지를 입력해주세요">
+        </div>
+
+        <div class="route-arrow">
+            <i class="fa-solid fa-arrow-down"></i>
+        </div>
+
+        <div class="route-field">
+            <span class="route-label">도착</span>
+            <input id="routeEnd"
+                   type="text"
+                   placeholder="도착지를 입력해주세요">
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="searchRoute()">
+            길찾기
+        </button>
+
+        <p class="route-notice">
+            ※ 길찾기 결과는 Google Maps에서 확인할 수 있습니다.
+        </p>
+
+    </div>
+</div>
+
 <!-- 2. FOOTER 분리 포함 -->
 {% include 'footer.html' %}
 
@@ -170,6 +365,8 @@
     };
 </script>
 
+<script src="{{ url_for('static', filename='js/countries.js') }}"></script>
+<script src="{{ url_for('static', filename='js/travel_tools.js') }}"></script>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </body>
 </html>

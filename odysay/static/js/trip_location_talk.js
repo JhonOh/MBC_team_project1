@@ -215,7 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="travel-talk-user-area">
         
                                 <span class="travel-talk-avatar">
-                                    👤
+                                    ${talk.profile_image
+                                        ? `<img src="/static/${talk.profile_image}" alt="${talk.nickname} 프로필">`
+                                        : '👤'
+                                    }
                                 </span>
         
                                 <div class="travel-talk-user-info">
@@ -697,7 +700,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="travel-talk-comment-user-area">
     
                                 <span class="travel-talk-comment-avatar">
-                                    👤
+                                    ${comment.profile_image
+                                        ? `<img src="/static/${comment.profile_image}" alt="${comment.nickname} 프로필">`
+                                        : '👤'
+                                    }
                                 </span>
     
                                 <span class="travel-talk-comment-user"></span>
