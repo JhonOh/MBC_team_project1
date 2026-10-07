@@ -6,22 +6,13 @@
     <title>내가 찜한 여행지 | 어딧세이</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+
 </head>
+{% include 'header.html' %}
+
 <body class="my-places-page">
-<header class="header">
-    <div class="header-inner">
-        <a href="{{ url_for('homepage.homepage') }}" class="logo">
-            <span class="logo-mark">✈</span><span>어딧세이</span>
-        </a>
-        <nav class="gnb" aria-label="주 메뉴">
-            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="{{ url_for('community.community_all') }}">커뮤니티</a>
-            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
-            <a href="{{ url_for('homepage.mypage') }}" class="active">마이페이지</a>
-        </nav>
-        <a class="logout-btn" href="{{ url_for('auth.logout') }}">로그아웃</a>
-    </div>
-</header>
+
 <main>
     <section class="travel-hero">
         <p class="hero-label">MY ODYSAY TRAVEL</p>

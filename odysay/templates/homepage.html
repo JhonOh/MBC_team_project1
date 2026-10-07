@@ -26,7 +26,7 @@
 
 <main>
 
-   <!-- 메인 여행 지도 -->
+       <!-- 메인 여행 지도 -->
 <section class="home-map-section" aria-label="여행지 지도">
     <div id="home-map"></div>
 
@@ -51,107 +51,131 @@
         </div>
 
         <nav class="travel-menu" aria-label="여행 카테고리">
-            <a href="#"><span>⌂</span>국내여행</a>
-            <a href="#"><span>◎</span>해외여행</a>
-            <a href="#"><span>☆</span>인기여행지</a>
-            <a href="#"><span>♧</span>추천코스</a>
-            <a href="#"><span>☼</span>여행꿀팁</a>
+            <a href="#" onclick="openExchangeModal(event)">
+                <span><i class="fa-solid fa-coins"></i></span>
+                환율
+            </a>
+
+            <a href="#" onclick="openTimeModal(event)">
+                <span><i class="fa-regular fa-clock"></i></span>
+                시차
+            </a>
+
+            <a href="#" onclick="openRouteModal(event)">
+                <span><i class="fa-solid fa-route"></i></span>
+                길찾기
+            </a>
+
+            <a href="#" onclick="openWeatherModal(event)">
+                <span><i class="fa-solid fa-sun"></i></span>
+                날씨
+            </a>
+
+            <a href="#"
+               target="_blank">
+                <span><i class="fa-regular fa-comments"></i></span>
+                QnA
+            </a>
         </nav>
     </div>
 
     <p id="home-map-error" role="alert" hidden></p>
 </section>
+        </div>
 
-<!-- ========================================
-     메인 콘텐츠
-     추천 여행지 / 최근 등록 / 커뮤니티
-======================================== -->
+        <p id="home-map-error" role="alert" hidden></p>
+    </section>
 
-<section class="home-content">
+    <!-- ========================================
+         메인 콘텐츠
+         추천 여행지 / 최근 등록 / 커뮤니티
+    ======================================== -->
 
-    <div class="section-inner home-grid">
+    <section class="home-content">
 
-        <!-- 추천 여행지 (인기 여행지 동적 렌더링) -->
-        <div class="recommend-section">
+        <div class="section-inner home-grid">
 
-            <div class="sub-section-title">
-                <div>
-                    <h2>인기 여행지</h2>
-                    <p>어딧세이에서 인기있는 특별한 여행지</p>
+            <!-- 추천 여행지 (인기 여행지 동적 렌더링) -->
+            <div class="recommend-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>인기 여행지</h2>
+                        <p>어딧세이에서 인기있는 특별한 여행지</p>
+                    </div>
+                    <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
                 </div>
-                <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="recommend-list" id="recommendedList"></div>
+
             </div>
 
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="recommend-list" id="recommendedList"></div>
+
+            <!-- 최근 등록된 여행지 (동적 렌더링) -->
+            <div class="recent-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>최근 등록된 여행지</h2>
+                        <p>새로운 여행지를 확인해보세요!</p>
+                    </div>
+                    <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
+                </div>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="recent-list" id="recentList"></div>
+
+            </div>
+
+
+            <!-- 커뮤니티 인기글 (동적 렌더링) -->
+            <div class="community-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>커뮤니티 인기글</h2>
+                        <p>다양한 이야기와 정보 공유</p>
+                    </div>
+                    <a href="/homepage/community/all?sort=popular">더보기 ›</a>
+                </div>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="community-list" id="mainCommunityList"></div>
+
+            </div>
 
         </div>
 
+    </section>
 
-        <!-- 최근 등록된 여행지 (동적 렌더링) -->
-        <div class="recent-section">
-
-            <div class="sub-section-title">
-                <div>
-                    <h2>최근 등록된 여행지</h2>
-                    <p>새로운 여행지를 확인해보세요!</p>
-                </div>
-                <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
-            </div>
-
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="recent-list" id="recentList"></div>
-
-        </div>
-
-
-        <!-- 커뮤니티 인기글 (동적 렌더링) -->
-        <div class="community-section">
-
-            <div class="sub-section-title">
-                <div>
-                    <h2>커뮤니티 인기글</h2>
-                    <p>다양한 이야기와 정보 공유</p>
-                </div>
-                <a href="/homepage/community/all?sort=popular">더보기 ›</a>
-            </div>
-
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="community-list" id="mainCommunityList"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ========================================
-     하단 브랜드 배너
-======================================== -->
-<section class="bottom-banner">
-    <div class="section-inner bottom-banner-inner">
-        <p class="bottom-message">
-            여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
-        </p>
-
-        <div class="bottom-brand">
-            <div class="bottom-logo">
-                <span class="logo-symbol">△△</span>
-                <div>
-                    <strong>어딧세이</strong>
-                    <small>ODYSAY</small>
-                </div>
-            </div>
-
-            <div class="bottom-divider"></div>
-
-            <p class="bottom-slogan">
-                더 많은 이야기로,<br>
-                더 멀리.
+    <!-- ========================================
+         하단 브랜드 배너
+    ======================================== -->
+    <section class="bottom-banner">
+        <div class="section-inner bottom-banner-inner">
+            <p class="bottom-message">
+                여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
             </p>
+
+            <div class="bottom-brand">
+                <div class="bottom-logo">
+                    <span class="logo-symbol">△△</span>
+                    <div>
+                        <strong>어딧세이</strong>
+                        <small>ODYSAY</small>
+                    </div>
+                </div>
+
+                <div class="bottom-divider"></div>
+
+                <p class="bottom-slogan">
+                    더 많은 이야기로,<br>
+                    더 멀리.
+                </p>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
 </main>
