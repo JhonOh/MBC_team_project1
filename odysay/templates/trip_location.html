@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_all.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_review.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_talk.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
     <!-- 상세페이지 지도용 Leaflet CSS -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -53,9 +54,9 @@
 
 
             {% if g.user %}
-            <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
+                <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
-            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
+                <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
             {% endif %}
 
         </div>
@@ -71,21 +72,21 @@
         <!-- 이미지 슬라이더 영역 -->
         <div class="image-slider">
             {% if photos and photos|length > 0 %}
-            <button class="slider-arrow left-arrow">‹</button>
-            <div class="slider-view">
-                <img id="mainImage" src="{{ url_for('static', filename='uploads/' + photos[0]) }}"
-                     alt="{{ place.place }}">
-            </div>
-            <button class="slider-arrow right-arrow">›</button>
+                <button class="slider-arrow left-arrow">‹</button>
+                <div class="slider-view">
+                    <img id="mainImage" src="{{ url_for('static', filename='uploads/' + photos[0]) }}"
+                         alt="{{ place.place }}">
+                </div>
+                <button class="slider-arrow right-arrow">›</button>
 
-            <!-- 메인사진 위에 겹쳐지는 썸네일 영역 -->
-            <div class="main-thumbnails" id="mainThumbnails"></div>
+                <!-- 메인사진 위에 겹쳐지는 썸네일 영역 -->
+                <div class="main-thumbnails" id="mainThumbnails"></div>
 
             {% else %}
-            <div class="placeholder-image">
-                <div class="mountains-icon">▲▲</div>
-                <p>등록된 사진이 없습니다.</p>
-            </div>
+                <div class="placeholder-image">
+                    <div class="mountains-icon">▲▲</div>
+                    <p>등록된 사진이 없습니다.</p>
+                </div>
             {% endif %}
         </div>
 
@@ -99,9 +100,18 @@
 
                     <div class="place-title-left">
 
+
                         <h1 class="title">
                             {{ place.place }}
                         </h1>
+
+                        {% with display_travel_tags=place.travel_tags or [] %}
+                            {% include "components/travel_tag_badges.html" %}
+                        {% endwith %}
+
+                        <div class="title-bookmark-count">
+                            ♥ <span id="bookmarkCount">0</span>
+                        </div>
 
                         <div class="title-bookmark-count">
                             ♥ <span id="bookmarkCount">0</span>
@@ -110,29 +120,29 @@
                     </div>
 
                     {% if g.user and place.user_id == g.user.id %}
-                    <div class="owner-actions">
+                        <div class="owner-actions">
 
-                        <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
-                           class="owner-button">
-                            수정
-                        </a>
+                            <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
+                               class="owner-button">
+                                수정
+                            </a>
 
-                        <form method="POST"
-                              action="{{ url_for('trip_location.trip_location_delete', place_id=place.id) }}"
-                              onsubmit="return confirm('정말 이 여행지를 삭제하시겠습니까?');">
+                            <form method="POST"
+                                  action="{{ url_for('trip_location.trip_location_delete', place_id=place.id) }}"
+                                  onsubmit="return confirm('정말 이 여행지를 삭제하시겠습니까?');">
 
-                            <input type="hidden"
-                                   name="csrf_token"
-                                   value="{{ csrf_token() }}">
+                                <input type="hidden"
+                                       name="csrf_token"
+                                       value="{{ csrf_token() }}">
 
-                            <button type="submit"
-                                    class="owner-button owner-delete">
-                                삭제
-                            </button>
+                                <button type="submit"
+                                        class="owner-button owner-delete">
+                                    삭제
+                                </button>
 
-                        </form>
+                            </form>
 
-                    </div>
+                        </div>
                     {% endif %}
 
                 </div>
@@ -146,10 +156,10 @@
             <div class="place-meta">
 
                 {% if author %}
-                <p class="author-info">
-                    <span class="meta-label">작성자</span>
-                    <span>{{ author.nickname }}</span>
-                </p>
+                    <p class="author-info">
+                        <span class="meta-label">작성자</span>
+                        <span>{{ author.nickname }}</span>
+                    </p>
                 {% endif %}
 
                 <p class="created-time-box">
@@ -161,164 +171,164 @@
                 </p>
 
                 {% if place.updated_at %}
-                <p class="updated-time-box">
-                    <span class="meta-label">수정일</span>
-                    <span class="updated-time"
-                          data-utc="{{ place.updated_at.isoformat() }}">
+                    <p class="updated-time-box">
+                        <span class="meta-label">수정일</span>
+                        <span class="updated-time"
+                              data-utc="{{ place.updated_at.isoformat() }}">
                         {{ place.updated_at.strftime('%Y-%m-%d %H:%M') }}
                     </span>
-                </p>
+                    </p>
                 {% endif %}
 
-            <div class="place-summary">
+                <div class="place-summary">
 
-                <div class="summary-item">
+                    <div class="summary-item">
 
                     <span class="summary-label">
                         카테고리
                     </span>
 
-                    <span class="place-category">
+                        <span class="place-category">
                         {{ place.category }}
                     </span>
 
-                </div>
+                    </div>
 
-                {% if place.intro %}
-                <div class="summary-item">
+                    {% if place.intro %}
+                        <div class="summary-item">
 
                     <span class="summary-label">
                         한줄 소개
                     </span>
 
-                    <p class="place-intro">
-                        {{ place.intro }}
-                    </p>
+                            <p class="place-intro">
+                                {{ place.intro }}
+                            </p>
+
+                        </div>
+                    {% endif %}
 
                 </div>
-                {% endif %}
-
-            </div>
 
             </div>
 
 
             <div class="action-buttons">
 
-            <!-- 공유하기 -->
-            <div class="share-wrapper">
+                <!-- 공유하기 -->
+                <div class="share-wrapper">
 
-                <button type="button" class="btn-action btn-share">
-                    ↗ 공유하기
-                </button>
+                    <button type="button" class="btn-action btn-share">
+                        ↗ 공유하기
+                    </button>
 
 
-                <!-- 공유 팝업 -->
-                <div class="share-popup" id="sharePopup">
+                    <!-- 공유 팝업 -->
+                    <div class="share-popup" id="sharePopup">
 
-                    <div class="share-popup-title">
-                        공유하기
+                        <div class="share-popup-title">
+                            공유하기
+                        </div>
+
+
+                        <!-- SNS 공유 -->
+                        <div class="share-sns-list">
+
+                            <!-- 카카오톡 -->
+                            <button type="button"
+                                    class="share-sns-button"
+                                    id="kakaoShareButton">
+
+                                <div class="share-icon kakao-icon">
+                                    <span>💬</span>
+                                </div>
+
+                                <span class="share-sns-name">카카오톡</span>
+
+                            </button>
+
+
+                            <!-- 인스타그램 -->
+                            <button type="button"
+                                    class="share-sns-button"
+                                    id="instagramShareButton">
+
+                                <div class="share-icon instagram-icon">
+                                    <span>◎</span>
+                                </div>
+
+                                <span class="share-sns-name">인스타</span>
+
+                            </button>
+
+
+                            <!-- X -->
+                            <button type="button"
+                                    class="share-sns-button"
+                                    id="xShareButton">
+
+                                <div class="share-icon x-icon">
+                                    <span>𝕏</span>
+                                </div>
+
+                                <span class="share-sns-name">X</span>
+
+                            </button>
+
+
+                            <!-- 페이스북 -->
+                            <button type="button"
+                                    class="share-sns-button"
+                                    id="facebookShareButton">
+
+                                <div class="share-icon facebook-icon">
+                                    <span>f</span>
+                                </div>
+
+                                <span class="share-sns-name">페이스북</span>
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- 링크 -->
+                        <div class="share-link-title">
+                            링크
+                        </div>
+
+                        <div class="share-link-box">
+
+                            <input type="text"
+                                   id="shareLink"
+                                   readonly>
+
+                            <button type="button"
+                                    id="copyLinkButton">
+                                복사
+                            </button>
+
+                        </div>
+
+
+                        <!-- 복사 완료 문구 -->
+                        <p class="copy-message"
+                           id="copyMessage">
+                            링크가 복사되었습니다.
+                        </p>
+
                     </div>
 
-
-             <!-- SNS 공유 -->
-            <div class="share-sns-list">
-
-                <!-- 카카오톡 -->
-                <button type="button"
-                        class="share-sns-button"
-                        id="kakaoShareButton">
-
-                    <div class="share-icon kakao-icon">
-                        <span>💬</span>
-                    </div>
-
-                    <span class="share-sns-name">카카오톡</span>
-
-                </button>
-
-
-                <!-- 인스타그램 -->
-                <button type="button"
-                        class="share-sns-button"
-                        id="instagramShareButton">
-
-                    <div class="share-icon instagram-icon">
-                        <span>◎</span>
-                    </div>
-
-                    <span class="share-sns-name">인스타</span>
-
-                </button>
-
-
-                <!-- X -->
-                <button type="button"
-                        class="share-sns-button"
-                        id="xShareButton">
-
-                    <div class="share-icon x-icon">
-                        <span>𝕏</span>
-                    </div>
-
-                    <span class="share-sns-name">X</span>
-
-                </button>
-
-
-                <!-- 페이스북 -->
-                <button type="button"
-                        class="share-sns-button"
-                        id="facebookShareButton">
-
-                    <div class="share-icon facebook-icon">
-                        <span>f</span>
-                    </div>
-
-                    <span class="share-sns-name">페이스북</span>
-
-                </button>
-
-            </div>
-
-
-                    <!-- 링크 -->
-                    <div class="share-link-title">
-                        링크
-                    </div>
-
-                    <div class="share-link-box">
-
-                        <input type="text"
-                               id="shareLink"
-                               readonly>
-
-                        <button type="button"
-                                id="copyLinkButton">
-                            복사
-                        </button>
-
-                    </div>
-
-
-                    <!-- 복사 완료 문구 -->
-                    <p class="copy-message"
-                       id="copyMessage">
-                        링크가 복사되었습니다.
-                    </p>
+                </div>
+                <div class="bookmark-action">
+                    <button type="button"
+                            class="btn-action btn-jjim">
+                        ♥ 찜하기
+                    </button>
 
                 </div>
 
             </div>
-            <div class="bookmark-action">
-                <button type="button"
-                        class="btn-action btn-jjim">
-                    ♥ 찜하기
-                </button>
-
-            </div>
-
-        </div>
         </div>
     </section>
 
@@ -356,7 +366,7 @@
             <div class="all-info-section">
 
                 <h2 class="all-section-title">
-                    📍  기본정보
+                    📍 기본정보
                 </h2>
 
                 <div class="all-section-content basic-info-layout">
@@ -393,25 +403,25 @@
 
 
                     {% if place.latitude is not none and place.longitude is not none %}
-                    <div class="detail-map-link">
+                        <div class="detail-map-link">
 
-                        <div class="detail-map"
-                             data-lat="{{ place.latitude }}"
-                             data-lng="{{ place.longitude }}"
-                             data-title="{{ place.place }}">
-                        </div>
+                            <div class="detail-map"
+                                 data-lat="{{ place.latitude }}"
+                                 data-lng="{{ place.longitude }}"
+                                 data-title="{{ place.place }}">
+                            </div>
 
-                        <a class="detail-map-caption"
-                           href="{{ url_for(
+                            <a class="detail-map-caption"
+                               href="{{ url_for(
                                'homepage.homepage',
                                place_id=place.id,
                                lat=place.latitude,
                                lng=place.longitude
                            ) }}">
-                            전체 지도에서 보기 →
-                        </a>
+                                전체 지도에서 보기 →
+                            </a>
 
-                    </div>
+                        </div>
                     {% endif %}
 
                 </div>
@@ -445,62 +455,62 @@
 
                 {% if place.restaurant or restaurant_photos %}
 
-                <div class="registered-info-layout">
+                    <div class="registered-info-layout">
 
-                    <div class="registered-info-text">
-                        {% if place.restaurant %}
-                            {{ place.restaurant }}
-                        {% else %}
-                            <span class="registered-info-no-text">
+                        <div class="registered-info-text">
+                            {% if place.restaurant %}
+                                {{ place.restaurant }}
+                            {% else %}
+                                <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
                             </span>
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
 
-                    {% if restaurant_photos %}
-                    <div class="registered-photo-slider"
-                         data-photo-slider>
+                        {% if restaurant_photos %}
+                            <div class="registered-photo-slider"
+                                 data-photo-slider>
 
-                        <button type="button"
-                                class="registered-photo-arrow registered-photo-prev">
-                            ‹
-                        </button>
+                                <button type="button"
+                                        class="registered-photo-arrow registered-photo-prev">
+                                    ‹
+                                </button>
 
-                        <div class="registered-photo-view">
+                                <div class="registered-photo-view">
 
-                            {% for photo in restaurant_photos %}
-                            <img
-                                src="{{ url_for('static', filename='uploads/' + photo) }}"
-                                alt="주변 맛집 사진"
-                                class="gallery-image registered-slide-photo
+                                    {% for photo in restaurant_photos %}
+                                        <img
+                                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                                alt="주변 맛집 사진"
+                                                class="gallery-image registered-slide-photo
                                        {% if loop.first %}active{% endif %}">
-                            {% endfor %}
+                                    {% endfor %}
 
-                        </div>
+                                </div>
 
-                        <button type="button"
-                                class="registered-photo-arrow registered-photo-next">
-                            ›
-                        </button>
+                                <button type="button"
+                                        class="registered-photo-arrow registered-photo-next">
+                                    ›
+                                </button>
 
-                        {% if restaurant_photos|length > 1 %}
-                        <div class="registered-photo-count">
-                            <span class="registered-photo-current">1</span>
-                            /
-                            {{ restaurant_photos|length }}
-                        </div>
+                                {% if restaurant_photos|length > 1 %}
+                                    <div class="registered-photo-count">
+                                        <span class="registered-photo-current">1</span>
+                                        /
+                                        {{ restaurant_photos|length }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
                         {% endif %}
 
                     </div>
-                    {% endif %}
-
-                </div>
 
                 {% else %}
 
-                <p class="registered-info-empty">
-                    등록된 주변 맛집 정보가 없습니다.
-                </p>
+                    <p class="registered-info-empty">
+                        등록된 주변 맛집 정보가 없습니다.
+                    </p>
 
                 {% endif %}
 
@@ -516,67 +526,67 @@
 
                 {% if place.nearby or nearby_photos %}
 
-                <div class="registered-info-layout">
+                    <div class="registered-info-layout">
 
-                    <div class="registered-info-text">
-                        {% if place.nearby %}
-                            {{ place.nearby }}
-                        {% else %}
-                            <span class="registered-info-no-text">
+                        <div class="registered-info-text">
+                            {% if place.nearby %}
+                                {{ place.nearby }}
+                            {% else %}
+                                <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
                             </span>
-                        {% endif %}
-                    </div>
+                            {% endif %}
+                        </div>
 
-                    {% if nearby_photos %}
-                    <div class="registered-photo-slider"
-                         data-photo-slider>
+                        {% if nearby_photos %}
+                            <div class="registered-photo-slider"
+                                 data-photo-slider>
 
-                        <button type="button"
-                                class="registered-photo-arrow registered-photo-prev">
-                            ‹
-                        </button>
+                                <button type="button"
+                                        class="registered-photo-arrow registered-photo-prev">
+                                    ‹
+                                </button>
 
-                        <div class="registered-photo-view">
+                                <div class="registered-photo-view">
 
-                            {% for photo in nearby_photos %}
-                            <img
-                                src="{{ url_for('static', filename='uploads/' + photo) }}"
-                                alt="주변 볼거리 사진"
-                                class="gallery-image registered-slide-photo
+                                    {% for photo in nearby_photos %}
+                                        <img
+                                                src="{{ url_for('static', filename='uploads/' + photo) }}"
+                                                alt="주변 볼거리 사진"
+                                                class="gallery-image registered-slide-photo
                                        {% if loop.first %}active{% endif %}">
-                            {% endfor %}
+                                    {% endfor %}
 
-                        </div>
+                                </div>
 
-                        <button type="button"
-                                class="registered-photo-arrow registered-photo-next">
-                            ›
-                        </button>
+                                <button type="button"
+                                        class="registered-photo-arrow registered-photo-next">
+                                    ›
+                                </button>
 
-                        {% if nearby_photos|length > 1 %}
-                        <div class="registered-photo-count">
-                            <span class="registered-photo-current">1</span>
-                            /
-                            {{ nearby_photos|length }}
-                        </div>
+                                {% if nearby_photos|length > 1 %}
+                                    <div class="registered-photo-count">
+                                        <span class="registered-photo-current">1</span>
+                                        /
+                                        {{ nearby_photos|length }}
+                                    </div>
+                                {% endif %}
+
+                            </div>
                         {% endif %}
 
                     </div>
-                    {% endif %}
-
-                </div>
 
                 {% else %}
 
-                <p class="registered-info-empty">
-                    등록된 주변 볼거리 정보가 없습니다.
-                </p>
+                    <p class="registered-info-empty">
+                        등록된 주변 볼거리 정보가 없습니다.
+                    </p>
 
                 {% endif %}
 
             </div>
-                    <!-- 10km 내 주변 여행지 -->
+            <!-- 10km 내 주변 여행지 -->
             <div class="all-info-section nearby-place-section">
 
                 <h2 class="all-section-title">
@@ -585,53 +595,53 @@
 
                 {% if nearby_places %}
 
-                <div class="nearby-place-list">
+                    <div class="nearby-place-list">
 
-                    {% for item in nearby_places %}
-                    <a href="{{ url_for('trip_location.trip_location_detail', place_id=item.place.id) }}"
-                       class="nearby-place-card">
+                        {% for item in nearby_places %}
+                            <a href="{{ url_for('trip_location.trip_location_detail', place_id=item.place.id) }}"
+                               class="nearby-place-card">
 
-                        <div class="nearby-place-image">
+                                <div class="nearby-place-image">
 
-                            {% if item.place.photos %}
-                                {% set nearby_photo = item.place.photos.split(',')[0].strip() %}
+                                    {% if item.place.photos %}
+                                        {% set nearby_photo = item.place.photos.split(',')[0].strip() %}
 
-                                <img src="{{ url_for('static', filename='uploads/' + nearby_photo) }}"
-                                     alt="{{ item.place.place }}">
-                            {% else %}
-                                <div class="nearby-place-no-image">
-                                    사진 없음
+                                        <img src="{{ url_for('static', filename='uploads/' + nearby_photo) }}"
+                                             alt="{{ item.place.place }}">
+                                    {% else %}
+                                        <div class="nearby-place-no-image">
+                                            사진 없음
+                                        </div>
+                                    {% endif %}
+
                                 </div>
-                            {% endif %}
 
-                        </div>
+                                <div class="nearby-place-info">
 
-                        <div class="nearby-place-info">
+                                    <strong class="nearby-place-name">
+                                        {{ item.place.place }}
+                                    </strong>
 
-                            <strong class="nearby-place-name">
-                                {{ item.place.place }}
-                            </strong>
-
-                            <span class="nearby-place-region">
+                                    <span class="nearby-place-region">
                                 {{ item.place.country }} · {{ item.place.region }}
                             </span>
 
-                            <span class="nearby-place-distance">
+                                    <span class="nearby-place-distance">
                                 📍 현재 여행지에서 약 {{ item.distance }}km 떨어진 곳
                             </span>
 
-                        </div>
+                                </div>
 
-                    </a>
-                    {% endfor %}
+                            </a>
+                        {% endfor %}
 
-                </div>
+                    </div>
 
                 {% else %}
 
-                <p class="registered-info-empty">
-                    10km 내에 등록된 다른 여행지가 없습니다.
-                </p>
+                    <p class="registered-info-empty">
+                        10km 내에 등록된 다른 여행지가 없습니다.
+                    </p>
 
                 {% endif %}
 
@@ -721,9 +731,9 @@
                     </div>
 
                     <textarea
-                        id="reviewInput"
-                        maxlength="300"
-                        placeholder="이 여행지에 대한 리뷰를 남겨주세요."></textarea>
+                            id="reviewInput"
+                            maxlength="300"
+                            placeholder="이 여행지에 대한 리뷰를 남겨주세요."></textarea>
 
                     <div class="review-write-bottom">
 
@@ -776,16 +786,16 @@
                     <div class="travel-talk-write-buttons">
 
                         <button
-                            type="button"
-                            class="travel-talk-write-cancel"
-                            id="travelTalkWriteCancel">
+                                type="button"
+                                class="travel-talk-write-cancel"
+                                id="travelTalkWriteCancel">
                             작성 취소
                         </button>
 
                         <button
-                            type="button"
-                            class="travel-talk-open-button"
-                            id="travelTalkOpenButton">
+                                type="button"
+                                class="travel-talk-open-button"
+                                id="travelTalkOpenButton">
                             글 작성하기
                         </button>
 
@@ -804,9 +814,9 @@
                            placeholder="제목을 입력해주세요.">
 
                     <textarea
-                        id="travelTalkInput"
-                        maxlength="500"
-                        placeholder="내용을 입력해주세요."></textarea>
+                            id="travelTalkInput"
+                            maxlength="500"
+                            placeholder="내용을 입력해주세요."></textarea>
 
                     <div class="travel-talk-write-bottom">
 
@@ -843,24 +853,23 @@
 </main>
 
 
-
 <!-- ================= 이미지 크게보기 팝업 ================= -->
 
 <div class="image-modal" id="imageModal">
 
     <!-- 닫기 버튼 -->
     <button
-        type="button"
-        class="image-modal-close"
-        id="imageModalClose">
+            type="button"
+            class="image-modal-close"
+            id="imageModalClose">
         ×
     </button>
 
     <!-- 이전 사진 -->
     <button
-        type="button"
-        class="image-modal-arrow image-modal-prev"
-        id="imageModalPrev">
+            type="button"
+            class="image-modal-arrow image-modal-prev"
+            id="imageModalPrev">
         ‹
     </button>
 
@@ -868,23 +877,23 @@
     <div class="image-modal-content">
 
         <img
-            src=""
-            alt="여행지 사진 크게보기"
-            id="imageModalPhoto">
+                src=""
+                alt="여행지 사진 크게보기"
+                id="imageModalPhoto">
 
         <!-- 아래 작은 이미지 -->
         <div
-            class="image-modal-thumbnails"
-            id="imageModalThumbnails">
+                class="image-modal-thumbnails"
+                id="imageModalThumbnails">
         </div>
 
     </div>
 
     <!-- 다음 사진 -->
     <button
-        type="button"
-        class="image-modal-arrow image-modal-next"
-        id="imageModalNext">
+            type="button"
+            class="image-modal-arrow image-modal-next"
+            id="imageModalNext">
         ›
     </button>
 

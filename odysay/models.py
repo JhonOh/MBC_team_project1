@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime ,timezone
 from . import db
 
 
@@ -21,6 +21,14 @@ class User(db.Model):
     birth_date = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
     profile_image = db.Column(db.String(255), nullable=True)
+
+    # UTC 기준 가입 시각 저장
+    # 이전 회원은 실제 가입 시각을 알 수 없으므로 NULL 유지
+    created_at = db.Column(
+        db.DateTime,
+        nullable=True,
+        default=lambda: datetime.now(timezone.utc).replace(tzinfo=None),
+    )
 
 
 
@@ -94,6 +102,13 @@ class TripLocationmd(db.Model):
     likes = db.Column(db.Integer, default=0)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=True)
+
+    # 공통 여행 스타일 태그. 기존 데이터는 NULL 허용
+    travel_tags = db.Column(
+        db.JSON,
+        nullable=True,
+        default=list,
+    )
 
 
 # ==========================================
@@ -205,6 +220,13 @@ class Post(db.Model):
     # 작성자 (로그인 연동 시 사용)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
 
+    # 공통 여행 스타일 태그. 기존 데이터는 NULL 허용
+    travel_tags = db.Column(
+        db.JSON,
+        nullable=True,
+        default=list,
+    )
+
 
 # ==========================================
 # [추가] 자유게시판 / 여행팁 (Post) 좋아요 기록 모델
@@ -277,3 +299,40 @@ class ModerationLog(db.Model):
     before_data = db.Column(db.Text, nullable=False)
     after_data = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+# ==========================================
+# 1:1 문의 (QnA)
+# ==========================================
+
+
+class Inquiry(db.Model):
+    __tablename__ = 'inquiries'
+
+    id = db.Column(db.Integer, primary_key=True)
+
+    # 문의 작성자
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=False,
+        index=True,
+    )
+
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(
+        db.DateTime,
+        nullable=False,
+        default=datetime.now,
+    )
+
+    # 관리자 답변
+    answer = db.Column(db.Text, nullable=True)
+    answered_by = db.Column(
+        db.Integer,
+        db.ForeignKey('user.id'),
+        nullable=True,
+    )
+    answered_at = db.Column(db.DateTime, nullable=True)
+
+    author = db.relationship('User', foreign_keys=[user_id])

@@ -153,34 +153,49 @@ def check_nickname():
 
 @bp.route('/withdraw/', methods=['POST'])
 def withdraw():
-    # 로그인한 회원인지 확인
     if g.user is None:
         flash('로그인이 필요합니다.')
         return redirect(url_for('first.map'))
 
-    # 설정 화면에서 입력한 비밀번호
+    withdraw_url = url_for(
+        'homepage.mypage_settings',
+        _anchor='withdraw',
+    )
+
+    # 설정에 지정된 관리자 계정은 탈퇴 차단
+    try:
+        admin_user_id = int(
+            current_app.config.get('ADMIN_USER_ID') or 0
+        )
+    except (TypeError, ValueError):
+        admin_user_id = 0
+
+    if admin_user_id > 0 and g.user.id == admin_user_id:
+        flash(
+            '관리자 계정은 탈퇴할 수 없습니다. '
+            '관리자 권한을 다른 계정으로 이전한 뒤 진행해 주세요.'
+        )
+        return redirect(withdraw_url)
+
     password = request.form.get('password', '')
 
-    # 현재 비밀번호가 맞는지 확인
     if not password or not check_password_hash(
             g.user.password_hash,
-            password
+            password,
     ):
         flash('비밀번호가 일치하지 않습니다.')
-        return redirect(url_for('homepage.mypage_settings'))
+        return redirect(withdraw_url)
 
-    # 회원정보와 여행지는 보존하고 계정만 비활성화
+    # 기존 방식 유지: 데이터 보존, 계정 비활성화
     g.user.is_active = False
 
     try:
         db.session.commit()
-
     except SQLAlchemyError:
         db.session.rollback()
         flash('회원 탈퇴 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.')
-        return redirect(url_for('homepage.mypage_settings'))
+        return redirect(withdraw_url)
 
-    # 저장에 성공한 경우 로그아웃
     session.clear()
 
     flash('회원 탈퇴가 완료되었습니다.')
@@ -309,7 +324,7 @@ def profile_edit():
         # 오류가 있으면 변경 내용을 저장하지 않음
         if form.errors:
             return render_template(
-                'profile_edit.html',
+                'mypage_profile_edit.html',
                 form=form,
                 save_error=save_error
             )
@@ -322,7 +337,7 @@ def profile_edit():
             except ValueError as error:
                 form.avatar.errors.append(str(error))
                 return render_template(
-                    'profile_edit.html',
+                    'mypage_profile_edit.html',
                     form=form,
                     save_error=None
                 )
@@ -330,7 +345,7 @@ def profile_edit():
             except OSError:
                 current_app.logger.exception('대표 이미지 저장 실패')
                 return render_template(
-                    'profile_edit.html',
+                    'mypage_profile_edit.html',
                     form=form,
                     save_error='사진을 저장하지 못했습니다. 다시 시도해 주세요.'
                 )
@@ -389,7 +404,7 @@ def profile_edit():
             return redirect(url_for('homepage.mypage'))
 
     return render_template(
-        'profile_edit.html',
+        'mypage_profile_edit.html',
         form=form,
         save_error=save_error
     )

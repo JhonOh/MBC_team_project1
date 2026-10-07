@@ -47,7 +47,9 @@ def create_app(test_config=None):
     # 블루프린트 등록[cite: 11]
 
     from .views import (main_views, a0_mapmain_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views, a5_mypage_views, a1_homepage_views, auth_views , a2_trip_list_views,
-        a4_z1_z1_trip_location_feature_views)
+        a4_z1_z1_trip_location_feature_views ,admin_views , a6_inquiry_veiws ,a7_search_views)
+    from .moderation import is_admin
+    from .admin_commands import register_commands
 
     app.register_blueprint(main_views.bp)
     app.register_blueprint(a0_mapmain_views.bp)
@@ -62,10 +64,11 @@ def create_app(test_config=None):
     app.register_blueprint(auth_views.profile_bp)
     app.register_blueprint(a2_trip_list_views.bp)
     app.register_blueprint(a4_z1_z1_trip_location_feature_views.bp)
+    app.register_blueprint(a7_search_views.bp)
 
-    from .views import admin_views
-    from .moderation import is_admin
-    from .admin_commands import register_commands
+    #문의 기능 등록
+    app.register_blueprint(a6_inquiry_veiws.bp)
+
     app.register_blueprint(admin_views.bp)
     app.context_processor(lambda: {'is_admin': is_admin})
     register_commands(app)

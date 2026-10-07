@@ -1,0 +1,90 @@
+{% extends "inquiry_base.html" %}
+
+{% block title %}문의 상세{% endblock %}
+
+{% block content %}
+<article class="inquiry-panel">
+    <h1 class="inquiry-title">{{ inquiry.title }}</h1>
+
+    <div class="inquiry-meta">
+        <span class="inquiry-status {{ 'inquiry-status-done' if inquiry.answer else 'inquiry-status-waiting' }}">
+            {{ '답변 완료' if inquiry.answer else '답변 대기' }}
+        </span>
+
+        <time datetime="{{ inquiry.created_at.isoformat() }}">
+            {{ inquiry.created_at.strftime('%Y.%m.%d %H:%M') }}
+        </time>
+
+        {% if is_admin() %}
+            <span>
+                작성자:
+                {{ (inquiry.author.nickname or inquiry.author.username)
+                   if inquiry.author else '알 수 없는 사용자' }}
+            </span>
+        {% endif %}
+    </div>
+
+    <div class="inquiry-message">{{ inquiry.content }}</div>
+</article>
+
+<section class="inquiry-panel">
+    <h2 class="inquiry-answer-title">
+        <i class="fa-regular fa-comment-dots"></i>
+        관리자 답변
+    </h2>
+
+    {% if inquiry.answer %}
+        <div class="inquiry-message">{{ inquiry.answer }}</div>
+
+        {% if inquiry.answered_at %}
+            <div class="inquiry-meta">
+                <time datetime="{{ inquiry.answered_at.isoformat() }}">
+                    답변일 {{ inquiry.answered_at.strftime('%Y.%m.%d %H:%M') }}
+                </time>
+            </div>
+        {% endif %}
+    {% else %}
+        <p class="inquiry-description">
+            아직 답변이 등록되지 않았습니다.
+        </p>
+    {% endif %}
+
+    {% if is_admin() %}
+        <form method="post"
+              class="inquiry-answer-form"
+              action="{{ url_for('inquiry.answer', inquiry_id=inquiry.id) }}">
+
+            <input type="hidden"
+                   name="csrf_token"
+                   value="{{ csrf_token() }}">
+
+            <div class="inquiry-field">
+                <label for="answer">
+                    {{ '답변 수정' if inquiry.answer else '답변 작성' }}
+                </label>
+
+                <textarea
+                    id="answer"
+                    name="answer"
+                    class="inquiry-textarea"
+                    maxlength="5000"
+                    placeholder="답변 내용을 입력하세요."
+                    required>{{ answer_draft if answer_draft is defined else (inquiry.answer or '') }}</textarea>
+            </div>
+
+            <div class="inquiry-actions">
+                <button type="submit" class="inquiry-button">
+                    답변 저장
+                </button>
+            </div>
+        </form>
+    {% endif %}
+</section>
+
+<div class="inquiry-actions">
+    <a href="{{ url_for('inquiry.index') }}"
+       class="inquiry-button inquiry-button-secondary">
+        목록으로
+    </a>
+</div>
+{% endblock %}

@@ -659,6 +659,7 @@ button {
     }
 
 }
+
 .profile-actions {
     display: flex;
     align-items: center;
@@ -684,6 +685,7 @@ button {
         justify-content: flex-end;
     }
 }
+
 /* 대표 이미지가 원형 밖으로 나오지 않도록 처리 */
 .profile-img {
     overflow: hidden;
@@ -706,3 +708,664 @@ button {
     margin-bottom: 16px;
 }
 
+.recent-box .post-thumbnail {
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.recent-box .post-thumbnail img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.recent-box .recent-empty {
+    padding: 30px 0;
+    text-align: center;
+    color: #888;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.header-actions .btn-logout {
+    background: #2b3a4a;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.header-actions .btn-logout:focus-visible {
+    outline: 2px solid #1677b7;
+    outline-offset: 3px;
+}
+
+@media (max-width: 750px) {
+    .header-actions {
+        margin-left: auto;
+    }
+}
+
+/* 마이페이지 본문만 조정 */
+.mypage-overview-page .content {
+    display: grid;
+    grid-template-columns: 220px minmax(0, 1fr);
+    align-items: stretch;
+    gap: 24px;
+
+    width: calc(100% - 48px);
+    max-width: 1360px;
+    margin: 28px auto 48px;
+}
+
+/* 왼쪽 메뉴 */
+.mypage-overview-page .side-menu {
+    width: auto;
+    min-width: 0;
+    height: auto;
+    align-self: stretch;
+
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.mypage-overview-page .side-title {
+    padding: 22px;
+    font-size: 20px;
+}
+
+.mypage-overview-page .side-list a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    font-size: 14px;
+}
+
+/* 오른쪽 본문 */
+.mypage-overview-page .mypage-main {
+    min-width: 0;
+    width: 100%;
+}
+
+.mypage-overview-page .page-title {
+    margin: 0 0 14px;
+    font-size: 25px;
+    color: #1e293b;
+}
+
+/* 프로필 */
+.mypage-overview-page .profile-overview {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 20px;
+
+    padding: 24px;
+    margin-bottom: 16px;
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    background: #fff;
+}
+
+.mypage-overview-page .profile-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.mypage-overview-page .profile-img {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.mypage-overview-page .profile-img img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mypage-overview-page .profile-info {
+    min-width: 0;
+}
+
+.mypage-overview-page .profile-info h2 {
+    margin-bottom: 8px;
+    font-size: 21px;
+    overflow-wrap: anywhere;
+}
+
+.mypage-overview-page .profile-info p {
+    margin: 0;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.mypage-overview-page .profile-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.mypage-overview-page .profile-actions .profile-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 14px;
+    border: 1px solid #d4dce6;
+    border-radius: 7px;
+    background: #fff;
+    color: #334155;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+.mypage-overview-page .profile-actions .profile-withdraw-link {
+    color: #995454;
+    border-color: #dfcaca;
+}
+
+.mypage-overview-page .profile-actions .profile-withdraw-link:hover {
+    background: #fff5f5;
+}
+
+/* 활동 통계: 현재는 실제 데이터가 있는 3개 */
+.mypage-overview-page .stat-box {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+
+    margin-bottom: 16px;
+    padding: 0;
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.mypage-overview-page .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    width: auto;
+    min-width: 0;
+    padding: 22px 12px;
+    border-right: 1px solid #e8edf3;
+}
+
+.mypage-overview-page .stat-item:last-child {
+    border-right: 0;
+}
+
+.mypage-overview-page .stat-title {
+    color: #64748b;
+    font-size: 14px;
+    text-align: center;
+}
+
+.mypage-overview-page .stat-number {
+    color: #1e293b;
+    font-size: 27px;
+    font-weight: 700;
+}
+
+/* 최근 글 */
+.mypage-overview-page .recent-box {
+    margin-bottom: 16px;
+    border: 1px solid #e0e6ed;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+}
+
+.mypage-overview-page .recent-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 16px 20px;
+    border-bottom: 1px solid #edf0f4;
+}
+
+.mypage-overview-page .recent-header h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.mypage-overview-page .recent-header .more {
+    color: #64748b;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.mypage-overview-page .post-list {
+    padding: 0 20px;
+}
+
+.mypage-overview-page .post-item {
+    display: grid;
+    grid-template-columns: 100px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+
+    padding: 14px 0;
+    min-height: 100px;
+}
+
+.mypage-overview-page .post-thumbnail {
+    width: 100px;
+    height: 70px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.mypage-overview-page .post-title {
+    color: #1e293b;
+    font-size: 15px;
+}
+
+.mypage-overview-page .post-meta {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.mypage-overview-page .post-date {
+    color: #7b8797;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.mypage-overview-page .recent-empty {
+    padding: 32px 0;
+    text-align: center;
+    color: #64748b;
+}
+
+/* 키보드 접근 */
+.mypage-overview-page .content a:focus-visible {
+    outline: 2px solid #4a86bb;
+    outline-offset: -3px;
+}
+
+/* 태블릿 */
+@media (max-width: 1100px) {
+    .mypage-overview-page .content {
+        grid-template-columns: 185px minmax(0, 1fr);
+        gap: 18px;
+    }
+
+    .mypage-overview-page .profile-overview {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .mypage-overview-page .post-item {
+        grid-template-columns: 80px minmax(0, 1fr);
+    }
+
+    .mypage-overview-page .post-thumbnail {
+        width: 80px;
+        height: 64px;
+        grid-row: span 2;
+    }
+
+    .mypage-overview-page .post-date {
+        grid-column: 2;
+    }
+}
+
+/* 모바일 */
+@media (max-width: 750px) {
+    .mypage-overview-page .content {
+        grid-template-columns: minmax(0, 1fr);
+        width: calc(100% - 24px);
+        margin-top: 20px;
+    }
+
+    .mypage-overview-page .side-title {
+        padding: 14px 16px;
+        font-size: 17px;
+    }
+
+    .mypage-overview-page .side-list {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .mypage-overview-page .side-list a {
+        padding: 12px 16px;
+        white-space: nowrap;
+    }
+
+    .mypage-overview-page .profile-overview {
+        padding: 18px;
+    }
+
+    .mypage-overview-page .profile-img {
+        width: 72px;
+        height: 72px;
+    }
+
+    .mypage-overview-page .stat-item {
+        padding: 18px 6px;
+    }
+
+    .mypage-overview-page .stat-title {
+        font-size: 12px;
+    }
+
+    .mypage-overview-page .stat-number {
+        font-size: 23px;
+    }
+
+    .mypage-overview-page .post-list {
+        padding: 0 14px;
+    }
+}
+
+/* 최근 찜한 여행지 */
+.mypage-overview-page .overview-destination-grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px;
+}
+
+.mypage-overview-page .overview-place-card,
+.mypage-overview-page .overview-registered-card {
+    min-width: 0;
+    border: 1px solid #e0e6ed;
+    border-radius: 8px;
+    background: #fff;
+    color: #1e293b;
+    text-decoration: none;
+    overflow: hidden;
+}
+
+.mypage-overview-page .overview-place-card:hover,
+.mypage-overview-page .overview-registered-card:hover {
+    border-color: #8dbce0;
+    box-shadow: 0 3px 12px rgb(30 41 59 / 8%);
+}
+
+.mypage-overview-page .overview-place-photo {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: #eef3f7;
+}
+
+.mypage-overview-page .overview-place-photo img,
+.mypage-overview-page .overview-registered-photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mypage-overview-page .overview-photo-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.mypage-overview-page .overview-saved-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #fff;
+    color: #f45b75;
+    font-size: 21px;
+}
+
+.mypage-overview-page .overview-place-body {
+    min-width: 0;
+    padding: 12px;
+}
+
+.mypage-overview-page .overview-place-body h4 {
+    margin: 0 0 6px;
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.mypage-overview-page .overview-place-body p {
+    margin: 0 0 8px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.mypage-overview-page .overview-place-count {
+    color: #b83b58;
+    font-size: 12px;
+}
+
+/* 내가 등록한 여행지 */
+.mypage-overview-page .overview-registered-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 16px;
+}
+
+.mypage-overview-page .overview-registered-card {
+    display: grid;
+    grid-template-columns: 120px minmax(0, 1fr);
+    align-items: stretch;
+}
+
+.mypage-overview-page .overview-registered-photo {
+    min-height: 110px;
+    background: #eef3f7;
+}
+
+.mypage-overview-page .overview-registered-date {
+    display: block;
+    margin-top: 8px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.mypage-overview-page .overview-add-place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 110px;
+    padding: 16px;
+    border: 1px dashed #93c5e9;
+    border-radius: 8px;
+    background: #f0f8ff;
+    color: #17689f;
+    font-size: 13px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.mypage-overview-page .overview-add-place > span {
+    font-size: 28px;
+}
+
+.mypage-overview-page .overview-add-place:hover {
+    background: #e4f3ff;
+}
+
+.mypage-overview-page .overview-empty {
+    margin: 0;
+    padding: 28px 12px;
+    color: #64748b;
+    font-size: 14px;
+    text-align: center;
+    line-height: 1.8;
+}
+
+.mypage-overview-page .overview-destination-grid > .overview-empty {
+    grid-column: 1 / -1;
+}
+
+.mypage-overview-page .overview-empty a {
+    display: block;
+    color: #17689f;
+}
+
+@media (max-width: 1100px) {
+    .mypage-overview-page .overview-destination-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mypage-overview-page .overview-registered-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 750px) {
+    .mypage-overview-page .overview-destination-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mypage-overview-page .overview-registered-card {
+        grid-template-columns: 90px minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 380px) {
+    .mypage-overview-page .overview-destination-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+/* 모바일에서는 활동 통계를 2열로 표시 */
+@media (max-width: 750px) {
+    .mypage-overview-page .stat-box {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .mypage-overview-page .stat-item:nth-child(2n) {
+        border-right: 0;
+    }
+
+    .mypage-overview-page .stat-item:nth-child(-n + 2) {
+        border-bottom: 1px solid #e8edf3;
+    }
+}
+
+/* 가입일 및 가입 후 경과일 */
+.mypage-overview-page .profile-membership {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.mypage-overview-page .profile-membership-label {
+    color: #334155;
+    font-weight: 600;
+}
+
+.mypage-overview-page .membership-days {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #eaf5ff;
+    color: #17689f;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.mypage-overview-page .membership-unknown {
+    color: #64748b;
+    font-size: 12px;
+}
+
+/* 찜 기록 기반 관심 지역과 여행 스타일 */
+.mypage-overview-page .profile-info {
+    min-width: 0;
+}
+
+.mypage-overview-page .profile-preferences {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.mypage-overview-page .profile-preference-row {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px 12px;
+}
+
+.mypage-overview-page .profile-preference-label {
+    flex-shrink: 0;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.mypage-overview-page .profile-preference-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-width: 0;
+}
+
+.mypage-overview-page .profile-preference-tag {
+    display: inline-block;
+    max-width: 100%;
+    padding: 4px 9px;
+    border: 1px solid #dce8f3;
+    border-radius: 14px;
+    background: #f4f8fc;
+    color: #365b7c;
+    font-size: 12px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.mypage-overview-page .profile-preference-empty,
+.mypage-overview-page .profile-preference-note {
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.6;
+}
