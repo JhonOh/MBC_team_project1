@@ -1,5 +1,4 @@
 /* ==============================
-
    HEADER
 ============================== */
 /*=============================
@@ -470,24 +469,40 @@
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 0; /* 패딩을 통해 구분선 위치를 정확히 중앙으로 맞추기 위해 gap 0 설정 */
 }
 
 .recent-item,
 .community-item {
     display: flex;
     gap: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #edf0f4;
+    padding: 12px 8px; /* 위아래 패딩을 동일하게 맞춰 구분선이 중간에 오도록 설정 */
+    border-bottom: 1px solid #edf0f4; /* 항목 간 가운데 분리선 */
     align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
+    border-radius: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.recent-item:hover,
+.community-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(15, 30, 50, 0.08);
+    background-color: #ffffff;
 }
 
 .recent-item:last-child,
 .community-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+    border-bottom: none; /* 마지막 항목 밑줄 제거 */
+}
+
+.community-thumb {
+    width: 100px;
+    height: 84px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .recent-item img,
@@ -498,6 +513,12 @@
     object-fit: cover;
     flex-shrink: 0;
     display: block;
+    transition: transform 0.35s ease;
+}
+
+.recent-item:hover img,
+.community-item:hover img {
+    transform: scale(1.06);
 }
 
 .recent-info,
