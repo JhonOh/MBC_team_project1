@@ -9,37 +9,13 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
 </head>
 
 <body>
-
+{% include 'header.html' %}
 <div class="mypage-wrap">
 
-    <!-- HEADER -->
-    <header class="header">
-
-        <div class="header-inner">
-
-            <a href="#" class="logo">
-                <span class="logo-icon">△</span>
-                <span>어디갈까?</span>
-            </a>
-
-            <nav class="main-menu">
-                <a href="{{ url_for('homepage.homepage') }}">홈</a>
-                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
-                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
-                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
-            </nav>
-
-            <button type="button" class="search-btn">
-                ⌕
-            </button>
-
-        </div>
-
-    </header>
 
 
     <!-- MAIN CONTENT -->
@@ -55,7 +31,7 @@
             <ul class="side-list">
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage') }}">
+                    <a href="{{ url_for('mypage.mypage') }}">
                         <span class="menu-icon">♙</span>
                         <span>내 정보</span>
                     </a>
@@ -76,7 +52,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage_settings') }}"
+                    <a href="{{ url_for('mypage.mypage_settings') }}"
                        class="active">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>
@@ -186,40 +162,9 @@
         </section>
 
     </main>
+        {% include 'footer.html' %}
 
 
-    <!-- FOOTER -->
-    <footer class="footer">
-
-        <div class="footer-inner">
-
-            <div class="footer-logo">
-                △ 어디갈까?
-            </div>
-
-            <div class="footer-menu">
-
-                <a href="#">
-                    이용약관
-                </a>
-
-                <a href="#">
-                    개인정보처리방침
-                </a>
-
-                <a href="#">
-                    고객센터
-                </a>
-
-            </div>
-
-            <div class="copyright">
-                © 2026 어디갈까? All rights reserved.
-            </div>
-
-        </div>
-
-    </footer>
 
 </div>
 

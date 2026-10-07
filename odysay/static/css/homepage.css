@@ -1,5 +1,4 @@
 /* ==============================
-
    HEADER
 ============================== */
 /*=============================
@@ -470,24 +469,40 @@
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 0; /* 패딩을 통해 구분선 위치를 정확히 중앙으로 맞추기 위해 gap 0 설정 */
 }
 
 .recent-item,
 .community-item {
     display: flex;
     gap: 14px;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #edf0f4;
+    padding: 12px 8px; /* 위아래 패딩을 동일하게 맞춰 구분선이 중간에 오도록 설정 */
+    border-bottom: 1px solid #edf0f4; /* 항목 간 가운데 분리선 */
     align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
+    border-radius: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.recent-item:hover,
+.community-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(15, 30, 50, 0.08);
+    background-color: #ffffff;
 }
 
 .recent-item:last-child,
 .community-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+    border-bottom: none; /* 마지막 항목 밑줄 제거 */
+}
+
+.community-thumb {
+    width: 100px;
+    height: 84px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .recent-item img,
@@ -498,6 +513,12 @@
     object-fit: cover;
     flex-shrink: 0;
     display: block;
+    transition: transform 0.35s ease;
+}
+
+.recent-item:hover img,
+.community-item:hover img {
+    transform: scale(1.06);
 }
 
 .recent-info,
@@ -941,12 +962,14 @@ a {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0,0,0,.45);
+    background: rgba(0, 0, 0, .45);
     align-items: center;
     justify-content: center;
 }
 
-.time-modal.active { display: flex; }
+.time-modal.active {
+    display: flex;
+}
 
 .time-box {
     position: relative;
@@ -969,7 +992,9 @@ a {
     cursor: pointer;
 }
 
-.country-search { position: relative; }
+.country-search {
+    position: relative;
+}
 
 .country-search input,
 .city-box select,
@@ -993,7 +1018,9 @@ a {
     z-index: 10;
 }
 
-.country-list.active { display: block; }
+.country-list.active {
+    display: block;
+}
 
 .country-option {
     padding: 8px 10px;
@@ -1170,6 +1197,7 @@ a {
     line-height: 1.5;
 }
 
+
 /* Travel tools allow longer labels in either language. */
 .time-modal { padding: 20px; box-sizing: border-box; }
 .time-box h2 {
@@ -1189,3 +1217,19 @@ a {
     .time-result-row { flex-direction: column; }
     .time-box h2 { font-size: 20px; }
 }
+
+.home-map-stage {
+    position: relative;
+}
+
+.home-main-map-button {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    z-index: 800;
+
+    transform: translateX(-50%) scale(0.8);
+    transform-origin: center bottom;
+    white-space: nowrap;
+}
+

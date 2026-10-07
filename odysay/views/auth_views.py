@@ -33,6 +33,7 @@ def load_logged_in_user():
 
     # 로그인한 회원만 접근 가능한 화면
     member_pages = {
+        'homepage.homepage',
         'homepage.mypage',
         'homepage.mypage_settings',
         'profile.profile_edit',
@@ -41,7 +42,7 @@ def load_logged_in_user():
 
     if g.user is None and request.endpoint in member_pages:
         flash('로그인이 필요합니다.')
-        return redirect(url_for('homepage.homepage'))
+        return redirect(url_for('first.map'))
 
 
 @bp.route('/signup/', methods=['GET', 'POST'])
@@ -81,7 +82,7 @@ def signup():
 @bp.route('/login/', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return redirect(url_for('homepage.homepage'))
+        return redirect(url_for('first.map'))
 
     form = LoginForm()
 
@@ -114,7 +115,7 @@ def login():
             for error in errors:
                 flash(error)
 
-    return redirect(url_for('homepage.homepage'))
+    return redirect(url_for('first.map'))
 
 
 @bp.route('/logout/')

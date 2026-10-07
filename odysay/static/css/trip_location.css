@@ -1,11 +1,4 @@
 /* 기본 초기화 스타일 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
 body {
     background-color: #ffffff;
     color: #333333;
@@ -661,50 +654,6 @@ button {
 
 .related-image-section {
     margin-top: 35px;
-}
-
-/* 하단 푸터 바 */
-.footer {
-    background-color: #2c3e50;
-    color: #b2bec3;
-    padding: 30px 0;
-    margin-top: 60px;
-    font-size: 13px;
-}
-
-.footer-container {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 20px;
-}
-
-.footer-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #34495e;
-    padding-bottom: 15px;
-    margin-bottom: 15px;
-}
-
-.footer-logo {
-    font-weight: bold;
-    color: #ffffff;
-}
-
-.footer-links {
-    display: flex;
-    gap: 20px;
-}
-
-.footer-sns {
-    display: flex;
-    gap: 15px;
-}
-
-.footer-bottom {
-    font-size: 11px;
-    color: #7f8c8d;
 }
 
 /* ================= 찜하기 ================= */

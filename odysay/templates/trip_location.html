@@ -8,15 +8,15 @@
 
     {# header css  #}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_all.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_review.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_talk.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+
     <!-- 상세페이지 지도용 Leaflet CSS -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -28,44 +28,8 @@
 <body>
 
 <!-- 헤더 영역 -->
-<header class="header">
-    <div class="header-inner">
+{% include 'header.html' %}
 
-
-        <a href="/homepage/sjw" class="logo">
-
-
-            <span class="logo-symbol">△△</span>
-
-            <div class="logo-text">
-                <strong>어딧세이</strong>
-                <small>ODYSAY</small>
-            </div>
-        </a>
-
-        <nav class="gnb">
-            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
-            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
-            <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
-        </nav>
-
-        <div class="header-util">
-            <button type="button" class="search-button">
-
-            </button>
-
-
-            {% if g.user %}
-                <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
-            {% else %}
-                <a class="logout-button" href="{{ url_for('homepage.homepage') }}">로그인</a>
-            {% endif %}
-
-        </div>
-
-    </div>
-</header>
 
 <!-- 메인 콘텐츠 -->
 <main class="container">
@@ -920,21 +884,7 @@
 </div>
 
 <!-- 푸터 영역 -->
-<footer class="footer">
-    <div class="footer-container">
-        <div class="footer-top">
-            <div class="footer-logo">▲ 어딧세이 ODYSSEY</div>
-            <div class="footer-links">
-                <a href="#">이용약관</a>
-                <a href="#">개인정보처리방침</a>
-                <a href="#">고객센터</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>© 2025 ODYSSEY. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
+{% include 'footer.html' %}
 
 <script>
     const photoList = {{ photos | tojson }};
@@ -951,6 +901,7 @@
 </script>
 <script src="{{ url_for('static', filename='js/trip_location.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_all.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_review.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_talk.js') }}"></script>
 </body>

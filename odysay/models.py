@@ -305,6 +305,22 @@ class ModerationLog(db.Model):
 # ==========================================
 
 
+class ContentReport(db.Model):
+    __tablename__ = 'content_reports'
+    id = db.Column(db.Integer, primary_key=True)
+    reporter_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    content_type = db.Column(db.String(32), nullable=False)
+    content_id = db.Column(db.Integer, nullable=False)
+    reason = db.Column(db.String(500), nullable=False)
+    snapshot = db.Column(db.Text, nullable=False)
+    status = db.Column(db.String(20), nullable=False, default='pending')
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    resolved_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    resolved_at = db.Column(db.DateTime, nullable=True)
+    resolution = db.Column(db.String(500), nullable=True)
+    __table_args__ = (db.UniqueConstraint('reporter_id', 'content_type', 'content_id', name='uq_report_user_target'),)
+
+
 class Inquiry(db.Model):
     __tablename__ = 'inquiries'
 

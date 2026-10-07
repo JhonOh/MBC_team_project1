@@ -8,11 +8,14 @@
     {% include 'components/language_assets.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_detail.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
 
 </head>
 <body>
 
-<div class="container">
+{% include 'header.html' %}
+
+<main class="community-detail">
     <!-- 게시글 헤더 -->
     <div class="post-header">
         <div id="title-display">
@@ -31,7 +34,6 @@
                 {% endif %}
             </h1>
         </div>
-
         <div class="post-meta">
             <div class="author-info">
                 <span>
@@ -118,6 +120,7 @@
         </div>
     {% endif %}
 
+    <button type="button" class="btn" onclick="submitContentReport(this, '{{ 'post' if is_post else 'place' }}', {{ item_id }})">🚨 신고</button>
     <!-- 좋아요 섹션 -->
     <div class="like-section">
         {% if is_post %}
@@ -204,7 +207,9 @@
             {% endfor %}
         </ul>
     </div>
-</div>
+</main>
+
+{% include 'footer.html' %}
 
 <script>
     const postType = "{{ 'post' if is_post else 'place' }}";
@@ -217,10 +222,18 @@
         if (postType !== 'post') return;
 
         try {
-            const response = await fetch(`/homepage/community/detail/api/like/${postType}/${itemId}`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'}
-            });
+            const response = await fetch(
+                `/homepage/community/detail/api/like/${postType}/${itemId}`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': document.querySelector(
+                            'meta[name="csrf-token"]'
+                        ).content
+                    }
+                }
+            );
             const data = await response.json();
 
             if (response.ok && data.success) {
@@ -237,7 +250,7 @@
                 }
 
             } else {
-                alert(data.message || '좋아요 처리에 실패하였습니다.');
+                alert(data.message || data.error || '좋아요 처리에 실패하였습니다.');
             }
 
         } catch (error) {
@@ -459,6 +472,7 @@
         }
     }
 </script>
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 <script src="{{ url_for('static', filename='js/travel_tags.js') }}"></script>
 </body>
 </html>
