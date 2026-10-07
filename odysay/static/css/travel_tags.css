@@ -1,0 +1,92 @@
+.travel-tag-fields {
+    min-width: 0;
+    margin: 20px 0;
+    padding: 16px;
+    border: 1px solid #dce3eb;
+    border-radius: 10px;
+}
+
+.travel-tag-fields legend {
+    padding: 0 6px;
+    color: #334155;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.travel-tag-help {
+    margin: 0 0 12px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.travel-tag-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.travel-tag-option {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid #dce3eb;
+    border-radius: 20px;
+    background: #f8fafc;
+    cursor: pointer;
+}
+
+.travel-tag-option input {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: #17689f;
+}
+
+.travel-tag-option span {
+    color: #475569;
+    font-size: 13px;
+}
+
+.travel-tag-option input:checked + span {
+    color: #17689f;
+    font-weight: 700;
+}
+
+.travel-tag-option:focus-within {
+    outline: 2px solid #17689f;
+    outline-offset: 2px;
+}
+
+.travel-tag-message {
+    margin: 8px 0 0;
+    color: #b42318;
+    font-size: 12px;
+}
+
+.travel-tag-message:empty {
+    display: none;
+}
+/* 상세페이지 여행 스타일 표시 */
+.travel-tag-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin: 12px 0;
+}
+
+.travel-tag-badges:not(:has(.travel-tag-badge)) {
+    display: none;
+}
+
+.travel-tag-badge {
+    display: inline-block;
+    padding: 5px 11px;
+    border: 1px solid #dce8f3;
+    border-radius: 16px;
+    background: #f0f7ff;
+    color: #17689f;
+    font-size: 12px;
+    line-height: 1.5;
+}

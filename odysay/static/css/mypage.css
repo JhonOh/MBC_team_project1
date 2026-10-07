@@ -645,17 +645,4 @@ button {
     .profile-btn {
         display: none;
     }
-
-    .footer-inner {
-        flex-direction: column;
-
-        justify-content: center;
-
-        gap: 5px;
-    }
-
-    .footer-menu {
-        display: none;
-    }
-
 }

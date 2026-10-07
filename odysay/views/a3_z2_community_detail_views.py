@@ -9,6 +9,11 @@ from odysay import csrf
 
 from datetime import datetime
 from odysay.moderation import protect_hidden_descendants
+from odysay.travel_tags import (
+    TRAVEL_TAG_CHOICES,
+    TRAVEL_TAG_LABELS,
+    validate_travel_tags,
+)
 
 bp = Blueprint('detail', __name__, url_prefix='/homepage/community/detail')
 
@@ -49,7 +54,10 @@ def detail(post_type, item_id):
             item_id=item_id,
             is_post=True,
             current_user_id=current_user_id,
-            is_liked=is_liked
+            is_liked=is_liked,
+            travel_tag_choices=TRAVEL_TAG_CHOICES,
+            travel_tag_labels=TRAVEL_TAG_LABELS,
+            selected_travel_tags=item.travel_tags or [],
         )
 
     # 2. 여행 후기 (TripLocationmd)
@@ -74,8 +82,12 @@ def detail(post_type, item_id):
             item_id=item_id,
             is_post=False,
             current_user_id=current_user_id,
-            is_liked=False
+            is_liked=False,
+            travel_tag_choices=TRAVEL_TAG_CHOICES,
+            travel_tag_labels=TRAVEL_TAG_LABELS,
+            selected_travel_tags=item.travel_tags or [],
         )
+
 
     else:
         abort(404)
@@ -278,7 +290,26 @@ def update_post(post_type, item_id):
     if str(item.user_id) != str(user_id):
         return jsonify({'success': False, 'message': '작성자만 게시글을 수정할 수 있습니다.'}), 403
 
-    data = request.get_json() or {}
+    data = request.get_json()
+
+    if not isinstance(data, dict):
+        return jsonify({
+            'success': False,
+            'message': '올바른 JSON 객체를 전달해 주세요.',
+        }), 400
+
+    selected_tags = None
+
+    if 'travel_tags' in data:
+        try:
+            selected_tags = validate_travel_tags(
+                data['travel_tags']
+            )
+        except ValueError as error:
+            return jsonify({
+                'success': False,
+                'message': str(error),
+            }), 400
 
     try:
         now = datetime.now()
@@ -296,7 +327,8 @@ def update_post(post_type, item_id):
                 return jsonify({'success': False, 'message': '소개와 추천 이유를 모두 입력해주세요.'}), 400
             item.intro = intro
             item.reason = reason
-
+        if selected_tags is not None:
+            item.travel_tags = selected_tags
         if hasattr(item, 'updated_at'):
             item.updated_at = now
 

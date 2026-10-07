@@ -8,10 +8,17 @@
 </head>
 <body>
 <header><a class="brand" href="{{ url_for('admin.index') }}">어딧세이 <span>콘텐츠 관리</span></a>
-<nav><a href="{{ url_for('admin.index') }}">전체 콘텐츠</a><a href="{{ url_for('admin.logs') }}">관리 이력</a><a href="{{ url_for('homepage.mypage') }}">마이페이지</a></nav></header>
+<nav>
+    <a href="{{ url_for('admin.index') }}">전체 콘텐츠</a>
+    <a href="{{ url_for('admin.logs') }}">관리 이력</a>
+    <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+    <a href="{{ url_for('inquiry.index') }}">문의 관리</a>
+</nav>
+</header>
 <main>
 {% for message in get_flashed_messages() %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
 {% block content %}{% endblock %}
+
 </main>
 </body>
 </html>

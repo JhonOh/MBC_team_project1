@@ -23,18 +23,43 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. 백엔드 API로부터 데이터 가져오기
   fetchPlaces();
 
-  function fetchPlaces() {
-    fetch('/homepage/community/api/places')
-      .then(response => response.json())
-      .then(data => {
-        placesData = data;
-        applyFilterAndRender();
-        renderHotList(placesData);
-      })
-      .catch(error => {
-        console.error('데이터 가져오기 실패:', error);
-      });
-  }
+ function fetchPlaces() {
+  const container = document.querySelector('.main-container');
+  const apiUrl =
+    container?.dataset.postsApi || '/homepage/community/api/places';
+
+  fetch(apiUrl)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(
+          response.status === 401
+            ? '로그인이 필요합니다. 로그인 후 다시 시도해 주세요.'
+            : '게시글을 불러오지 못했습니다.'
+        );
+      }
+
+      return response.json();
+    })
+    .then(data => {
+      placesData = data;
+      applyFilterAndRender();
+      renderHotList(placesData);
+    })
+    .catch(error => {
+      console.error('데이터 가져오기 실패:', error);
+
+      const postList = document.getElementById('postList');
+      const pagination = document.getElementById('pagination');
+
+      if (postList) {
+        postList.textContent = error.message;
+      }
+
+      if (pagination) {
+        pagination.innerHTML = '';
+      }
+    });
+}
 
   // 3. 필터링 + 정렬 + 페이징 종합 적용
   function applyFilterAndRender() {
