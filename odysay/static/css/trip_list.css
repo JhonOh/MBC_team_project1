@@ -145,16 +145,28 @@ input {
 ========================= */
 
 .travel-hero {
+
+    max-width: 1150px;
+    margin: 0 auto;
+    min-height: 350px;
     padding: 72px 20px 60px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 
     text-align: center;
 
     background:
         linear-gradient(
-            180deg,
-            #f7f9fc 0%,
-            #ffffff 100%
-        );
+            rgba(255, 255, 255, 0.30),
+            rgba(255, 255, 255, 0.50)
+        ),
+        url("../images/trip/air.png");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .hero-label {

@@ -143,7 +143,7 @@ def upload():
     # 로그인한 회원만 여행지 등록 가능
     if g.user is None:
         flash('여행지를 등록하려면 로그인해 주세요.')
-        return redirect(url_for('homepage.main'))
+        return redirect(url_for('homepage.homepage'))
 
     if request.method == 'POST':
         country = request.form.get('country', '')

@@ -1,41 +1,235 @@
-/* Common header, hero, cards and responsive grid come from trip_list.css. */
-.my-places-page .my-list-actions {
+
+.my-places-wrap {
+    width: min(100% - 32px, 1000px);
+    margin: 40px auto;
+}
+
+.back-link {
+    color: #405474;
+    text-decoration: none;
+}
+
+.page-heading {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
     gap: 16px;
-    margin-bottom: 24px;
-    font-size: 14px;
+    margin: 24px 0;
 }
-.my-places-page .back-link { color: #536982; }
-.my-places-page .upload-link {
+
+.page-heading h1 {
+    margin: 0 0 8px;
+    font-size: 26px;
+}
+
+.page-heading p {
+    margin: 0;
+    color: #64748b;
+    overflow-wrap: anywhere;
+}
+
+.upload-link {
     padding: 12px 18px;
     border-radius: 10px;
-    background: #1f3048;
+    background: #2563eb;
     color: #fff;
-    font-weight: 600;
+    text-decoration: none;
 }
-.my-places-page .destination-card { display: block; min-width: 0; }
-.my-places-page .destination-card:focus-visible,
-.my-places-page .upload-link:focus-visible,
-.my-places-page .back-link:focus-visible {
-    outline: 3px solid #536982;
+
+.place-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+}
+
+.place-card {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+}
+
+.place-card:hover {
+    border-color: #2563eb;
+}
+
+.place-card:focus-visible {
+    outline: 3px solid #2563eb;
     outline-offset: 3px;
 }
-.my-places-page .my-place-placeholder {
+
+.place-image,
+.place-placeholder {
+    width: 100%;
+    height: 200px;
+}
+
+.place-image {
+    display: block;
+    object-fit: cover;
+}
+
+.place-placeholder {
     display: grid;
     place-items: center;
-    height: 100%;
-    color: #7c8998;
-    font-size: 12px;
+    background: #e8edf3;
+    color: #53647a;
 }
+
+.place-body {
+    padding: 20px;
+    overflow-wrap: anywhere;
+}
+
+.place-location {
+    margin: 0 0 8px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.place-body h2 {
+    margin: 0 0 10px;
+    font-size: 20px;
+}
+
+.place-intro {
+    margin: 0 0 16px;
+    line-height: 1.6;
+}
+
+.place-date {
+    color: #64748b;
+    font-size: 13px;
+}
+
+.place-detail-link {
+    display: block;
+    margin-top: 16px;
+    color: #2563eb;
+    font-size: 14px;
+}
+
+.empty-state {
+    padding: 60px 20px;
+    border-radius: 16px;
+    background: #fff;
+    text-align: center;
+}
+
+.empty-state p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .place-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* trip_list 구조를 사용하는 본인 여행지 목록 */
+
+.my-places-page .travel-page {
+    display: flex;
+    flex-direction: column;
+}
+
+.my-places-page .main {
+    flex: 1;
+    min-height: 0;
+}
+
+.my-places-page .header-right .mypage-btn {
+    color: #fff;
+}
+
+.my-places-page .my-list-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.my-places-page .travel-card {
+    display: block;
+    min-width: 0;
+    color: inherit;
+    text-decoration: none;
+}
+
+.my-places-page .travel-card:focus-visible {
+    outline: 3px solid #2563eb;
+    outline-offset: 3px;
+}
+
+.my-places-page .travel-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.my-places-page .image-placeholder {
+    padding: 12px;
+    color: #53647a;
+    font-size: 12px;
+    text-align: center;
+}
+
+/* 소개와 날짜가 추가되므로 고정 높이를 해제 */
+.my-places-page .travel-info {
+    height: auto;
+}
+
+.my-places-page .travel-bottom {
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.my-places-page .travel-bottom > span:first-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.my-places-page .likes {
+    flex-shrink: 0;
+}
+
+.my-places-page .my-place-intro {
+    margin: 12px 0;
+    color: #536372;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
 .my-places-page .my-place-date {
     display: block;
-    margin-top: 10px;
-    color: #84909f;
-    font-size: 11px;
+    color: #64748b;
+    font-size: 12px;
 }
-.my-places-page .my-empty-state { display: block; }
-.my-places-page .card-title,
-.my-places-page .hero-description { overflow-wrap: anywhere; }
+
+.my-places-page .my-place-detail {
+    display: block;
+    margin-top: 12px;
+    color: #2563eb;
+    font-size: 12px;
+}
+
+.my-places-page .my-empty-state {
+    padding: 60px 20px;
+    text-align: center;
+    color: #536372;
+}
+
+.my-places-page .title-section p {
+    color: #64748b;
+    overflow-wrap: anywhere;
+}

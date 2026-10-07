@@ -1,0 +1,124 @@
+/* static/css/header_footer.css */
+
+/* ==============================
+   HEADER (공통)
+============================== */
+.header {
+    width: 100%;
+    height: 76px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8ecf1;
+}
+
+.header-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-right: 80px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.logo-symbol {
+    font-size: 28px;
+    font-weight: 700;
+    color: #14233b;
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo-text strong {
+    font-size: 22px;
+    font-weight: 700;
+    color: #14233b;
+}
+
+.logo-text small {
+    margin-top: 2px;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: #14233b;
+}
+
+.gnb {
+    display: flex;
+    align-items: center;
+    gap: 55px;
+}
+
+.gnb a {
+    font-size: 15px;
+    font-weight: 600;
+    color: #26364d;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.gnb a:hover,
+.gnb a.active {
+    color: #557ba8;
+}
+
+.header-util {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logout-button {
+    padding: 12px 24px;
+    background: #152238;
+    color: white;
+    border-radius: 30px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+/* ==============================
+   FOOTER (공통)
+============================== */
+.footer {
+    border-top: 1px solid #e8ecf1;
+    padding: 25px 0 30px;
+    background: #ffffff;
+}
+
+.footer-inner {
+    width: 1200px;
+    max-width: calc(100% - 80px);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-left strong {
+    font-size: 14px;
+    color: #26364d;
+}
+
+.footer-left p {
+    margin-top: 5px;
+    font-size: 10px;
+    color: #929dad;
+}
+
+.footer-right {
+    display: flex;
+    gap: 20px;
+    font-size: 10px;
+    color: #9aa4b2;
+}

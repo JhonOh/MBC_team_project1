@@ -1,5 +1,4 @@
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
 from wtforms.fields.simple import (
     StringField,
     PasswordField,
@@ -126,15 +125,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField('로그인')
 
 class ProfileEditForm(FlaskForm):
-    avatar = FileField(
-        '대표 이미지',
-        validators=[
-            FileAllowed(
-                ['jpg', 'jpeg', 'png', 'webp'],
-                'JPG, PNG, WEBP 사진만 등록할 수 있습니다.'
-            )
-        ]
-    )
     nickname = StringField(
         '닉네임',
         filters=[lambda value: value.strip() if value else value],

@@ -37,7 +37,7 @@ def homepage():
         recommended_places.append(place)
 
     return render_template(
-        'shin2ryu/sjw.html',
+        'homepage.html',
         recent_places=recent_places,
         recommended_places=recommended_places
     )
