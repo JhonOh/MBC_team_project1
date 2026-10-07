@@ -785,3 +785,25 @@
     line-height: 1;
     vertical-align: middle;
 }
+
+.travel-talk-avatar {
+    overflow: hidden;
+}
+
+.travel-talk-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.travel-talk-comment-avatar {
+    overflow: hidden;
+}
+
+.travel-talk-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}

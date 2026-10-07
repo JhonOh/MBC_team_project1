@@ -269,7 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="review-header">
                 
                         <div class="review-user-area">
-                            <span class="review-avatar">👤</span>
+                            <span class="review-avatar">
+                                ${review.profile_image
+                                    ? `<img src="/static/${review.profile_image}" alt="${review.nickname} 프로필">`
+                                    : '👤'
+                                }
+                            </span>
                 
                             <div class="review-user-info">
 
