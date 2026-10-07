@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const uiText = (key, values) => window.OdysayLanguage?.t?.(key, values) || key;
 
     // 수정 모드인지 확인
     const editMode =
@@ -14,93 +15,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const uploadContent = document.getElementById("uploadContent");
     const guideContent = document.getElementById("guideContent");
 
-    // 1. 국가 검색
+    // 1. 국가 검색: shared picker keeps the submitted value canonical Korean.
     const countrySearch = document.getElementById("countrySearch");
     const countryInput = document.getElementById("country");
     const countryResults = document.getElementById("countryResults");
 
-    if (countrySearch && countryInput && countryResults && typeof countries !== "undefined") {
-
-        const CHO = "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ";
-        let filtered = [];
-        let index = -1;
-
-        // 초성 변환
-        const getCho = text =>
-            [...text].map(c => {
-                const code = c.charCodeAt(0) - 44032;
-                return code >= 0 && code <= 11171
-                    ? CHO[Math.floor(code / 588)]
-                    : c;
-            }).join("");
-
-        // 목록 출력
-        function show(list) {
-            filtered = list;
-            index = -1;
-
-            countryResults.innerHTML = list.length
-                ? list.map(c => `<div class="country-result-item">${c}</div>`).join("")
-                : `<div class="country-no-result">검색 결과가 없습니다.</div>`;
-
-            countryResults.style.display = "block";
-        }
-
-        // 클릭하면 선택
-        countryResults.addEventListener("click", e => {
-            if (!e.target.classList.contains("country-result-item")) return;
-
-            countrySearch.value = e.target.textContent;
-            countryInput.value = e.target.textContent;
-            countryResults.style.display = "none";
-        });
-
-        // 클릭하면 전체 목록
-        countrySearch.addEventListener("focus", () => show(countries));
-
-        // 검색 + 초성 검색
-        countrySearch.addEventListener("input", function () {
-            countryInput.value = "";
-
-            const word = this.value.trim().toLowerCase();
-
-            show(countries.filter(c =>
-                c.toLowerCase().startsWith(word) ||
-                getCho(c).startsWith(word)
-            ));
-        });
-
-        // ↑ ↓ Enter
-        countrySearch.addEventListener("keydown", e => {
-            const items = countryResults.querySelectorAll(".country-result-item");
-
-            if (!items.length) return;
-
-            if (e.key === "ArrowDown") {
-                index = (index + 1) % items.length;
-            } else if (e.key === "ArrowUp") {
-                index = (index - 1 + items.length) % items.length;
-            } else if (e.key === "Enter") {
-                e.preventDefault();
-
-                const selectedIndex = index >= 0 ? index : 0;
-                items[selectedIndex].click();
-                return;
-            } else {
-                return;
+    if (countrySearch && countryInput && countryResults && window.OdysayCountrySearch) {
+        window.OdysayCountrySearch.create({
+            input: countrySearch,
+            results: countryResults,
+            hiddenInput: countryInput,
+            wrapper: ".country-search-wrapper",
+            itemClass: "country-result-item",
+            activeClass: "active",
+            onSelect(country) {
+                countryInput.value = country;
+            },
+            onInput(country) {
+                countryInput.value = country || "";
             }
-
-            e.preventDefault();
-
-            items.forEach(i => i.classList.remove("active"));
-            items[index].classList.add("active");
-            items[index].scrollIntoView({ block: "nearest" });
-        });
-
-        // 바깥 클릭하면 닫기
-        document.addEventListener("click", e => {
-            if (!e.target.closest(".country-search-wrapper"))
-                countryResults.style.display = "none";
         });
     }
 
@@ -239,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // 기존 DB 사진 + 이미 새로 선택한 사진 + 이번에 선택한 사진
                 if (existingPhotoCount + selectedPhotos.length + newFiles.length > 10) {
 
-                    alert("메인 사진은 최대 10장까지 등록할 수 있습니다.");
+                    alert(uiText('upload.photoLimit'));
 
                     updatePhotoInput();
 
@@ -364,7 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 // 기존 DB 사진 + 새로 선택한 사진 = 최대 3장
                 if (existingPhotoCount + selectedFiles.length + newFiles.length > 3) {
 
-                    alert("주변정보 사진은 최대 3장까지 등록할 수 있습니다.");
+                    alert(uiText('upload.nearbyPhotoLimit'));
 
                     updateInput();
 
@@ -410,7 +343,7 @@ document.addEventListener("DOMContentLoaded", function () {
              // 1. 등록 가이드를 아직 확인하지 않았을 때
             if (!guideChecked) {
 
-                alert("여행지를 등록하기 전에 등록 가이드를 확인해주세요.");
+                alert(uiText('upload.readGuide'));
 
                 // 등록 가이드 보여주기
                 uploadContent.style.display = "none";
@@ -432,7 +365,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // 2. 가이드는 봤지만 동의 체크 안 했을 때
             if (!editMode && (!agree || !agree.checked)) {
 
-                alert("등록 가이드라인에 동의해주세요.");
+                alert(uiText('upload.agree'));
 
                 agree.scrollIntoView({
                     behavior: "smooth",
@@ -450,7 +383,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 photosInput ? photosInput.files.length : 0;
 
             if (existingPhotoCount + newPhotoCount === 0) {
-                alert("메인 사진을 1장 이상 등록해주세요.");
+                alert(uiText('upload.addPhoto'));
 
                 if (photosInput) {
                     photosInput.closest(".form-section")?.scrollIntoView({
@@ -462,9 +395,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
 
-            // 나라 검색창 값을 실제 country 값에 넣기
+            // CountryPicker stores the canonical Korean value. Retain the old
+            // free-text fallback only when a legacy/non-catalog value is used.
             if (countrySearch && countryInput) {
-                countryInput.value = countrySearch.value.trim();
+                const canonical = window.OdysayCountries?.canonicalize(
+                    countryInput.value || countrySearch.value
+                );
+                countryInput.value = canonical || countrySearch.value.trim();
             }
 
             const formData = new FormData(travelForm);
@@ -476,7 +413,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     if (!response.ok) {
                         let data = {};
                         try { data = await response.json(); } catch (_) {}
-                        throw new Error(data.error || '등록에 실패했습니다. 입력값을 확인해 주세요.');
+                        throw new Error(data.error || uiText('upload.submitError'));
                     }
                     if (response.redirected) window.location.href = response.url;
                 })

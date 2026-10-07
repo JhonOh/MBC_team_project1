@@ -520,8 +520,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const longitude =
                         parseFloat(detailMapElement.dataset.lng);
 
-                    const placeTitle =
+                    const originalPlaceTitle =
                         detailMapElement.dataset.title || '여행지';
+
+                    const placeCountry =
+                        window.OdysayCountries?.canonicalize?.(
+                            detailMapElement.dataset.country
+                        ) || detailMapElement.dataset.country;
+
+                    const placeTitle =
+                        window.OdysayLanguage?.getLanguage?.() === 'en' &&
+                        placeCountry === '대한민국'
+                            ? window.OdysayLanguage?.englishKoreanPlaceName?.(originalPlaceTitle) || originalPlaceTitle
+                            : originalPlaceTitle;
 
                     if (
                         Number.isFinite(latitude) &&

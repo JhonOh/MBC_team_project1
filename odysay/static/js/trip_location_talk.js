@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     function formatPostDate(date) {
-        return date.toLocaleString('ko-KR', {
+        return date.toLocaleString(window.OdysayLanguage?.getLocale?.() || 'ko-KR', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',

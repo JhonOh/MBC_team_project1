@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Odysay</title>
+    {% include 'components/language_assets.html' %}
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -215,15 +216,37 @@
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
                     Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
                 const popup = document.createElement('div');
+
+                const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
+                const canonicalCountry =
+                    window.OdysayCountries?.canonicalize?.(place.country) || place.country;
+
                 const title = document.createElement('strong');
-                title.textContent = place.title;
+                title.textContent =
+                    isEnglish && canonicalCountry === '대한민국'
+                        ? window.OdysayLanguage?.englishKoreanPlaceName?.(place.title) || place.title
+                        : place.title;
+
                 const location = document.createElement('p');
-                location.textContent = [place.country, place.region].filter(Boolean).join(' ');
+
+                const displayCountry =
+                    window.OdysayLanguage?.countryName?.(place.country) || place.country;
+
+                const displayRegion =
+                    isEnglish && canonicalCountry === '대한민국'
+                        ? window.OdysayLanguage?.englishKoreanRegion?.(place.region) || place.region
+                        : place.region;
+
+                location.textContent = [displayCountry, displayRegion]
+                    .filter(Boolean)
+                    .join(' ');
+
                 const intro = document.createElement('p');
                 intro.textContent = place.intro || '';
                 const link = document.createElement('a');
                 link.href = place.detail_url;
-                link.textContent = '상세보기';
+                link.dataset.i18n = 'common.details';
+                link.textContent = window.OdysayLanguage?.t?.('common.details') || '상세보기';
 
                 {% if g.user is none %}
                     link.addEventListener('click', function (event) {
@@ -241,7 +264,8 @@
             const message = document.createElement('div');
             message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';
             message.style.zIndex = '1100';
-            message.textContent = '여행지 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+            message.dataset.i18n = 'map.loadError';
+            message.textContent = window.OdysayLanguage?.t?.('map.loadError') || '여행지 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
             document.body.append(message);
         }
     }
