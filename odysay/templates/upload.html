@@ -6,62 +6,21 @@
 
     <title>어딧세이 - 여행지 등록</title>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-      rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/reset.css') }}">
-
-    <link rel="stylesheet"
-      href="{{ url_for('static', filename='css/common.css') }}">
 
     <link rel="stylesheet"
       href="{{ url_for('static', filename='css/homepage.css') }}">
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/upload.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
 
 </head>
 <body>
 {# header  #}
-    <header class="header">
-    <div class="header-inner">
-
-
-        <a href="/homepage/sjw" class="logo">
-
-
-            <span class="logo-symbol">△△</span>
-
-            <div class="logo-text">
-                <strong>어딧세이</strong>
-                <small>ODYSAY</small>
-            </div>
-        </a>
-
-        <nav class="gnb">
-            <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
-            <a href="{{ url_for('homepage.community') }}">커뮤니티</a>
-            <a href="{{ url_for('homepage.upload') }}">여행지 등록</a>
-            <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
-        </nav>
-
-        <div class="header-util">
-            <button type="button" class="search-button">
-
-            </button>
-
-
-            {% if g.user %}
-            <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
-            {% else %}
-            <a class="logout-button" href="{{ url_for('homepage.main') }}">로그인</a>
-            {% endif %}
-
-        </div>
-
-    </div>
-</header>
+{% include 'header.html' %}
 
 {# main #}
     <main class="page-container">
@@ -546,78 +505,10 @@
 
     </main>
 
-    <!-- ========================================
-         하단 브랜드 배너
-    ======================================== -->
-    <section class="bottom-banner">
-        <div class="section-inner bottom-banner-inner">
-
-            <p class="bottom-message">
-                여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
-            </p>
-
-            <div class="bottom-brand">
-
-                <div class="bottom-logo">
-
-                    <span class="logo-symbol">
-                        △△
-                    </span>
-
-                    <div>
-                        <strong>어딧세이</strong>
-                        <small>ODYSAY</small>
-                    </div>
-
-                </div>
-
-                <div class="bottom-divider"></div>
-
-                <p class="bottom-slogan">
-                    더 많은 이야기로,<br>
-                    더 멀리.
-                </p>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- ========================================
-         FOOTER
-    ======================================== -->
-    <footer class="footer">
-
-        <div class="section-inner footer-inner">
-
-            <div class="footer-left">
-
-                <strong>
-                    어딧세이 ODYSAY
-                </strong>
-
-                <p>
-                    참여형 여행정보 커뮤니티
-                </p>
-
-            </div>
-
-            <div class="footer-right">
-
-                <span>
-                    © 2026 ODYSAY
-                </span>
-
-                <span>
-                    Team Project
-                </span>
-
-            </div>
-
-        </div>
-
-    </footer>
+<!-- ========================================
+    FOOTER
+======================================== -->
+{% include 'footer.html' %}
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

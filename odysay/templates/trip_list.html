@@ -6,37 +6,14 @@
 
     <title>여행지 | 어딧세이</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='css/trip_list.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
 </head>
 
 <body>
 
-<!-- =========================
-     HEADER
-========================= -->
-<header class="header">
-    <div class="header-inner">
-
-        <a href="/homepage" class="logo">
-            <span class="logo-mark">✈</span>
-            <span>어딧세이</span>
-        </a>
-
-        <nav class="gnb">
-            <a href="/homepage/trip_list" class="active">여행지</a>
-            <a href="#">커뮤니티</a>
-            <a href="#">여행지 등록</a>
-            <a href="#">마이페이지</a>
-        </nav>
-
-        <button class="logout-btn" type="button">
-            로그아웃
-        </button>
-
-    </div>
-</header>
-
+{% include 'header.html' %}
 
 <main>
 
@@ -258,6 +235,7 @@
 
 </main>
 
+{% include 'footer.html' %}
 
 <!-- =========================
      JS
