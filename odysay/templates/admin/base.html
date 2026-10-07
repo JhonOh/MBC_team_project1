@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}콘텐츠 관리{% endblock %} | 어딧세이</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<header><a class="brand" href="{{ url_for('admin.index') }}">어딧세이 <span>콘텐츠 관리</span></a>
+<nav><a href="{{ url_for('admin.index') }}">전체 콘텐츠</a><a href="{{ url_for('admin.logs') }}">관리 이력</a><a href="{{ url_for('homepage.mypage') }}">마이페이지</a></nav></header>
+<main>
+{% for message in get_flashed_messages() %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+{% block content %}{% endblock %}
+</main>
+</body>
+</html>

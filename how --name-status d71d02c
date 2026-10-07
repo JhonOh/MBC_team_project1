@@ -1,0 +1,85 @@
+[33mcommit d71d02c5e8a51a49fe414f07511f250dfbd270cb[m
+Author: 박기흠 <sonic7877@gmail.com>
+Date:   Fri Oct 2 17:46:53 2026 +0900
+
+     26,10,02 관리자 권한 추가 및 개인 이미지 추가
+
+ config.py                                          |    9 [32m+[m[31m-[m
+ docs/ADMIN_GUIDE.md                                |   95 [32m++[m
+ ...32\251\352\260\200\354\235\264\353\223\234.txt" |  428 [32m+++++[m
+ odysay/__init__.py                                 |    9 [32m+[m[31m-[m
+ odysay/admin_commands.py                           |   54 [32m+[m
+ odysay/forms.py                                    |   10 [32m+[m
+ odysay/models.py                                   |   29 [32m+[m[31m-[m
+ odysay/moderation.py                               |  120 [32m++[m
+ odysay/services/geocoding.py                       |  105 [31m--[m
+ odysay/static/css/admin.css                        |    1 [32m+[m
+ odysay/static/css/mypage.css                       |   49 [32m+[m[31m-[m
+ odysay/static/css/mypage_my_places.css             |  238 [32m+[m[31m--[m
+ odysay/templates/admin/base.html                   |   17 [32m+[m
+ odysay/templates/admin/edit.html                   |   32 [32m+[m
+ odysay/templates/admin/index.html                  |   24 [32m+[m
+ odysay/templates/admin/logs.html                   |   11 [32m+[m
+ odysay/templates/base.html                         |   10 [31m-[m
+ odysay/templates/community_detail.html             |   11 [32m+[m[31m-[m
+ odysay/templates/login.html                        |   19 [31m-[m
+ odysay/templates/mypage.html                       |   29 [32m+[m[31m-[m
+ odysay/templates/mypage_my_places.html             |  253 [32m+[m[31m--[m
+ odysay/templates/profile_edit.html                 |  165 [32m+[m[31m-[m
+ odysay/views/a3_z2_community_detail_views.py       |   45 [32m+[m[31m-[m
+ .../views/a4_z1_z1_trip_location_feature_views.py  |    4 [32m+[m[31m-[m
+ odysay/views/admin_views.py                        |  206 [32m+++[m
+ odysay/views/auth_views.py                         |  131 [32m+[m[31m-[m
+ output/pdf/odysay-study-guide.pdf                  | 1684 [32m++++++++++++++++++++[m
+ requirements.txt                                   |    1 [32m+[m
+ ...225\231\354\212\265\352\265\220\354\236\254.md" |  277 [32m++++[m
+ ...275\224\353\223\234\354\247\200\353\217\204.md" |  256 [32m+++[m
+ ...212\265\352\263\274\353\263\265\354\212\265.md" |  145 [32m++[m
+ study/README.md                                    |   21 [32m+[m
+ study/practice_memory_db.py                        |   51 [32m+[m
+ study/source_fingerprints.json                     |   53 [32m+[m
+ tests/test_admin_moderation.py                     |  141 [32m++[m
+ tmp/pdfs/build_study_pdf.py                        |  100 [32m++[m
+ tmp/pdfs/contact-0.png                             |  Bin [31m0[m -> [32m551603[m bytes
+ tmp/pdfs/contact-1.png                             |  Bin [31m0[m -> [32m430818[m bytes
+ tmp/pdfs/contact-2.png                             |  Bin [31m0[m -> [32m275422[m bytes
+ tmp/pdfs/contact-3.png                             |  Bin [31m0[m -> [32m88915[m bytes
+ tmp/pdfs/page-01.png                               |  Bin [31m0[m -> [32m40450[m bytes
+ tmp/pdfs/page-02.png                               |  Bin [31m0[m -> [32m86576[m bytes
+ tmp/pdfs/page-03.png                               |  Bin [31m0[m -> [32m68846[m bytes
+ tmp/pdfs/page-04.png                               |  Bin [31m0[m -> [32m84213[m bytes
+ tmp/pdfs/page-05.png                               |  Bin [31m0[m -> [32m68070[m bytes
+ tmp/pdfs/page-06.png                               |  Bin [31m0[m -> [32m80475[m bytes
+ tmp/pdfs/page-07.png                               |  Bin [31m0[m -> [32m101858[m bytes
+ tmp/pdfs/page-08.png                               |  Bin [31m0[m -> [32m100802[m bytes
+ tmp/pdfs/page-09.png                               |  Bin [31m0[m -> [32m106459[m bytes
+ tmp/pdfs/page-10.png                               |  Bin [31m0[m -> [32m85085[m bytes
+ tmp/pdfs/page-11.png                               |  Bin [31m0[m -> [32m53031[m bytes
+ tmp/pdfs/page-12.png                               |  Bin [31m0[m -> [32m98988[m bytes
+ tmp/pdfs/page-13.png                               |  Bin [31m0[m -> [32m106824[m bytes
+ tmp/pdfs/page-14.png                               |  Bin [31m0[m -> [32m49645[m bytes
+ tmp/pdfs/page-15.png                               |  Bin [31m0[m -> [32m49419[m bytes
+ tmp/pdfs/page-16.png                               |  Bin [31m0[m -> [32m108518[m bytes
+ tmp/pdfs/page-17.png                               |  Bin [31m0[m -> [32m101879[m bytes
+ tmp/pdfs/page-18.png                               |  Bin [31m0[m -> [32m89097[m bytes
+ tmp/pdfs/page-19.png                               |  Bin [31m0[m -> [32m91446[m bytes
+ tmp/pdfs/page-20.png                               |  Bin [31m0[m -> [32m21677[m bytes
+ tmp/pdfs/page-21.png                               |  Bin [31m0[m -> [32m42473[m bytes
+ tmp/pdfs/page-22.png                               |  Bin [31m0[m -> [32m39889[m bytes
+ tmp/pdfs/page-23.png                               |  Bin [31m0[m -> [32m48593[m bytes
+ tmp/pdfs/page-24.png                               |  Bin [31m0[m -> [32m61973[m bytes
+ tmp/pdfs/page-25.png                               |  Bin [31m0[m -> [32m47933[m bytes
+ tmp/pdfs/page-26.png                               |  Bin [31m0[m -> [32m43952[m bytes
+ tmp/pdfs/page-27.png                               |  Bin [31m0[m -> [32m54837[m bytes
+ tmp/pdfs/page-28.png                               |  Bin [31m0[m -> [32m59087[m bytes
+ tmp/pdfs/page-29.png                               |  Bin [31m0[m -> [32m58799[m bytes
+ tmp/pdfs/page-30.png                               |  Bin [31m0[m -> [32m52575[m bytes
+ tmp/pdfs/page-31.png                               |  Bin [31m0[m -> [32m61526[m bytes
+ tmp/pdfs/page-32.png                               |  Bin [31m0[m -> [32m44487[m bytes
+ tmp/pdfs/page-33.png                               |  Bin [31m0[m -> [32m38916[m bytes
+ tmp/pdfs/page-34.png                               |  Bin [31m0[m -> [32m46005[m bytes
+ tmp/pdfs/page-35.png                               |  Bin [31m0[m -> [32m39798[m bytes
+ tmp/pdfs/page-36.png                               |  Bin [31m0[m -> [32m24131[m bytes
+ tmp/pdfs/page-37.png                               |  Bin [31m0[m -> [32m74746[m bytes
+ tmp/pdfs/page-38.png                               |  Bin [31m0[m -> [32m37043[m bytes
+ 78 files changed, 4182 insertions(+), 651 deletions(-)

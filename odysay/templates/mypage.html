@@ -6,275 +6,331 @@
 
     <title>마이페이지</title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
 </head>
 
 <body>
-<!-- =========================
-     HEADER
-========================== -->
-{% include 'header.html' %}
 
-
-<!-- =========================
-     MAIN CONTENT
-========================== -->
-<main class="content">
-
+<div class="mypage-wrap">
 
     <!-- =========================
-         LEFT SIDE MENU
+         HEADER
     ========================== -->
-    <aside class="side-menu">
+    <header class="header">
 
-        <div class="side-title">
-            마이페이지
+        <div class="header-inner">
+
+             <a href="{{ url_for('homepage.homepage') }}" class="logo">
+                <span class="logo-icon">△</span>
+                <span>어디갈까?</span>
+            </a>
+
+            <nav class="main-menu">
+                <a href="{{ url_for('homepage.homepage') }}">홈</a>
+                <a href="{{ url_for('homepage.trip_list') }}">여행지</a>
+                <a href="{{ url_for('community.community_review') }}">여행 후기</a>
+                <a href="{{ url_for('upload.upload') }}">여행지 등록</a>
+                <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+            </nav>
+
+            <button type="button" class="search-btn">
+                ⌕
+            </button>
+
         </div>
 
-        <ul class="side-list">
-
-            <li>
-                <a href="{{ url_for('homepage.mypage') }}" class="active">
-                    <span class="menu-icon">♙</span>
-                    <span>내 정보</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span class="menu-icon">♧</span>
-                    <span>내가 쓴 글</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <span class="menu-icon">♡</span>
-                    <span>내가 찜한 여행지</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ url_for('mypage.my_places') }}">
-                    <span class="menu-icon">✎</span>
-                    <span>내가 만든 여행지</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="{{ url_for('homepage.mypage_settings') }}">
-                    <span class="menu-icon">⚙</span>
-                    <span>설정</span>
-                </a>
-            </li>
-
-        </ul>
-
-    </aside>
+    </header>
 
 
     <!-- =========================
-         RIGHT CONTENT
+         MAIN CONTENT
     ========================== -->
-    <section class="mypage-main">
-
-        <h1 class="page-title">
-            내 정보
-        </h1>
+    <main class="content">
 
 
         <!-- =========================
-             PROFILE
+             LEFT SIDE MENU
         ========================== -->
-        <div class="profile-box">
+        <aside class="side-menu">
 
-            <div class="profile-left">
+            <div class="side-title">
+                마이페이지
+            </div>
 
-                <div class="profile-img">
-                    ♙
+            <ul class="side-list">
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage') }}" class="active">
+                        <span class="menu-icon">♙</span>
+                        <span>내 정보</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <span class="menu-icon">♧</span>
+                        <span>내가 쓴 글</span>
+                    </a>
+                </li>
+
+                               <li>
+                    <a href="#">
+                        <span class="menu-icon">♡</span>
+                        <span>내가 찜한 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('mypage.my_places') }}">
+                        <span class="menu-icon">✎</span>
+                        <span>내가 만든 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('homepage.mypage_settings') }}">
+                        <span class="menu-icon">⚙</span>
+                        <span>설정</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </aside>
+
+
+        <!-- =========================
+             RIGHT CONTENT
+        ========================== -->
+        <section class="mypage-main">
+
+            <h1 class="page-title">
+                내 정보
+            </h1>
+
+
+            <!-- =========================
+                 PROFILE
+            ========================== -->
+            <div class="profile-box">
+
+                <div class="profile-left">
+
+                    <div class="profile-img">
+                        ♙
+                    </div>
+
+                    <div class="profile-info">
+
+                        <h2>{{ g.user.nickname or g.user.username }}
+                        </h2>
+
+                        <p>
+                            안녕하세요.<br>
+                            나만의 여행 이야기를 기록해보세요.
+                        </p>
+
+                    </div>
+
                 </div>
 
-                <div class="profile-info">
-
-                    <h2>{{ g.user.nickname or g.user.username }}
-                    </h2>
-
-                    <p>
-                        안녕하세요.<br>
-                        나만의 여행 이야기를 기록해보세요.
-                    </p>
-
-                </div>
+                 <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">프로필 수정
+               </a>
 
             </div>
 
-            <a href="{{ url_for('profile.profile_edit') }}" class="profile-btn">프로필 수정
-            </a>
 
-        </div>
+            <!-- =========================
+                 STATISTICS
+            ========================== -->
+            <div class="stat-box">
 
-
-        <!-- =========================
-             STATISTICS
-        ========================== -->
-        <div class="stat-box">
-
-            <div class="stat-item">
+                <div class="stat-item">
 
                     <span class="stat-title">
                         내가 쓴 글
                     </span>
 
-                <span class="stat-number">
+                    <span class="stat-number">
                         12
                     </span>
 
-            </div>
+                </div>
 
 
-            <div class="stat-item">
+                <div class="stat-item">
 
                     <span class="stat-title">
                         내가 찜한 여행지
                     </span>
 
-                <span class="stat-number">
+                    <span class="stat-number">
                         328
                     </span>
 
-            </div>
+                </div>
 
 
-            <a href="{{ url_for('mypage.my_places') }}"
-               class="stat-item">
+                                <a href="{{ url_for('mypage.my_places') }}"
+                   class="stat-item">
 
                     <span class="stat-title">
                         내가 만든 여행지
                     </span>
 
-                <span class="stat-number">
+                    <span class="stat-number">
                         {{ my_places_count }}
                     </span>
 
-            </a>
-
-        </div>
-
-
-        <!-- =========================
-             RECENT POSTS
-        ========================== -->
-        <div class="recent-box">
-
-            <div class="recent-header">
-
-                <h3>
-                    최근 작성한 글
-                </h3>
-
-                <a href="#" class="more">
-                    전체보기 ›
                 </a>
 
             </div>
 
 
-            <div class="post-list">
+            <!-- =========================
+                 RECENT POSTS
+            ========================== -->
+            <div class="recent-box">
+
+                <div class="recent-header">
+
+                    <h3>
+                        최근 작성한 글
+                    </h3>
+
+                    <a href="#" class="more">
+                        전체보기 ›
+                    </a>
+
+                </div>
 
 
-                <!-- POST 1 -->
-                <a href="#" class="post-item">
+                <div class="post-list">
 
-                    <div class="post-thumbnail">
-                        △
-                    </div>
 
-                    <div class="post-info">
+                    <!-- POST 1 -->
+                    <a href="#" class="post-item">
+
+                        <div class="post-thumbnail">
+                            △
+                        </div>
+
+                        <div class="post-info">
 
                             <span class="post-title">
                                 산토리니 4박 5일 솔직 후기 ✈
                             </span>
 
-                        <span class="post-meta">
+                            <span class="post-meta">
                                 ♡ 26　 💬 17
                             </span>
 
-                    </div>
+                        </div>
 
-                    <span class="post-date">
+                        <span class="post-date">
                             2026. 09. 15
                         </span>
 
-                </a>
+                    </a>
 
 
-                <!-- POST 2 -->
-                <a href="#" class="post-item">
+                    <!-- POST 2 -->
+                    <a href="#" class="post-item">
 
-                    <div class="post-thumbnail">
-                        △
-                    </div>
+                        <div class="post-thumbnail">
+                            △
+                        </div>
 
-                    <div class="post-info">
+                        <div class="post-info">
 
                             <span class="post-title">
                                 이번 여름 제주도 여행지 추천
                             </span>
 
-                        <span class="post-meta">
+                            <span class="post-meta">
                                 ♡ 256　 💬 32
                             </span>
 
-                    </div>
+                        </div>
 
-                    <span class="post-date">
+                        <span class="post-date">
                             2026. 09. 14
                         </span>
 
-                </a>
+                    </a>
 
 
-                <!-- POST 3 -->
-                <a href="#" class="post-item">
+                    <!-- POST 3 -->
+                    <a href="#" class="post-item">
 
-                    <div class="post-thumbnail">
-                        △
-                    </div>
+                        <div class="post-thumbnail">
+                            △
+                        </div>
 
-                    <div class="post-info">
+                        <div class="post-info">
 
                             <span class="post-title">
                                 꼭 가봐야 할 국내 여행지 BEST 5
                             </span>
 
-                        <span class="post-meta">
+                            <span class="post-meta">
                                 ♡ 89　 💬 14
                             </span>
 
-                    </div>
+                        </div>
 
-                    <span class="post-date">
+                        <span class="post-date">
                             2026. 09. 10
                         </span>
 
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="footer">
+
+        <div class="footer-inner">
+
+            <div class="footer-logo">
+                △ 어디갈까?
+            </div>
+
+            <div class="footer-menu">
+
+                <a href="#">
+                    이용약관
                 </a>
 
+                <a href="#">
+                    개인정보처리방침
+                </a>
 
+                <a href="#">
+                    고객센터
+                </a>
+
+            </div>
+
+            <div class="copyright">
+                © 2026 어디갈까? All rights reserved.
             </div>
 
         </div>
 
-    </section>
+    </footer>
 
-</main>
-
-
-<!-- =========================
-     FOOTER
-========================== -->
-{% include 'footer.html' %}
+</div>
 
 
 <script src="{{ url_for('static', filename='js/mypage.js') }}"></script>

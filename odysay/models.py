@@ -20,6 +20,7 @@ class User(db.Model):
     nickname = db.Column(db.String(20), unique=True, nullable=True)
     birth_date = db.Column(db.Date, nullable=True)
     gender = db.Column(db.String(10), nullable=True)
+    profile_image = db.Column(db.String(255), nullable=True)
 
 
 
@@ -250,3 +251,29 @@ class Comment(db.Model):
 
     travel_place_id = db.Column(db.Integer, db.ForeignKey('trip_locationmd.id', ondelete='CASCADE'), nullable=True)
     travel_place = db.relationship('TripLocationmd', backref=db.backref('comments', cascade='all, delete-orphan'))
+
+
+class ContentModeration(db.Model):
+    """One moderation state per content item; original content is preserved."""
+    __tablename__ = 'content_moderation'
+    id = db.Column(db.Integer, primary_key=True)
+    content_type = db.Column(db.String(32), nullable=False)
+    content_id = db.Column(db.Integer, nullable=False)
+    is_hidden = db.Column(db.Boolean, nullable=False, default=False, server_default=db.false())
+    changed_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    changed_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    reason = db.Column(db.String(500), nullable=False)
+    __table_args__ = (db.UniqueConstraint('content_type', 'content_id', name='uq_content_moderation_target'),)
+
+
+class ModerationLog(db.Model):
+    __tablename__ = 'moderation_log'
+    id = db.Column(db.Integer, primary_key=True)
+    content_type = db.Column(db.String(32), nullable=False)
+    content_id = db.Column(db.Integer, nullable=False)
+    actor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    action = db.Column(db.String(16), nullable=False)
+    reason = db.Column(db.String(500), nullable=False)
+    before_data = db.Column(db.Text, nullable=False)
+    after_data = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

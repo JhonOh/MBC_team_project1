@@ -49,20 +49,7 @@
 }
 
 
-/* 위쪽 문구 */
 
-.side-message {
-    margin: 50px 10px 45px;
-
-    line-height: 2;
-
-    font-style: italic;
-    font-weight: 600;
-    color: black;
-
-    position: relative;
-    z-index: 2;
-}
 
 /* 사진 위 문구 */
 
@@ -115,20 +102,19 @@
 
 .menu-list a {
     text-decoration: none;
-
-    color: black;
-
+    color: #26364d;
     padding: 13px;
-
     border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
 }
 
 .menu-list a.selected {
     background: rgba(255, 255, 255, 0.85);
-
-    color: #142443;
-
-    font-weight: bold;
+    color: #142947;
+    font-weight: 700;
 }
 
 /* ================= FORM ================= */
@@ -164,10 +150,12 @@
 
 .form-section h3 {
     font-size: 18px;
-
     font-weight: 700;
-
     margin-bottom: 15px;
+}
+
+.form-section h3 > span {
+    color: #ff5050;
 }
 
 .form-section h3 small {
@@ -240,6 +228,10 @@ textarea.form-control {
     height: 90px;
 
     resize: none;
+}
+
+#reason {
+    height: 180px;
 }
 
 /* ================= COUNTRY SEARCH ================= */
@@ -673,33 +665,6 @@ textarea.form-control {
     box-shadow: 0 8px 18px rgba(20, 41, 71, 0.05);
 }
 
-/* 위쪽 안내 영역 */
-
-.right-content {
-    position: relative;
-
-    z-index: 2;
-
-    padding: 90px 20px 20px;
-}
-
-.right-info h4 {
-    margin: 0 0 60px;
-
-    font-size: 15px;
-
-    color: black;
-
-    font-weight: 700;
-}
-
-.right-info .right-content p {
-    line-height: 1.7;
-
-    margin-bottom: 14px;
-
-    color: black;
-}
 
 /* 사진 위 문구 */
 
@@ -723,15 +688,56 @@ textarea.form-control {
     z-index: 2;
 }
 
+/* ================= SIDE BANNER TYPOGRAPHY ================= */
+
+.side-message {
+    margin: 50px 10px 45px;
+    position: relative;
+    z-index: 2;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 2;
+    letter-spacing: -0.3px;
+    color: #18263b;
+}
+
+.right-content {
+    padding: 75px 20px 20px;
+}
+
+.right-info h4 {
+    margin-bottom: 45px;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -0.3px;
+    color: #142947;
+}
+
+.right-info .right-content p {
+    margin-bottom: 18px;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.8;
+    letter-spacing: -0.2px;
+    color: #35445a;
+}
+
 
 /* ================= MOBILE ================= */
 
-@media (max-width: 700px) {
+@media (max-width: 1000px) {
     .left-menu,
     .right-info {
         display: none;
     }
 
+    .page-container {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@media (max-width: 700px) {
     .page-container {
         display: block;
         width: 100%;
@@ -754,5 +760,34 @@ textarea.form-control {
 
     #etc-input-box {
         grid-column: 1;
+    }
+}
+
+.mobile-upload-menu {
+    display: none;
+}
+
+@media (max-width: 1000px) {
+    .mobile-upload-menu {
+        display: flex;
+        gap: 8px;
+        padding: 10px 15px;
+    }
+
+    .mobile-upload-menu button {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #d7dfea;
+        border-radius: 8px;
+        background: white;
+        color: #718097;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .mobile-upload-menu button.selected {
+        background: #142947;
+        border-color: #142947;
+        color: white;
     }
 }

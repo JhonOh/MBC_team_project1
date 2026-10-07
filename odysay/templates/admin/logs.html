@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+<h1>관리 이력</h1><p class="muted">처리 시간은 UTC입니다. 수정 전후 내용을 확인할 수 있습니다.</p>
+{% for log in page.items %}
+<article class="panel"><p class="eyebrow">{{ log.created_at.strftime('%Y.%m.%d %H:%M:%S') }} UTC · 관리자 #{{ log.actor_id }}</p>
+<h2>{{ kinds[log.content_type][1] }} #{{ log.content_id }} · {{ {'edit':'수정', 'hide':'게시 중단', 'restore':'복원'}.get(log.action, log.action) }}</h2>
+<p>{{ log.reason }}</p><a href="{{ url_for('admin.edit', kind=log.content_type, content_id=log.content_id) }}">콘텐츠 관리</a>
+<details><summary>변경 전후 보기</summary><h3>변경 전</h3><pre>{{ log.before_data }}</pre><h3>변경 후</h3><pre>{{ log.after_data }}</pre></details></article>
+{% else %}<p class="empty">아직 관리 이력이 없습니다.</p>{% endfor %}
+<nav class="pagination">{% if page.has_prev %}<a href="{{ url_for('admin.logs', page=page.prev_num) }}">← 이전</a>{% endif %}<span>{{ page.page }} / {{ page.pages or 1 }}</span>{% if page.has_next %}<a href="{{ url_for('admin.logs', page=page.next_num) }}">다음 →</a>{% endif %}</nav>
+{% endblock %}
