@@ -1,0 +1,24 @@
+<fieldset class="travel-tag-fields">
+    <legend>여행 스타일</legend>
+
+    <p class="travel-tag-help">
+        글이나 여행지와 관련된 항목을 최대 3개 선택하세요.
+        선택하지 않아도 등록할 수 있습니다.
+    </p>
+
+    <div class="travel-tag-options">
+        {% for value, label in travel_tag_choices %}
+            <label class="travel-tag-option">
+                <input type="checkbox"
+                       name="travel_tags"
+                       value="{{ value }}"
+                        {% if value in (selected_travel_tags | default([], true)) %}
+                       checked
+                        {% endif %}>
+                <span>{{ label }}</span>
+            </label>
+        {% endfor %}
+    </div>
+
+    <p class="travel-tag-message" role="status"></p>
+</fieldset>

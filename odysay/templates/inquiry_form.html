@@ -1,0 +1,57 @@
+{% extends "inquiry_base.html" %}
+
+{% block title %}문의 작성{% endblock %}
+
+{% block content %}
+<div class="inquiry-panel">
+    <div class="inquiry-heading">
+        <div>
+            <h1 class="inquiry-title">1:1 문의 작성</h1>
+            <p class="inquiry-description">
+                문의 내용은 작성자와 관리자만 확인할 수 있습니다.
+            </p>
+        </div>
+    </div>
+
+    <form method="post" action="{{ url_for('inquiry.create') }}">
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <div class="inquiry-field">
+            <label for="title">제목</label>
+            <input
+                type="text"
+                id="title"
+                name="title"
+                class="inquiry-input"
+                maxlength="200"
+                placeholder="문의 제목을 입력하세요."
+                value="{{ title }}"
+                required>
+        </div>
+
+        <div class="inquiry-field">
+            <label for="content">문의 내용</label>
+            <textarea
+                id="content"
+                name="content"
+                class="inquiry-textarea"
+                maxlength="5000"
+                placeholder="문의 내용을 입력하세요."
+                required>{{ content }}</textarea>
+        </div>
+
+        <div class="inquiry-actions">
+            <a href="{{ url_for('inquiry.index') }}"
+               class="inquiry-button inquiry-button-secondary">
+                취소
+            </a>
+
+            <button type="submit" class="inquiry-button">
+                문의 등록
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
