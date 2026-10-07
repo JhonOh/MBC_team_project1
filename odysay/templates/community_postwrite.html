@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>글쓰기 - 어딧세이</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_postwrite.css') }}">
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/travel_tags.css') }}">
 </head>
 <body>
 
@@ -23,6 +25,7 @@
                 <option value="자유 게시판" {% if default_category == 'free' %}selected{% endif %}>자유 게시판</option>
             </select>
         </div>
+        {% include "components/travel_tag_fields.html" %}
 
         <!-- 2. 제목 입력 -->
         <div class="title-input-box">
@@ -47,6 +50,6 @@
         </div>
     </form>
 </div>
-
+<script src="{{ url_for('static', filename='js/travel_tags.js') }}"></script>
 </body>
 </html>

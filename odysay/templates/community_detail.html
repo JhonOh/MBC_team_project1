@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ item.title or item.place }} - 커뮤니티 상세</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_detail.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
 
 </head>
 <body>
@@ -43,6 +44,9 @@
             {% endif %}
         </div>
     </div>
+    {% with display_travel_tags=item.travel_tags or [] %}
+        {% include "components/travel_tag_badges.html" %}
+    {% endwith %}
 
     <!-- 게시글 본문 -->
     <div id="post-content-display" class="post-content">
@@ -56,6 +60,7 @@
 
     <!-- 게시글 수정 폼 -->
     <div id="post-edit-form" style="display: none; margin-bottom: 30px;">
+        {% include "components/travel_tag_fields.html" %}
         {% if is_post %}
             <input type="text" id="edit-post-title" class="edit-input" value="{{ item.title }}"
                    style="margin-bottom: 10px;">
@@ -221,7 +226,21 @@
             }
             payload = {intro, reason};
         }
+        const selectedTags = Array.from(
+            document.querySelectorAll(
+                '#post-edit-form input[name="travel_tags"]:checked'
+            ),
+            function (input) {
+                return input.value;
+            }
+        );
 
+        if (selectedTags.length > 3) {
+            alert("여행 스타일은 최대 3개까지 선택할 수 있습니다.");
+            return;
+        }
+
+        payload.travel_tags = selectedTags;
         try {
             const response = await fetch(`/homepage/community/detail/api/post/update/${postType}/${itemId}`, {
                 method: 'POST',
@@ -384,5 +403,6 @@
         }
     }
 </script>
+<script src="{{ url_for('static', filename='js/travel_tags.js') }}"></script>
 </body>
 </html>

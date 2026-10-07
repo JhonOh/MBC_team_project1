@@ -1,9 +1,13 @@
 import os
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, g, flash
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, session, g, flash, abort
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from odysay import db
 from odysay.models import Post
+from odysay.travel_tags import (
+    TRAVEL_TAG_CHOICES,
+    validate_travel_tags,
+)
 
 bp = Blueprint('postwrite', __name__, url_prefix='/homepage/community/postwrite')
 
@@ -31,9 +35,16 @@ def write_post():
     if not user_id:
         # 로그인되어 있지 않으면 로그인 페이지로 이동시키거나 안내
         # (프로젝트 로그인 라우트 이름에 맞춰 수정 가능)
-        return redirect('/homepage/login')
+        return redirect(url_for('homepage.homepage'))
 
     if request.method == 'POST':
+        try:
+            selected_tags = validate_travel_tags(
+                request.form.getlist('travel_tags')
+            )
+        except ValueError as error:
+            abort(400, description=str(error))
+
         selected_category = request.form.get('category')
         title = request.form.get('title')
         content = request.form.get('content')
@@ -62,7 +73,8 @@ def write_post():
             content=content,
             photos=photos_str,
             user_id=user_id,  # 👈 로그인 사용자 ID 연동!
-            created_at=datetime.now()
+            created_at=datetime.now(),
+            travel_tags=selected_tags,
         )
         db.session.add(new_post)
         db.session.commit()
@@ -74,5 +86,11 @@ def write_post():
         else:
             return redirect(url_for('community.community_all'))
 
+
     default_category = request.args.get('category', '')
-    return render_template('community_postwrite.html', default_category=default_category)
+
+    return render_template(
+        'community_postwrite.html',
+        default_category=default_category,
+        travel_tag_choices=TRAVEL_TAG_CHOICES,
+    )

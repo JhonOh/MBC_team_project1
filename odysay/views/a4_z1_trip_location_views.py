@@ -2,15 +2,21 @@ import os
 import time
 import math
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, current_app, g
+from flask import Blueprint, render_template, request, redirect, url_for, current_app, g, abort
 from werkzeug.utils import secure_filename
 from odysay.models import (
     db, User, Uploadmd, TripLocationmd,
     Bookmark, Review, TravelTalk,
     TravelTalkComment, Comment
 )
+from odysay.travel_tags import (
+    TRAVEL_TAG_CHOICES,
+    TRAVEL_TAG_LABELS,
+    validate_travel_tags,
+)
 
 bp = Blueprint('trip_location', __name__, url_prefix='/homepage/trip_location')
+
 
 #  거리 계산 함수 (지도)
 def calculate_distance(lat1, lon1, lat2, lon2):
@@ -26,6 +32,7 @@ def calculate_distance(lat1, lon1, lat2, lon2):
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
 
     return earth_radius * c
+
 
 # -----------------------------------------------------------
 # 여행지 상세 페이지
@@ -79,7 +86,8 @@ def trip_location_detail(place_id):
         restaurant_photos=restaurant_photos,
         nearby_photos=nearby_photos,
         author=author,
-        nearby_places=nearby_places
+        nearby_places=nearby_places,
+        travel_tag_labels=TRAVEL_TAG_LABELS,
     )
 
 
@@ -95,6 +103,15 @@ def trip_location_edit(place_id):
         return redirect(url_for('trip_location.trip_location_detail', place_id=place_id))
 
     if request.method == 'POST':
+        try:
+            selected_tags = validate_travel_tags(
+                request.form.getlist('travel_tags')
+            )
+        except ValueError as error:
+            abort(400, description=str(error))
+
+        place_data.travel_tags = selected_tags
+
         place_data.country = request.form.get('country', '')
         place_data.region = request.form.get('region', '')
         place_data.place = request.form.get('place', '')
@@ -147,8 +164,10 @@ def trip_location_edit(place_id):
         )
 
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-    restaurant_photos = [p.strip() for p in place_data.restaurant_photos.split(',') if p.strip()] if place_data.restaurant_photos else []
-    nearby_photos = [p.strip() for p in place_data.nearby_photos.split(',') if p.strip()] if place_data.nearby_photos else []
+    restaurant_photos = [p.strip() for p in place_data.restaurant_photos.split(',') if
+                         p.strip()] if place_data.restaurant_photos else []
+    nearby_photos = [p.strip() for p in place_data.nearby_photos.split(',') if
+                     p.strip()] if place_data.nearby_photos else []
 
     return render_template(
         'upload.html',
@@ -156,8 +175,11 @@ def trip_location_edit(place_id):
         edit_mode=True,
         photos=photos,
         restaurant_photos=restaurant_photos,
-        nearby_photos=nearby_photos
+        nearby_photos=nearby_photos,
+        travel_tag_choices=TRAVEL_TAG_CHOICES,
+        selected_travel_tags=place_data.travel_tags or [],
     )
+
 
 # -----------------------------------------------------------
 # 여행지 삭제
@@ -194,7 +216,7 @@ def trip_location_delete(place_id):
 
     db.session.commit()
 
-    return redirect(url_for('homepage.sjw'))
+    return redirect(url_for('homepage.homepage'))
 
 
 # -----------------------------------------------------------
@@ -208,4 +230,9 @@ def trip_location():
         return "<script>alert('등록된 여행지가 없습니다. 먼저 여행지를 등록해주세요!'); location.href='/homepage/upload';</script>"
 
     photos = [p.strip() for p in place_data.photos.split(',') if p.strip()] if place_data.photos else []
-    return render_template('trip_location.html', place=place_data, photos=photos)
+    return render_template(
+        'trip_location.html',
+        place=place_data,
+        photos=photos,
+        travel_tag_labels=TRAVEL_TAG_LABELS,
+    )

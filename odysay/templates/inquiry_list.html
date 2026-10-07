@@ -1,0 +1,86 @@
+{% extends "inquiry_base.html" %}
+
+{% block title %}
+    {{ '문의 관리' if is_admin() else '내 문의 목록' }}
+{% endblock %}
+
+{% block content %}
+<div class="inquiry-panel">
+    <div class="inquiry-heading">
+        <div>
+            <h1 class="inquiry-title">
+                {{ '문의 관리' if is_admin() else '내 문의 목록' }}
+            </h1>
+
+            <p class="inquiry-description">
+                {% if is_admin() %}
+                    접수된 문의와 답변 상태를 확인하세요.
+                {% else %}
+                    작성한 문의와 관리자 답변을 확인하세요.
+                {% endif %}
+            </p>
+        </div>
+
+        <a href="{{ url_for('inquiry.create') }}" class="inquiry-button">
+            <i class="fa-solid fa-pen"></i>
+            문의 작성
+        </a>
+    </div>
+
+    <div class="inquiry-list">
+        {% for inquiry in pagination.items %}
+            <a href="{{ url_for('inquiry.detail', inquiry_id=inquiry.id) }}"
+               class="inquiry-row">
+
+                <div class="inquiry-row-top">
+                    <span class="inquiry-status {{ 'inquiry-status-done' if inquiry.answer else 'inquiry-status-waiting' }}">
+                        {{ '답변 완료' if inquiry.answer else '답변 대기' }}
+                    </span>
+
+                    <strong class="inquiry-row-title">
+                        {{ inquiry.title }}
+                    </strong>
+                </div>
+
+                <div class="inquiry-meta">
+                    <time datetime="{{ inquiry.created_at.isoformat() }}">
+                        {{ inquiry.created_at.strftime('%Y.%m.%d %H:%M') }}
+                    </time>
+
+                    {% if is_admin() %}
+                        <span>
+                            작성자:
+                            {{ (inquiry.author.nickname or inquiry.author.username)
+                               if inquiry.author else '알 수 없는 사용자' }}
+                        </span>
+                    {% endif %}
+                </div>
+            </a>
+        {% else %}
+            <div class="inquiry-empty">
+                <p>등록된 문의가 없습니다.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% if pagination.pages > 1 %}
+    <nav class="inquiry-pagination" aria-label="문의 목록 페이지">
+        {% if pagination.has_prev %}
+            <a href="{{ url_for('inquiry.index', page=pagination.prev_num) }}">
+                이전
+            </a>
+        {% endif %}
+
+        <span class="inquiry-page-number">
+            {{ pagination.page }} / {{ pagination.pages }}
+        </span>
+
+        {% if pagination.has_next %}
+            <a href="{{ url_for('inquiry.index', page=pagination.next_num) }}">
+                다음
+            </a>
+        {% endif %}
+    </nav>
+{% endif %}
+{% endblock %}

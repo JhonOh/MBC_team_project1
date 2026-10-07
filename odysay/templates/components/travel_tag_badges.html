@@ -1,0 +1,9 @@
+<div class="travel-tag-badges" aria-label="여행 스타일">
+    {% for tag in display_travel_tags %}
+        {% if tag in travel_tag_labels %}
+            <span class="travel-tag-badge">
+                {{ travel_tag_labels[tag] }}
+            </span>
+        {% endif %}
+    {% endfor %}
+</div>
