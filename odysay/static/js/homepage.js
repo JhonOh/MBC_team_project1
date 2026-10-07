@@ -24,6 +24,22 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
     return `<img src="/static/images/logo.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
 }
 
+function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>'"]/g, (character) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        "'": '&#39;',
+        '"': '&quot;'
+    })[character]);
+}
+
+function renderCountryLabel(country) {
+    const canonical = String(country || '');
+    const label = window.OdysayLanguage?.countryName?.(canonical) || canonical;
+    return `<span data-country-name="${escapeHtml(canonical)}">${escapeHtml(label)}</span>`;
+}
+
 (async function () {
     // 1. 지도 초기화
     const mapElement = document.getElementById('home-map');
@@ -137,15 +153,37 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
                             if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
                             const popup = document.createElement('div');
+
+                            const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
+                            const canonicalCountry =
+                                window.OdysayCountries?.canonicalize?.(place.country) || place.country;
+
                             const title = document.createElement('strong');
-                            title.textContent = place.title;
+                            title.textContent =
+                                isEnglish && canonicalCountry === '대한민국'
+                                    ? window.OdysayLanguage?.englishKoreanPlaceName?.(place.title) || place.title
+                                    : place.title;
+
                             const location = document.createElement('p');
-                            location.textContent = [place.country, place.region].filter(Boolean).join(' ');
+
+                            const displayCountry =
+                                window.OdysayLanguage?.countryName?.(place.country) || place.country;
+
+                            const displayRegion =
+                                isEnglish && canonicalCountry === '대한민국'
+                                    ? window.OdysayLanguage?.englishKoreanRegion?.(place.region) || place.region
+                                    : place.region;
+
+                            location.textContent = [displayCountry, displayRegion]
+                                .filter(Boolean)
+                                .join(' ');
+
                             const intro = document.createElement('p');
                             intro.textContent = place.intro || '';
                             const link = document.createElement('a');
                             link.href = place.detail_url;
-                            link.textContent = '상세보기';
+                            link.dataset.i18n = 'common.details';
+                            link.textContent = uiText('common.details');
 
                             popup.append(title, location, intro, link);
                             // 같은 장소를 현재 표시하는 세계 지도의 경도 범위로 맞춤
@@ -170,7 +208,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
         } catch (error) {
             const message = document.getElementById('home-map-error');
             if (message) {
-                message.textContent = '여행지 목록을 불러오지 못했습니다. 새로고침해 주세요.';
+                message.textContent = uiText('home.mapLoadError');
                 message.hidden = false;
             }
         }
@@ -184,7 +222,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
             if (!container) return;
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="padding: 20px 0; color: #888;">등록된 추천 여행지가 없습니다.</p>';
+                container.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.recommendedEmpty')}</p>`;
                 return;
             }
 
@@ -200,8 +238,12 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
                             ${imgHtml}
                         </div>
                         <div class="recommend-info">
-                            <span>[${place.country}]</span>
-                            <strong>${place.place}</strong>
+                            <span>[${renderCountryLabel(place.country)}]</span>
+                            <strong
+                                data-translate-place="${Number(place.id)}"
+                                data-translate-field="place"
+                                data-place-country="${escapeHtml(place.country)}"
+                            >${place.place}</strong>
                             <p class="recommend-like" style="${heartStyle}">
                                 ${heartSymbol} ${count}
                             </p>
@@ -220,7 +262,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
             if (!container) return;
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="padding: 20px 0; color: #888;">최근 등록된 여행지가 없습니다.</p>';
+                container.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.recentEmpty')}</p>`;
                 return;
             }
 
@@ -234,7 +276,18 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
                     <a href="${place.detail_url}" class="recent-item">
                         ${imgHtml}
                         <div class="recent-info">
-                            <strong>[${place.country}/${place.region}] ${place.place}</strong>
+                            <strong>
+                                [${renderCountryLabel(place.country)}/<span
+                                    data-translate-place="${Number(place.id)}"
+                                    data-translate-field="region"
+                                    data-place-country="${escapeHtml(place.country)}"
+                                >${place.region}</span>]
+                                <span
+                                    data-translate-place="${Number(place.id)}"
+                                    data-translate-field="place"
+                                    data-place-country="${escapeHtml(place.country)}"
+                                >${place.place}</span>
+                            </strong>
                             <div class="recent-meta-box">
                                 <div class="recent-like-count" style="${heartStyle}">
                                     ${heartSymbol} ${count}
@@ -275,7 +328,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
             }).slice(0, 3);
 
             if (sorted.length === 0) {
-                communityList.innerHTML = '<p style="padding: 20px 0; color: #888;">게시글이 없습니다.</p>';
+                communityList.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.communityEmpty')}</p>`;
                 return;
             }
 
@@ -296,7 +349,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
                         </div>
                         <div class="community-info">
                             <div class="community-top">
-                                <span class="community-category">${item.category || '커뮤니티'}</span>
+                                <span class="community-category">${item.category || uiText('home.defaultCommunity')}</span>
                                 <strong>${item.title}</strong>
                             </div>
                             <div class="community-meta">
@@ -358,105 +411,87 @@ function closeWeatherModal() {
 
 /* ===== 국가 검색 ===== */
 
-const CHO = 'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ';
+function updateCityOptions(country, cityBoxId, cityId) {
+    if (!cityBoxId || !cityId) return;
 
-const chosung = str => [...str].map(c => {
-    const n = c.charCodeAt(0) - 44032;
-    return n >= 0 && n <= 11171 ? CHO[Math.floor(n / 588)] : c;
-}).join('');
+    const cityBox = $(cityBoxId);
+    const citySelect = $(cityId);
+    const cities = country ? countryCityTimeZones[country] : null;
+    if (!cityBox || !citySelect) return;
 
-function countrySearch(inputId, listId, cityBoxId, cityId) {
-    const input = $(inputId);
-    const list = $(listId);
-    if (!input || !list) return;
+    cityBox.hidden = !cities;
+    citySelect.replaceChildren();
+    if (!cities) return;
 
-    let result = [], index = -1;
-
-    const select = country => {
-        input.value = country;
-        list.classList.remove('active');
-        index = -1;
-
-        if (!cityBoxId || !cityId) return;
-
-        const cities = countryCityTimeZones[country];
-        $(cityBoxId).hidden = !cities;
-        $(cityId).innerHTML = cities
-            ? Object.keys(cities).map(city => `<option>${city}</option>`).join('')
-            : '';
-    };
-
-    const show = () => {
-        const q = input.value.trim();
-
-        result = countries.filter(c =>
-            !q || c.includes(q) || chosung(c).startsWith(q)
-        );
-
-        list.innerHTML = result
-            .map(c => `<div class="country-option">${c}</div>`)
-            .join('');
-
-        list.classList.toggle('active', !!result.length);
-
-        [...list.children].forEach((item, i) =>
-            item.onmousedown = () => select(result[i])
-        );
-
-        index = -1;
-    };
-
-    input.onclick = () =>
-        list.classList.contains('active')
-            ? list.classList.remove('active')
-            : show();
-
-    input.oninput = show;
-
-    input.onkeydown = e => {
-        const items = [...list.children];
-
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            if (result.length) select(result[index >= 0 ? index : 0]);
-            return;
-        }
-
-        if (!items.length || !['ArrowDown', 'ArrowUp'].includes(e.key)) return;
-
-        e.preventDefault();
-        index += e.key === 'ArrowDown' ? 1 : -1;
-        index = (index + items.length) % items.length;
-
-        items.forEach(item => item.classList.remove('selected'));
-        items[index].classList.add('selected');
-        items[index].scrollIntoView({block: 'nearest'});
-    };
+    Object.keys(cities).forEach((city) => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        citySelect.append(option);
+    });
 }
 
-countrySearch('exchangeCountry1', 'exchangeCountryList1');
-countrySearch('exchangeCountry2', 'exchangeCountryList2');
-countrySearch('country1', 'countryList1', 'cityBox1', 'city1');
-countrySearch('country2', 'countryList2', 'cityBox2', 'city2');
-countrySearch('weatherCountry', 'weatherCountryList');
+function setupCountryPicker(inputId, listId, cityBoxId, cityId) {
+    if (!window.OdysayCountrySearch) return null;
+
+    return window.OdysayCountrySearch.create({
+        input: $(inputId),
+        results: $(listId),
+        wrapper: $(inputId)?.closest('.country-search'),
+        itemClass: 'country-option',
+        activeClass: 'selected',
+        onSelect(country) {
+            updateCityOptions(country, cityBoxId, cityId);
+        },
+        onInput(country) {
+            updateCityOptions(country, cityBoxId, cityId);
+        }
+    });
+}
+
+const homepageCountryPickers = [
+    setupCountryPicker('exchangeCountry1', 'exchangeCountryList1'),
+    setupCountryPicker('exchangeCountry2', 'exchangeCountryList2'),
+    setupCountryPicker('country1', 'countryList1', 'cityBox1', 'city1'),
+    setupCountryPicker('country2', 'countryList2', 'cityBox2', 'city2'),
+    setupCountryPicker('weatherCountry', 'weatherCountryList')
+].filter(Boolean);
+
+function canonicalCountryFromInput(inputId) {
+    return window.OdysayCountries?.canonicalize($(inputId)?.value) || null;
+}
+
+function uiText(key, values) {
+    return window.OdysayLanguage?.t?.(key, values) || key;
+}
+
+
+function uiLocale() {
+    return window.OdysayLanguage?.getLocale?.() || 'ko-KR';
+
+}
+
+function localizedCountry(country) {
+    return window.OdysayLanguage?.countryName?.(country) || country;
+}
 
 
 /* ===== 환율 ===== */
 
 $('exchangeAmount')?.addEventListener('input', e => {
     const n = e.target.value.replace(/\D/g, '');
-    e.target.value = n ? Number(n).toLocaleString() : '';
+    e.target.value = n ? Number(n).toLocaleString(uiLocale()) : '';
 });
 
 async function checkExchange() {
-    const c1 = $('exchangeCountry1').value.trim();
-    const c2 = $('exchangeCountry2').value.trim();
+    const c1 = canonicalCountryFromInput('exchangeCountry1');
+    const c2 = canonicalCountryFromInput('exchangeCountry2');
     const amount = Number($('exchangeAmount').value.replace(/,/g, ''));
     const from = countryCurrencies[c1];
     const to = countryCurrencies[c2];
 
-    if (!from || !to) return alert('국가를 선택해주세요.');
-    if (!amount) return alert('금액을 입력해주세요.');
+    if (!from || !to) return alert(uiText('exchange.selectCountry'));
+    if (!amount) return alert(uiText('exchange.enterAmount'));
 
     if (from === to) return showExchange(amount, amount, from, to, 1);
 
@@ -467,41 +502,43 @@ async function checkExchange() {
         const data = await res.json();
         showExchange(amount, amount * data.rate, from, to, data.rate, data.date);
     } catch {
-        alert('선택한 국가의 환율 정보는 현재 제공되지 않습니다.');
+        alert(uiText('exchange.unavailable'));
     }
 }
 
 function showExchange(amount, result, from, to, rate, date = '') {
+    const locale = uiLocale();
     $('exchangeResult').innerHTML = `
         <div class="exchange-result">
-            <small>환전 예상 금액</small>
-            <strong>${result.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}</strong>
-            <span>${amount.toLocaleString()} ${from} → ${result.toLocaleString(undefined, {maximumFractionDigits: 2})} ${to}</span>
-            <p>1 ${from} = ${rate.toLocaleString(undefined, {maximumFractionDigits: 6})} ${to}${date ? ` · 기준일 ${date}` : ''}</p>
-            <p class="exchange-notice">※ 최근 환율 기준이며, 실제 환전 시 차이가 있을 수 있습니다.</p>
-        </div>`;
+
+            <small>${uiText('exchange.estimated')}</small>
+            <strong>${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</strong>
+            <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</span>
+            <p>1 ${from} = ${rate.toLocaleString(locale, { maximumFractionDigits: 6 })} ${to}${date ? ` · ${uiText('exchange.asOf', { date })}` : ''}</p>
+            <p class="exchange-notice">${uiText('exchange.notice')}</p>
+
 }
 
 
 /* ===== 시차 ===== */
 
 function getZone(n) {
-    const country = $(`country${n}`).value.trim();
+    const country = canonicalCountryFromInput(`country${n}`);
     const city = $(`city${n}`).value;
     return city ? countryCityTimeZones[country]?.[city] : countryTimeZones[country];
 }
 
 function checkTime() {
-    const c1 = $('country1').value.trim();
-    const c2 = $('country2').value.trim();
+    const c1 = canonicalCountryFromInput('country1');
+    const c2 = canonicalCountryFromInput('country2');
     const z1 = getZone(1), z2 = getZone(2);
 
-    if (!z1 || !z2) return alert('국가를 선택해주세요.');
+    if (!z1 || !z2) return alert(uiText('time.selectCountry'));
 
     const now = new Date();
 
-    const time = z => new Intl.DateTimeFormat('en-US', {
-        timeZone: z, hour: '2-digit', minute: '2-digit', hour12: true
+    const time = z => new Intl.DateTimeFormat(uiLocale(), {
+        timeZone: z, hour: '2-digit', minute: '2-digit'
     }).format(now);
 
     const offset = z =>
@@ -520,18 +557,25 @@ function checkTime() {
     const diff = offset(z2) - offset(z1);
     const h = Math.floor(Math.abs(diff) / 60);
     const m = Math.abs(diff) % 60;
-    const gap = `${h}시간${m ? ` ${m}분` : ''}`;
+    const gap = m
+        ? uiText('time.hoursMinutes', { hours: h, minutes: m })
+        : uiText('time.hours', { hours: h });
+    const c1Label = localizedCountry(c1);
+    const c2Label = localizedCountry(c2);
+    const differenceLabel = diff === 0
+        ? uiText('time.noDifference')
+        : uiText(diff > 0 ? 'time.faster' : 'time.slower', { country: c2Label, gap });
 
     $('timeResult').innerHTML = `
         <div class="time-result-row">
-            <div class="time-card"><span>${c1}</span><b>${time(z1)}</b><small>${gmt(z1)}</small></div>
-            <div class="time-card"><span>${c2}</span><b>${time(z2)}</b><small>${gmt(z2)}</small></div>
+            <div class="time-card"><span>${c1Label}</span><b>${time(z1)}</b><small>${gmt(z1)}</small></div>
+            <div class="time-card"><span>${c2Label}</span><b>${time(z2)}</b><small>${gmt(z2)}</small></div>
         </div>
         <div class="time-gap">
             <span>⇄</span>
             <div>
-                <small>TIME DIFFERENCE</small>
-                <strong>${diff === 0 ? '시차가 없습니다.' : `${c2}이(가) ${gap} ${diff > 0 ? '빠릅니다.' : '느립니다.'}`}</strong>
+                <small>${uiText('time.difference')}</small>
+                <strong>${differenceLabel}</strong>
             </div>
         </div>`;
 }
@@ -543,7 +587,7 @@ function searchRoute() {
     const start = $('routeStart').value.trim();
     const end = $('routeEnd').value.trim();
 
-    if (!start || !end) return alert('출발지와 도착지를 입력해주세요.');
+    if (!start || !end) return alert(uiText('route.enterBoth'));
 
     window.open(
         `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(start)}&destination=${encodeURIComponent(end)}`,
@@ -555,33 +599,33 @@ function searchRoute() {
 /* ===== 날씨 ===== */
 
 const weatherInfo = code => {
-    if (code === 0) return ['☀️', '맑음'];
-    if (code <= 2) return ['🌤️', '구름 조금'];
-    if (code === 3) return ['☁️', '흐림'];
-    if ([45, 48].includes(code)) return ['🌫️', '안개'];
-    if (code <= 57) return ['🌦️', '이슬비'];
-    if (code <= 67) return ['🌧️', '비'];
-    if (code <= 77) return ['🌨️', '눈'];
-    if (code <= 82) return ['🌦️', '소나기'];
-    if (code >= 95) return ['⛈️', '뇌우'];
-    return ['🌤️', '날씨'];
+    if (code === 0) return ['☀️', uiText('weather.clear')];
+    if (code <= 2) return ['🌤️', uiText('weather.partlyCloudy')];
+    if (code === 3) return ['☁️', uiText('weather.cloudy')];
+    if ([45, 48].includes(code)) return ['🌫️', uiText('weather.fog')];
+    if (code <= 57) return ['🌦️', uiText('weather.drizzle')];
+    if (code <= 67) return ['🌧️', uiText('weather.rain')];
+    if (code <= 77) return ['🌨️', uiText('weather.snow')];
+    if (code <= 82) return ['🌦️', uiText('weather.showers')];
+    if (code >= 95) return ['⛈️', uiText('weather.thunderstorm')];
+    return ['🌤️', uiText('weather.default')];
 };
 
 async function checkWeather() {
-    const country = $('weatherCountry').value.trim();
+    const country = canonicalCountryFromInput('weatherCountry');
     const city = $('weatherCity').value.trim();
 
-    if (!country || !city) return alert('국가와 도시를 선택해주세요.');
+    if (!country || !city) return alert(uiText('weather.selectCountryCity'));
 
     try {
         const geo = await fetch(
-            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=10&language=ko&format=json`
+            `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=10&language=${window.OdysayLanguage?.getApiLanguage?.() || 'ko'}&format=json`
         ).then(r => r.json());
 
         const location = (geo.results || [])
             .find(p => p.country_code === countryCodes[country]);
 
-        if (!location) return alert('입력한 도시 또는 지역을 찾을 수 없습니다.');
+        if (!location) return alert(uiText('weather.notFound'));
 
         const data = await fetch(
             `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weather_code&hourly=temperature_2m,weather_code,precipitation_probability&forecast_days=1&timezone=auto`
@@ -608,21 +652,21 @@ async function checkWeather() {
 
         $('weatherResult').innerHTML = `
             <div class="weather-result">
-                <span>${country} · ${location.name}</span>
+                <span>${localizedCountry(country)} · ${location.name}</span>
                 <div class="weather-current">
                     <strong>${icon} ${Math.round(current.temperature_2m)}°C</strong>
                     <b>${text}</b>
                 </div>
-                <p>체감 ${Math.round(current.apparent_temperature)}°C · 습도 ${current.relative_humidity_2m}%</p>
-                <div class="weather-hour-title">시간대별 날씨</div>
+                <p>${uiText('weather.feelsLikeHumidity', { temperature: Math.round(current.apparent_temperature), humidity: current.relative_humidity_2m })}</p>
+                <div class="weather-hour-title">${uiText('weather.hourly')}</div>
                 <div class="weather-hourly">${hourly}</div>
                 <p class="weather-notice">
-                    ※ 날씨 및 강수확률은 Open-Meteo 예보 기준이며, 기상 기관에 따라 실제 예보와 차이가 있을 수 있습니다.
+                    ${uiText('weather.notice')}
                 </p>
             </div>`;
 
     } catch {
-        alert('날씨 정보를 불러오지 못했습니다.');
+        alert(uiText('weather.loadError'));
     }
 }
 
@@ -634,5 +678,6 @@ document.addEventListener('wheel', e => {
     if (!box) return;
 
     e.preventDefault();
-    box.scrollLeft += e.deltaY;
-}, {passive: false});
+    box.scrollLeft += e.delta
+}, { passive: false });
+
