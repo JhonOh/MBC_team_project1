@@ -20,7 +20,7 @@ python -m flask --app odysay admin-init-db
 ```
 
 기존 SQLite DB를 `instance/admin-backups/`에 백업한 후, `content_moderation`과
-`moderation_log` 두 테이블만 추가합니다. 여러 번 실행해도 기존 데이터는 유지됩니다.
+`moderation_log`, `content_reports` 관리·신고 테이블을 추가합니다. 여러 번 실행해도 기존 데이터는 유지됩니다.
 사용자의 기존 방침에 따라 migrations 폴더를 Git에 올리지 않으며, 다른 PC에서도
 이 명령을 실행해야 새 관리 테이블이 만들어집니다. 기존 앱 테이블이 이미 준비된 DB가 필요합니다.
 이 명령은 기존 migration 이력을 초기화하거나 stamp하지 않습니다.

@@ -70,6 +70,8 @@ def create_app(test_config=None):
     app.register_blueprint(a6_inquiry_veiws.bp)
 
     app.register_blueprint(admin_views.bp)
+    from .views import report_views
+    app.register_blueprint(report_views.bp)
     app.context_processor(lambda: {'is_admin': is_admin})
     register_commands(app)
 

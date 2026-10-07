@@ -1068,3 +1068,15 @@ a {
     font-size: 12px;
     line-height: 1.6;
 }
+
+.mypage-overview-page .post-thumbnail img.fallback-logo,
+.mypage-overview-page .overview-place-photo img.fallback-logo,
+.mypage-overview-page .overview-registered-photo img.fallback-logo {
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    object-fit: contain;
+    background: #fff;
+}

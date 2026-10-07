@@ -215,7 +215,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="travel-talk-user-area">
         
                                 <span class="travel-talk-avatar">
-                                    👤
+                                    ${talk.profile_image
+                                        ? `<img src="/static/${talk.profile_image}" alt="${talk.nickname} 프로필">`
+                                        : '👤'
+                                    }
                                 </span>
         
                                 <div class="travel-talk-user-info">
@@ -588,31 +591,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                     if (reportButton) {
-
-                        if (!checkLogin()) {
-                            return;
-                        }
-
-
-                        const result =
-                            confirm(
-                                '이 게시글을 신고하시겠습니까?'
-                            );
-
-
-                        if (result) {
-
-                            alert(
-                                '신고가 접수되었습니다.'
-                            );
-
-                            reportButton.textContent =
-                                '🚨 신고 완료';
-
-                            reportButton.disabled = true;
-
-                        }
-
+                        if (!checkLogin()) return;
+                        window.submitContentReport(reportButton, 'talk',
+                            reportButton.closest('.travel-talk-item').dataset.travelTalkId);
                     }
 
                 }
@@ -697,7 +678,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="travel-talk-comment-user-area">
     
                                 <span class="travel-talk-comment-avatar">
-                                    👤
+                                    ${comment.profile_image
+                                        ? `<img src="/static/${comment.profile_image}" alt="${comment.nickname} 프로필">`
+                                        : '👤'
+                                    }
                                 </span>
     
                                 <span class="travel-talk-comment-user"></span>
@@ -993,28 +977,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             if (commentReport) {
-
-                if (!checkLogin()) {
-                    return;
-                }
-
-
-                const result =
-                    confirm('이 댓글을 신고하시겠습니까?');
-
-
-                if (result) {
-
-                    alert('신고가 접수되었습니다.');
-
-                    commentReport.textContent =
-                        '🚨 신고 완료';
-
-                    commentReport.disabled = true;
-
-                }
-
-            }
+                        if (!checkLogin()) return;
+                        window.submitContentReport(commentReport, 'talk_comment',
+                            commentReport.closest('.travel-talk-comment-item').dataset.commentId);
+                    }
 
 
         // ------------------------------------------

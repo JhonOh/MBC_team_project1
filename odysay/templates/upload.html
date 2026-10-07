@@ -89,6 +89,7 @@
               action="
 
 
+
                       {% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
 
               enctype="multipart/form-data">

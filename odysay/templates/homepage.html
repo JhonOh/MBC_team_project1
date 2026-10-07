@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
@@ -26,135 +26,343 @@
 
 <main>
 
-   <!-- 메인 여행 지도 -->
-<section class="home-map-section" aria-label="여행지 지도">
-    <div id="home-map"></div>
+    <!-- 메인 여행 지도 -->
+    <section class="home-map-section" aria-label="여행지 지도">
+        <div class="home-map-stage">
+            <div id="home-map"></div>
 
-    <!-- 지도 위에 표시되는 작은 배너 -->
-    <div class="map-banner">
-        <p class="map-banner-caption">✈ 어디로 갈지 고민이라면,</p>
-        <h1>어딧세이와 함께 떠나요.</h1>
-        <p class="map-banner-description">
-            여행의 시작, 사람들의 이야기로부터
-        </p>
-
-        <!-- 검색 영역 -->
-        <div class="travel-search">
-            <input
-                type="text"
-                id="mainSearchInput"
-                aria-label="여행지 검색"
-                placeholder="어디로 떠나고 싶으신가요? (나라)"
-                onkeydown="if(event.key === 'Enter') handleSearch();"
-            >
-            <button type="button" onclick="handleSearch()">검색</button>
+            <a href="{{ url_for('first.map') }}"
+               class="home-main-map-button btn btn-dark px-4 py-3 rounded-pill shadow">
+                메인 지도
+            </a>
         </div>
 
-        <nav class="travel-menu" aria-label="여행 카테고리">
-            <a href="#"><span>⌂</span>국내여행</a>
-            <a href="#"><span>◎</span>해외여행</a>
-            <a href="#"><span>☆</span>인기여행지</a>
-            <a href="#"><span>♧</span>추천코스</a>
-            <a href="#"><span>☼</span>여행꿀팁</a>
-        </nav>
-    </div>
-
-    <p id="home-map-error" role="alert" hidden></p>
-</section>
-
-<!-- ========================================
-     메인 콘텐츠
-     추천 여행지 / 최근 등록 / 커뮤니티
-======================================== -->
-
-<section class="home-content">
-
-    <div class="section-inner home-grid">
-
-        <!-- 추천 여행지 (인기 여행지 동적 렌더링) -->
-        <div class="recommend-section">
-
-            <div class="sub-section-title">
-                <div>
-                    <h2>인기 여행지</h2>
-                    <p>어딧세이에서 인기있는 특별한 여행지</p>
-                </div>
-                <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
-            </div>
-
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="recommend-list" id="recommendedList"></div>
-
-        </div>
-
-
-        <!-- 최근 등록된 여행지 (동적 렌더링) -->
-        <div class="recent-section">
-
-            <div class="sub-section-title">
-                <div>
-                    <h2>최근 등록된 여행지</h2>
-                    <p>새로운 여행지를 확인해보세요!</p>
-                </div>
-                <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
-            </div>
-
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="recent-list" id="recentList"></div>
-
-        </div>
-
-
-        <!-- 커뮤니티 인기글 (동적 렌더링) -->
-        <div class="community-section">
-
-            <div class="sub-section-title">
-                <div>
-                    <h2>커뮤니티 인기글</h2>
-                    <p>다양한 이야기와 정보 공유</p>
-                </div>
-                <a href="/homepage/community/all?sort=popular">더보기 ›</a>
-            </div>
-
-            <!-- JS 동적 렌더링 영역 -->
-            <div class="community-list" id="mainCommunityList"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-<!-- ========================================
-     하단 브랜드 배너
-======================================== -->
-<section class="bottom-banner">
-    <div class="section-inner bottom-banner-inner">
-        <p class="bottom-message">
-            여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
-        </p>
-
-        <div class="bottom-brand">
-            <div class="bottom-logo">
-                <span class="logo-symbol">△△</span>
-                <div>
-                    <strong>어딧세이</strong>
-                    <small>ODYSAY</small>
-                </div>
-            </div>
-
-            <div class="bottom-divider"></div>
-
-            <p class="bottom-slogan">
-                더 많은 이야기로,<br>
-                더 멀리.
+        <!-- 지도 위에 표시되는 작은 배너 -->
+        <div class="map-banner">
+            <p class="map-banner-caption">✈ 어디로 갈지 고민이라면,</p>
+            <h1>어딧세이와 함께 떠나요.</h1>
+            <p class="map-banner-description">
+                여행의 시작, 사람들의 이야기로부터
             </p>
+
+            <!-- 검색 영역 -->
+            <div class="travel-search">
+                <input
+                        type="text"
+                        id="mainSearchInput"
+                        aria-label="여행지 검색"
+                        placeholder="어디로 떠나고 싶으신가요? (나라)"
+                        onkeydown="if(event.key === 'Enter') handleSearch();"
+                >
+                <button type="button" onclick="handleSearch()">검색</button>
+            </div>
+
+            <nav class="travel-menu" aria-label="여행 카테고리">
+                <a href="#" onclick="openExchangeModal(event)">
+                    <span><i class="fa-solid fa-coins"></i></span>
+                    환율
+                </a>
+
+                <a href="#" onclick="openTimeModal(event)">
+                    <span><i class="fa-regular fa-clock"></i></span>
+                    시차
+                </a>
+
+                <a href="#" onclick="openRouteModal(event)">
+                    <span><i class="fa-solid fa-route"></i></span>
+                    길찾기
+                </a>
+
+                <a href="#" onclick="openWeatherModal(event)">
+                    <span><i class="fa-solid fa-sun"></i></span>
+                    날씨
+                </a>
+
+
+                <a href="#">
+
+                    <span><i class="fa-regular fa-comments"></i></span>
+                    QnA
+                </a>
+            </nav>
         </div>
-    </div>
-</section>
+
+        <p id="home-map-error" role="alert" hidden></p>
+    </section>
+
+    <!-- ========================================
+         메인 콘텐츠
+         추천 여행지 / 최근 등록 / 커뮤니티
+    ======================================== -->
+
+    <section class="home-content">
+
+        <div class="section-inner home-grid">
+
+            <!-- 추천 여행지 (인기 여행지 동적 렌더링) -->
+            <div class="recommend-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>인기 여행지</h2>
+                        <p>어딧세이에서 인기있는 특별한 여행지</p>
+                    </div>
+                    <a href="{{ url_for('community.community_review') }}?sort=popular">더보기 ›</a>
+                </div>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="recommend-list" id="recommendedList"></div>
+
+            </div>
+
+
+            <!-- 최근 등록된 여행지 (동적 렌더링) -->
+            <div class="recent-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>최근 등록된 여행지</h2>
+                        <p>새로운 여행지를 확인해보세요!</p>
+                    </div>
+                    <a href="{{ url_for('community.community_review') }}?sort=latest">더보기 ›</a>
+                </div>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="recent-list" id="recentList"></div>
+
+            </div>
+
+
+            <!-- 커뮤니티 인기글 (동적 렌더링) -->
+            <div class="community-section">
+
+                <div class="sub-section-title">
+                    <div>
+                        <h2>커뮤니티 인기글</h2>
+                        <p>다양한 이야기와 정보 공유</p>
+                    </div>
+                    <a href="/homepage/community/all?sort=popular">더보기 ›</a>
+                </div>
+
+                <!-- JS 동적 렌더링 영역 -->
+                <div class="community-list" id="mainCommunityList"></div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ========================================
+         하단 브랜드 배너
+    ======================================== -->
+    <section class="bottom-banner">
+        <div class="section-inner bottom-banner-inner">
+            <p class="bottom-message">
+                여행은 목적지가 아닌, 새로운 나를 만나는 여정입니다.
+            </p>
+
+            <div class="bottom-brand">
+                <div class="bottom-logo">
+                    <span class="logo-symbol">△△</span>
+                    <div>
+                        <strong>어딧세이</strong>
+                        <small>ODYSAY</small>
+                    </div>
+                </div>
+
+                <div class="bottom-divider"></div>
+
+                <p class="bottom-slogan">
+                    더 많은 이야기로,<br>
+                    더 멀리.
+                </p>
+            </div>
+        </div>
+    </section>
 
 
 </main>
+
+<!-- ================= 환율 ================= -->
+<div id="exchangeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeExchangeModal()">×
+        </button>
+
+        <h2>💰 국가별 환율</h2>
+
+        <div class="country-search">
+            <input id="exchangeCountry1"
+                   type="text"
+                   placeholder="첫 번째 국가"
+                   autocomplete="off">
+            <div id="exchangeCountryList1"
+                 class="country-list"></div>
+        </div>
+
+        <div class="exchange-arrow">
+            <i class="fa-solid fa-arrow-down"></i>
+        </div>
+
+        <div class="country-search">
+            <input id="exchangeCountry2"
+                   type="text"
+                   placeholder="두 번째 국가"
+                   autocomplete="off">
+            <div id="exchangeCountryList2"
+                 class="country-list"></div>
+        </div>
+
+        <input id="exchangeAmount"
+               type="text"
+               inputmode="numeric"
+               placeholder="금액 입력">
+
+        <button type="button"
+                class="time-check"
+                onclick="checkExchange()">
+            환율 계산
+        </button>
+
+        <div id="exchangeResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 시차 ================= -->
+<div id="timeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeTimeModal()">×
+        </button>
+
+        <h2>🕐 국가별 시차</h2>
+
+        <div class="country-search">
+            <input id="country1"
+                   type="text"
+                   placeholder="첫 번째 국가"
+                   autocomplete="off">
+            <div id="countryList1" class="country-list"></div>
+        </div>
+
+        <div id="cityBox1" class="city-box" hidden>
+            <select id="city1"></select>
+        </div>
+
+        <div class="country-search">
+            <input id="country2"
+                   type="text"
+                   placeholder="두 번째 국가"
+                   autocomplete="off">
+            <div id="countryList2" class="country-list"></div>
+        </div>
+
+        <div id="cityBox2" class="city-box" hidden>
+            <select id="city2"></select>
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="checkTime()">
+            시차 확인
+        </button>
+
+        <div id="timeResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 날씨 ================= -->
+<div id="weatherModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeWeatherModal()">×
+        </button>
+
+        <h2>☀️ 날씨</h2>
+
+        <div class="country-search">
+            <input id="weatherCountry"
+                   type="text"
+                   placeholder="국가를 선택해주세요"
+                   autocomplete="off">
+
+            <div id="weatherCountryList"
+                 class="country-list"></div>
+        </div>
+
+        <div class="country-search">
+            <input id="weatherCity"
+                   class="weather-city-input"
+                   type="text"
+                   placeholder="도시 또는 지역을 입력해주세요"
+                   autocomplete="off">
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="checkWeather()">
+            날씨 확인
+        </button>
+
+        <div id="weatherResult"></div>
+
+    </div>
+</div>
+
+
+<!-- ================= 길찾기 ================= -->
+<div id="routeModal" class="time-modal">
+    <div class="time-box">
+
+        <button type="button"
+                class="time-close"
+                onclick="closeRouteModal()">×
+        </button>
+
+        <h2>📍 길찾기</h2>
+
+        <div class="route-field">
+            <span class="route-label">출발</span>
+            <input id="routeStart"
+                   type="text"
+                   placeholder="출발지를 입력해주세요">
+        </div>
+
+        <div class="route-arrow">
+            <i class="fa-solid fa-arrow-down"></i>
+        </div>
+
+        <div class="route-field">
+            <span class="route-label">도착</span>
+            <input id="routeEnd"
+                   type="text"
+                   placeholder="도착지를 입력해주세요">
+        </div>
+
+        <button type="button"
+                class="time-check"
+                onclick="searchRoute()">
+            길찾기
+        </button>
+
+        <p class="route-notice">
+            ※ 길찾기 결과는 Google Maps에서 확인할 수 있습니다.
+        </p>
+
+    </div>
+</div>
 
 <!-- 2. FOOTER 분리 포함 -->
 {% include 'footer.html' %}
@@ -170,6 +378,8 @@
     };
 </script>
 
+<script src="{{ url_for('static', filename='js/countries.js') }}"></script>
+<script src="{{ url_for('static', filename='js/travel_tools.js') }}"></script>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </body>
 </html>

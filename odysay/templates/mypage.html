@@ -17,6 +17,7 @@
 
 <div class="mypage-wrap">
 
+
     <!-- =========================
          MAIN CONTENT
     ========================== -->
@@ -65,7 +66,7 @@
                 <li>
                     <a href="{{ url_for('inquiry.index') }}">
                         <span class="menu-icon">✉</span>
-                        <span>{{ '문의 관리' if is_admin() else '1:1 문의' }}</span>
+                        <span>{{ '문의 관리 및 신고관리' if is_admin() else '1:1 문의' }}</span>
                     </a>
                 </li>
 
@@ -242,7 +243,10 @@
                                             alt="{{ item.title }} 사진"
                                             loading="lazy">
                                 {% else %}
-                                    <span aria-label="사진 없음">△</span>
+                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                         class="fallback-logo"
+                                         alt="어딧세이 기본 이미지"
+                                         loading="lazy">
                                 {% endif %}
                             </div>
 
@@ -301,7 +305,10 @@
                                             alt="{{ place.place }} 사진"
                                             loading="lazy">
                                 {% else %}
-                                    <span class="overview-photo-placeholder">사진 없음</span>
+                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                         class="fallback-logo"
+                                         alt="어딧세이 기본 이미지"
+                                         loading="lazy">
                                 {% endif %}
 
                                 <span class="overview-saved-badge"
@@ -354,12 +361,17 @@
 
                             <div class="overview-registered-photo">
                                 {% if photo_names %}
-                                    <img
-                                            src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
-                                            alt="{{ place.place }} 사진"
-                                            loading="lazy">
+
+                                    <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
+                                         alt="{{ place.place }} 사진"
+                                         loading="lazy"
+                                         data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                         onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지'; this.src=this.dataset.fallback;">
                                 {% else %}
-                                    <span class="overview-photo-placeholder">사진 없음</span>
+                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                         class="fallback-logo"
+                                         alt="어딧세이 기본 이미지"
+                                         loading="lazy">
                                 {% endif %}
                             </div>
 

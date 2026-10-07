@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_review.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_talk.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+
     <!-- 상세페이지 지도용 Leaflet CSS -->
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -26,6 +28,7 @@
 
 <!-- 헤더 영역 -->
 {% include 'header.html' %}
+
 
 <!-- 메인 콘텐츠 -->
 <main class="container">
@@ -75,11 +78,6 @@
                         <div class="title-bookmark-count">
                             ♥ <span id="bookmarkCount">0</span>
                         </div>
-
-                        <div class="title-bookmark-count">
-                            ♥ <span id="bookmarkCount">0</span>
-                        </div>
-
                     </div>
 
                     {% if g.user and place.user_id == g.user.id %}
@@ -880,6 +878,7 @@
 </script>
 <script src="{{ url_for('static', filename='js/trip_location.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_all.js') }}"></script>
+<script src="{{ url_for('static', filename='js/reports.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_review.js') }}"></script>
 <script src="{{ url_for('static', filename='js/trip_location_talk.js') }}"></script>
 </body>
