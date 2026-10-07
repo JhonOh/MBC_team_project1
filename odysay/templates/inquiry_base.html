@@ -32,9 +32,9 @@
             </a>
 
             <a href="{{ url_for('inquiry.index') }}"
-               class="menu-item {% if request.endpoint in ['inquiry.index', 'inquiry.detail', 'inquiry.answer'] %}active{% endif %}">
+               class="menu-item {% if request.endpoint in ['inquiry.index', 'inquiry.detail', 'inquiry.answer', 'reports.index'] %}active{% endif %}">
                 <i class="fa-regular fa-comments"></i>
-                <span>{{ '문의 관리' if is_admin() else '내 문의 목록' }}</span>
+                <span>{{ '문의 관리 및 신고 관리' if is_admin() else '내 문의 목록' }}</span>
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
 
@@ -62,7 +62,19 @@
                 {{ message }}
             </div>
         {% endfor %}
+        {% if is_admin() %}
+            <nav class="management-tabs" aria-label="문의 및 신고 관리">
+                <a href="{{ url_for('inquiry.index') }}"
+                   class="{{ 'active' if request.blueprint == 'inquiry' else '' }}">
+                    문의
+                </a>
 
+                <a href="{{ url_for('reports.index') }}"
+                   class="{{ 'active' if request.blueprint == 'reports' else '' }}">
+                    신고
+                </a>
+            </nav>
+        {% endif %}
         {% block content %}{% endblock %}
     </section>
 
@@ -88,7 +100,7 @@
         </div>
     </aside>
 </main>
-        {% include 'footer.html' %}
+{% include 'footer.html' %}
 <script src="{{ url_for('static', filename='js/header_search.js') }}"></script>
 </body>
 </html>

@@ -36,41 +36,49 @@
             <div class="destination-count">총 <strong>{{ places | length }}</strong>개의 여행지</div>
         </div>
         {% if places %}
-        <div class="destination-grid">
-            {% for place in places %}
-            {% set photo_names = (place.photos or '').split(',') | map('trim') | reject('equalto', '') | list %}
-            <a class="destination-card" href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
-                <div class="card-image">
-                    {% if photo_names %}
-                    <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}" alt="{{ place.place }} 사진" loading="lazy">
-                    {% else %}
-                    <div class="my-place-placeholder">등록된 사진이 없습니다</div>
-                    {% endif %}
-                    <span class="country-badge">{{ place.country }}</span>
-                </div>
-                <div class="card-content">
-                    <div class="card-location">{{ place.region }}</div>
-                    <h3 class="card-title">{{ place.place }}</h3>
-                    <p class="card-description">{{ place.intro or '소개가 없습니다.' }}</p>
-                    {% if place.created_at %}
-                    <time class="my-place-date" datetime="{{ place.created_at.isoformat() }}">등록일 {{ place.created_at.strftime('%Y.%m.%d') }}</time>
-                    {% endif %}
-                    <div class="card-bottom">
-                        <span class="like" aria-label="좋아요 {{ place.likes or 0 }}개">♡ {{ place.likes or 0 }}</span>
-                        <span class="detail-text">자세히 보기 →</span>
-                    </div>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
+            <div class="destination-grid">
+                {% for place in places %}
+                    {% set photo_names = (place.photos or '').split(',') | map('trim') | reject('equalto', '') | list %}
+                    <a class="destination-card"
+                       href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
+                        <div class="card-image">
+                            {% if photo_names %}
+                                <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
+                                     alt="{{ place.place }} 사진" loading="lazy">
+                            {% else %}
+                                data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
+                                this.src=this.dataset.fallback;"
+                            {% endif %}
+                            <span class="country-badge">{{ place.country }}</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-location">{{ place.region }}</div>
+                            <h3 class="card-title">{{ place.place }}</h3>
+                            <p class="card-description">{{ place.intro or '소개가 없습니다.' }}</p>
+                            {% if place.created_at %}
+                                <time class="my-place-date" datetime="{{ place.created_at.isoformat() }}">
+                                    등록일 {{ place.created_at.strftime('%Y.%m.%d') }}</time>
+                            {% endif %}
+                            <div class="card-bottom">
+                                <span class="like"
+                                      aria-label="좋아요 {{ place.likes or 0 }}개">♡ {{ place.likes or 0 }}</span>
+                                <span class="detail-text">자세히 보기 →</span>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
         {% else %}
-        <div class="empty-state my-empty-state">
-            <div class="empty-icon" aria-hidden="true">🧳</div>
-            <h3>아직 찜한 여행지가 없습니다.</h3>
-            <p>여행지 상세페이지에서 찜하기 버튼을 눌러 보세요.</p>
-        </div>
+            <div class="empty-state my-empty-state">
+                <div class="empty-icon" aria-hidden="true">🧳</div>
+                <h3>아직 찜한 여행지가 없습니다.</h3>
+                <p>여행지 상세페이지에서 찜하기 버튼을 눌러 보세요.</p>
+            </div>
         {% endif %}
     </section>
+    {% include 'footer.html' %}
+
 </main>
 </body>
 </html>

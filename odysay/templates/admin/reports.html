@@ -1,0 +1,80 @@
+{% extends 'inquiry_base.html' %}
+{% block title %}문의 및 신고 관리{% endblock %}
+{% block content %}
+<div class="inquiry-panel">
+    <div class="inquiry-heading">
+        <div>
+            <h1 class="inquiry-title">신고 관리</h1>
+            <p class="inquiry-description">
+                접수된 신고와 처리 상태를 확인하세요.
+                게시 중단은 콘텐츠 관리에서 진행한 뒤 처리 결과를 기록해 주세요.
+            </p>
+        </div>
+    </div>
+        <nav class="report-status-tabs" aria-label="신고 상태">
+            {% for value, label in [('pending', '접수'), ('resolved', '조치 완료'), ('dismissed', '조치 없음'), ('all', '전체')] %}
+                <a href="{{ url_for('reports.index', status=value) }}"
+                   class="{{ 'active' if status == value else '' }}">{{ label }}</a>
+            {% endfor %}
+        </nav>
+    <p class="inquiry-description">총 {{ page.total }}건</p>
+    <div class="inquiry-list">
+    {% for report in page.items %}
+        <article class="inquiry-row">
+            <div>
+                <div class="inquiry-row-top">
+                    <span class="inquiry-status {{ 'inquiry-status-waiting' if report.status == 'pending' else 'inquiry-status-done' }}">
+                        {{ {'pending': '접수', 'resolved': '조치 완료', 'dismissed': '조치 없음'}.get(report.status, report.status) }}
+                    </span>
+                    <h2 class="inquiry-row-title">{{ kinds[report.content_type][1] }} #{{ report.content_id }}</h2>
+                </div>
+                <p class="inquiry-meta">신고 #{{ report.id }} · 신고자 #{{ report.reporter_id }} · {{ report.created_at.strftime('%Y.%m.%d %H:%M') }} UTC</p>
+                <p><strong>신고 사유:</strong> {{ report.reason }}</p>
+                <details>
+                    <summary>신고 당시 내용</summary>
+                    <p class="inquiry-message">{{ report.snapshot }}</p></details>
+                <a class="inquiry-button inquiry-button-secondary"
+                   href="{{ url_for('admin.edit', kind=report.content_type, content_id=report.content_id) }}">콘텐츠 관리</a>
+                <p class="inquiry-description">원문이 삭제된 경우 콘텐츠 관리 화면은 열리지 않으며, 위 신고 당시 내용으로 검토할 수 있습니다.</p>
+                {% if report.status == 'pending' %}
+                    <form class="inquiry-answer-form"
+                          method="post"
+                          action="{{ url_for('reports.resolve', report_id=report.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <div class="inquiry-field">
+                            <label for="report-status-{{ report.id }}">처리 결과</label>
+                            <select id="report-status-{{ report.id }}" name="status" class="inquiry-input">
+                                <option value="resolved">조치 완료</option>
+                                <option value="dismissed">조치 없음</option>
+                            </select>
+                        </div>
+                        <div class="inquiry-field">
+                            <label for="report-resolution-{{ report.id }}">처리 사유</label>
+                            <textarea id="report-resolution-{{ report.id }}" name="resolution"
+                                      class="inquiry-textarea" required maxlength="500"
+                                      placeholder="검토 결과와 조치 내용을 입력해 주세요."></textarea>
+                        </div>
+                        <div class="inquiry-actions">
+                            <button type="submit" class="inquiry-button">처리 결과 저장</button>
+                        </div>
+                    </form>
+                {% else %}
+                    <p class="inquiry-message">{{ report.resolution }}</p>
+                    <p class="inquiry-meta">처리자 #{{ report.resolved_by }} · {{ report.resolved_at.strftime('%Y.%m.%d %H:%M') if report.resolved_at else '-' }} UTC</p>
+                {% endif %}
+            </div>
+        </article>
+    {% else %}
+        <div class="inquiry-empty">신고 내역이 없습니다.</div>
+    {% endfor %}
+    </div>
+</div>
+
+<nav class="inquiry-pagination">
+    {% if page.has_prev %}
+        <a href="{{ url_for('reports.index', status=status, page=page.prev_num) }}">이전</a>{% endif %}
+    <span class="inquiry-page-number">{{ page.page }} / {{ page.pages or 1 }}</span>
+    {% if page.has_next %}
+        <a href="{{ url_for('reports.index', status=status, page=page.next_num) }}">다음</a>{% endif %}
+</nav>
+{% endblock %}
