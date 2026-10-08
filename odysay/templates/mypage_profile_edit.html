@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 수정 | 어딧세이</title>
     {% include 'components/language_assets.html' %}
+        {% include 'theme_head.html' %}
+
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/mypage.css') }}">
@@ -17,8 +19,8 @@
 
         .profile-edit-card {
             padding: 28px;
-            background: #fff;
-            border: 1px solid #ddd;
+            background: var(--odysay-surface, #fff);
+            border: 1px solid var(--odysay-border, #ddd);
             border-radius: 10px;
         }
 
@@ -32,20 +34,20 @@
             width: 100%;
             box-sizing: border-box;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid var(--odysay-border, #ccc);
             border-radius: 6px;
             font: inherit;
         }
 
         .profile-edit-help {
             margin-top: 8px;
-            color: #667085;
+            color: var(--odysay-muted, #667085);
             font-size: 13px;
         }
 
         .profile-edit-error {
             margin-top: 8px;
-            color: #b42318;
+            color: var(--odysay-danger, #b42318);
             font-size: 13px;
         }
 
@@ -65,13 +67,12 @@
             color: #fff;
             cursor: pointer;
         }
-
-        .profile-password-section {
+                .profile-password-section {
             min-width: 0;
             margin: 28px 0 0;
             padding: 20px 0 0;
             border: 0;
-            border-top: 1px solid #ddd;
+            border-top: 1px solid var(--odysay-border, #ddd);
         }
 
         .profile-password-section legend {
@@ -92,6 +93,7 @@
             text-decoration: none;
         }
     </style>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
 </head>
 <body>
@@ -99,50 +101,21 @@
 <main class="profile-edit-wrap">
     <h1 class="page-title">프로필 수정</h1>
 
-    <form class="profile-edit-card"
-          method="POST"
-          enctype="multipart/form-data"
-          action="{{ url_for('profile.profile_edit') }}">
 
-        {{ form.hidden_tag() }}
-        <div class="profile-avatar-field">
-            <div class="profile-img">
-                {% if g.user.profile_image %}
-                    <img
-                            src="{{ url_for('static', filename=g.user.profile_image) }}"
-                            alt="현재 대표 이미지">
-                {% else %}
-                    <span aria-label="기본 대표 이미지">♙</span>
-                {% endif %}
-            </div>
+        <form class="profile-edit-card"
+              method="POST"
+              action="{{ url_for('profile.profile_edit') }}">
 
-            {{ form.avatar.label }}
-            {{ form.avatar(
-                    class_='profile-edit-input',
-                    accept='.jpg,.jpeg,.png,.webp'
-                ) }}
+            {{ form.hidden_tag() }}
 
-            <p class="profile-edit-help">
-                JPG, PNG, WEBP / 최대 5MB<br>
-                사진을 선택하고 아래 저장 버튼을 눌러 주세요.
-                선택하지 않으면 기존 이미지가 유지됩니다.
-            </p>
-
-            {% for error in form.avatar.errors %}
+            {% if save_error %}
                 <p class="profile-edit-error" role="alert">
-                    {{ error }}
+                    {{ save_error }}
                 </p>
-            {% endfor %}
-        </div>
+            {% endif %}
 
-        {% if save_error %}
-            <p class="profile-edit-error" role="alert">
-                {{ save_error }}
-            </p>
-        {% endif %}
-
-        {{ form.nickname.label }}
-        {{ form.nickname(
+            {{ form.nickname.label }}
+            {{ form.nickname(
                 class_='profile-edit-input',
                 minlength=2,
                 maxlength=20,
@@ -151,41 +124,41 @@
                 required=True
             ) }}
 
-        <p class="profile-edit-help">
-            닉네임은 2~20자로 입력해 주세요.
-        </p>
-
-        {% for error in form.nickname.errors %}
-            <p class="profile-edit-error" role="alert">
-                {{ error }}
-            </p>
-        {% endfor %}
-        <fieldset class="profile-password-section">
-            <legend>비밀번호 변경</legend>
-
             <p class="profile-edit-help">
-                닉네임만 수정하려면 아래 세 항목을 모두 비워 두세요.
-                비밀번호를 변경하면 다시 로그인해야 합니다.
+                닉네임은 2~20자로 입력해 주세요.
             </p>
 
-            <div class="profile-password-field">
-                {{ form.current_password.label }}
-                {{ form.current_password(
+            {% for error in form.nickname.errors %}
+                <p class="profile-edit-error" role="alert">
+                    {{ error }}
+                </p>
+            {% endfor %}
+                        <fieldset class="profile-password-section">
+                <legend>비밀번호 변경</legend>
+
+                <p class="profile-edit-help">
+                    닉네임만 수정하려면 아래 세 항목을 모두 비워 두세요.
+                    비밀번호를 변경하면 다시 로그인해야 합니다.
+                </p>
+
+                <div class="profile-password-field">
+                    {{ form.current_password.label }}
+                    {{ form.current_password(
                         class_='profile-edit-input',
                         autocomplete='current-password',
                         placeholder='현재 비밀번호를 입력해 주세요'
                     ) }}
 
-                {% for error in form.current_password.errors %}
-                    <p class="profile-edit-error" role="alert">
-                        {{ error }}
-                    </p>
-                {% endfor %}
-            </div>
+                    {% for error in form.current_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
 
-            <div class="profile-password-field">
-                {{ form.new_password.label }}
-                {{ form.new_password(
+                <div class="profile-password-field">
+                    {{ form.new_password.label }}
+                    {{ form.new_password(
                         class_='profile-edit-input',
                         minlength=8,
                         maxlength=128,
@@ -193,42 +166,42 @@
                         placeholder='새 비밀번호를 입력해 주세요.'
                     ) }}
 
-                <p class="profile-edit-help">
-                    현재 비밀번호와 다른 8~128자의 비밀번호를 입력하세요.
-                </p>
-
-                {% for error in form.new_password.errors %}
-                    <p class="profile-edit-error" role="alert">
-                        {{ error }}
+                    <p class="profile-edit-help">
+                        현재 비밀번호와 다른 8~128자의 비밀번호를 입력하세요.
                     </p>
-                {% endfor %}
-            </div>
 
-            <div class="profile-password-field">
-                {{ form.confirm_password.label }}
-                {{ form.confirm_password(
+                    {% for error in form.new_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+
+                <div class="profile-password-field">
+                    {{ form.confirm_password.label }}
+                    {{ form.confirm_password(
                         class_='profile-edit-input',
                         autocomplete='new-password',
                         placeholder='새 비밀번호를 다시 입력해 주세요.'
                     ) }}
 
-                {% for error in form.confirm_password.errors %}
-                    <p class="profile-edit-error" role="alert">
-                        {{ error }}
-                    </p>
-                {% endfor %}
+                    {% for error in form.confirm_password.errors %}
+                        <p class="profile-edit-error" role="alert">
+                            {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="profile-edit-actions">
+                <a href="{{ url_for('homepage.mypage') }}"
+                   class="profile-btn">
+                    취소
+                </a>
+
+                {{ form.submit(class_='profile-save-btn') }}
             </div>
-        </fieldset>
-
-        <div class="profile-edit-actions">
-            <a href="{{ url_for('homepage.mypage') }}"
-               class="profile-btn">
-                취소
-            </a>
-
-            {{ form.submit(class_='profile-save-btn') }}
-        </div>
-    </form>
-</main>
+        </form>
+    </main>
 </body>
 </html>

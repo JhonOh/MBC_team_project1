@@ -5,10 +5,10 @@
     width: 100%;
     box-sizing: border-box;
     padding: 28px;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--odysay-border, #e2e8f0);
     border-radius: 16px;
-    background: #fff;
-    color: #243044;
+    background: var(--odysay-surface, #fff);
+    color: var(--odysay-text, #243044);
 }
 
 .withdraw-header h2 {
@@ -24,7 +24,7 @@
     margin: 20px 0;
     padding: 18px;
     border-radius: 10px;
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .withdraw-warning ul {
@@ -38,7 +38,7 @@
 }
 
 .withdraw-error {
-    color: #b42318;
+    color: var(--odysay-danger, #b42318);
     line-height: 1.6;
 }
 
@@ -57,7 +57,7 @@
     max-width: 400px;
     box-sizing: border-box;
     padding: 12px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--odysay-border, #cbd5e1);
     border-radius: 8px;
     font: inherit;
 }
@@ -75,26 +75,26 @@
 .withdraw-btn {
     display: inline-block;
     padding: 12px 20px;
-    border: 1px solid #cbd5e1;
+    border: 1px solid var(--odysay-border, #cbd5e1);
     border-radius: 8px;
     font: inherit;
     text-decoration: none;
 }
 
 .withdraw-cancel {
-    background: #fff;
-    color: #334155;
+    background: var(--odysay-surface, #fff);
+    color: var(--odysay-text, #334155);
 }
 
 .withdraw-btn {
-    border-color: #b42318;
+    border-color: var(--odysay-accent, #b42318);
     background: #b42318;
     color: #fff;
     cursor: pointer;
 }
 
 .withdraw-btn:hover {
-    border-color: #912018;
+    border-color: var(--odysay-accent, #912018);
     background: #912018;
 }
 

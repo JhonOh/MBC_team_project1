@@ -79,9 +79,11 @@ def map_page():
 @bp.route('/api/places')
 def get_places():
     places = TripLocationmd.query.all()
+    like_counts = dict(db.session.query(Bookmark.place_id, func.count(Bookmark.id)).group_by(Bookmark.place_id).all())
     results = []
     for p in places:
         if p.latitude and p.longitude:
+            cover_photo = next((name.strip() for name in (p.photos or '').split(',') if name.strip()), None)
             results.append({
                 'id': p.id,
                 'title': p.place,
@@ -89,6 +91,8 @@ def get_places():
                 'detail_url': url_for('trip_location.trip_location_detail', place_id=p.id),
                 'region': p.region,
                 'intro': p.intro,
+                'photo_url': url_for('static', filename='uploads/' + cover_photo) if cover_photo else None,
+                'like_count': like_counts.get(p.id, 0),
                 'lat': p.latitude,
                 'lng': p.longitude
             })

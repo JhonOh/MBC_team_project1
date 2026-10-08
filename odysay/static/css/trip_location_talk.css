@@ -17,7 +17,7 @@
 .travel-talk-description {
     margin-top: -5px;
 
-    color: #7b8794;
+    color: var(--odysay-muted, #7b8794);
 
     font-size: 13px;
     line-height: 1.6;
@@ -31,10 +31,10 @@
 
     margin-bottom: 22px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 10px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     overflow: hidden;
 }
@@ -49,7 +49,7 @@
     padding: 14px 15px;
 
     border: none;
-    border-bottom: 1px solid #edf0f3;
+    border-bottom: 1px solid var(--odysay-border, #edf0f3);
     outline: none;
 
     font-size: 15px;
@@ -81,11 +81,11 @@
 
     padding: 10px 12px;
 
-    border-top: 1px solid #f0f2f5;
+    border-top: 1px solid var(--odysay-border, #f0f2f5);
 }
 
 .travel-talk-counter {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
 }
 
@@ -111,7 +111,7 @@
 .travel-talk-item {
     padding: 20px 8px;
 
-    border-bottom: 1px solid #edf0f3;
+    border-bottom: 1px solid var(--odysay-border, #edf0f3);
 }
 
 .travel-talk-header {
@@ -133,7 +133,7 @@
 .travel-talk-post-title {
     margin: 0 0 7px 38px;
 
-    color: #1f2937;
+    color: var(--odysay-text, #1f2937);
 
     font-size: 17px;
     font-weight: 700;
@@ -144,7 +144,7 @@
 .travel-talk-text {
     margin-left: 38px;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 14px;
     line-height: 1.7;
@@ -165,19 +165,19 @@
 .travel-talk-action-button {
     padding: 0;
 
-    color: #929ba5;
+    color: var(--odysay-muted, #929ba5);
 
     font-size: 12px;
 }
 
 .travel-talk-action-button.liked {
-    color: #e45b69;
+    color: var(--odysay-danger, #e45b69);
 }
 
 .travel-talk-more {
     margin-left: auto;
 
-    color: #929ba5;
+    color: var(--odysay-muted, #929ba5);
 
     font-size: 18px;
 }
@@ -206,10 +206,10 @@
 
     padding: 5px;
 
-    border: 1px solid #e2e7ed;
+    border: 1px solid var(--odysay-border, #e2e7ed);
     border-radius: 8px;
 
-    background: #fff;
+    background: var(--odysay-surface, #fff);
 
     box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
 
@@ -231,19 +231,19 @@
 
     border-radius: 5px;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
     font-size: 12px;
     text-align: left;
 }
 
 .travel-talk-more-menu button:hover,
 .comment-more-menu button:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .travel-talk-delete-button,
 .comment-delete-button {
-    color: #e25555 !important;
+    color: var(--odysay-danger, #e25555) !important;
 }
 
 
@@ -255,10 +255,10 @@
 .travel-talk-post-inline-edit {
     margin: 14px 0 14px 38px;
 
-    border: 1px solid #cfd8e3;
+    border: 1px solid var(--odysay-border, #cfd8e3);
     border-radius: 10px;
 
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
 
     overflow: hidden;
 }
@@ -274,12 +274,12 @@
     padding: 14px 15px;
 
     border: none;
-    border-bottom: 1px solid #e3e8ee;
+    border-bottom: 1px solid var(--odysay-border, #e3e8ee);
     outline: none;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    color: #1f2937;
+    color: var(--odysay-text, #1f2937);
 
     font-size: 15px;
     font-weight: 700;
@@ -299,11 +299,11 @@
     border: none;
     outline: none;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     resize: none;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 14px;
     line-height: 1.7;
@@ -321,9 +321,9 @@
 
     padding: 10px 12px;
 
-    border-top: 1px solid #e3e8ee;
+    border-top: 1px solid var(--odysay-border, #e3e8ee);
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 
@@ -331,11 +331,11 @@
 
 .travel-talk-post-edit-count {
     margin-right: auto;
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 }
 
 .travel-talk-post-edit-counter {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
 }
 
@@ -345,12 +345,12 @@
 .travel-talk-post-edit-cancel {
     padding: 8px 16px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 6px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    color: #66778a;
+    color: var(--odysay-muted, #66778a);
 
     font-size: 13px;
     font-weight: 600;
@@ -376,7 +376,7 @@
 /* 버튼 hover */
 
 .travel-talk-post-edit-cancel:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .travel-talk-post-edit-save:hover {
@@ -387,7 +387,7 @@
 /* 댓글 ⋯ */
 
 .comment-more-button {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 17px;
 
@@ -403,9 +403,9 @@
     margin: 18px 0 0 38px;
     padding: 16px 18px;
 
-    border-top: 1px solid #edf0f3;
+    border-top: 1px solid var(--odysay-border, #edf0f3);
 
-    background: #fafbfd;
+    background: var(--odysay-surface, #fafbfd);
 }
 
 
@@ -429,7 +429,7 @@
 .travel-talk-no-comment {
     padding: 12px 0 18px;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 12px;
     text-align: center;
@@ -441,7 +441,7 @@
 .travel-talk-comment-item {
     padding: 13px 0;
 
-    border-bottom: 1px solid #e9edf2;
+    border-bottom: 1px solid var(--odysay-border, #e9edf2);
 }
 
 .travel-talk-comment-item:last-child {
@@ -478,20 +478,20 @@
 
     border-radius: 50%;
 
-    background: #eaf2ff;
+    background: var(--odysay-surface-tint, #eaf2ff);
 
     font-size: 12px;
 }
 
 .travel-talk-comment-user {
-    color: #26384a;
+    color: var(--odysay-text, #26384a);
 
     font-size: 12px;
     font-weight: 700;
 }
 
 .travel-talk-comment-date {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 11px;
 
@@ -513,7 +513,7 @@
 .travel-talk-comment-text {
     flex: 1;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 13px;
     line-height: 1.6;
@@ -525,7 +525,7 @@
 .travel-talk-comment-report {
     flex-shrink: 0;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 11px;
 }
@@ -536,10 +536,10 @@
 .travel-talk-comment-write {
     margin-top: 14px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 8px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
     overflow: hidden;
 }
@@ -557,7 +557,7 @@
 
     resize: none;
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
 
     font-size: 13px;
     line-height: 1.6;
@@ -572,11 +572,11 @@
 
     padding: 8px 10px;
 
-    border-top: 1px solid #edf0f3;
+    border-top: 1px solid var(--odysay-border, #edf0f3);
 }
 
 .travel-talk-comment-counter {
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 11px;
 }
@@ -602,10 +602,10 @@
     width: 100%;
     margin-top: 10px;
 
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
     border-radius: 8px;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
     overflow: hidden;
 }
 
@@ -621,9 +621,9 @@
     border: none;
     outline: none;
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 
-    color: #4f5f6f;
+    color: var(--odysay-muted, #4f5f6f);
     font-size: 13px;
     line-height: 1.6;
 
@@ -645,9 +645,9 @@
     margin: 0;
     padding: 8px 10px;
 
-    border-top: 1px solid #edf0f3;
+    border-top: 1px solid var(--odysay-border, #edf0f3);
 
-    background: #ffffff;
+    background: var(--odysay-surface, #ffffff);
 }
 
 .comment-edit-cancel,
@@ -663,10 +663,10 @@
 }
 
 .comment-edit-cancel {
-    border: 1px solid #dfe4ea;
+    border: 1px solid var(--odysay-border, #dfe4ea);
 
-    background: #ffffff;
-    color: #66778a;
+    background: var(--odysay-surface, #ffffff);
+    color: var(--odysay-muted, #66778a);
 }
 
 .comment-edit-save {
@@ -677,7 +677,7 @@
 }
 
 .comment-edit-cancel:hover {
-    background: #f5f7fa;
+    background: var(--odysay-surface-muted, #f5f7fa);
 }
 
 .comment-edit-save:hover {
@@ -744,11 +744,11 @@
 
 /* 여행톡 추천 활성화 */
 .travel-talk-like.liked {
-    color: #ff3b30;
+    color: var(--odysay-danger, #ff3b30);
 }
 
 .travel-talk-like.liked .travel-talk-like-count {
-    color: #ff3b30;
+    color: var(--odysay-danger, #ff3b30);
 }
 
 /* BEST */
@@ -760,8 +760,8 @@
 
     border-radius: 10px;
 
-    background: #fff3cd;
-    color: #e08a00;
+    background: var(--odysay-surface-tint, #fff3cd);
+    color: var(--odysay-warning, #e08a00);
 
     font-size: 10px;
     font-weight: 700;

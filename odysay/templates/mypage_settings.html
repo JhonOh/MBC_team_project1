@@ -10,10 +10,12 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+     {% include 'theme_head.html' %}
 </head>
 
 <body>
 {% include 'header.html' %}
+
 <div class="mypage-wrap">
 
 

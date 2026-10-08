@@ -152,6 +152,7 @@ function renderCountryLabel(country) {
                         for (const place of places) {
                             if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
+
                             const popup = document.createElement('div');
 
                             const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
@@ -199,6 +200,7 @@ function renderCountryLabel(country) {
                                     L.marker([place.lat, displayLng]).bindPopup(popup)
                                 );
                             }
+
                         }
 
 
@@ -222,7 +224,9 @@ function renderCountryLabel(country) {
             if (!container) return;
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.recommendedEmpty')}</p>`;
+
+                container.innerHTML = `<p style="padding: 20px 0; color: var(--odysay-muted, #888);">${uiText('home.recommendedEmpty')}</p>`;
+
                 return;
             }
 
@@ -230,7 +234,7 @@ function renderCountryLabel(country) {
                 const imgHtml = renderImageOrPlaceholder(place.photos, place.place);
                 const count = place.like_count || 0;
                 const heartSymbol = count > 0 ? '♥' : '♡';
-                const heartStyle = count > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+                const heartStyle = count > 0 ? 'color: var(--odysay-danger, #ff5a5f); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
 
                 return `
                     <a href="${place.detail_url}" class="recommend-card">
@@ -262,7 +266,10 @@ function renderCountryLabel(country) {
             if (!container) return;
 
             if (!data || data.length === 0) {
-                container.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.recentEmpty')}</p>`;
+
+
+                container.innerHTML = `<p style="padding: 20px 0; var(--odysay-muted, #888);">${uiText('home.recentEmpty')}</p>`;
+
                 return;
             }
 
@@ -270,7 +277,7 @@ function renderCountryLabel(country) {
                 const imgHtml = renderImageOrPlaceholder(place.photos, place.place);
                 const count = place.like_count || 0;
                 const heartSymbol = count > 0 ? '♥' : '♡';
-                const heartStyle = count > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
+                const heartStyle = count > 0 ? 'color: var(--odysay-danger, #ff5a5f); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
 
                 return `
                     <a href="${place.detail_url}" class="recent-item">
@@ -328,7 +335,9 @@ function renderCountryLabel(country) {
             }).slice(0, 3);
 
             if (sorted.length === 0) {
-                communityList.innerHTML = `<p style="padding: 20px 0; color: #888;">${uiText('home.communityEmpty')}</p>`;
+
+                communityList.innerHTML = `<p style="padding: 20px 0; color: var(--odysay-muted, #888);">${uiText('home.communityEmpty')}</p>`;
+
                 return;
             }
 
@@ -339,8 +348,8 @@ function renderCountryLabel(country) {
                 const createdDate = item.created_at || '';
 
                 const heartSymbol = likeCount > 0 ? '♥' : '♡';
-                const heartStyle = likeCount > 0 ? 'color: #ff5a5f; font-weight: bold;' : 'color: #aaa;';
-                const commentStyle = commentCount > 0 ? 'color: #007bff; font-weight: bold;' : 'color: #aaa;';
+                const heartStyle = likeCount > 0 ? 'color: var(--odysay-danger, #ff5a5f); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
+                const commentStyle = commentCount > 0 ? 'color: var(--odysay-accent, #007bff); font-weight: bold;' : 'color: var(--odysay-muted, #aaa);';
 
                 return `
                     <a href="${item.detail_url}" class="community-item">
@@ -366,6 +375,7 @@ function renderCountryLabel(country) {
         })
         .catch(err => console.error('커뮤니티 인기글 불러오기 실패:', err));
 })();
+
 
 /* ================= 여행 도구 ================= */
 
@@ -515,12 +525,12 @@ function showExchange(amount, result, from, to, rate, date = '') {
             <strong>${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</strong>
             <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</span>
             <p>1 ${from} = ${rate.toLocaleString(locale, { maximumFractionDigits: 6 })} ${to}${date ? ` · ${uiText('exchange.asOf', { date })}` : ''}</p>
-            <p class="exchange-notice">${uiText('exchange.notice')}</p>
+            <p class="exchange-notice">${uiText('exchange.notice')}</p>`
 
 }
 
 
-/* ===== 시차 ===== */
+ /* ===== 시차 ===== */
 
 function getZone(n) {
     const country = canonicalCountryFromInput(`country${n}`);
@@ -680,4 +690,5 @@ document.addEventListener('wheel', e => {
     e.preventDefault();
     box.scrollLeft += e.delta
 }, { passive: false });
+
 

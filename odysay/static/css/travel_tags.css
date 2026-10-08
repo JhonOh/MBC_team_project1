@@ -2,20 +2,20 @@
     min-width: 0;
     margin: 20px 0;
     padding: 16px;
-    border: 1px solid #dce3eb;
+    border: 1px solid var(--odysay-border, #dce3eb);
     border-radius: 10px;
 }
 
 .travel-tag-fields legend {
     padding: 0 6px;
-    color: #334155;
+    color: var(--odysay-text, #334155);
     font-size: 15px;
     font-weight: 600;
 }
 
 .travel-tag-help {
     margin: 0 0 12px;
-    color: #64748b;
+    color: var(--odysay-muted, #64748b);
     font-size: 13px;
     line-height: 1.6;
 }
@@ -31,9 +31,9 @@
     align-items: center;
     gap: 6px;
     padding: 8px 12px;
-    border: 1px solid #dce3eb;
+    border: 1px solid var(--odysay-border, #dce3eb);
     border-radius: 20px;
-    background: #f8fafc;
+    background: var(--odysay-surface, #f8fafc);
     cursor: pointer;
 }
 
@@ -41,27 +41,27 @@
     width: 16px;
     height: 16px;
     margin: 0;
-    accent-color: #17689f;
+    accent-color: var(--odysay-accent, #17689f);
 }
 
 .travel-tag-option span {
-    color: #475569;
+    color: var(--odysay-muted, #475569);
     font-size: 13px;
 }
 
 .travel-tag-option input:checked + span {
-    color: #17689f;
+    color: var(--odysay-accent, #17689f);
     font-weight: 700;
 }
 
 .travel-tag-option:focus-within {
-    outline: 2px solid #17689f;
+    outline: 2px solid var(--odysay-accent, #17689f);
     outline-offset: 2px;
 }
 
 .travel-tag-message {
     margin: 8px 0 0;
-    color: #b42318;
+    color: var(--odysay-danger, #b42318);
     font-size: 12px;
 }
 
@@ -83,10 +83,10 @@
 .travel-tag-badge {
     display: inline-block;
     padding: 5px 11px;
-    border: 1px solid #dce8f3;
+    border: 1px solid var(--odysay-border, #dce8f3);
     border-radius: 16px;
-    background: #f0f7ff;
-    color: #17689f;
+    background: var(--odysay-surface-muted, #f0f7ff);
+    color: var(--odysay-accent, #17689f);
     font-size: 12px;
     line-height: 1.5;
 }

@@ -190,9 +190,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (items.length === 0) {
       postList.innerHTML = `
-        <div style="text-align:center; padding:60px 20px; background:#fff; border-radius:12px; color:#888;">
-          <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:#ccc;"></i>
-          <p>${uiText('community.noPosts')}</p>
+
+        <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
+          <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:var(--odysay-muted, #ccc);"></i>
+          <p>등록된 게시글이 없습니다.</p>
+
         </div>`;
       return;
     }

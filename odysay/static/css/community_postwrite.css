@@ -2,8 +2,8 @@
     max-width: 900px;
     margin: 30px auto;
     padding: 20px;
-    background: #fff;
-    border: 1px solid #ddd;
+    background: var(--odysay-surface, #fff);
+    border: 1px solid var(--odysay-border, #ddd);
     border-radius: 8px;
 }
 
@@ -12,19 +12,19 @@
     align-items: center;
     gap: 10px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--odysay-border, #eee);
     margin-bottom: 15px;
 }
 
 .board-select-bar label {
     font-weight: bold;
     font-size: 14px;
-    color: #333;
+    color: var(--odysay-text, #333);
 }
 
 .board-select-bar select {
     padding: 6px 12px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--odysay-border, #ccc);
     border-radius: 4px;
     font-size: 14px;
 }
@@ -37,7 +37,7 @@
     width: 100%;
     padding: 10px;
     font-size: 16px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--odysay-border, #ccc);
     border-radius: 4px;
     box-sizing: border-box;
 }
@@ -47,7 +47,7 @@
     height: 400px;
     padding: 12px;
     font-size: 14px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--odysay-border, #ccc);
     border-radius: 4px;
     resize: vertical;
     box-sizing: border-box;
@@ -70,8 +70,8 @@
 }
 
 .btn-cancel {
-    background-color: #e2e8f0;
-    color: #333;
+    background-color: var(--odysay-surface-tint, #e2e8f0);
+    color: var(--odysay-text, #333);
     padding: 10px 20px;
     border: none;
     border-radius: 4px;

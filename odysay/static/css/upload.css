@@ -16,7 +16,7 @@
 
     padding: 20px;
 
-    background: white;
+    background: var(--odysay-surface, white);
 
     border-radius: 20px 20px 0 0;
 }
@@ -68,7 +68,7 @@
 
     line-height: 1.8;
 
-    color: #4f6584;
+    color: var(--odysay-muted, #4f6584);
 
     z-index: 2;
 }
@@ -102,7 +102,7 @@
 
 .menu-list a {
     text-decoration: none;
-    color: #26364d;
+    color: var(--odysay-text, #26364d);
     padding: 13px;
     border-radius: 8px;
 
@@ -112,8 +112,8 @@
 }
 
 .menu-list a.selected {
-    background: rgba(255, 255, 255, 0.85);
-    color: #142947;
+    background: var(--odysay-surface, rgba(255, 255, 255, 0.85));
+    color: var(--odysay-text, #142947);
     font-weight: 700;
 }
 
@@ -123,7 +123,7 @@
     padding: 10px 15px 30px;
     position: relative;
     z-index: 1;
-    background: white;
+    background: var(--odysay-surface, white);
 }
 
 .form-title {
@@ -137,7 +137,7 @@
 }
 
 .form-title p {
-    color: #8590a2;
+    color: var(--odysay-muted, #8590a2);
 
     font-size: 13px;
 
@@ -155,18 +155,18 @@
 }
 
 .form-section h3 > span {
-    color: #ff5050;
+    color: var(--odysay-danger, #ff5050);
 }
 
 .form-section h3 small {
     font-size: 12px;
 
-    color: #8994a5;
+    color: var(--odysay-muted, #8994a5);
 }
 
 /*주변 정보*/
 .nearby-section {
-    border: 1px solid #d7dfea;
+    border: 1px solid var(--odysay-border, #d7dfea);
     border-radius: 7px;
     padding: 15px;
     margin-bottom: 28px;
@@ -204,14 +204,14 @@
 }
 
 .form-group label span {
-    color: #ff5050;
+    color: var(--odysay-danger, #ff5050);
 }
 
 .form-control,
 .form-select {
     min-height: 48px;
 
-    border: 1px solid #d7dfea;
+    border: 1px solid var(--odysay-border, #d7dfea);
 
     border-radius: 7px;
 
@@ -220,7 +220,7 @@
 
 .form-control:focus,
 .form-select:focus {
-    border-color: #2878ff;
+    border-color: var(--odysay-accent, #2878ff);
 
     box-shadow: 0 0 0 2px rgba(40, 120, 255, 0.1);
 }
@@ -255,9 +255,9 @@ textarea.form-control {
 
     overflow-y: auto;
 
-    background: white;
+    background: var(--odysay-surface, white);
 
-    border: 1px solid #d7dfea;
+    border: 1px solid var(--odysay-border, #d7dfea);
     border-radius: 7px;
 
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -270,20 +270,20 @@ textarea.form-control {
 
     font-size: 13px;
 
-    color: #142443;
+    color: var(--odysay-text, #142443);
 
     cursor: pointer;
 }
 
 .country-result-item:hover {
-    background: #f4f8ff;
-    color: #1473ff;
+    background: var(--odysay-surface-muted, #f4f8ff);
+    color: var(--odysay-accent, #1473ff);
 }
 
 /* 키보드 ↑ ↓ 로 선택 중인 국가 */
 .country-result-item.active {
-    background: #f4f8ff;
-    color: #1473ff;
+    background: var(--odysay-surface-muted, #f4f8ff);
+    color: var(--odysay-accent, #1473ff);
 }
 
 .country-no-result {
@@ -291,7 +291,7 @@ textarea.form-control {
 
     font-size: 13px;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 }
 
 /* ================= CATEGORY ================= */
@@ -316,11 +316,11 @@ textarea.form-control {
     min-height: 48px;
     padding: 10px;
 
-    border: 1px solid #dce3ec;
+    border: 1px solid var(--odysay-border, #dce3ec);
 
     border-radius: 20px;
 
-    background: #fafbfd;
+    background: var(--odysay-surface, #fafbfd);
 
     cursor: pointer;
 
@@ -331,11 +331,11 @@ textarea.form-control {
 }
 
 .btn-check:checked + .category-button {
-    color: #1473ff;
+    color: var(--odysay-accent, #1473ff);
 
-    border-color: #1473ff;
+    border-color: var(--odysay-accent, #1473ff);
 
-    background: #f4f8ff;
+    background: var(--odysay-surface-muted, #f4f8ff);
 }
 
 /* 기타 카테고리 입력칸 */
@@ -349,19 +349,19 @@ textarea.form-control {
     width: 100%;
     height: 42px;
     padding: 0 12px;
-    border: 1px solid #d7dfea;
+    border: 1px solid var(--odysay-border, #d7dfea);
     border-radius: 7px;
     font-size: 12px;
-    color: #142443;
+    color: var(--odysay-text, #142443);
     outline: none;
 }
 
 #etc-category::placeholder {
-    color : #9aa4b5;
+    color : var(--odysay-muted, #9aa4b5);
 }
 
 #etc-category:focus {
-    border-color: #2878ff;
+    border-color: var(--odysay-accent, #2878ff);
     box-shadow: 0 0 0 2px rgba(40, 120, 255, 0.1);
 }
 
@@ -374,7 +374,7 @@ textarea.form-control {
     right: 10px;
     bottom: 8px;
 
-    color: #9aa4b5;
+    color: var(--odysay-muted, #9aa4b5);
 
     font-size: 11px;
 }
@@ -385,13 +385,13 @@ textarea.form-control {
 .photo-info {
     font-size: 12px;
 
-    color: #8893a4;
+    color: var(--odysay-muted, #8893a4);
 }
 
 .upload-box {
     min-height: 100px;
 
-    border: 1px dashed #cbd5e3;
+    border: 1px dashed var(--odysay-border, #cbd5e3);
 
     border-radius: 8px;
 
@@ -402,7 +402,7 @@ textarea.form-control {
 
     gap: 15px;
 
-    color: #68758b;
+    color: var(--odysay-muted, #68758b);
 
     cursor: pointer;
 
@@ -474,12 +474,12 @@ textarea.form-control {
 
     margin-bottom: 5px !important;
 
-    border: 1px dashed #cbd5e3;
+    border: 1px dashed var(--odysay-border, #cbd5e3);
     border-radius: 7px;
 
-    background: #fafbfd;
+    background: var(--odysay-surface, #fafbfd);
 
-    color: #68758b;
+    color: var(--odysay-muted, #68758b);
 
     font-size: 12px !important;
 
@@ -487,11 +487,11 @@ textarea.form-control {
 }
 
 .nearby-photo-button:hover {
-    border-color: #2878ff;
+    border-color: var(--odysay-accent, #2878ff);
 
-    background: #f4f8ff;
+    background: var(--odysay-surface-muted, #f4f8ff);
 
-    color: #1473ff;
+    color: var(--odysay-accent, #1473ff);
 }
 
 .nearby-photo-area small {
@@ -499,7 +499,7 @@ textarea.form-control {
 
     margin-top: 5px;
 
-    color: #8994a5;
+    color: var(--odysay-muted, #8994a5);
 
     font-size: 11px;
 }
@@ -526,7 +526,7 @@ textarea.form-control {
 /* ================= BOTTOM ================= */
 
 .bottom-area {
-    border-top: 1px solid #eee;
+    border-top: 1px solid var(--odysay-border, #eee);
 
     padding-top: 20px;
 
@@ -559,11 +559,11 @@ textarea.form-control {
 }
 
 .cancel-button {
-    border: 1px solid #1c2e4c;
+    border: 1px solid var(--odysay-accent, #1c2e4c);
 
-    background: white;
+    background: var(--odysay-surface, white);
 
-    color: #1c2e4c;
+    color: var(--odysay-text, #1c2e4c);
 }
 
 .submit-button {
@@ -581,17 +581,17 @@ textarea.form-control {
     padding: 10px 15px 30px;
     position: relative;
     z-index: 1;
-    background: white;
+    background: var(--odysay-surface, white);
 }
 
 .guide-box {
     padding: 22px;
     margin-bottom: 15px;
 
-    border: 1px solid #d7dfea;
+    border: 1px solid var(--odysay-border, #d7dfea);
     border-radius: 10px;
 
-    background: #fafcff;
+    background: var(--odysay-surface, #fafcff);
 }
 
 .guide-box h3 {
@@ -599,7 +599,7 @@ textarea.form-control {
 
     font-size: 16px;
     font-weight: 700;
-    color: #17305a;
+    color: var(--odysay-text, #17305a);
 }
 
 .guide-box p {
@@ -607,7 +607,7 @@ textarea.form-control {
 
     font-size: 13px;
     line-height: 1.8;
-    color: #718097;
+    color: var(--odysay-muted, #718097);
 }
 .guide-bottom {
     margin-top: 30px;
@@ -618,7 +618,7 @@ textarea.form-control {
     margin-bottom: 15px;
     font-size: 13px;
     line-height: 1.7;
-    color: #718097;
+    color: var(--odysay-muted, #718097);
 }
 
 #guideConfirmButton {
@@ -688,7 +688,7 @@ textarea.form-control {
 
     line-height: 1.8;
 
-    color: #4f6584;
+    color: var(--odysay-muted, #4f6584);
 
     z-index: 2;
 }
@@ -703,7 +703,7 @@ textarea.form-control {
     font-weight: 600;
     line-height: 2;
     letter-spacing: -0.3px;
-    color: #18263b;
+    color: var(--odysay-text, #18263b);
 }
 
 .right-content {
@@ -716,7 +716,7 @@ textarea.form-control {
     font-weight: 700;
     line-height: 1.5;
     letter-spacing: -0.3px;
-    color: #142947;
+    color: var(--odysay-text, #142947);
 }
 
 .right-info .right-content p {
@@ -725,7 +725,7 @@ textarea.form-control {
     font-weight: 400;
     line-height: 1.8;
     letter-spacing: -0.2px;
-    color: #35445a;
+    color: var(--odysay-text, #35445a);
 }
 
 
@@ -782,17 +782,17 @@ textarea.form-control {
     .mobile-upload-menu button {
         flex: 1;
         padding: 12px;
-        border: 1px solid #d7dfea;
+        border: 1px solid var(--odysay-border, #d7dfea);
         border-radius: 8px;
-        background: white;
-        color: #718097;
+        background: var(--odysay-surface, white);
+        color: var(--odysay-muted, #718097);
         font-size: 13px;
         font-weight: 600;
     }
 
     .mobile-upload-menu button.selected {
         background: #142947;
-        border-color: #142947;
+        border-color: var(--odysay-accent, #142947);
         color: white;
     }
 }

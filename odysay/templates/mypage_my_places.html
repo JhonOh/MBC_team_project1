@@ -2,14 +2,22 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
     <title>내가 만든 여행지 | 어딧세이</title>
+
     {% include 'components/language_assets.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+        {% include 'theme_head.html' %}
+
+
 </head>
+
 <body class="my-places-page">
+
 {% include 'header.html' %}
 
 <main>
@@ -30,8 +38,11 @@
                     <p class="selected-label">MY PLACES</p>
                     <h2>내 여행지 목록</h2>
                     <p>직접 등록한 여행지를 최신순으로 확인해보세요.</p>
+
                 </div>
+
             </div>
+
             <div class="destination-count">총 <strong>{{ places | length }}</strong>개의 여행지</div>
         </div>
         {% if places %}
@@ -79,6 +90,7 @@
 
 </main>
 {% include 'footer.html' %}
+
 
 </body>
 </html>

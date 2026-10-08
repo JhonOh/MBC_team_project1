@@ -3,8 +3,8 @@
 ============================== */
 
 body {
-    background-color: #ffffff;
-    color: #14233b;
+    background-color: var(--odysay-surface, #ffffff);
+    color: var(--odysay-text, #14233b);
 }
 
 .header-inner,
