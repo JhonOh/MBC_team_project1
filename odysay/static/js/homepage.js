@@ -21,7 +21,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
         }
     }
     // 사진이 없을 때 logo-img 대신 no-photo-img 클래스 적용
-    return `<img src="/static/images/logo.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
+    return `<img src="/static/images/logo-transparent.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
 }
 
 function escapeHtml(value) {
@@ -153,19 +153,19 @@ function renderCountryLabel(country) {
                             if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
 
-                            const popup = document.createElement('div');
+                            const popup = createMapPlacePopup(place);
 
                             const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
                             const canonicalCountry =
                                 window.OdysayCountries?.canonicalize?.(place.country) || place.country;
 
-                            const title = document.createElement('strong');
+                            const title = popup.querySelector('.map-place-card__title');
                             title.textContent =
                                 isEnglish && canonicalCountry === '대한민국'
                                     ? window.OdysayLanguage?.englishKoreanPlaceName?.(place.title) || place.title
                                     : place.title;
 
-                            const location = document.createElement('p');
+                            const location = popup.querySelector('.map-place-card__location');
 
                             const displayCountry =
                                 window.OdysayLanguage?.countryName?.(place.country) || place.country;
@@ -179,14 +179,10 @@ function renderCountryLabel(country) {
                                 .filter(Boolean)
                                 .join(' ');
 
-                            const intro = document.createElement('p');
-                            intro.textContent = place.intro || '';
-                            const link = document.createElement('a');
-                            link.href = place.detail_url;
+                            const link = popup.querySelector('.map-place-card__link');
                             link.dataset.i18n = 'common.details';
                             link.textContent = uiText('common.details');
 
-                            popup.append(title, location, intro, link);
                             // 같은 장소를 현재 표시하는 세계 지도의 경도 범위로 맞춤
                             let displayLng = place.lng;
 
@@ -197,7 +193,13 @@ function renderCountryLabel(country) {
 // 지정한 지도 범위 안의 여행지만 표시
                             if (allowedBounds.contains([place.lat, displayLng])) {
                                 markers.addLayer(
-                                    L.marker([place.lat, displayLng]).bindPopup(popup)
+                                    L.marker([place.lat, displayLng]).bindPopup(popup, {
+                                        className: 'map-place-popup',
+                                        maxWidth: 288,
+                                        minWidth: 0,
+                                        maxHeight: Math.max(120, map.getSize().y - 100),
+                                        autoPanPadding: [24, 24]
+                                    })
                                 );
                             }
 

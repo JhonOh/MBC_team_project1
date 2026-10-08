@@ -52,9 +52,8 @@
                                 <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
                                      alt="{{ place.place }} 사진" loading="lazy">
                             {% else %}
-                                data-fallback="{{ url_for('static', filename='images/logo.png') }}"
-                                onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
-                                this.src=this.dataset.fallback;"
+                                <img src="{{ url_for('static', filename='images/logo-transparent.png') }}"
+                                     class="destination-photo-fallback" alt="어딧세이 기본 이미지" loading="lazy">
                             {% endif %}
                             <span class="country-badge">{{ place.country }}</span>
                         </div>
