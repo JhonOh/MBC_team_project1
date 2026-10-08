@@ -13,7 +13,7 @@
 {% for item, state, author, parent_hidden in rows %}
 <article class="item">
 <div><span class="badge {{ 'hidden' if state and state.is_hidden else '' }}">{{ '게시 중단' if state and state.is_hidden else '중단 안 됨' }}</span>{% if parent_hidden %}<span class="badge hidden">상위 콘텐츠 중단 또는 없음</span>{% endif %}
-<h2>{{ (item.place or item.title or item.content or '내용 없음') | truncate(100) }}</h2>
+<h2 data-translate-type="{{ kind }}" data-translate-id="{{ item.id }}" data-translate-field="{{ 'place' if kind == 'place' else 'title' if kind in ('post', 'talk') else 'content' }}" data-translation-excerpt>{{ (item.place or item.title or item.content or '내용 없음') | truncate(100) }}</h2>
 <p class="muted">#{{ item.id }} · {{ (author.nickname or author.username) if author else '작성자 없음' }} · {{ item.created_at.strftime('%Y.%m.%d') if item.created_at else '-' }}</p>
 {% if state and state.is_hidden %}<p>중단 사유: {{ state.reason }}</p>{% endif %}</div>
 <a class="button secondary" href="{{ url_for('admin.edit', kind=kind, content_id=item.id) }}">내용 및 관리</a>

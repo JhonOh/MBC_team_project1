@@ -1,7 +1,8 @@
 <div class="travel-tag-badges" aria-label="여행 스타일">
     {% for tag in display_travel_tags %}
         {% if tag in travel_tag_labels %}
-            <span class="travel-tag-badge">
+            <span class="travel-tag-badge"
+                  data-travel-tag="{{ tag }}">
                 {{ travel_tag_labels[tag] }}
             </span>
         {% endif %}

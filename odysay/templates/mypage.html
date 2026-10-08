@@ -255,7 +255,7 @@
 
                             <div class="post-info">
                                 <span class="post-title">
-                                    [{{ item.category }}] {{ item.title }}
+                                    [{{ item.category }}] <span data-translate-type="{{ item.kind }}" data-translate-id="{{ item.id }}" data-translate-field="{{ 'place' if item.kind == 'place' else 'title' }}">{{ item.title }}</span>
                                 </span>
 
                                 <span class="post-meta">

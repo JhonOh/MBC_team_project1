@@ -16,3 +16,10 @@ ADMIN_USER_ID = os.getenv('ADMIN_USER_ID', '')
 
 # 로컬 개발용: 서버를 다시 실행하면 이전 로그인 세션 무효화
 RESET_LOGIN_ON_RESTART = True
+
+# Never enable generation until the operator verifies a billing-disabled Free tier project.
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
+GEMINI_FREE_TIER_CONFIRMED = os.getenv('GEMINI_FREE_TIER_CONFIRMED', '').lower() == 'true'
+GEMINI_TRANSLATION_ENABLED = os.getenv('GEMINI_TRANSLATION_ENABLED', '').lower() == 'true'
+GEMINI_TRANSLATION_MODEL = os.getenv('GEMINI_TRANSLATION_MODEL', 'gemini-3.6-flash')
+GEMINI_TRANSLATION_INTERVAL = 15

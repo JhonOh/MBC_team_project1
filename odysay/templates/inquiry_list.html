@@ -37,7 +37,7 @@
                         {{ '답변 완료' if inquiry.answer else '답변 대기' }}
                     </span>
 
-                    <strong class="inquiry-row-title">
+                    <strong class="inquiry-row-title" data-translate-type="inquiry" data-translate-id="{{ inquiry.id }}" data-translate-field="title">
                         {{ inquiry.title }}
                     </strong>
                 </div>

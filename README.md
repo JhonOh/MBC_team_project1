@@ -93,6 +93,54 @@ http://127.0.0.1:5000/ 에서 확인하세요. 이 통합본에는 migrations가
 
 ## Git에 올릴 때
 
+### Gemini 저장형 번역 (2026-10-08)
+
+기존 하단 KO/EN 버튼과 `language.js`를 사용합니다. 여행지의 사용자 입력 필드,
+커뮤니티 글·댓글, 리뷰, 여행톡·댓글/답글, 비공개 문의·관리자 답변을 작성·수정할 때
+서버가 영어 번역을 `content_translation`에 저장합니다. `Uploadmd`와 상세 여행지가
+중복 저장되는 경우 상세 여행지의 ID를 기준으로 번역을 한 번만 관리합니다.
+원문 테이블의 기존 값은 바꾸지 않습니다. 개인정보·닉네임·비밀번호·지도 타일은 번역하지 않습니다.
+
+서버 `.env` 설정 (실제 키를 Git이나 브라우저에 넣지 마세요):
+
+```dotenv
+GEMINI_API_KEY=본인의_서버_키
+GEMINI_FREE_TIER_CONFIRMED=true
+GEMINI_TRANSLATION_ENABLED=true
+GEMINI_TRANSLATION_MODEL=gemini-3.6-flash
+```
+
+반드시 Google AI Studio에서 해당 프로젝트가 **결제 미연결 Free tier**인지 확인한 후
+두 플래그를 켜세요. 코드는 결제 상태를 키만으로 확인할 수 없습니다. 유료 전환,
+검색/지도 grounding, 유료 Batch API, 모델 자동 교체는 하지 않습니다.
+Gemini 무료 등급에 전송한 내용은 제품 개선에 사용될 수 있습니다.
+비공개 문의도 소유자/관리자만 저장된 번역을 볼 수 있으며 외부 전송에 대한 운영 정책을 확인하세요.
+
+기존 SQLite DB는 서버를 종료하고 다음 순서로 반영합니다. `--apply`는 자동 백업 후
+테이블을 **추가**하며 기존 글·회원·Alembic 이력은 보존합니다.
+
+```powershell
+.venv/Scripts/python.exe update_database.py --check --translations-only
+.venv/Scripts/python.exe update_database.py --apply --translations-only
+.venv/Scripts/python.exe -m flask --app odysay translate-missing --limit 20
+```
+
+`translate-missing`은 없는 번역과 수정되어 오래된 필드만 채웁니다. 기존 유효 번역은
+덮어쓰지 않습니다. 실행을 다시 해도 중복 생성하지 않으며, 429가 나오면 중단합니다.
+`--enqueue-only`는 AI 호출 없이 누락 항목을 대기 상태로 기록합니다.
+요청 간격은 기본 15초이며 계정별 실제 무료 한도가 우선합니다. 실패/한도 초과 시 원문을
+유지하며 영어 화면의 작성자/관리자용 **Retry translation** 또는 명령 재실행으로 재시도합니다.
+번역 상태가 지연되면 서버 로그에 키나 본문을 출력하지 않고 DB 상태로만 확인합니다.
+
+화면 조회의 `/api/translations` GET은 저장된 번역을 읽기만 합니다. 화면 이동·언어 전환은
+AI를 호출하지 않습니다. 수정 폼에는 영어 화면에서도 원문을 넣습니다.
+검증: `python -m unittest discover -s tests -p test_translation.py -v`,
+`node --test tests/test_language_url.cjs`. 테스트는 메모리 DB와 모의 API를 사용합니다.
+
+공식 참고: [가격·무료 등급](https://ai.google.dev/gemini-api/docs/pricing),
+[결제 등급](https://ai.google.dev/gemini-api/docs/billing),
+[구조화 응답](https://ai.google.dev/gemini-api/docs/structured-output).
+
 `.env`, DB, 백업, 가상환경, 사용자 업로드는 `.gitignore`에서 제외합니다. migrations는 Git에 포함합니다. `.gitignore`는 이미 추적 중인 파일까지 제거하지는 않으므로 커밋 전에 실제 변경 파일을 확인하세요.
 
 원본 파일에 실제 키로 보이는 문자열이 있었으므로 해당 제공자의 기존 키는 교체하고 새 값만 로컬 `.env`에 입력하는 것을 권장합니다.
