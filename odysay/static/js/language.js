@@ -2,7 +2,7 @@
  * 사이트 전체 한국어 / 영어 UI 언어 전환 기능
  *
  * 고정된 UI 문구는 미리 정의된 영어 문구로 변환합니다.
- * 사용자가 직접 작성한 내용은 원문 그대로 유지합니다.
+ * 사용자 글은 원문을 보존하며 DB에 저장된 영어 번역만 조회합니다.
  * 대한민국 여행지명과 지역명은 영어 모드에서 영문 표기로 변환할 수 있습니다.
  */
 (function (global) {
@@ -119,6 +119,40 @@
             'community.commentEditError': '댓글 수정 실패',
             'community.commentDeleteConfirm': '댓글을 삭제하시겠습니까?',
             'community.commentDeleteError': '댓글 삭제 실패',
+            'community.report': '신고',
+            'community.submit': '등록',
+            'community.saveChanges': '수정 완료',
+            'report.reasonPrompt': '신고 사유를 입력해 주세요. (1~500자)',
+            'report.reasonRequired': '신고 사유를 1~500자로 입력해 주세요.',
+            'report.submitError': '신고 접수에 실패했습니다. 다시 시도해 주세요.',
+            'report.completed': '🚨 신고 완료',
+            'report.success': '신고가 접수되었습니다.',
+            'talk.description': '이 여행지에 대해 궁금한 점이나 정보를 자유롭게 이야기해보세요.',
+            'talk.writeCancel': '작성 취소',
+            'talk.write': '글 작성하기',
+            'talk.titlePlaceholder': '제목을 입력해주세요.',
+            'talk.contentPlaceholder': '내용을 입력해주세요.',
+            'talk.empty': '아직 등록된 여행톡이 없습니다.',
+            'talk.noComments': '아직 댓글이 없습니다.',
+            'talk.commentPlaceholder': '댓글을 입력해주세요.',
+            'talk.loginRequired': '로그인 후 이용할 수 있습니다.',
+            'talk.titleRequired': '제목을 입력해주세요.',
+            'talk.contentRequired': '내용을 입력해주세요.',
+            'talk.commentRequired': '댓글 내용을 입력해주세요.',
+            'talk.postError': '여행톡 등록 중 오류가 발생했습니다.',
+            'talk.editError': '여행톡 수정 중 오류가 발생했습니다.',
+            'talk.deleteError': '여행톡 삭제 중 오류가 발생했습니다.',
+            'talk.commentPostError': '댓글 등록 중 오류가 발생했습니다.',
+            'talk.commentEditError': '댓글 수정 중 오류가 발생했습니다.',
+            'talk.commentDeleteError': '댓글 삭제 중 오류가 발생했습니다.',
+            'talk.recommendError': '추천 처리 중 오류가 발생했습니다.',
+            'talk.deleteConfirm': '이 게시글을 삭제하시겠습니까?',
+            'talk.commentDeleteConfirm': '이 댓글을 삭제하시겠습니까?',
+            'talk.edited': ' (수정)',
+            'detail.viewFullMap': '전체 지도에서 보기 →',
+            'detail.edit': '수정',
+            'detail.delete': '삭제',
+            'detail.deleteConfirm': '정말 이 여행지를 삭제하시겠습니까?',
 
         },
         en: {
@@ -175,6 +209,36 @@
             'community.commentEditError': 'Failed to update the comment.',
             'community.commentDeleteConfirm': 'Are you sure you want to delete this comment?',
             'community.commentDeleteError': 'Failed to delete the comment.',
+            'community.report': 'Report',
+            'community.submit': 'Submit',
+            'community.saveChanges': 'Save changes',
+            'talk.description': 'Feel free to ask questions and share information about this destination.',
+            'talk.writeCancel': 'Cancel writing',
+            'talk.write': 'Write a post',
+            'talk.titlePlaceholder': 'Enter a title.',
+            'talk.contentPlaceholder': 'Enter content.',
+            'talk.empty': 'No travel talk posts yet.',
+            'talk.noComments': 'No comments yet.',
+            'talk.commentPlaceholder': 'Write a comment.',
+            'talk.loginRequired': 'Please log in to continue.',
+            'talk.titleRequired': 'Please enter a title.',
+            'talk.contentRequired': 'Please enter content.',
+            'talk.commentRequired': 'Please enter a comment.',
+            'talk.postError': 'Failed to post travel talk.',
+            'talk.editError': 'Failed to edit travel talk.',
+            'talk.deleteError': 'Failed to delete travel talk.',
+            'talk.commentPostError': 'Failed to post the comment.',
+            'talk.commentEditError': 'Failed to edit the comment.',
+            'talk.commentDeleteError': 'Failed to delete the comment.',
+            'talk.recommendError': 'Failed to update the recommendation.',
+            'talk.deleteConfirm': 'Are you sure you want to delete this post?',
+            'talk.commentDeleteConfirm': 'Are you sure you want to delete this comment?',
+            'talk.edited': ' (Edited)',
+            'report.reasonPrompt': 'Please enter a reason for reporting. (1–500 characters)',
+            'report.reasonRequired': 'Please enter a report reason between 1 and 500 characters.',
+            'report.submitError': 'Failed to submit the report. Please try again.',
+            'report.completed': '🚨 Reported',
+            'report.success': 'Your report has been submitted.',
             'inquiry.myList': 'My inquiries',
             'inquiry.management': 'Inquiry management',
             'exchange.selectCountry': 'Please select a country.',
@@ -223,7 +287,11 @@
             'upload.agree': 'Please agree to the registration guidelines.',
             'upload.addPhoto': 'Please add at least one main photo.',
             'upload.photoDescription': 'Add photos that showcase this destination. (At least 1 required; up to 10 photos)',
-            'tags.maxSelected': 'You can select up to three travel styles.'
+            'tags.maxSelected': 'You can select up to three travel styles.',
+            'detail.viewFullMap': 'View on full map →',
+            'detail.edit': 'Edit',
+            'detail.delete': 'Delete',
+            'detail.deleteConfirm': 'Are you sure you want to delete this destination?',
         }
     };
 
@@ -375,6 +443,15 @@
         '작성일': 'Created',
         '수정일': 'Updated',
         '카테고리': 'Category',
+        '수정': 'Edit',
+        '삭제': 'Delete',
+        '답글': 'Reply',
+        '♥ 추천': '♥ Recommend',
+        '♡ 추천': '♡ Recommend',
+        '🚨 신고': '🚨 Report',
+        '사진을 준비 중이에요': 'Photos coming soon',
+        '이 장소의 이야기를 상세페이지에서 만나보세요.': 'Discover this destination on its detail page.',
+        '여행지 자세히 보기 →': 'View destination →',
         '위치': 'Location',
         '📍 기본정보': '📍 Basic information',
         '💬 여행자가 전하는 정보': '💬 Tips from travelers',
@@ -417,14 +494,19 @@
         '수정 완료': 'Save changes',
         '등록하러 가기': 'Start registering',
         '회원가입': 'Sign up',
+        '회원가입하고 여행을 시작하세요.': 'Sign up and start your journey.',
+        '로그인에 사용할 이름을 3~20자로 입력해 주세요.': 'Enter a username of 3–20 characters.',
+        '이미 계정이 있으신가요?': 'Already have an account?',
+        '확인 중입니다…': 'Checking...',
+        '확인하지 못했습니다. 잠시 후 다시 시도해 주세요.': 'Could not check. Please try again shortly.',
+        '사용 가능한 닉네임입니다.': 'This nickname is available.',
+        '비밀번호를 다시 입력해 주세요': 'Please re-enter your password.',
         '아이디': 'Username',
         '비밀번호': 'Password',
         '비밀번호 확인': 'Confirm password',
         '이메일': 'Email',
         '검색': 'Search',
         '작성하기': 'Write a post',
-        '수정': 'Edit',
-        '삭제': 'Delete',
         '목록으로': 'Back to list',
         '저장': 'Save',
         '문의하기': 'Contact us',
@@ -576,6 +658,10 @@
         '함께 둘러보면 좋은 장소나 즐길거리가 있나요?': 'Any nearby places to visit or things to do?',
         '운영 시간 : 10:00 ~ 18:00 이용 요금 : 성인 10,000원 휴무일 : 매주 월요일 교통·주차 : 전용 주차장 이용 가능 방문 팁 : 사람이 적은 오전 방문을 추천해요. 여행자에게 도움이 될 정보를 자유롭게 작성해주세요.': 'Opening hours: 10:00–18:00\nAdmission: KRW 10,000 per adult\nClosed: Mondays\nTransport / parking: On-site parking available\nTip: Visit in the morning to avoid crowds.\n\nShare any information that could help other travelers.',
         '닉네임을 입력해 주세요.': 'Enter a nickname.',
+        '로그인에 사용할 사용자 이름': 'Enter your username',
+        '닉네임': 'Nickname',
+        '비밀번호': 'Password',
+        '비밀번호를 다시 입력해 주세요': 'Confirm your password',
         '새 비밀번호를 입력해 주세요.': 'Enter a new password.',
         '새 비밀번호를 다시 입력해 주세요.': 'Confirm your new password.',
         '여행지 검색': 'Search destinations',
@@ -632,7 +718,7 @@
         '#recommendedList', '#recentList', '#mainCommunityList', '#destinationGrid', '#postList', '#hotList',
         '.post-content', '.comment-content', '.user-content', '.review-content', '.talk-content',
         '.post-title', '.post-desc', '.hot-title', '.inquiry-title', '.inquiry-row-title', '.inquiry-message',
-        '.place-title-area', '.place-intro', '#reviewList', '.review-list', '.travel-talk-list'
+        '.place-title-area', '.place-intro', '.review-user', '.travel-talk-user', '.travel-talk-comment-user'
     ].join(', ');
 
     // Form controls are skipped for text-node translation, but their static
@@ -991,7 +1077,159 @@
         return `${romanized}${suffix}`;
     }
 
-        function translatePublishedContent(root) {
+    const storedContent = new Map();
+    const pendingContent = new Set();
+    let contentTimer;
+    let translationNotice;
+    const contentSelector = '[data-translate-id][data-translate-field], [data-translate-place][data-translate-field]';
+
+    function contentRef(element) {
+        return `${element.dataset.translateType || 'place'}:${element.dataset.translateId || element.dataset.translatePlace}`;
+    }
+
+    function contentAttrs(kind, id, field) {
+        if (!/^[a-z_]+$/.test(kind) || !/^\d+$/.test(String(id)) || !/^[a-z_]+$/.test(field)) return '';
+        return `data-translate-type="${kind}" data-translate-id="${id}" data-translate-field="${field}"`;
+    }
+
+    function originalContent(element) {
+        return contentOriginals.get(element) ?? element?.textContent ?? '';
+    }
+
+    function resetContent(element, text) {
+        if (!element) return;
+        contentOriginals.set(element, text);
+        element.textContent = text;
+        storedContent.delete(contentRef(element));
+        translatePublishedContent(element);
+    }
+
+    function bindContent(element, kind, id, field, text) {
+        element.dataset.translateType = kind;
+        element.dataset.translateId = String(id);
+        element.dataset.translateField = field;
+        resetContent(element, text);
+    }
+
+    function contentStatus() {
+        return;
+        if (!translationNotice) {
+            translationNotice = document.createElement('div');
+            translationNotice.dataset.i18nIgnore = 'true';
+            translationNotice.className = 'stored-translation-notice';
+            translationNotice.setAttribute('role', 'status');
+            translationNotice.style.cssText = 'max-width:1200px;margin:12px auto;padding:10px 16px;box-sizing:border-box;font:13px/1.6 sans-serif;overflow-wrap:anywhere;';
+            const main = document.querySelector('main');
+            if (main) main.before(translationNotice);
+            else document.body.prepend(translationNotice);
+        }
+        const elements = [...document.querySelectorAll(contentSelector)];
+        translationNotice.hidden = currentLanguage !== 'en' || !elements.length;
+        if (translationNotice.hidden) return;
+        const missing = elements.some(el => !storedContent.get(contentRef(el))?.fields?.[el.dataset.translateField]);
+        translationNotice.textContent = missing
+            ? 'Some translations are pending or unavailable. The original text is shown.'
+            : 'Showing saved English translations.';
+        const retryRefs = [...new Set(elements.map(contentRef))].filter(ref => {
+            const payload = storedContent.get(ref);
+            return payload?.can_retry && payload.status !== 'ready';
+        });
+        if (retryRefs.length) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = 'Retry translation';
+            button.style.marginLeft = '12px';
+            button.addEventListener('click', async () => {
+                button.disabled = true;
+                const base = document.querySelector('meta[name="odysay-translations-url"]')?.content;
+                const csrf = document.querySelector('meta[name="odysay-translations-csrf"]')?.content;
+                try {
+                    for (const ref of retryRefs) {
+                        const response = await fetch(`${base}/${ref.replace(':', '/')}/retry`, {
+                            method: 'POST', headers: {'X-CSRFToken': csrf}, credentials: 'same-origin'
+                        });
+                        if (!response.ok) throw new Error('Retry unavailable');
+                        const result = await response.json();
+                        storedContent.set(ref, result);
+                        if (result.status !== 'ready') break;
+                    }
+                } catch (_) { /* Preserve originals; a later click can retry. */ }
+                translatePublishedContent(document);
+            });
+            translationNotice.append(button);
+        }
+    }
+
+    async function loadStoredContent() {
+        contentTimer = null;
+        const base = document.querySelector('meta[name="odysay-translations-url"]')?.content;
+        if (!base) return;
+        const refs = [...pendingContent];
+        pendingContent.clear();
+        for (let index = 0; index < refs.length; index += 100) {
+            const batch = refs.slice(index, index + 100);
+            try {
+                // This GET only reads the database. It cannot generate translations.
+                const response = await fetch(`${base}?refs=${encodeURIComponent(batch.join(','))}`, {credentials: 'same-origin'});
+                if (!response.ok) throw new Error('Stored translations unavailable');
+                const data = await response.json();
+                batch.forEach(ref => storedContent.set(ref, data[ref] || {fields: {}}));
+            } catch (_) {
+                batch.forEach(ref => storedContent.set(ref, {fields: {}}));
+            }
+        }
+        translatePublishedContent(document);
+    }
+
+    function translatePublishedContent(root) {
+        // Search suggestions are rendered by the team's header script; leave that script intact.
+        root.querySelectorAll?.('a.site-search-item').forEach(link => {
+            const path = new URL(link.href, location.href).pathname;
+            const place = path.match(/\/trip_location\/(\d+)$/);
+            const post = path.match(/\/community\/detail\/post\/(\d+)$/);
+            if (!place && !post) return;
+            const title = link.querySelector('strong');
+            if (!title) return;
+            title.dataset.translateType = place ? 'place' : 'post';
+            title.dataset.translateId = (place || post)[1];
+            title.dataset.translateField = place ? 'place' : 'title';
+        });
+        const elements = [...(root.querySelectorAll?.(contentSelector) || [])];
+        if (root instanceof Element && root.matches(contentSelector)) elements.unshift(root);
+        elements.forEach(element => {
+            if (element.closest('textarea, input, [contenteditable]')) return;
+            if (element.closest('.leaflet-pane, #home-map, #map') && !element.closest('[data-database-popup]')) return;
+            if (!contentOriginals.has(element)) contentOriginals.set(element, element.textContent);
+            const original = originalContent(element);
+            if (currentLanguage === 'ko') {
+                if (element.textContent !== original) element.textContent = original;
+                return;
+            }
+            const ref = contentRef(element);
+            if (!/^[a-z_]+:\d+$/.test(ref)) return;
+            const field = element.dataset.translateField;
+            let payload = storedContent.get(ref);
+            if (payload?.originals?.[field] !== undefined &&
+                normalizeText(payload.originals[field]) !== normalizeText(original) &&
+                !element.hasAttribute('data-translation-excerpt')) {
+                storedContent.delete(ref);
+                payload = undefined;
+            }
+            const translated = payload?.fields?.[field];
+            const text = typeof translated === 'string'
+                ? (element.hasAttribute('data-translation-excerpt') && translated.length > 200 ? translated.slice(0, 200) + '…' : translated)
+                : original;
+            if (element.textContent !== text) element.textContent = text;
+            if (!storedContent.has(ref)) {
+                storedContent.set(ref, {fields: {}}); // Deduplicate while the batch is in flight.
+                pendingContent.add(ref);
+                if (!contentTimer) contentTimer = setTimeout(loadStoredContent, 0);
+            }
+        });
+        if (elements.length) contentStatus();
+    }
+
+        function romanizePublishedContent(root) {
             const selector = '[data-translate-place][data-translate-field]';
             const elements = [...(root.querySelectorAll?.(selector) || [])];
 
@@ -1148,6 +1386,10 @@
         countryName,
         englishKoreanPlaceName,
         englishKoreanRegion,
+        contentAttrs,
+        originalContent,
+        resetContent,
+        bindContent,
         applyTranslations
     });
 

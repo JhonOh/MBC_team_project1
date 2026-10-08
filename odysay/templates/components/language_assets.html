@@ -1,5 +1,7 @@
 {# Shared language and country-search dependencies. Keep this independent of
    the header/footer scripts because those are maintained separately. #}
 <script src="{{ url_for('static', filename='js/countries.js') }}"></script>
+<meta name="odysay-translations-url" content="{{ url_for('translations.read_translations') }}">
+<meta name="odysay-translations-csrf" content="{{ csrf_token() }}">
 <script src="{{ url_for('static', filename='js/language.js') }}"></script>
 <script src="{{ url_for('static', filename='js/country_search.js') }}"></script>

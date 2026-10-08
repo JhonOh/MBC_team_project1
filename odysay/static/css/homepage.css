@@ -808,14 +808,17 @@
 .map-banner .travel-menu {
     position: static;
     transform: none;
+
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-    gap: 8px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+
     width: 100%;
     max-width: none;
     height: auto;
     margin: 0;
     padding: 10px;
+
     border: 0;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.08);
@@ -827,17 +830,18 @@
     align-items: center;
     justify-content: center;
     gap: 5px;
-    width: auto;
+    width: 100%;
     min-width: 0;
-    margin: 0;
-    padding: 9px 6px;
     min-height: 68px;
+    margin: 0;
+    padding: 8px 2px;
     color: #fff;
-    font-size: 12px;
-    line-height: 1.4;
+    font-size: 11px;
+    line-height: 1.35;
     white-space: normal;
     text-align: center;
-    overflow-wrap: anywhere;
+    overflow-wrap: normal;
+    word-break: normal;
     text-decoration: none;
 }
 

@@ -22,6 +22,9 @@ def create_app(test_config=None):
     app.config.from_object(config)
     if test_config:
         app.config.update(test_config)
+    if app.testing:
+        # Tests never inherit live generation from the developer's .env.
+        app.config['GEMINI_TRANSLATION_ENABLED'] = (test_config or {}).get('GEMINI_TRANSLATION_ENABLED', False)
     if not app.config.get('SECRET_KEY'):
         raise RuntimeError('먼저 python setup_env.py를 실행해 로컬 .env를 생성하세요.')
     csrf.init_app(app)
@@ -47,7 +50,7 @@ def create_app(test_config=None):
     # 블루프린트 등록[cite: 11]
 
     from .views import (main_views, a0_mapmain_views, a3_community_views, a3_z1_community_postwrite_views, a3_z2_community_detail_views, a4_upload_views, a4_z1_trip_location_views, a5_mypage_views, a1_homepage_views, auth_views , a2_trip_list_views,
-        a4_z1_z1_trip_location_feature_views ,admin_views , a6_inquiry_veiws ,a7_search_views)
+        a4_z1_z1_trip_location_feature_views ,admin_views , a6_inquiry_veiws)
     from .moderation import is_admin
     from .admin_commands import register_commands
 
@@ -64,7 +67,6 @@ def create_app(test_config=None):
     app.register_blueprint(auth_views.profile_bp)
     app.register_blueprint(a2_trip_list_views.bp)
     app.register_blueprint(a4_z1_z1_trip_location_feature_views.bp)
-    app.register_blueprint(a7_search_views.bp)
 
     #문의 기능 등록
     app.register_blueprint(a6_inquiry_veiws.bp)
@@ -74,6 +76,9 @@ def create_app(test_config=None):
     app.register_blueprint(report_views.bp)
     app.context_processor(lambda: {'is_admin': is_admin})
     register_commands(app)
+
+    from .services.translation import init_translation
+    init_translation(app)
 
     # # 라우트 설정[cite: 11]
     # @app.route('/')

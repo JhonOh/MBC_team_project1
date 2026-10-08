@@ -4,6 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const displayCountry = (country) => window.OdysayLanguage?.countryName?.(country) || country || '';
   const isPlaceItem = (item) =>
     String(item?.id || '').startsWith('place_');
+  const escapeContent = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const contentSpan = (item, field, value) => {
+    const kind = String(item.id).replace(/_\d+$/, '');
+    const id = item.raw_id || String(item.id).split('_').pop();
+    return `<span ${window.OdysayLanguage.contentAttrs(kind, id, field)}>${escapeContent(value)}</span>`;
+  };
 
   const isKoreanPlace = (item) => {
     const country =
@@ -193,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
           <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:var(--odysay-muted, #ccc);"></i>
-          <p>등록된 게시글이 없습니다.</p>
+          <p>${uiText('community.noPosts')}</p>
 
         </div>`;
       return;
@@ -224,8 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="post-body-wrap">
               <span class="badge">${displayCategory(item.category)}</span>
               <div class="post-main-content">
-                <h3 class="post-title">[${displayCountry(item.country) || 'Odysay'}/${displayRegion(item) || uiText('community.board')}] ${displayTitle(item)}</h3>
-                <p class="post-desc">${item.intro || uiText('community.noContent')}</p>
+                <h3 class="post-title">[${escapeContent(isPlaceItem(item) ? (displayCountry(item.country) || 'Odysay') : uiText('home.defaultCommunity'))}/${isPlaceItem(item) ? contentSpan(item, 'region', item.region) : escapeContent(displayCategory(item.category))}] ${contentSpan(item, isPlaceItem(item) ? 'place' : 'title', item.title)}</h3>                <p class="post-desc">${item.intro ? contentSpan(item, isPlaceItem(item) ? 'intro' : 'content', item.intro) : uiText('community.noContent')}</p>
               </div>
             </div>
             <div class="post-meta">
@@ -337,7 +342,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="hot-rank">${index + 1}</span>
             ${hotImageHtml}
             <div class="hot-details">
-              <div class="hot-title">${displayTitle(item)}</div>
+              <div class="hot-title">${contentSpan(item, isPlaceItem(item) ? 'place' : 'title', item.title)}</div>
               <div class="hot-stats">
                 <i class="fa-regular fa-heart"></i> ${item.likes || 0}
                 <i class="fa-regular fa-comment" style="margin-left:6px;"></i> ${commentCount}

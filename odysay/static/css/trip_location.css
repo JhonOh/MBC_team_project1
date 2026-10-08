@@ -1156,6 +1156,31 @@ button {
     opacity: 0.7;
 }
 
+/* 지도 팝업 너비 넓히기 */
+.detail-map .leaflet-popup {
+    width: 320px !important;
+    max-width: calc(100vw - 40px);
+}
+
+.detail-map .leaflet-popup-content-wrapper {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.detail-map .leaflet-popup-content {
+    width: auto !important;
+    margin: 12px 16px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+/* 긴 여행지 제목 줄바꿈 */
+.detail-map .leaflet-popup-content * {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
 
 /* 모바일 */
 @media (max-width: 600px) {

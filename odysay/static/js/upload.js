@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
             guideMenu.classList.remove("selected");
 
             // 동의 체크박스로 이동
-            document.getElementById("agree").scrollIntoView({
+            document.getElementById("agree")?.scrollIntoView({
                 behavior: "smooth",
                 block: "center"
             });

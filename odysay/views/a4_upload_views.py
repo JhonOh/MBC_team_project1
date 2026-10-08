@@ -32,6 +32,8 @@ geolocator = Nominatim(user_agent="odysay_travel_app_v8")
 # 1. Gemini AI: 오타/한글발음 ➔ 정식 명칭 추출
 # -----------------------------------------------------------
 def get_corrected_place_from_ai(country, region, place):
+    if current_app.testing or not current_app.config.get('GEMINI_FREE_TIER_CONFIRMED'):
+        return country, region, place
     max_retries = 3
     retry_delay = 1
 

@@ -154,6 +154,7 @@ function renderCountryLabel(country) {
 
 
                             const popup = document.createElement('div');
+                            popup.dataset.databasePopup = 'true';
 
                             const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
                             const canonicalCountry =
@@ -181,6 +182,8 @@ function renderCountryLabel(country) {
 
                             const intro = document.createElement('p');
                             intro.textContent = place.intro || '';
+                            window.OdysayLanguage.bindContent(title, 'place', place.id, 'place', place.title);
+                            if (place.intro) window.OdysayLanguage.bindContent(intro, 'place', place.id, 'intro', place.intro);
                             const link = document.createElement('a');
                             link.href = place.detail_url;
                             link.dataset.i18n = 'common.details';
@@ -359,7 +362,7 @@ function renderCountryLabel(country) {
                         <div class="community-info">
                             <div class="community-top">
                                 <span class="community-category">${item.category || uiText('home.defaultCommunity')}</span>
-                                <strong>${item.title}</strong>
+                                <strong ${window.OdysayLanguage.contentAttrs(String(item.id).replace(/_\d+$/, ''), item.raw_id, String(item.id).startsWith('place_') ? 'place' : 'title')}>${escapeHtml(item.title)}</strong>
                             </div>
                             <div class="community-meta">
                                 <span>

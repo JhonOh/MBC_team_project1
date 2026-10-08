@@ -56,12 +56,12 @@
                                 onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
                                 this.src=this.dataset.fallback;"
                             {% endif %}
-                            <span class="country-badge">{{ place.country }}</span>
+                            <span class="country-badge" data-country-name="{{ place.country }}">{{ place.country }}</span>
                         </div>
                         <div class="card-content">
-                            <div class="card-location">{{ place.region }}</div>
-                            <h3 class="card-title">{{ place.place }}</h3>
-                            <p class="card-description">{{ place.intro or '소개가 없습니다.' }}</p>
+                            <div class="card-location" data-translate-place="{{ place.id }}" data-translate-field="region">{{ place.region }}</div>
+                            <h3 class="card-title" data-translate-place="{{ place.id }}" data-translate-field="place">{{ place.place }}</h3>
+                            <p class="card-description" {% if place.intro %}data-translate-place="{{ place.id }}" data-translate-field="intro"{% endif %}>{{ place.intro or '소개가 없습니다.' }}</p>
                             {% if place.created_at %}
                                 <time class="my-place-date" datetime="{{ place.created_at.isoformat() }}">
                                     등록일 {{ place.created_at.strftime('%Y.%m.%d') }}</time>

@@ -24,6 +24,8 @@ def valid_coords(lat, lng):
 
 
 def get_corrected_place_from_ai(country, region, place):
+    if current_app.testing or not current_app.config.get('GEMINI_FREE_TIER_CONFIRMED'):
+        return country, region, place
     key = current_app.config.get('GEMINI_API_KEY')
     if not key:
         return country, region, place
