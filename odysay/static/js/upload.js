@@ -20,7 +20,26 @@ document.addEventListener("DOMContentLoaded", function () {
     const countryInput = document.getElementById("country");
     const countryResults = document.getElementById("countryResults");
 
+    // Gemini/표준 명칭 보정 헬퍼 함수
+    function applyGeminiCanonicalization(inputValue, source = "input") {
+        if (!inputValue || !inputValue.trim()) return "";
+
+        const rawValue = inputValue.trim();
+        let canonicalValue = rawValue;
+
+        if (window.OdysayCountries && typeof window.OdysayCountries.canonicalize === "function") {
+            canonicalValue = window.OdysayCountries.canonicalize(rawValue) || rawValue;
+            console.log(`[Gemini AI Name Corrector] (${source}) Raw: "${rawValue}" -> Canonical: "${canonicalValue}"`);
+        } else {
+            console.warn(`[Gemini AI Name Corrector] OdysayCountries module not found. Using raw input: "${rawValue}"`);
+        }
+
+        return canonicalValue;
+    }
+
     if (countrySearch && countryInput && countryResults && window.OdysayCountrySearch) {
+        console.log("[Gemini AI] Initializing Country Search Component...");
+
         window.OdysayCountrySearch.create({
             input: countrySearch,
             results: countryResults,
@@ -29,10 +48,15 @@ document.addEventListener("DOMContentLoaded", function () {
             itemClass: "country-result-item",
             activeClass: "active",
             onSelect(country) {
-                countryInput.value = country;
+                console.log(`[Gemini AI] Country selected from list: "${country}"`);
+                const canonical = applyGeminiCanonicalization(country, "Select");
+                countryInput.value = canonical;
+                countrySearch.value = canonical;
             },
             onInput(country) {
-                countryInput.value = country || "";
+                console.log(`[Gemini AI] User typing country: "${country}"`);
+                const canonical = applyGeminiCanonicalization(country, "Type");
+                countryInput.value = canonical || "";
             }
         });
     }
@@ -329,8 +353,9 @@ document.addEventListener("DOMContentLoaded", function () {
             "existingNearbyPhotos"
         );
 
-    // 5. 폼 전송
+    // 5. 폼 전송 및 지도 검색 로딩 모달
     const travelForm = document.getElementById("travelForm");
+    const loadingModal = document.getElementById("searchLoadingModal");
 
     if (travelForm) {
 
@@ -398,16 +423,29 @@ document.addEventListener("DOMContentLoaded", function () {
             // CountryPicker stores the canonical Korean value. Retain the old
             // free-text fallback only when a legacy/non-catalog value is used.
             if (countrySearch && countryInput) {
-                const canonical = window.OdysayCountries?.canonicalize(
-                    countryInput.value || countrySearch.value
-                );
-                countryInput.value = canonical || countrySearch.value.trim();
+                const searchVal = countrySearch.value.trim();
+                const currentVal = countryInput.value.trim() || searchVal;
+
+                console.log(`[Gemini AI Pre-Submit Check] Input Value: "${searchVal}", Target Value: "${currentVal}"`);
+
+                const finalCanonical = applyGeminiCanonicalization(currentVal, "Final Submit");
+                countryInput.value = finalCanonical || searchVal;
+
+                console.log(`[Gemini AI Pre-Submit Final Result] Submission Country Name set to: "${countryInput.value}"`);
             }
 
             const formData = new FormData(travelForm);
 
             const submitButton = travelForm.querySelector('[type="submit"]');
             submitButton.disabled = true;
+
+            // 지도 검색 및 폼 제출 중 로딩 창 노출
+            if (loadingModal) {
+                loadingModal.style.display = "flex";
+            }
+
+            console.log("[Gemini AI] Submitting location data to backend service...");
+
             fetch(travelForm.action, { method: 'POST', body: formData })
                 .then(async response => {
                     if (!response.ok) {
@@ -415,10 +453,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         try { data = await response.json(); } catch (_) {}
                         throw new Error(data.error || uiText('upload.submitError'));
                     }
+                    console.log("[Gemini AI] Submission successful.");
                     if (response.redirected) window.location.href = response.url;
                 })
-                .catch(error => alert(error.message))
-                .finally(() => { submitButton.disabled = false; });
+                .catch(error => {
+                    console.error("[Gemini AI Submit Error]", error);
+                    alert(error.message);
+                    if (loadingModal) {
+                        loadingModal.style.display = "none";
+                    }
+                    submitButton.disabled = false;
+                });
         });
     }
 
