@@ -7,6 +7,7 @@ from odysay.forms import UserCreateForm, LoginForm, ProfileEditForm
 from io import BytesIO
 from pathlib import Path
 from uuid import uuid4
+from urllib.parse import urlsplit
 import warnings
 
 from PIL import Image, ImageOps, UnidentifiedImageError
@@ -31,18 +32,88 @@ def load_logged_in_user():
         else:
             g.user = user
 
-    # 로그인한 회원만 접근 가능한 화면
-    member_pages = {
-        'homepage.homepage',
-        'homepage.mypage',
-        'homepage.mypage_settings',
-        'profile.profile_edit',
-
+    # 홈페이지의 콘텐츠 표시에 필요한 조회 API는 공개
+    public_preview_endpoints = {
+        'homepage.get_recommended_places',
+        'homepage.get_recent_places',
+        'homepage.get_places',
+        'community.get_places',
     }
 
-    if g.user is None and request.endpoint in member_pages:
-        flash('로그인이 필요합니다.')
-        return redirect(url_for('first.map'))
+    # homepage 블루프린트 안의 회원 전용 화면
+    member_pages = {
+        'homepage.trip_list',
+        'homepage.community',
+        'homepage.upload',
+        'homepage.mypage',
+        'homepage.mypage_settings',
+    }
+
+    # 하위 화면 및 관련 기능
+    member_blueprints = {
+        'trip_list',
+        'community',
+        'detail',
+        'postwrite',
+        'trip_location',
+        'feature',
+        'upload',
+        'mypage',
+        'profile',
+    }
+
+    endpoint = request.endpoint
+    requires_login = (
+            endpoint in member_pages
+            or request.blueprint in member_blueprints
+    )
+
+    if (
+            g.user is None
+            and requires_login
+            and endpoint not in public_preview_endpoints
+    ):
+        # API와 데이터 변경 요청에는 JSON으로 응답
+        is_api = (
+                '/api/' in request.path
+                or request.blueprint in {'trip_list', 'feature'}
+                or request.is_json
+                or request.method not in {'GET', 'HEAD'}
+        )
+
+        if is_api:
+            return jsonify(
+                error='login_required',
+                message='로그인 후 이용할 수 있습니다.'
+            ), 401
+
+        # 직전 화면이 같은 사이트의 지도/홈페이지일 때만 복귀
+        return_endpoint = 'homepage.homepage'
+
+        try:
+            previous = urlsplit(request.referrer or '')
+            current = urlsplit(request.host_url)
+
+            public_pages = {
+                url_for('first.map').rstrip('/'): 'first.map',
+                url_for('homepage.homepage').rstrip('/'): 'homepage.homepage',
+            }
+
+            if (
+                    previous.scheme == current.scheme
+                    and previous.netloc == current.netloc
+            ):
+                return_endpoint = public_pages.get(
+                    previous.path.rstrip('/'),
+                    'homepage.homepage'
+                )
+        except ValueError:
+            pass
+
+        return redirect(url_for(
+            return_endpoint,
+            signup_required='1'
+        ))
 
 
 @bp.route('/signup/', methods=['GET', 'POST'])
