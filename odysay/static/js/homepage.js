@@ -692,3 +692,12 @@ document.addEventListener('wheel', e => {
 }, { passive: false });
 
 
+/* ===== 키보드 ESC 누를 때 모달 닫기 ===== */
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+        closeExchangeModal();
+        closeTimeModal();
+        closeRouteModal();
+        closeWeatherModal();
+    }
+});

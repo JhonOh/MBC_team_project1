@@ -361,10 +361,9 @@
 .footer {
     border-top: 1px solid var(--odysay-border, #e8ecf1);
     padding: 30px 0 35px;
-
     background: var(--odysay-surface, #ffffff);
     flex-shrink: 0; /* 화면이 작아지거나 콘텐츠가 적어도 푸터 높이가 압축되지 않도록 설정 */
-
+} /* 👈 [수정] 닫는 중괄호 추가 */
 
 .footer-inner {
     width: 1200px;
@@ -382,7 +381,7 @@
 }
 
 .footer-left p {
-    margin-top: 5px;
+    margin: 5px 0 0;
     font-size: 10px;
     color: var(--odysay-muted, #929dad);
 }
@@ -392,9 +391,7 @@
     gap: 20px;
     font-size: 10px;
     color: var(--odysay-muted, #9aa4b2);
-
-
-}
+} /* 👈 [수정] 닫는 중괄호 추가 */
 
 /* ==============================
    7. STICKY FOOTER (모든 페이지 공통)
