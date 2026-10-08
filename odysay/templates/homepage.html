@@ -81,7 +81,7 @@
                 </a>
 
 
-                <a href="#">
+                <a href="{{ url_for('inquiry.index') }}">
 
                     <span><i class="fa-regular fa-comments"></i></span>
                     QnA
@@ -375,7 +375,7 @@
 <!-- JS 파일 내에서 사용할 Flask url_for 값 전달 -->
 <script>
     window.APP_CONFIG = {
-        isGuest: {{ (g.user is none) | tojson }}
+        isGuest: {{ (g.user is none) | tojson }},
         tripListUrl: "{{ url_for('homepage.trip_list') }}",
         getPlacesUrl: {{ url_for('homepage.get_places') | tojson }}
     };
