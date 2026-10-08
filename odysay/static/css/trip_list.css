@@ -765,10 +765,6 @@
 
 @media (max-width: 760px) {
 
-    .gnb {
-        display: none;
-    }
-
     .travel-hero {
         padding: 55px 20px 45px;
     }

@@ -17,10 +17,8 @@
                     <a href="{{ url_for('homepage.trip_list') }}" class="gnb-link">여행지</a>
                     <div class="single-dropdown">
                         <ul class="sub-menu">
-                            <li><a href="{{ url_for('homepage.trip_list') }}?category=domestic">국내 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.trip_list') }}?category=overseas">해외 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.trip_list') }}?sort=popular">인기 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.trip_list') }}?sort=recommended">추천 코스</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?all">전체 여행지</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?focus=search">나라 이름 검색</a></li>
                         </ul>
                     </div>
                 </li>
@@ -44,7 +42,6 @@
                     <div class="single-dropdown">
                         <ul class="sub-menu">
                             <li><a href="{{ url_for('homepage.upload') }}">새 여행지 등록</a></li>
-                            <li><a href="#">등록 가이드</a></li>
                         </ul>
                     </div>
                 </li>
@@ -91,10 +88,8 @@
             <div class="sub-column">
                 <strong class="sub-title">여행지</strong>
                 <ul class="sub-list">
-                    <li><a href="{{ url_for('homepage.trip_list') }}?category=domestic">국내 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.trip_list') }}?category=overseas">해외 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.trip_list') }}?sort=popular">인기 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.trip_list') }}?sort=recommended">추천 코스</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?all">전체 여행지</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?focus=search">나라 이름 검색</a></li>
                 </ul>
             </div>
 
@@ -112,14 +107,14 @@
                 <strong class="sub-title">여행지 등록</strong>
                 <ul class="sub-list">
                     <li><a href="{{ url_for('homepage.upload') }}">새 여행지 등록</a></li>
-                    <li><a href="#">등록 가이드</a></li>
                 </ul>
             </div>
 
             <div class="sub-column">
                 <strong class="sub-title">마이페이지</strong>
                 <ul class="sub-list">
-                    <li><a href="{{ url_for('mypage.mypage') }}">내정보</a></li>
+
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=info">내정보</a></li>
                     <li><a href="{{ url_for('mypage.mypage_posts') }}">내가 쓴 글</a></li>
                     <li><a href="{{ url_for('mypage.mypage_bookmarks') }}">내가 찜한 여행지</a></li>
                     <li><a href="{{ url_for('mypage.mypage_places') }}">내가 만든 여행지</a></li>
