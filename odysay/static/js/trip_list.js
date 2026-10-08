@@ -5,237 +5,15 @@
 
 
 /* =========================================================
-   1. 국가 기본 데이터
+   1. Shared country catalog
 ========================================================= */
 
-const countries = [
-    // =========================
-    // 아시아
-    // =========================
-    { name: "대한민국", flag: "🇰🇷", continent: "asia" },
-    { name: "네팔", flag: "🇳🇵", continent: "asia" },
-    { name: "동티모르", flag: "🇹🇱", continent: "asia" },
-    { name: "라오스", flag: "🇱🇦", continent: "asia" },
-    { name: "레바논", flag: "🇱🇧", continent: "asia" },
-    { name: "말레이시아", flag: "🇲🇾", continent: "asia" },
-    { name: "몰디브", flag: "🇲🇻", continent: "asia" },
-    { name: "몽골", flag: "🇲🇳", continent: "asia" },
-    { name: "미얀마", flag: "🇲🇲", continent: "asia" },
-    { name: "바레인", flag: "🇧🇭", continent: "asia" },
-    { name: "방글라데시", flag: "🇧🇩", continent: "asia" },
-    { name: "베트남", flag: "🇻🇳", continent: "asia" },
-    { name: "부탄", flag: "🇧🇹", continent: "asia" },
-    { name: "브루나이", flag: "🇧🇳", continent: "asia" },
-    { name: "사우디아라비아", flag: "🇸🇦", continent: "asia" },
-    { name: "스리랑카", flag: "🇱🇰", continent: "asia" },
-    { name: "싱가포르", flag: "🇸🇬", continent: "asia" },
-    { name: "아랍에미리트", flag: "🇦🇪", continent: "asia" },
-    { name: "아르메니아", flag: "🇦🇲", continent: "asia" },
-    { name: "아제르바이잔", flag: "🇦🇿", continent: "asia" },
-    { name: "아프가니스탄", flag: "🇦🇫", continent: "asia" },
-    { name: "예멘", flag: "🇾🇪", continent: "asia" },
-    { name: "오만", flag: "🇴🇲", continent: "asia" },
-    { name: "요르단", flag: "🇯🇴", continent: "asia" },
-    { name: "우즈베키스탄", flag: "🇺🇿", continent: "asia" },
-    { name: "이라크", flag: "🇮🇶", continent: "asia" },
-    { name: "이란", flag: "🇮🇷", continent: "asia" },
-    { name: "이스라엘", flag: "🇮🇱", continent: "asia" },
-    { name: "인도", flag: "🇮🇳", continent: "asia" },
-    { name: "인도네시아", flag: "🇮🇩", continent: "asia" },
-    { name: "일본", flag: "🇯🇵", continent: "asia" },
-    { name: "조지아", flag: "🇬🇪", continent: "asia" },
-    { name: "중국", flag: "🇨🇳", continent: "asia" },
-    { name: "카자흐스탄", flag: "🇰🇿", continent: "asia" },
-    { name: "카타르", flag: "🇶🇦", continent: "asia" },
-    { name: "캄보디아", flag: "🇰🇭", continent: "asia" },
-    { name: "쿠웨이트", flag: "🇰🇼", continent: "asia" },
-    { name: "키르기스스탄", flag: "🇰🇬", continent: "asia" },
-    { name: "타지키스탄", flag: "🇹🇯", continent: "asia" },
-    { name: "태국", flag: "🇹🇭", continent: "asia" },
-    { name: "튀르키예", flag: "🇹🇷", continent: "asia" },
-    { name: "투르크메니스탄", flag: "🇹🇲", continent: "asia" },
-    { name: "파키스탄", flag: "🇵🇰", continent: "asia" },
-    { name: "필리핀", flag: "🇵🇭", continent: "asia" },
-
-    // =========================
-    // 유럽
-    // =========================
-    { name: "그리스", flag: "🇬🇷", continent: "europe" },
-    { name: "네덜란드", flag: "🇳🇱", continent: "europe" },
-    { name: "노르웨이", flag: "🇳🇴", continent: "europe" },
-    { name: "덴마크", flag: "🇩🇰", continent: "europe" },
-    { name: "독일", flag: "🇩🇪", continent: "europe" },
-    { name: "라트비아", flag: "🇱🇻", continent: "europe" },
-    { name: "러시아", flag: "🇷🇺", continent: "europe" },
-    { name: "루마니아", flag: "🇷🇴", continent: "europe" },
-    { name: "룩셈부르크", flag: "🇱🇺", continent: "europe" },
-    { name: "리투아니아", flag: "🇱🇹", continent: "europe" },
-    { name: "리히텐슈타인", flag: "🇱🇮", continent: "europe" },
-    { name: "모나코", flag: "🇲🇨", continent: "europe" },
-    { name: "몬테네그로", flag: "🇲🇪", continent: "europe" },
-    { name: "몰도바", flag: "🇲🇩", continent: "europe" },
-    { name: "몰타", flag: "🇲🇹", continent: "europe" },
-    { name: "바티칸 시국", flag: "🇻🇦", continent: "europe" },
-    { name: "벨기에", flag: "🇧🇪", continent: "europe" },
-    { name: "벨라루스", flag: "🇧🇾", continent: "europe" },
-    { name: "보스니아 헤르체고비나", flag: "🇧🇦", continent: "europe" },
-    { name: "북마케도니아", flag: "🇲🇰", continent: "europe" },
-    { name: "불가리아", flag: "🇧🇬", continent: "europe" },
-    { name: "산마리노", flag: "🇸🇲", continent: "europe" },
-    { name: "세르비아", flag: "🇷🇸", continent: "europe" },
-    { name: "스웨덴", flag: "🇸🇪", continent: "europe" },
-    { name: "스위스", flag: "🇨🇭", continent: "europe" },
-    { name: "스페인", flag: "🇪🇸", continent: "europe" },
-    { name: "슬로바키아", flag: "🇸🇰", continent: "europe" },
-    { name: "슬로베니아", flag: "🇸🇮", continent: "europe" },
-    { name: "아이슬란드", flag: "🇮🇸", continent: "europe" },
-    { name: "아일랜드", flag: "🇮🇪", continent: "europe" },
-    { name: "알바니아", flag: "🇦🇱", continent: "europe" },
-    { name: "에스토니아", flag: "🇪🇪", continent: "europe" },
-    { name: "영국", flag: "🇬🇧", continent: "europe" },
-    { name: "오스트리아", flag: "🇦🇹", continent: "europe" },
-    { name: "우크라이나", flag: "🇺🇦", continent: "europe" },
-    { name: "이탈리아", flag: "🇮🇹", continent: "europe" },
-    { name: "체코", flag: "🇨🇿", continent: "europe" },
-    { name: "크로아티아", flag: "🇭🇷", continent: "europe" },
-    { name: "키프로스", flag: "🇨🇾", continent: "europe" },
-    { name: "포르투갈", flag: "🇵🇹", continent: "europe" },
-    { name: "폴란드", flag: "🇵🇱", continent: "europe" },
-    { name: "프랑스", flag: "🇫🇷", continent: "europe" },
-    { name: "핀란드", flag: "🇫🇮", continent: "europe" },
-    { name: "헝가리", flag: "🇭🇺", continent: "europe" },
-
-    // =========================
-    // 아메리카
-    // =========================
-    { name: "가이아나", flag: "🇬🇾", continent: "america" },
-    { name: "과테말라", flag: "🇬🇹", continent: "america" },
-    { name: "그레나다", flag: "🇬🇩", continent: "america" },
-    { name: "니카라과", flag: "🇳🇮", continent: "america" },
-    { name: "도미니카 공화국", flag: "🇩🇴", continent: "america" },
-    { name: "도미니카 연방", flag: "🇩🇲", continent: "america" },
-    { name: "멕시코", flag: "🇲🇽", continent: "america" },
-    { name: "미국", flag: "🇺🇸", continent: "america" },
-    { name: "바베이도스", flag: "🇧🇧", continent: "america" },
-    { name: "바하마", flag: "🇧🇸", continent: "america" },
-    { name: "베네수엘라", flag: "🇻🇪", continent: "america" },
-    { name: "벨리즈", flag: "🇧🇿", continent: "america" },
-    { name: "볼리비아", flag: "🇧🇴", continent: "america" },
-    { name: "브라질", flag: "🇧🇷", continent: "america" },
-    { name: "세인트루시아", flag: "🇱🇨", continent: "america" },
-    { name: "세인트빈센트 그레나딘", flag: "🇻🇨", continent: "america" },
-    { name: "세인트키츠 네비스", flag: "🇰🇳", continent: "america" },
-    { name: "수리남", flag: "🇸🇷", continent: "america" },
-    { name: "아르헨티나", flag: "🇦🇷", continent: "america" },
-    { name: "아이티", flag: "🇭🇹", continent: "america" },
-    { name: "앤티가 바부다", flag: "🇦🇬", continent: "america" },
-    { name: "에콰도르", flag: "🇪🇨", continent: "america" },
-    { name: "엘살바도르", flag: "🇸🇻", continent: "america" },
-    { name: "온두라스", flag: "🇭🇳", continent: "america" },
-    { name: "우루과이", flag: "🇺🇾", continent: "america" },
-    { name: "자메이카", flag: "🇯🇲", continent: "america" },
-    { name: "캐나다", flag: "🇨🇦", continent: "america" },
-    { name: "코스타리카", flag: "🇨🇷", continent: "america" },
-    { name: "콜롬비아", flag: "🇨🇴", continent: "america" },
-    { name: "쿠바", flag: "🇨🇺", continent: "america" },
-    { name: "트리니다드 토바고", flag: "🇹🇹", continent: "america" },
-    { name: "파나마", flag: "🇵🇦", continent: "america" },
-    { name: "파라과이", flag: "🇵🇾", continent: "america" },
-    { name: "페루", flag: "🇵🇪", continent: "america" },
-    { name: "칠레", flag: "🇨🇱", continent: "america" },
-
-    // =========================
-    // 오세아니아
-    // =========================
-    { name: "나우루", flag: "🇳🇷", continent: "oceania" },
-    { name: "뉴질랜드", flag: "🇳🇿", continent: "oceania" },
-    { name: "마셜 제도", flag: "🇲🇭", continent: "oceania" },
-    { name: "미크로네시아", flag: "🇫🇲", continent: "oceania" },
-    { name: "바누아투", flag: "🇻🇺", continent: "oceania" },
-    { name: "사모아", flag: "🇼🇸", continent: "oceania" },
-    { name: "솔로몬 제도", flag: "🇸🇧", continent: "oceania" },
-    { name: "키리바시", flag: "🇰🇮", continent: "oceania" },
-    { name: "통가", flag: "🇹🇴", continent: "oceania" },
-    { name: "투발루", flag: "🇹🇻", continent: "oceania" },
-    { name: "파푸아뉴기니", flag: "🇵🇬", continent: "oceania" },
-    { name: "팔라우", flag: "🇵🇼", continent: "oceania" },
-    { name: "피지", flag: "🇫🇯", continent: "oceania" },
-    { name: "호주", flag: "🇦🇺", continent: "oceania" },
-
-    // =========================
-    // 아프리카
-    // =========================
-    { name: "가나", flag: "🇬🇭", continent: "africa" },
-    { name: "가봉", flag: "🇬🇦", continent: "africa" },
-    { name: "감비아", flag: "🇬🇲", continent: "africa" },
-    { name: "기니", flag: "🇬🇳", continent: "africa" },
-    { name: "기니비사우", flag: "🇬🇼", continent: "africa" },
-    { name: "나미비아", flag: "🇳🇦", continent: "africa" },
-    { name: "나이지리아", flag: "🇳🇬", continent: "africa" },
-    { name: "남수단", flag: "🇸🇸", continent: "africa" },
-    { name: "남아프리카공화국", flag: "🇿🇦", continent: "africa" },
-    { name: "니제르", flag: "🇳🇪", continent: "africa" },
-    { name: "라이베리아", flag: "🇱🇷", continent: "africa" },
-    { name: "레소토", flag: "🇱🇸", continent: "africa" },
-    { name: "르완다", flag: "🇷🇼", continent: "africa" },
-    { name: "리비아", flag: "🇱🇾", continent: "africa" },
-    { name: "마다가스카르", flag: "🇲🇬", continent: "africa" },
-    { name: "말라위", flag: "🇲🇼", continent: "africa" },
-    { name: "말리", flag: "🇲🇱", continent: "africa" },
-    { name: "모로코", flag: "🇲🇦", continent: "africa" },
-    { name: "모리셔스", flag: "🇲🇺", continent: "africa" },
-    { name: "모리타니", flag: "🇲🇷", continent: "africa" },
-    { name: "모잠비크", flag: "🇲🇿", continent: "africa" },
-    { name: "베냉", flag: "🇧🇯", continent: "africa" },
-    { name: "보츠와나", flag: "🇧🇼", continent: "africa" },
-    { name: "부룬디", flag: "🇧🇮", continent: "africa" },
-    { name: "부르키나파소", flag: "🇧🇫", continent: "africa" },
-    { name: "상투메 프린시페", flag: "🇸🇹", continent: "africa" },
-    { name: "세네갈", flag: "🇸🇳", continent: "africa" },
-    { name: "세이셸", flag: "🇸🇨", continent: "africa" },
-    { name: "소말리아", flag: "🇸🇴", continent: "africa" },
-    { name: "수단", flag: "🇸🇩", continent: "africa" },
-    { name: "시에라리온", flag: "🇸🇱", continent: "africa" },
-    { name: "알제리", flag: "🇩🇿", continent: "africa" },
-    { name: "앙골라", flag: "🇦🇴", continent: "africa" },
-    { name: "에스와티니", flag: "🇸🇿", continent: "africa" },
-    { name: "에티오피아", flag: "🇪🇹", continent: "africa" },
-    { name: "에리트레아", flag: "🇪🇷", continent: "africa" },
-    { name: "우간다", flag: "🇺🇬", continent: "africa" },
-    { name: "이집트", flag: "🇪🇬", continent: "africa" },
-    { name: "잠비아", flag: "🇿🇲", continent: "africa" },
-    { name: "적도 기니", flag: "🇬🇶", continent: "africa" },
-    { name: "중앙아프리카공화국", flag: "🇨🇫", continent: "africa" },
-    { name: "지부티", flag: "🇩🇯", continent: "africa" },
-    { name: "짐바브웨", flag: "🇿🇼", continent: "africa" },
-    { name: "차드", flag: "🇹🇩", continent: "africa" },
-    { name: "카메룬", flag: "🇨🇲", continent: "africa" },
-    { name: "카보베르데", flag: "🇨🇻", continent: "africa" },
-    { name: "케냐", flag: "🇰🇪", continent: "africa" },
-    { name: "코모로", flag: "🇰🇲", continent: "africa" },
-    { name: "코트디부아르", flag: "🇨🇮", continent: "africa" },
-    { name: "콩고 공화국", flag: "🇨🇬", continent: "africa" },
-    { name: "콩고민주공화국", flag: "🇨🇩", continent: "africa" },
-    { name: "탄자니아", flag: "🇹🇿", continent: "africa" },
-    { name: "토고", flag: "🇹🇬", continent: "africa" },
-    { name: "튀니지", flag: "🇹🇳", continent: "africa" }
-];
-
-/* =========================================================
-   국기 이모지 → ISO 국가코드 변환
-========================================================= */
-
-function flagToCountryCode(flag) {
-    if (!flag) return "";
-
-    const codePoints = [...flag].map(char => char.codePointAt(0));
-    if (codePoints.length !== 2) return "";
-
-    return codePoints
-        .map(code => String.fromCharCode(code - 127397))
-        .join("")
-        .toLowerCase();
-}
+const tripCountries = (window.OdysayCountries?.all || []).map((country) => ({
+    name: country.ko,
+    flag: country.flag,
+    code: country.code,
+    continent: country.continent
+}));
 
 
 /* =========================================================
@@ -246,6 +24,7 @@ let travelPlaces = [];
 let selectedCountry = null;
 let selectedContinent = "all";
 let searchKeyword = "";
+let keyboardCountryIndex = -1;
 
 
 /* =========================================================
@@ -272,7 +51,7 @@ async function loadTravelPlaces() {
         const response = await fetch("/trip-list/places");
 
         if (!response.ok) {
-            throw new Error(`여행지 데이터를 불러오지 못했습니다. (${response.status})`);
+            throw new Error(uiText('tripList.loadError', { status: response.status }));
         }
 
         travelPlaces = await response.json();
@@ -307,50 +86,15 @@ function getCountryCount(countryName) {
 
 function normalizeCountry(country) {
     if (!country) return "";
+    return window.OdysayCountries?.canonicalize(country) || String(country).trim();
+}
 
-    const value = String(country).trim();
+function uiText(key, values) {
+    return window.OdysayLanguage?.t?.(key, values) || key;
+}
 
-    const countryAliases = {
-        "한국": "대한민국",
-        "대한민국": "대한민국",
-        "Korea": "대한민국",
-        "South Korea": "대한민국",
-        "Republic of Korea": "대한민국",
-
-        "일본": "일본",
-        "Japan": "일본",
-
-        "베트남": "베트남",
-        "Vietnam": "베트남",
-
-        "태국": "태국",
-        "Thailand": "태국",
-
-        "미국": "미국",
-        "USA": "미국",
-        "United States": "미국",
-        "United States of America": "미국",
-
-        "캐나다": "캐나다",
-        "Canada": "캐나다",
-
-        "호주": "호주",
-        "Australia": "호주",
-
-        "프랑스": "프랑스",
-        "France": "프랑스",
-
-        "이탈리아": "이탈리아",
-        "Italy": "이탈리아",
-
-        "스위스": "스위스",
-        "Switzerland": "스위스",
-
-        "싱가포르": "싱가포르",
-        "Singapore": "싱가포르"
-    };
-
-    return countryAliases[value] || value;
+function displayCountry(country) {
+    return window.OdysayLanguage?.countryName?.(country) || country;
 }
 
 
@@ -363,21 +107,25 @@ function renderCountryList() {
 
     countryList.innerHTML = "";
 
-    // 대륙 + 검색어로 국가 필터링
-    const filteredCountries = countries
+    const matchingCountries = new Set(
+        (window.OdysayCountrySearch?.search(searchKeyword) || tripCountries)
+            .map((country) => country.ko || country.name)
+    );
+
+    // 대륙 + 공통 한글/영문/초성 검색으로 국가 필터링
+    const filteredCountries = tripCountries
         .filter(country => {
             const continentMatch =
                 selectedContinent === "all" ||
                 country.continent === selectedContinent;
 
-            const searchMatch =
-                country.name
-                    .toLowerCase()
-                    .includes(searchKeyword.toLowerCase());
+            const searchMatch = !searchKeyword || matchingCountries.has(country.name);
 
             return continentMatch && searchMatch;
         })
-        .sort((a, b) => a.name.localeCompare(b.name, "ko"));
+        .sort((a, b) => displayCountry(a.name).localeCompare(displayCountry(b.name), window.OdysayLanguage?.getLocale?.() || "ko-KR"));
+
+    keyboardCountryIndex = -1;
 
     // 국가 버튼 생성
     filteredCountries.forEach(country => {
@@ -397,14 +145,14 @@ function renderCountryList() {
         button.innerHTML = `
             <span class="country-flag">
                 <img
-                    src="https://flagcdn.com/w40/${flagToCountryCode(country.flag)}.png"
-                    alt="${country.name} 국기"
+                    src="https://flagcdn.com/w40/${country.code.toLowerCase()}.png"
+                    alt="${displayCountry(country.name)}"
                     loading="lazy"
                 >
             </span>
 
-            <span class="country-name">
-                ${country.name}
+            <span class="country-name" data-country-name="${country.name}">
+                ${displayCountry(country.name)}
             </span>
 
             <span class="country-count">
@@ -429,7 +177,7 @@ function renderCountryList() {
                 color: var(--odysay-muted, #9aa4b1);
                 font-size: 12px;
             ">
-                검색 결과가 없습니다.
+                ${uiText('tripList.noResults')}
             </div>
         `;
     }
@@ -441,9 +189,21 @@ function renderCountryList() {
 ========================================================= */
 
 function selectCountry(countryName) {
-    selectedCountry = countryName;
+    selectedCountry = normalizeCountry(countryName);
     renderCountryList();
     renderDestinations();
+}
+
+function setKeyboardCountryActive(index) {
+    const buttons = [...countryList.querySelectorAll('.country-item')];
+    if (!buttons.length) return;
+
+    keyboardCountryIndex = index;
+    buttons.forEach((button, buttonIndex) => {
+        const active = buttonIndex === keyboardCountryIndex;
+        button.classList.toggle('keyboard-active', active);
+        if (active) button.scrollIntoView({ block: 'nearest' });
+    });
 }
 
 
@@ -499,9 +259,16 @@ function createDestinationCard(place) {
     card.className = "destination-card";
 
     const imagePath = getPlaceImage(place);
-    const countryName = escapeCardText(normalizeCountry(place.country));
-    const region = escapeCardText(place.region || "");
-    const placeName = escapeCardText(place.place || "여행지");
+
+    const countryName = normalizeCountry(place.country);
+    const region = place.region || "";
+    const placeName = place.place || uiText('tripList.defaultPlace');
+
+    const displayRegion =
+        window.OdysayLanguage?.getLanguage?.() === 'en' &&
+        countryName === '대한민국'
+            ? window.OdysayLanguage?.englishKoreanRegion?.(region) || region
+            : region;
 
     const likesCount = getPlaceLikes(place);
     const hasLikeClass = likesCount > 0 ? "has-like" : "";
@@ -514,22 +281,26 @@ function createDestinationCard(place) {
                 loading="lazy"
                 decoding="async"
             >
-            <span class="country-badge">
-                ${countryName}
+            <span class="country-badge" data-country-name="${countryName}">
+                ${displayCountry(countryName)}
             </span>
         </div>
 
         <div class="card-content">
             <div class="card-location">
-                ${region}
+                ${displayRegion}
             </div>
 
-            <h3 class="card-title">
+            <h3 class="card-title"
+                data-translate-place="${Number(place.id)}"
+                data-translate-field="place"
+                data-place-country="${countryName}">
                 ${placeName}
             </h3>
 
-            <p class="card-description">
-                ${escapeCardText(getPlaceDescription(place))}
+
+            <p class="card-description" ${place.intro ? `data-translate-place="${Number(place.id)}" data-translate-field="intro"` : ''}>
+                ${getPlaceDescription(place)}
             </p>
 
             <div class="card-bottom">
@@ -537,8 +308,8 @@ function createDestinationCard(place) {
                     ${heartIcon} ${likesCount}
                 </span>
 
-                <span class="detail-text">
-                    자세히 보기 →
+                <span class="detail-text" data-i18n="tripList.detail">
+                    ${uiText('tripList.detail')}
                 </span>
             </div>
         </div>
@@ -584,11 +355,18 @@ function getPlaceDescription(place) {
     }
 
     const region = place.region || "";
+    const displayRegion =
+        window.OdysayLanguage?.getLanguage?.() === 'en' &&
+        normalizeCountry(place.country) === '대한민국'
+            ? window.OdysayLanguage?.englishKoreanRegion?.(region) || region
+            : region;
     if (region) {
-        return `${region}에서 만나볼 수 있는 특별한 여행지입니다.`;
+        return uiText('tripList.descriptionWithRegion', {
+    region: displayRegion
+});
     }
 
-    return "어딧세이에서 추천하는 특별한 여행지입니다.";
+    return uiText('tripList.description');
 }
 
 
@@ -615,20 +393,20 @@ function updateSelectedCountryHeader(count) {
 
     if (!selectedCountry) {
         if (selectedCountryFlag) selectedCountryFlag.textContent = "🌏";
-        if (selectedCountryName) selectedCountryName.textContent = "전체 여행지";
-        if (selectedCountryDescription) selectedCountryDescription.textContent = "다양한 나라의 여행지를 둘러보세요.";
+        if (selectedCountryName) selectedCountryName.textContent = uiText('tripList.allCountries');
+        if (selectedCountryDescription) selectedCountryDescription.textContent = uiText('tripList.allCountriesDescription');
         return;
     }
 
-    const country = countries.find(item => item.name === selectedCountry);
+    const country = tripCountries.find(item => item.name === selectedCountry);
 
     if (selectedCountryFlag) {
         if (country) {
-            const countryCode = flagToCountryCode(country.flag);
+            const countryCode = country.code.toLowerCase();
             selectedCountryFlag.innerHTML = `
                 <img
                     src="https://flagcdn.com/w80/${countryCode}.png"
-                    alt="${country.name} 국기"
+                    alt="${displayCountry(country.name)}"
                 >
             `;
         } else {
@@ -637,11 +415,13 @@ function updateSelectedCountryHeader(count) {
     }
 
     if (selectedCountryName) {
-        selectedCountryName.textContent = selectedCountry;
+        selectedCountryName.textContent = displayCountry(selectedCountry);
     }
 
     if (selectedCountryDescription) {
-        selectedCountryDescription.textContent = `${selectedCountry}에서 등록된 여행지를 둘러보세요.`;
+        selectedCountryDescription.textContent = uiText('tripList.countryDescription', {
+            country: displayCountry(selectedCountry)
+        });
     }
 }
 
@@ -663,8 +443,8 @@ function handleUrlParams() {
         searchKeyword = query.trim();
     }
 
-    // 통일된 국가명이 countries 목록에 정확히 존재하는지 검사
-    const targetCountry = countries.find(c => c.name === normalizedQuery || c.name === query.trim());
+    // Common catalog resolves Korean, English and aliases to one Korean key.
+    const targetCountry = tripCountries.find(c => c.name === normalizedQuery);
 
     if (targetCountry) {
         selectCountry(targetCountry.name);
@@ -689,6 +469,26 @@ if (countrySearch) {
         }
 
         renderCountryList();
+    });
+
+    countrySearch.addEventListener('keydown', (event) => {
+        const buttons = [...countryList.querySelectorAll('.country-item')];
+        if (!buttons.length || !['ArrowDown', 'ArrowUp', 'Enter'].includes(event.key)) return;
+
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            const button = buttons[keyboardCountryIndex >= 0 ? keyboardCountryIndex : 0];
+            if (button) selectCountry(button.dataset.country);
+            return;
+        }
+
+        event.preventDefault();
+        const direction = event.key === 'ArrowDown' ? 1 : -1;
+        const initialIndex = direction === 1 ? 0 : buttons.length - 1;
+        const next = keyboardCountryIndex < 0
+            ? initialIndex
+            : (keyboardCountryIndex + direction + buttons.length) % buttons.length;
+        setKeyboardCountryActive(next);
     });
 }
 
@@ -719,4 +519,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 3. DB 여행지 데이터 불러오기
     loadTravelPlaces();
+});
+
+window.addEventListener('odysay:languagechange', () => {
+    renderCountryList();
+    renderDestinations();
 });

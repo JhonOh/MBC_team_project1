@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 수정 | 어딧세이</title>
+    {% include 'components/language_assets.html' %}
+        {% include 'theme_head.html' %}
+
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/mypage.css') }}">
@@ -90,12 +93,14 @@
             text-decoration: none;
         }
     </style>
-    {% include 'theme_head.html' %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
 </head>
 <body>
-<div class="theme-toolbar">{% include 'theme_toggle.html' %}</div>
-    <main class="profile-edit-wrap">
-        <h1 class="page-title">프로필 수정</h1>
+{% include 'header.html' %}
+<main class="profile-edit-wrap">
+    <h1 class="page-title">프로필 수정</h1>
+
 
         <form class="profile-edit-card"
               method="POST"
@@ -115,6 +120,7 @@
                 minlength=2,
                 maxlength=20,
                 autocomplete='nickname',
+                placeholder='닉네임을 입력해 주세요.',
                 required=True
             ) }}
 
@@ -139,7 +145,8 @@
                     {{ form.current_password.label }}
                     {{ form.current_password(
                         class_='profile-edit-input',
-                        autocomplete='current-password'
+                        autocomplete='current-password',
+                        placeholder='현재 비밀번호를 입력해 주세요'
                     ) }}
 
                     {% for error in form.current_password.errors %}
@@ -155,7 +162,8 @@
                         class_='profile-edit-input',
                         minlength=8,
                         maxlength=128,
-                        autocomplete='new-password'
+                        autocomplete='new-password',
+                        placeholder='새 비밀번호를 입력해 주세요.'
                     ) }}
 
                     <p class="profile-edit-help">
@@ -173,7 +181,8 @@
                     {{ form.confirm_password.label }}
                     {{ form.confirm_password(
                         class_='profile-edit-input',
-                        autocomplete='new-password'
+                        autocomplete='new-password',
+                        placeholder='새 비밀번호를 다시 입력해 주세요.'
                     ) }}
 
                     {% for error in form.confirm_password.errors %}

@@ -132,6 +132,7 @@ def review_list(place_id):
             'id': review.id,
             'user_id': review.user_id,
             'nickname': user.nickname if user and user.nickname else '사용자',
+            'profile_image': user.profile_image if user else None,
             'rating': review.rating,
             'content': review.content,
             'created_at': review.created_at.isoformat(),
@@ -393,6 +394,7 @@ def travel_talk_list(place_id):
                 if user and user.nickname
                 else '사용자'
             ),
+            'profile_image': user.profile_image if user else None,
             'title': talk.title,
             'content': talk.content,
             'created_at': talk.created_at.isoformat(),
@@ -894,6 +896,7 @@ def travel_talk_main_comment_list(talk_id):
                 if user and user.nickname
                 else '사용자'
             ),
+            'profile_image': user.profile_image if user else None,
             'content': comment.content,
             'created_at': comment.created_at.isoformat(),
             'updated_at': comment.updated_at.isoformat() if comment.updated_at else None,

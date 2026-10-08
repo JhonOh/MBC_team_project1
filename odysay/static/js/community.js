@@ -1,5 +1,52 @@
 document.addEventListener('DOMContentLoaded', () => {
   let placesData = [];
+  const uiText = (key, values) => window.OdysayLanguage?.t?.(key, values) || key;
+  const displayCountry = (country) => window.OdysayLanguage?.countryName?.(country) || country || '';
+  const isPlaceItem = (item) =>
+    String(item?.id || '').startsWith('place_');
+
+  const isKoreanPlace = (item) => {
+    const country =
+      window.OdysayCountries?.canonicalize?.(item?.country) || item?.country;
+
+    return isPlaceItem(item) && country === '대한민국';
+  };
+
+  const displayRegion = (item) => {
+    const region = item?.region || '';
+
+    if (
+      window.OdysayLanguage?.getLanguage?.() === 'en' &&
+      isKoreanPlace(item)
+    ) {
+      return window.OdysayLanguage?.englishKoreanRegion?.(region) || region;
+    }
+
+    return region;
+  };
+
+  const displayTitle = (item) => {
+    const title = item?.title || '';
+
+    if (
+      window.OdysayLanguage?.getLanguage?.() === 'en' &&
+      isKoreanPlace(item)
+    ) {
+      return window.OdysayLanguage?.englishKoreanPlaceName?.(title) || title;
+    }
+
+    // 일반 커뮤니티 게시글 제목은 사용자가 작성한 내용 → 그대로
+    return title;
+  };
+  const displayCategory = (category) => {
+    const normalized = String(category || '').replace(/\s+/g, '');
+    const keyByCategory = {
+      '여행후기': 'community.categoryReview',
+      '여행팁': 'community.categoryTip',
+      '자유게시판': 'community.categoryFree'
+    };
+    return keyByCategory[normalized] ? uiText(keyByCategory[normalized]) : (category || uiText('community.general'));
+  };
 
   // 1. HTML의 hidden input에서 현재 카테고리값 및 초기 정렬값 읽기
   const categoryInput = document.getElementById('currentCategoryInput');
@@ -33,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!response.ok) {
         throw new Error(
           response.status === 401
-            ? '로그인이 필요합니다. 로그인 후 다시 시도해 주세요.'
-            : '게시글을 불러오지 못했습니다.'
+            ? uiText('community.loginRequired')
+            : uiText('community.loadError')
         );
       }
 
@@ -143,9 +190,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (items.length === 0) {
       postList.innerHTML = `
+
         <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
           <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:var(--odysay-muted, #ccc);"></i>
           <p>등록된 게시글이 없습니다.</p>
+
         </div>`;
       return;
     }
@@ -173,10 +222,10 @@ document.addEventListener('DOMContentLoaded', () => {
           ${imageHtml}
           <div class="post-info">
             <div class="post-body-wrap">
-              <span class="badge">${item.category || '일반'}</span>
+              <span class="badge">${displayCategory(item.category)}</span>
               <div class="post-main-content">
-                <h3 class="post-title">[${item.country || '어딧세이'}/${item.region || '게시판'}] ${item.title}</h3>
-                <p class="post-desc">${item.intro || '등록된 내용이 없습니다.'}</p>
+                <h3 class="post-title">[${displayCountry(item.country) || 'Odysay'}/${displayRegion(item) || uiText('community.board')}] ${displayTitle(item)}</h3>
+                <p class="post-desc">${item.intro || uiText('community.noContent')}</p>
               </div>
             </div>
             <div class="post-meta">
@@ -288,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <span class="hot-rank">${index + 1}</span>
             ${hotImageHtml}
             <div class="hot-details">
-              <div class="hot-title">${item.title}</div>
+              <div class="hot-title">${displayTitle(item)}</div>
               <div class="hot-stats">
                 <i class="fa-regular fa-heart"></i> ${item.likes || 0}
                 <i class="fa-regular fa-comment" style="margin-left:6px;"></i> ${commentCount}
@@ -329,4 +378,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   }
+
+  window.addEventListener('odysay:languagechange', () => {
+    applyFilterAndRender();
+    renderHotList(placesData);
+  });
 });

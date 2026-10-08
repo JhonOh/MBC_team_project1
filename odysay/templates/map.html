@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Odysay</title>
+    {% include 'components/language_assets.html' %}
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
@@ -21,11 +22,9 @@
     <link rel="stylesheet"
           href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
     <link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}"
->
-    {% include 'theme_head.html' %}
+    rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/map_place_popup.css') }}">
+     {% include 'theme_head.html' %}
 </head>
 
 <body class="m-0 overflow-hidden">
@@ -36,14 +35,21 @@
         id="map"
         class="position-absolute top-0 start-0 w-100 vh-100">
 </div>
-<!-- 홈페이지로 이동 -->
-<a
-    id="map-explore-button"
-    href="{{ url_for('homepage.homepage') }}"
-    class="btn btn-dark px-4 py-3 rounded-pill shadow"
->
-    여행 둘러보기
-</a>
+<!-- 로그인 여부에 따른 여행 둘러보기 -->
+{% if g.user %}
+    <a id="map-explore-button"
+       href="{{ url_for('homepage.homepage') }}"
+       class="btn btn-dark px-4 py-3 rounded-pill shadow">
+        여행 둘러보기
+    </a>
+{% else %}
+    <button id="map-explore-button"
+            type="button"
+            class="btn btn-dark px-4 py-3 rounded-pill shadow"
+            onclick="showSignupNotice()">
+        여행 둘러보기
+    </button>
+{% endif %}
 
 <!-- 가입 완료 또는 로그인 오류 메시지 -->
 {% with messages = get_flashed_messages() %}
@@ -87,11 +93,11 @@
 
     <!-- 로그인하지 않은 사용자: 로그인 카드 -->
     <!-- 로그인하지 않은 사용자: 로그인 카드 -->
-<section
-    id="map-login-card"
-    class="bg-white rounded-4 shadow p-4"
-    aria-label="로그인"
->
+    <section
+            id="map-login-card"
+            class="bg-white rounded-4 shadow p-4"
+            aria-label="로그인"
+    >
 
         <div class="mb-4">
             <h2 class="fw-bold mb-2">
@@ -177,12 +183,13 @@
         maxBounds: worldBounds,
         maxBoundsViscosity: 1.0
     }).setView([20, 0], 3);
+    map.attributionControl.setPrefix(false);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         noWrap: true,
         bounds: worldBounds,
         attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(map);
 
     function updateMinimumZoom() {
@@ -218,8 +225,41 @@
             for (const place of places) {
                 if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) ||
                     Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
+
                 const popup = createMapPlacePopup(place);
                 const link = popup.querySelector('.map-place-card__link');
+
+                const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
+                const canonicalCountry =
+                    window.OdysayCountries?.canonicalize?.(place.country) || place.country;
+
+                const title = document.createElement('strong');
+                title.textContent =
+                    isEnglish && canonicalCountry === '대한민국'
+                        ? window.OdysayLanguage?.englishKoreanPlaceName?.(place.title) || place.title
+                        : place.title;
+
+                const location = document.createElement('p');
+
+                const displayCountry =
+                    window.OdysayLanguage?.countryName?.(place.country) || place.country;
+
+                const displayRegion =
+                    isEnglish && canonicalCountry === '대한민국'
+                        ? window.OdysayLanguage?.englishKoreanRegion?.(place.region) || place.region
+                        : place.region;
+
+                location.textContent = [displayCountry, displayRegion]
+                    .filter(Boolean)
+                    .join(' ');
+
+                const intro = document.createElement('p');
+                intro.textContent = place.intro || '';
+
+                link.href = place.detail_url;
+                link.dataset.i18n = 'common.details';
+                link.textContent = window.OdysayLanguage?.t?.('common.details') || '상세보기';
+
 
                 {% if g.user is none %}
                     link.addEventListener('click', function (event) {
@@ -242,60 +282,58 @@
             const message = document.createElement('div');
             message.className = 'alert alert-warning position-absolute top-0 start-0 m-3';
             message.style.zIndex = '1100';
-            message.textContent = '여행지 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
+            message.dataset.i18n = 'map.loadError';
+            message.textContent = window.OdysayLanguage?.t?.('map.loadError') || '여행지 목록을 불러오지 못했습니다. 잠시 후 새로고침해 주세요.';
             document.body.append(message);
         }
     }
 
     loadPlaces();
-</script>
+    </script>
+
+
+    <!-- 비로그인 사용자 안내창 -->
+    <div class="modal fade"
+         id="signupNoticeModal"
+         tabindex="-1"
+         aria-labelledby="signupNoticeTitle"
+         aria-hidden="true"
+         data-bs-backdrop="static"
+         data-bs-keyboard="false">
+
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="signupNoticeTitle">
+                        회원가입 안내
+                    </h2>
+                </div>
+
+                <div class="modal-body">
+                    여행지 상세보기는 회원가입 후 로그인하면 이용할 수 있습니다.
+                    <br>
+                        회원가입 페이지로 이동하시겠습니까?
+                </div>
+
+                <div class="modal-footer">
+                    <a href="{{ url_for('first.map') }}"
+                       class="btn btn-outline-secondary">
+                        아니오
+                    </a>
+
+                    <a href="{{ url_for('auth.signup') }}"
+                       class="btn btn-primary">
+                        회원가입
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- 위에서 안내한 모달 HTML과 script를 여기에 추가 -->
-
-</body>
-</html>
-
-<!-- 비로그인 사용자 안내창 -->
-<div class="modal fade"
-     id="signupNoticeModal"
-     tabindex="-1"
-     aria-labelledby="signupNoticeTitle"
-     aria-hidden="true"
-     data-bs-backdrop="static"
-     data-bs-keyboard="false">
-
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title fs-5" id="signupNoticeTitle">
-                    회원가입 안내
-                </h2>
-            </div>
-
-            <div class="modal-body">
-                여행지 상세보기는 회원가입 후 로그인하면 이용할 수 있습니다.
-                <br>
-                회원가입 페이지로 이동하시겠습니까?
-            </div>
-
-            <div class="modal-footer">
-                <a href="{{ url_for('first.map') }}"
-                   class="btn btn-outline-secondary">
-                    아니오
-                </a>
-
-                <a href="{{ url_for('auth.signup') }}"
-                   class="btn btn-primary">
-                    회원가입
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script>
     function showSignupNotice() {
         const element = document.getElementById('signupNoticeModal');
@@ -307,6 +345,9 @@
         showSignupNotice();
     {% endif %}
 </script>
+</body>
+</html>
+
 
 </body>
 </html>

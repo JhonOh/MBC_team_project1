@@ -268,3 +268,78 @@
         gap: 8px;
     }
 }
+
+.inquiry-page .management-tabs,
+.inquiry-page .report-status-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.inquiry-page .management-tabs a,
+.inquiry-page .report-status-tabs a {
+    padding: 10px 16px;
+    border: 1px solid #dce3eb;
+    border-radius: 8px;
+    background: #fff;
+    color: #334155;
+    text-decoration: none;
+}
+
+.inquiry-page .management-tabs a.active,
+.inquiry-page .report-status-tabs a.active {
+    background: #1e293b;
+    border-color: #1e293b;
+    color: #fff;
+}
+
+.inquiry-page .report-card {
+    padding: 20px;
+    margin-bottom: 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    overflow-wrap: anywhere;
+}
+
+.inquiry-page .report-resolution-form {
+    display: grid;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.inquiry-page .report-resolution-form label {
+    display: grid;
+    gap: 6px;
+}
+
+.inquiry-page .report-resolution-form select,
+.inquiry-page .report-resolution-form textarea {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dce3eb;
+    border-radius: 6px;
+}
+
+.inquiry-page .report-resolution-form textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+/* 문의·신고 탭에서 동일한 전체 너비 사용 */
+.inquiry-page .main-container {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.inquiry-page .content-center {
+    min-width: 0;
+}
+
+.inquiry-page .inquiry-panel {
+    box-sizing: border-box;
+    width: 100%;
+}

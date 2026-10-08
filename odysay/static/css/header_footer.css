@@ -1,25 +1,4 @@
 /* ==============================
-   0. Layout Reset & Sticky Footer Base
-============================== */
-html {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 본문 영역: header와 footer 사이의 모든 형제 요소가 남은 유휴 공간을 분할/확장하여 차지 */
-/* main 태그나 페이지별 본문 컨테이너 클래스가 무엇이든 자동으로 바닥으로 밀어냅니다. */
-body > :not(.header):not(.footer) {
-    flex: 1 0 auto;
-}
-
-/* ==============================
    HEADER (공통 기본)
 ============================== */
 .header {
@@ -29,7 +8,6 @@ body > :not(.header):not(.footer) {
     background: var(--odysay-surface, #ffffff);
     border-bottom: 1px solid var(--odysay-border, #e8ecf1);
     z-index: 1000;
-    flex-shrink: 0; /* 높이 줄어듦 방지 */
 }
 
 .header-inner {
@@ -180,19 +158,35 @@ body > :not(.header):not(.footer) {
     cursor: pointer;
     padding: 20px 5px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center;      /* 이미지와 글씨 수직 중앙 정렬 */
+    justify-content: center;  /* 수평 중앙 정렬 */
+    gap: 8px;
 }
 
 .all-menu-icon {
     width: 22px;
     height: auto;
     object-fit: contain;
+    display: block;           /* 이미지 기본 여백 제거 및 중앙 배치 고정 */
     transition: opacity 0.2s ease;
+}
+
+/* PC 화면에서는 전체 메뉴 글씨 숨김 */
+.all-menu-text {
+    display: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: #152238;
+    white-space: nowrap;
+    line-height: 1;            /* 이미지와의 수직 중앙 라인 맞춤 */
 }
 
 .all-menu-btn:hover .all-menu-icon {
     opacity: 0.6;
+}
+
+.all-menu-btn:hover .all-menu-text {
+    color: #557ba8;
 }
 
 /* ==============================
@@ -310,14 +304,67 @@ body > :not(.header):not(.footer) {
 }
 
 /* ==============================
-   5. FOOTER (공통)
+   5. 반응형 (화면이 줄어들었을 때)
+============================== */
+@media (max-width: 992px) {
+    .header-inner {
+        max-width: calc(100% - 40px);
+    }
+
+    /* 4개 주요 메뉴 안보이게 처리 */
+    .main-menu-item {
+        display: none !important;
+    }
+
+    /* 버튼 내 요소 간격 및 수직 Center 라인 고정 */
+    .all-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* 줄 3개 이미지와 '전체 메뉴' 글자 사이 여백 */
+    }
+
+    /* 전체 메뉴 버튼 텍스트 노출 및 높이 맞춤 */
+    .all-menu-text {
+        display: inline-block;
+        line-height: 1;
+    }
+
+    /* 메가 드롭다운 모바일/작은 화면 레이아웃 지원 */
+    .mega-dropdown-inner {
+        width: 100%;
+        max-width: calc(100% - 40px);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .sub-column {
+        padding: 0 15px;
+    }
+
+    .sub-column:nth-child(2n+1) {
+        border-left: none;
+    }
+
+    .all-menu-wrap:hover ~ .mega-dropdown,
+    .all-menu-wrap:has(:hover) ~ .mega-dropdown,
+    .mega-dropdown:hover,
+    .header:has(.all-menu-wrap:hover) .mega-dropdown {
+        max-height: 500px; /* 2열 배치로 늘어난 높이 확보 */
+    }
+}
+
+/* ==============================
+   6. FOOTER (공통)
 ============================== */
 .footer {
     border-top: 1px solid var(--odysay-border, #e8ecf1);
     padding: 30px 0 35px;
+
     background: var(--odysay-surface, #ffffff);
     flex-shrink: 0; /* 화면이 작아지거나 콘텐츠가 적어도 푸터 높이가 압축되지 않도록 설정 */
-}
+
 
 .footer-inner {
     width: 1200px;
@@ -345,4 +392,38 @@ body > :not(.header):not(.footer) {
     gap: 20px;
     font-size: 10px;
     color: var(--odysay-muted, #9aa4b2);
+
+
+}
+
+/* ==============================
+   7. STICKY FOOTER (모든 페이지 공통)
+============================== */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;          /* 모바일 주소창 대응 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* header / footer는 찌그러지지 않게 */
+.header,
+.footer {
+    flex-shrink: 0;
+}
+
+/* 본문 영역이 남는 공간을 모두 차지 → footer가 아래로 밀림 */
+body > main {
+    flex: 1 0 auto;
+    width: 100%;                 /* 중요: auto 마진 때문에 줄어드는 것 방지 */
+    box-sizing: border-box;
+}
+
+/* 본문이 main 태그가 아닌 페이지 대비용 안전장치 */
+.footer {
+    margin-top: auto;
 }

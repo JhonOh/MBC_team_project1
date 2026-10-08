@@ -1,5 +1,4 @@
 /* ==============================
-
    HEADER
 ============================== */
 /*=============================
@@ -470,24 +469,41 @@
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 0; /* 패딩을 통해 구분선 위치를 정확히 중앙으로 맞추기 위해 gap 0 설정 */
 }
 
 .recent-item,
 .community-item {
     display: flex;
     gap: 14px;
+
     padding-bottom: 8px;
     border-bottom: 1px solid var(--odysay-border, #edf0f4);
     align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
+    border-radius: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.recent-item:hover,
+.community-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(15, 30, 50, 0.08);
+    background-color: #ffffff;
 }
 
 .recent-item:last-child,
 .community-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
+    border-bottom: none; /* 마지막 항목 밑줄 제거 */
+}
+
+.community-thumb {
+    width: 100px;
+    height: 84px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
 }
 
 .recent-item img,
@@ -498,6 +514,12 @@
     object-fit: cover;
     flex-shrink: 0;
     display: block;
+    transition: transform 0.35s ease;
+}
+
+.recent-item:hover img,
+.community-item:hover img {
+    transform: scale(1.06);
 }
 
 .recent-info,
@@ -787,12 +809,13 @@
     position: static;
     transform: none;
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 8px;
     width: 100%;
     max-width: none;
     height: auto;
     margin: 0;
-    padding: 10px 0;
+    padding: 10px;
     border: 0;
     border-radius: 10px;
     background: rgba(255, 255, 255, 0.08);
@@ -807,10 +830,14 @@
     width: auto;
     min-width: 0;
     margin: 0;
-    padding: 0 2px;
+    padding: 9px 6px;
+    min-height: 68px;
     color: #fff;
-    font-size: 10px;
-    white-space: nowrap;
+    font-size: 12px;
+    line-height: 1.4;
+    white-space: normal;
+    text-align: center;
+    overflow-wrap: anywhere;
     text-decoration: none;
 }
 
@@ -894,8 +921,10 @@ a {
 .route-field input {
     width: 100%;
     height: 50px;
+
     padding: 0 18px 0 65px;
     border: 1px solid var(--odysay-border, #d7dfeb);
+
     border-radius: 10px;
     font-size: 15px;
     outline: none;
@@ -907,11 +936,16 @@ a {
 }
 
 .route-label {
+
     position: absolute;
     left: 18px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--odysay-muted, #7183a3);
+
+    display: block;
+    margin: 0 0 8px;
+
     font-size: 13px;
     font-weight: 700;
     z-index: 1;
@@ -938,15 +972,18 @@ a {
     position: fixed;
     inset: 0;
     z-index: 9999;
-    background: rgba(0,0,0,.45);
+    background: rgba(0, 0, 0, .45);
     align-items: center;
     justify-content: center;
 }
 
-.time-modal.active { display: flex; }
+.time-modal.active {
+    display: flex;
+}
 
 .time-box {
     position: relative;
+
     width: 360px;
     padding: 28px;
     background: var(--odysay-surface, white);
@@ -963,7 +1000,9 @@ a {
     cursor: pointer;
 }
 
-.country-search { position: relative; }
+.country-search {
+    position: relative;
+}
 
 .country-search input,
 .city-box select,
@@ -987,7 +1026,9 @@ a {
     z-index: 10;
 }
 
-.country-list.active { display: block; }
+.country-list.active {
+    display: block;
+}
 
 .country-option {
     padding: 8px 10px;
@@ -1019,6 +1060,8 @@ a {
 
 .time-card {
     flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
     padding: 16px;
     background: var(--odysay-surface-muted, #f4f7fb);
     border-radius: 12px;
@@ -1086,6 +1129,7 @@ a {
 
 .weather-current {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     margin: 8px 0;
@@ -1120,7 +1164,7 @@ a {
 }
 
 .weather-hour {
-    flex: 0 0 65px;
+    flex: 0 0 82px;
     padding: 10px 5px;
     border-radius: 10px;
     background: var(--odysay-surface, white);
@@ -1160,3 +1204,40 @@ a {
     color: var(--odysay-muted, #8a94a6) !important;
     line-height: 1.5;
 }
+
+
+/* Travel tools allow longer labels in either language. */
+.time-modal { padding: 20px; box-sizing: border-box; }
+.time-box h2 {
+    margin: 0 24px 22px 0;
+    font-size: 22px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+.time-box input, .time-box select, .time-box button {
+    font-size: 14px;
+    line-height: 1.5;
+}
+.time-box .time-check { margin-top: 20px; padding: 13px 16px; }
+@media (max-width: 480px) {
+    .time-modal { padding: 12px; }
+    .time-box { padding: 26px 20px; max-height: calc(100dvh - 24px); }
+    .time-result-row { flex-direction: column; }
+    .time-box h2 { font-size: 20px; }
+}
+
+.home-map-stage {
+    position: relative;
+}
+
+.home-main-map-button {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    z-index: 800;
+
+    transform: translateX(-50%) scale(0.8);
+    transform-origin: center bottom;
+    white-space: nowrap;
+}
+

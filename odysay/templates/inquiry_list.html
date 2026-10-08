@@ -1,14 +1,14 @@
 {% extends "inquiry_base.html" %}
 
 {% block title %}
-    {{ '문의 관리' if is_admin() else '내 문의 목록' }}
+    {{ '문의 및 신고 관리' if is_admin() else '내 문의 목록' }}
 {% endblock %}
 
 {% block content %}
 <div class="inquiry-panel">
     <div class="inquiry-heading">
         <div>
-            <h1 class="inquiry-title">
+            <h1 class="inquiry-title" data-i18n="{{ 'inquiry.management' if is_admin() else 'inquiry.myList' }}">
                 {{ '문의 관리' if is_admin() else '내 문의 목록' }}
             </h1>
 

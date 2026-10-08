@@ -13,7 +13,7 @@
         <nav class="gnb">
             <ul class="gnb-list">
                 <!-- 2-1. 여행지 -->
-                <li class="gnb-item">
+                <li class="gnb-item main-menu-item">
                     <a href="{{ url_for('homepage.trip_list') }}" class="gnb-link">여행지</a>
                     <div class="single-dropdown">
                         <ul class="sub-menu">
@@ -26,7 +26,7 @@
                 </li>
 
                 <!-- 2-2. 커뮤니티 -->
-                <li class="gnb-item">
+                <li class="gnb-item main-menu-item">
                     <a href="{{ url_for('homepage.community') }}" class="gnb-link">커뮤니티</a>
                     <div class="single-dropdown">
                         <ul class="sub-menu">
@@ -39,7 +39,7 @@
                 </li>
 
                 <!-- 2-3. 여행지 등록 -->
-                <li class="gnb-item">
+                <li class="gnb-item main-menu-item">
                     <a href="{{ url_for('homepage.upload') }}" class="gnb-link">여행지 등록</a>
                     <div class="single-dropdown">
                         <ul class="sub-menu">
@@ -50,23 +50,25 @@
                 </li>
 
                 <!-- 2-4. 마이페이지 -->
-                <li class="gnb-item">
+                <li class="gnb-item main-menu-item">
                     <a href="{{ url_for('homepage.mypage') }}" class="gnb-link">마이페이지</a>
                     <div class="single-dropdown">
                         <ul class="sub-menu">
-                            <li><a href="{{ url_for('homepage.mypage') }}?tab=info">내정보</a></li>
-                            <li><a href="{{ url_for('homepage.mypage') }}?tab=posts">내가 쓴 글</a></li>
-                            <li><a href="{{ url_for('homepage.mypage') }}?tab=bookmarks">내가 찜한 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.mypage') }}?tab=my_trips">내가 만든 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.mypage_settings') }}">설정</a></li>
+                            <li><a href="{{ url_for('mypage.mypage') }}?tab=info">내정보</a></li>
+                            <li><a href="{{ url_for('mypage.mypage_posts') }}">내가 쓴 글</a></li>
+                            <li><a href="{{ url_for('mypage.mypage_bookmarks') }}">내가 찜한 여행지</a></li>
+                            <li><a href="{{ url_for('mypage.mypage_places') }}">내가 만든 여행지</a></li>
+                            <li><a href="{{ url_for('mypage.mypage') }}?tab=my_trips">1:1 문의</a></li>
+                            <li><a href="{{ url_for('mypage.mypage_settings') }}">설정</a></li>
                         </ul>
                     </div>
                 </li>
 
-                <!-- 2-5. [마이페이지 오른쪽] 줄 세 개(allmenu.png) 아이콘 -->
+                <!-- 2-5. 줄 세 개 아이콘 및 전체 메뉴 버튼 -->
                 <li class="gnb-item all-menu-wrap">
                     <button type="button" class="all-menu-btn" aria-label="전체 메뉴">
                         <img src="{{ url_for('static', filename='images/allmenu.png') }}" alt="전체 메뉴 아이콘" class="all-menu-icon">
+                        <span class="all-menu-text">전체 메뉴</span>
                     </button>
                 </li>
             </ul>
@@ -78,12 +80,12 @@
             {% if g.user %}
             <a class="logout-button" href="{{ url_for('auth.logout') }}">로그아웃</a>
             {% else %}
-            <a class="logout-button" href="{{ url_for('homepage.homepage') }}">로그인</a>
+            <a class="logout-button" href="{{ url_for('first.map') }}">로그인</a>
             {% endif %}
         </div>
     </div>
 
-    <!-- 4. 전체 메가 드롭다운 (header 직속 자식으로 배치) -->
+    <!-- 4. 전체 메가 드롭다운 (header 직속 자식) -->
     <div class="mega-dropdown">
         <div class="mega-dropdown-inner">
             <div class="sub-column">
@@ -117,11 +119,12 @@
             <div class="sub-column">
                 <strong class="sub-title">마이페이지</strong>
                 <ul class="sub-list">
-                    <li><a href="{{ url_for('homepage.mypage') }}?tab=info">내정보</a></li>
-                    <li><a href="{{ url_for('homepage.mypage') }}?tab=posts">내가 쓴 글</a></li>
-                    <li><a href="{{ url_for('homepage.mypage') }}?tab=bookmarks">내가 찜한 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.mypage') }}?tab=my_trips">내가 만든 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.mypage_settings') }}">설정</a></li>
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=info">내정보</a></li>
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=posts">내가 쓴 글</a></li>
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=bookmarks">내가 찜한 여행지</a></li>
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=my_trips">내가 만든 여행지</a></li>
+                    <li><a href="{{ url_for('mypage.mypage') }}?tab=my_trips">1:1 문의</a></li>
+                    <li><a href="{{ url_for('mypage.mypage_settings') }}">설정</a></li>
                 </ul>
             </div>
         </div>

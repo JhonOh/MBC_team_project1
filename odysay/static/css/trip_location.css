@@ -1,11 +1,4 @@
 /* 기본 초기화 스타일 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
 body {
     background-color: var(--odysay-surface, #ffffff);
     color: var(--odysay-text, #333333);
@@ -32,7 +25,7 @@ button {
 /* 상단 카드 정보 구조 */
 .detail-top {
     display: grid;
-    grid-template-columns: 1.45fr 0.95fr;
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 0.95fr);
     gap: 30px;
     margin-bottom: 30px;
 }
@@ -222,6 +215,7 @@ button {
     flex-direction: column;
     justify-content: flex-start;
     padding-top: 10px;
+    min-width: 0;
 }
 
 .title {
@@ -236,6 +230,7 @@ button {
 }
 
 .place-meta {
+    --meta-label-width: 46px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -251,15 +246,25 @@ button {
     color: var(--odysay-muted, #66717d);
 }
 
-.place-meta p {
-    display: flex;
-    align-items: center;
+.place-meta > p {
+    display: grid;
+    grid-template-columns: minmax(0, var(--meta-label-width)) minmax(0, 1fr);
+    align-items: start;
     gap: 10px;
 }
 
+.place-meta:lang(en) {
+    --meta-label-width: 108px;
+}
+
+.place-meta > p > span,
+.summary-item > :last-child {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
 .meta-label {
-    width: 46px;
-    flex-shrink: 0;
+    line-height: 1.6;
 
     color: var(--odysay-muted, #9aa4b5);
     font-size: 12px;
@@ -301,17 +306,30 @@ button {
 
 .place-title-line {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 15px;
 }
 
 .place-title-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-
+    flex: 1;
     min-width: 0;
+}
+
+.title-with-heart {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+    flex: 1;
+}
+
+.title-with-heart .title {
+    margin: 0;
+    min-width: 0;
+    line-height: 1.3;
+    word-break: keep-all;
+    overflow-wrap: break-word;
 }
 
 .place-title-line .title {
@@ -325,12 +343,15 @@ button {
     font-weight: 600;
 
     white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 7px;
 }
 
 .owner-actions {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .owner-actions form {
@@ -391,8 +412,9 @@ button {
 }
 
 .summary-item {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, var(--meta-label-width)) minmax(0, 1fr);
+    align-items: start;
     gap: 10px;
 }
 
@@ -401,9 +423,12 @@ button {
     flex-shrink: 0;
 
     color: var(--odysay-muted, #9aa4b5);
+
     font-size: 12px;
     font-weight: 500;
-    white-space: nowrap;
+    line-height: 1.6;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .place-intro {
@@ -678,6 +703,7 @@ button {
     font-size: 11px;
     color: var(--odysay-muted, #7f8c8d);
 }
+
 
 /* ================= 찜하기 ================= */
 
@@ -1278,4 +1304,3 @@ button {
     border: 1px solid var(--odysay-border, #cfe0ff);
     border-radius: 10px;
 }
-

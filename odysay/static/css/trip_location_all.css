@@ -61,7 +61,7 @@
 
 .basic-info-layout {
     display: grid;
-    grid-template-columns: 1fr 420px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
 
     gap: 50px;
 
@@ -84,17 +84,27 @@
 }
 
 .basic-info-row {
-    display: flex;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: 70px minmax(0, 1fr);
+    align-items: start;
     gap: 14px;
+    width: 100%;
     font-size: 15px;
 }
 
-.basic-info-label {
-    width: 70px;
-    flex-shrink: 0;
+.basic-info-row:lang(en) {
+    grid-template-columns: minmax(0, 132px) minmax(0, 1fr);
+}
 
+
+.basic-info-row > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.basic-info-label {
     color: var(--odysay-muted, #718096);
+
 
     font-weight: 600;
 }
@@ -140,6 +150,8 @@
 
 .registered-info-text {
     flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
 
     margin: 0;
     padding: 0;
@@ -381,6 +393,23 @@
 }
 
 @media (max-width: 600px) {
+
+    .basic-info-row,
+    .basic-info-row:lang(en) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 4px;
+    }
+
+    .registered-info-layout {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .registered-photo-slider,
+    .registered-photo-view {
+        width: 100%;
+        max-width: 300px;
+    }
 
     .nearby-place-list {
         grid-template-columns: 1fr;

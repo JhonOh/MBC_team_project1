@@ -181,13 +181,14 @@
 .two-column {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
     gap: 20px;
 }
 
 .form-group {
     position: relative;
+    min-width: 0;
 
     margin-bottom: 15px;
 }
@@ -227,11 +228,12 @@
 textarea.form-control {
     height: 90px;
 
-    resize: none;
+    resize: vertical;
+    line-height: 1.6;
 }
 
 #reason {
-    height: 180px;
+    min-height: 230px;
 }
 
 /* ================= COUNTRY SEARCH ================= */
@@ -297,7 +299,7 @@ textarea.form-control {
 .category-list {
     display: grid;
 
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 
     gap: 8px;
     width: 100%;
@@ -311,7 +313,8 @@ textarea.form-control {
 
     width: 100%;
     min-width: 0;
-    height: 42px;
+    min-height: 48px;
+    padding: 10px;
 
     border: 1px solid var(--odysay-border, #dce3ec);
 
@@ -322,7 +325,9 @@ textarea.form-control {
     cursor: pointer;
 
     font-size: 12px !important;
-    white-space: nowrap;
+    white-space: normal;
+    line-height: 1.4;
+    text-align: center;
 }
 
 .btn-check:checked + .category-button {

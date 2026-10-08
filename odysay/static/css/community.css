@@ -5,6 +5,8 @@ body {
 
 /* Layout */
 .main-container {
+  width: 100%;
+  box-sizing: border-box;
   max-width: 1200px;
   margin: 24px auto;
   display: grid;

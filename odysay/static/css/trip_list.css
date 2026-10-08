@@ -330,8 +330,10 @@
     transition: 0.18s;
 }
 
+
 .country-item:hover {
     background: var(--odysay-surface-muted, #f5f7fa);
+
 }
 
 .country-item.active {

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
     function formatPostDate(date) {
-        return date.toLocaleString('ko-KR', {
+        return date.toLocaleString(window.OdysayLanguage?.getLocale?.() || 'ko-KR', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -269,7 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="review-header">
                 
                         <div class="review-user-area">
-                            <span class="review-avatar">👤</span>
+                            <span class="review-avatar">
+                                ${review.profile_image
+                                    ? `<img src="/static/${review.profile_image}" alt="${review.nickname} 프로필">`
+                                    : '👤'
+                                }
+                            </span>
                 
                             <div class="review-user-info">
 
@@ -790,32 +795,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                 if (reportButton) {
-
-                    if (!checkLogin()) {
-                        return;
+                        if (!checkLogin()) return;
+                        window.submitContentReport(reportButton, 'review',
+                            reportButton.closest('.review-item').dataset.reviewId);
                     }
-
-
-                    const result =
-                        confirm(
-                            '이 리뷰를 신고하시겠습니까?'
-                        );
-
-
-                    if (result) {
-
-                        alert(
-                            '신고가 접수되었습니다.'
-                        );
-
-                        reportButton.textContent =
-                            '🚨 신고 완료';
-
-                        reportButton.disabled = true;
-
-                    }
-
-                }
 
             });
 

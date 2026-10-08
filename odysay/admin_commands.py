@@ -8,13 +8,13 @@ from flask import current_app
 from flask.cli import with_appcontext
 
 from . import db
-from .models import ContentModeration, ModerationLog, User
+from .models import ContentModeration, ModerationLog, ContentReport, User
 
 
 @click.command('admin-init-db')
 @with_appcontext
 def init_db():
-    """Back up SQLite and create only the two administrator tables."""
+    """Back up SQLite and create administrator and report tables."""
     if db.engine.dialect.name != 'sqlite' or db.engine.url.database == ':memory:':
         raise click.ClickException('이 명령은 파일 기반 SQLite용입니다.')
     source = Path(db.engine.url.database).resolve()
@@ -28,6 +28,7 @@ def init_db():
     with db.engine.begin() as connection:
         ContentModeration.__table__.create(connection, checkfirst=True)
         ModerationLog.__table__.create(connection, checkfirst=True)
+        ContentReport.__table__.create(connection, checkfirst=True)
     click.echo(f'관리 테이블 준비 완료. 백업: {backup}')
 
 
