@@ -1,15 +1,19 @@
 // static/js/homepage.js
 
 function handleSearch() {
+    if (window.APP_CONFIG?.isGuest) {
+        showSignupNotice();
+        return;
+    }
+
     const input = document.getElementById('mainSearchInput');
     const keyword = input ? input.value.trim() : '';
-    const targetUrl = window.APP_CONFIG?.tripListUrl || '/homepage/trip_list';
+    const targetUrl =
+        window.APP_CONFIG?.tripListUrl || '/homepage/trip_list';
 
-    if (keyword) {
-        window.location.href = `${targetUrl}?keyword=${encodeURIComponent(keyword)}`;
-    } else {
-        window.location.href = targetUrl;
-    }
+    window.location.href = keyword
+        ? `${targetUrl}?keyword=${encodeURIComponent(keyword)}`
+        : targetUrl;
 }
 
 // 헬퍼: 사진 유무에 따른 HTML 반환 (업로드 이미지 or 대체 로고 이미지)
@@ -522,15 +526,15 @@ function showExchange(amount, result, from, to, rate, date = '') {
         <div class="exchange-result">
 
             <small>${uiText('exchange.estimated')}</small>
-            <strong>${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</strong>
-            <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</span>
-            <p>1 ${from} = ${rate.toLocaleString(locale, { maximumFractionDigits: 6 })} ${to}${date ? ` · ${uiText('exchange.asOf', { date })}` : ''}</p>
+            <strong>${result.toLocaleString(locale, {maximumFractionDigits: 2})} ${to}</strong>
+            <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, {maximumFractionDigits: 2})} ${to}</span>
+            <p>1 ${from} = ${rate.toLocaleString(locale, {maximumFractionDigits: 6})} ${to}${date ? ` · ${uiText('exchange.asOf', {date})}` : ''}</p>
             <p class="exchange-notice">${uiText('exchange.notice')}</p>`
 
 }
 
 
- /* ===== 시차 ===== */
+/* ===== 시차 ===== */
 
 function getZone(n) {
     const country = canonicalCountryFromInput(`country${n}`);
@@ -568,13 +572,13 @@ function checkTime() {
     const h = Math.floor(Math.abs(diff) / 60);
     const m = Math.abs(diff) % 60;
     const gap = m
-        ? uiText('time.hoursMinutes', { hours: h, minutes: m })
-        : uiText('time.hours', { hours: h });
+        ? uiText('time.hoursMinutes', {hours: h, minutes: m})
+        : uiText('time.hours', {hours: h});
     const c1Label = localizedCountry(c1);
     const c2Label = localizedCountry(c2);
     const differenceLabel = diff === 0
         ? uiText('time.noDifference')
-        : uiText(diff > 0 ? 'time.faster' : 'time.slower', { country: c2Label, gap });
+        : uiText(diff > 0 ? 'time.faster' : 'time.slower', {country: c2Label, gap});
 
     $('timeResult').innerHTML = `
         <div class="time-result-row">
@@ -667,7 +671,10 @@ async function checkWeather() {
                     <strong>${icon} ${Math.round(current.temperature_2m)}°C</strong>
                     <b>${text}</b>
                 </div>
-                <p>${uiText('weather.feelsLikeHumidity', { temperature: Math.round(current.apparent_temperature), humidity: current.relative_humidity_2m })}</p>
+                <p>${uiText('weather.feelsLikeHumidity', {
+            temperature: Math.round(current.apparent_temperature),
+            humidity: current.relative_humidity_2m
+        })}</p>
                 <div class="weather-hour-title">${uiText('weather.hourly')}</div>
                 <div class="weather-hourly">${hourly}</div>
                 <p class="weather-notice">
@@ -689,6 +696,6 @@ document.addEventListener('wheel', e => {
 
     e.preventDefault();
     box.scrollLeft += e.delta
-}, { passive: false });
+}, {passive: false});
 
 

@@ -50,12 +50,20 @@
                         <div class="card-image">
                             {% if photo_names %}
                                 <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
-                                     alt="{{ place.place }} 사진" loading="lazy">
+                                     alt="{{ place.place }} 사진"
+                                     loading="lazy"
+                                     data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                     onerror="this.onerror=null;
+                      this.classList.add('destination-photo-fallback');
+                      this.alt='어딧세이 기본 이미지';
+                      this.src=this.dataset.fallback;">
                             {% else %}
-                                data-fallback="{{ url_for('static', filename='images/logo.png') }}"
-                                onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
-                                this.src=this.dataset.fallback;"
+                                <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                     alt="어딧세이 기본 이미지"
+                                     class="destination-photo-fallback"
+                                     loading="lazy">
                             {% endif %}
+
                             <span class="country-badge">{{ place.country }}</span>
                         </div>
                         <div class="card-content">
