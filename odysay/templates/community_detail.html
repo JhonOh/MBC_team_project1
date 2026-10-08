@@ -5,10 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ item.title or item.place }} - 커뮤니티 상세</title>
+    {% include 'components/language_assets.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/community_detail.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
-
+    {% include 'theme_head.html' %}
 </head>
 <body>
 
@@ -20,28 +21,47 @@
         <div id="title-display">
             <h1 class="post-title">
                 {% if is_post %}
-                    {{ item.title }}
+                    <span data-user-content>{{ item.title }}</span>
                 {% else %}
-                    {{ item.place }} ({{ item.region }})
+                    <span data-translate-place="{{ item.id }}"
+                          data-translate-field="place"
+                          data-place-country="{{ item.country }}">{{ item.place }}</span>
+                    (
+                    <span data-translate-place="{{ item.id }}"
+                          data-translate-field="region"
+                          data-place-country="{{ item.country }}">{{ item.region }}</span>
+                    )
                 {% endif %}
             </h1>
         </div>
         <div class="post-meta">
             <div class="author-info">
-                <span>작성자: <strong>{{ author_name }}</strong></span>
+                <span>
+                    <span data-i18n="community.author">작성자:</span>
+                    <strong>{{ author_name }}</strong>
+                </span>
+
                 <span>
                     {% if item.updated_at %}
-                        수정일: {{ item.updated_at.strftime('%Y.%m.%d %H:%M') }} <span class="edited-tag">(수정됨)</span>
+                        <span data-i18n="community.updatedDate">수정일:</span>
+                        {{ item.updated_at.strftime('%Y.%m.%d %H:%M') }}
+                        <span class="edited-tag" data-i18n="community.edited">(수정됨)</span>
                     {% else %}
-                        작성일: {{ item.created_at.strftime('%Y.%m.%d %H:%M') if item.created_at else '' }}
+                        <span data-i18n="community.createdDate">작성일:</span>
+                        {{ item.created_at.strftime('%Y.%m.%d %H:%M') if item.created_at else '' }}
                     {% endif %}
                 </span>
             </div>
 
             {% if current_user_id and item.user_id and (current_user_id|string == item.user_id|string) %}
                 <div class="action-buttons" id="post-action-buttons">
-                    <button class="btn" onclick="enablePostEdit()">수정</button>
-                    <button class="btn btn-danger" onclick="deletePost()">삭제</button>
+                    <button class="btn"
+                            onclick="enablePostEdit()"
+                            data-i18n="community.edit">수정</button>
+
+                    <button class="btn btn-danger"
+                            onclick="deletePost()"
+                            data-i18n="community.delete">삭제</button>
                 </div>
             {% endif %}
         </div>
@@ -55,8 +75,15 @@
         {% if is_post %}
             {{ item.content }}
         {% else %}
-            <p><strong>소개:</strong> {{ item.intro }}</p>
-            <p><strong>추천 이유:</strong> {{ item.reason }}</p>
+            <p>
+                <strong data-i18n="community.intro">소개:</strong>
+                <span data-user-content>{{ item.intro }}</span>
+            </p>
+
+            <p>
+                <strong data-i18n="community.reason">추천 이유:</strong>
+                <span data-user-content>{{ item.reason }}</span>
+            </p>
         {% endif %}
     </div>
 
@@ -74,8 +101,13 @@
                       placeholder="추천 이유">{{ item.reason }}</textarea>
         {% endif %}
         <div style="text-align: right; margin-top: 10px;">
-            <button class="btn" onclick="cancelPostEdit()">취소</button>
-            <button class="btn btn-primary" onclick="submitPostUpdate()">저장</button>
+            <button class="btn"
+                    onclick="cancelPostEdit()"
+                    data-i18n="community.cancel">취소</button>
+
+            <button class="btn btn-primary"
+                    onclick="submitPostUpdate()"
+                    data-i18n="community.save">저장</button>
         </div>
     </div>
 
@@ -92,21 +124,32 @@
     <!-- 좋아요 섹션 -->
     <div class="like-section">
         {% if is_post %}
-            <button id="like-btn" class="btn-like {% if is_liked %}active{% endif %}" onclick="toggleLike()">
-                <span id="like-icon">{% if is_liked %}❤️{% else %}🤍{% endif %}</span> 좋아요 <span
-                    id="like-count">{{ item.likes or 0 }}</span>
+            <button id="like-btn"
+                    class="btn-like {% if is_liked %}active{% endif %}"
+                    onclick="toggleLike()">
+                <span id="like-icon">{% if is_liked %}❤️{% else %}🤍{% endif %}</span>
+                <span data-i18n="community.like">좋아요</span>
+                <span id="like-count">{{ item.likes or 0 }}</span>
             </button>
         {% endif %}
     </div>
 
     <!-- 댓글 영역 -->
     <div class="comments-section">
-        <h3>댓글 <span id="comment-count">({{ comments|length }})</span></h3>
+        <h3>
+            <span data-i18n="community.comments">댓글</span>
+            <span id="comment-count">({{ comments|length }})</span>
+        </h3>
 
         <div class="comment-form">
-            <textarea id="new-comment-content" placeholder="댓글을 입력해 주세요..."></textarea>
+            <textarea id="new-comment-content"
+                      data-i18n-placeholder="community.commentPlaceholder"
+                      placeholder="댓글을 입력해 주세요..."></textarea>
+
             <div class="comment-form-footer">
-                <button class="btn btn-primary" onclick="submitComment()">댓글 등록</button>
+                <button class="btn btn-primary"
+                        onclick="submitComment()"
+                        data-i18n="community.commentSubmit">댓글 등록</button>
             </div>
         </div>
 
@@ -118,13 +161,15 @@
                             <strong>{{ comment.author }}</strong>
 
                             {% if item.user_id and comment.user_id and (item.user_id|string == comment.user_id|string) %}
-                                <span class="author-badge">작성자</span>
+                                <span class="author-badge"
+                                      data-i18n="community.authorBadge">작성자</span>
                             {% endif %}
 
                             <span id="comment-date-{{ comment.id }}" style="margin-left: 8px;">
                             {% if comment.updated_at %}
                                 {{ comment.updated_at.strftime('%Y.%m.%d %H:%M') }}
-                                <span class="edited-tag">(수정됨)</span>
+                                <span class="edited-tag"
+                                      data-i18n="community.edited">(수정됨)</span>
                             {% else %}
                                 {{ comment.created_at.strftime('%Y.%m.%d %H:%M') if comment.created_at else '' }}
                             {% endif %}
@@ -132,8 +177,13 @@
                         </div>
                         {% if current_user_id and comment.user_id and (current_user_id|string == comment.user_id|string) %}
                             <div class="action-buttons">
-                                <button class="btn" onclick="showEditCommentForm({{ comment.id }})">수정</button>
-                                <button class="btn btn-danger" onclick="deleteComment({{ comment.id }})">삭제</button>
+                                <button class="btn"
+                                        onclick="showEditCommentForm({{ comment.id }})"
+                                        data-i18n="community.edit">수정</button>
+
+                                <button class="btn btn-danger"
+                                        onclick="deleteComment({{ comment.id }})"
+                                        data-i18n="community.delete">삭제</button>
                             </div>
                         {% endif %}
                     </div>
@@ -144,8 +194,13 @@
                         <textarea class="edit-input"
                                   id="comment-edit-input-{{ comment.id }}">{{ comment.content }}</textarea>
                         <div class="edit-form-buttons">
-                            <button class="btn" onclick="hideEditCommentForm({{ comment.id }})">취소</button>
-                            <button class="btn btn-primary" onclick="submitEditComment({{ comment.id }})">저장</button>
+                            <button class="btn"
+                                    onclick="hideEditCommentForm({{ comment.id }})"
+                                    data-i18n="community.cancel">취소</button>
+
+                            <button class="btn btn-primary"
+                                    onclick="submitEditComment({{ comment.id }})"
+                                    data-i18n="community.save">저장</button>
                         </div>
                     </div>
                 </li>
@@ -160,6 +215,7 @@
     const postType = "{{ 'post' if is_post else 'place' }}";
     const itemId = {{ item_id }};
     const currentUserId = "{{ current_user_id or '' }}";
+    const uiText = (key) => window.OdysayLanguage?.t?.(key) || key;
 
     // 1. 게시글 좋아요 토글
     async function toggleLike() {

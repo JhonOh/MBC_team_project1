@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>어딧세이 | 여행의 시작</title>
+    {% include 'components/language_assets.html' %}
 
     <!-- FontAwesome 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,7 +17,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/map_place_popup.css') }}">
+{% include 'theme_head.html' %}
 </head>
 
 <body>
@@ -334,7 +336,7 @@
         <h2>📍 길찾기</h2>
 
         <div class="route-field">
-            <span class="route-label">출발</span>
+            <label class="route-label" for="routeStart">출발</label>
             <input id="routeStart"
                    type="text"
                    placeholder="출발지를 입력해주세요">
@@ -345,7 +347,7 @@
         </div>
 
         <div class="route-field">
-            <span class="route-label">도착</span>
+            <label class="route-label" for="routeEnd">도착</label>
             <input id="routeEnd"
                    type="text"
                    placeholder="도착지를 입력해주세요">
@@ -378,7 +380,9 @@
     };
 </script>
 
-<script src="{{ url_for('static', filename='js/countries.js') }}"></script>
+
+<script src="{{ url_for('static', filename='js/map_place_popup.js') }}"></script>
+
 <script src="{{ url_for('static', filename='js/travel_tools.js') }}"></script>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
 </body>

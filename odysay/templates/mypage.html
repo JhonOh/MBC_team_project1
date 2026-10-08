@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>마이페이지</title>
+    {% include 'components/language_assets.html' %}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 <!-- =========================
      HEADER
@@ -36,28 +38,28 @@
             <ul class="side-list">
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage') }}" class="active">
+                    <a href="{{ url_for('mypage.mypage') }}" class="active">
                         <span class="menu-icon">♙</span>
                         <span>내 정보</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('mypage.my_posts') }}">
+                    <a href="{{ url_for('mypage.mypage_posts') }}">
                         <span class="menu-icon">♧</span>
                         <span>내가 쓴 글</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('mypage.my_bookmarks') }}">
+                    <a href="{{ url_for('mypage.mypage_bookmarks') }}">
                         <span class="menu-icon">♡</span>
                         <span>내가 찜한 여행지</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('mypage.my_places') }}">
+                    <a href="{{ url_for('mypage.mypage_places') }}">
                         <span class="menu-icon">✎</span>
                         <span>내가 만든 여행지</span>
                     </a>
@@ -71,7 +73,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage_settings') }}">
+                    <a href="{{ url_for('mypage.mypage_settings') }}">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>
                     </a>
@@ -122,35 +124,35 @@
                                     <div class="profile-preference-tags">
                                         {% for destination in interest_destinations %}
                                             <span class="profile-preference-tag">
-                    {{ destination }}
-                </span>
+                                                {{ destination }}
+                                            </span>
                                         {% else %}
                                             <span class="profile-preference-empty">
-                    여행지를 찜하면 표시됩니다.
-                </span>
+                                                여행지를 찜하면 표시됩니다.
+                                            </span>
                                         {% endfor %}
                                     </div>
                                 </div>
 
                                 <div class="profile-preference-row">
-                <span class="profile-preference-label">
-                                                        선호 여행 스타일</span>
+                                    <span class="profile-preference-label">선호 여행 스타일</span>
 
                                     <div class="profile-preference-tags">
                                         {% for style in preferred_styles %}
                                             <span class="profile-preference-tag">
-                    {{ style }}
-                </span>
+                                                {{ style }}
+                                            </span>
                                         {% else %}
                                             <span class="profile-preference-empty">
-                    태그가 있는 여행지를 찜하거나 커뮤니티 글에 좋아요를 눌러보세요.
-                </span>
+                                                태그가 있는 여행지를 찜하거나 커뮤니티 글에 좋아요를 눌러보세요.
+                                            </span>
                                         {% endfor %}
                                     </div>
                                 </div>
 
                                 <span class="profile-preference-note">
-                        관심 여행지는 찜한 지역, 여행 스타일은 찜·좋아요한 글의 태그를 바탕으로 표시합니다.</span>
+                                    관심 여행지는 찜한 지역, 여행 스타일은 찜·좋아요한 글의 태그를 바탕으로 표시합니다.
+                                </span>
                             </div>
                             <span class="profile-membership-label">가입일</span>
 
@@ -177,7 +179,7 @@
                         </a>
                     {% endif %}
 
-                    <a href="{{ url_for('homepage.mypage_settings') }}#withdraw"
+                    <a href="{{ url_for('mypage.mypage_settings') }}#withdraw"
                        class="profile-btn profile-withdraw-link">
                         회원탈퇴
                     </a>
@@ -193,24 +195,24 @@
                  STATISTICS
             ========================== -->
             <div class="stat-box">
-                <a href="{{ url_for('mypage.my_posts') }}" class="stat-item">
+                <a href="{{ url_for('mypage.mypage_posts') }}" class="stat-item">
                     <span class="stat-title">내가 쓴 글</span>
                     <span class="stat-number">{{ my_posts_count }}</span>
                 </a>
 
-                <a href="{{ url_for('mypage.my_bookmarks') }}" class="stat-item">
+                <a href="{{ url_for('mypage.mypage_bookmarks') }}" class="stat-item">
                     <span class="stat-title">내가 찜한 여행지</span>
                     <span class="stat-number">{{ my_bookmarks_count }}</span>
                 </a>
 
-                <a href="{{ url_for('mypage.my_places') }}" class="stat-item">
+                <a href="{{ url_for('mypage.mypage_places') }}" class="stat-item">
                     <span class="stat-title">내가 만든 여행지</span>
                     <span class="stat-number">{{ my_places_count }}</span>
                 </a>
                 <div class="stat-item"
                      title="내 여행지의 찜과 내 커뮤니티 글의 좋아요 합계입니다. 본인 반응은 제외합니다.">
                     <span class="stat-title">받은 추천</span>
-                    <span class="stat-number"> {{ received_recommendations_count }} </span>
+                    <span class="stat-number">{{ received_recommendations_count }}</span>
                 </div>
 
             </div>
@@ -223,7 +225,7 @@
                 <div class="recent-header">
                     <h3>최근 작성한 글</h3>
 
-                    <a href="{{ url_for('mypage.my_posts') }}" class="more">
+                    <a href="{{ url_for('mypage.mypage_posts') }}" class="more">
                         전체보기 ›
                     </a>
                 </div>
@@ -231,9 +233,9 @@
                 <div class="post-list">
                     {% for item in recent_items %}
                         {% set photo_names = (item.photos or '').split(',')
-                | map('trim')
-                | reject('equalto', '')
-                | list %}
+                            | map('trim')
+                            | reject('equalto', '')
+                            | list %}
 
                         <a href="{{ item.detail_url }}" class="post-item">
                             <div class="post-thumbnail">
@@ -251,13 +253,13 @@
                             </div>
 
                             <div class="post-info">
-                    <span class="post-title">
-                        [{{ item.category }}] {{ item.title }}
-                    </span>
+                                <span class="post-title">
+                                    [{{ item.category }}] {{ item.title }}
+                                </span>
 
                                 <span class="post-meta">
-                        ♡ {{ item.likes }}　 💬 {{ item.comment_count }}
-                    </span>
+                                    ♡ {{ item.likes }}  💬 {{ item.comment_count }}
+                                </span>
                             </div>
 
                             {% if item.created_at %}
@@ -277,12 +279,13 @@
                     {% endfor %}
                 </div>
             </div>
+
             <!-- 최근 찜한 여행지 -->
             <section class="recent-box" aria-labelledby="recent-bookmarks-title">
                 <div class="recent-header">
                     <h3 id="recent-bookmarks-title">최근 찜한 여행지</h3>
 
-                    <a href="{{ url_for('mypage.my_bookmarks') }}" class="more">
+                    <a href="{{ url_for('mypage.mypage_bookmarks') }}" class="more">
                         전체보기 ›
                     </a>
                 </div>
@@ -290,19 +293,17 @@
                 <div class="overview-destination-grid">
                     {% for place in recent_bookmarked_places %}
                         {% set photo_names = (place.photos or '').split(',')
-                | map('trim')
-                | reject('equalto', '')
-                | list %}
+                            | map('trim')
+                            | reject('equalto', '')
+                            | list %}
 
                         <a class="overview-place-card"
-                           href="{{ url_for('trip_location.trip_location_detail',
-                                place_id=place.id) }}">
+                           href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
 
                             <div class="overview-place-photo">
                                 {% if photo_names %}
                                     <img
-                                            src="{{ url_for('static',
-                                            filename='uploads/' ~ photo_names[0]) }}"
+                                            src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
                                             alt="{{ place.place }} 사진"
                                             loading="lazy">
                                 {% else %}
@@ -317,16 +318,18 @@
                             </div>
 
                             <div class="overview-place-body">
-                                <h4>{{ place.place }}</h4>
+                                <h4 data-translate-place="{{ place.id }}"
+                                    data-translate-field="place"
+                                    data-place-country="{{ place.country }}">{{ place.place }}</h4>
 
                                 <p>
                                     {{ place.category or '여행지' }}
-                                    · {{ place.country or '국가 미등록' }}
+                                    · {% if place.country %}<span data-country-name="{{ place.country }}">{{ place.country }}</span>{% else %}국가 미등록{% endif %}
                                 </p>
 
                                 <span class="overview-place-count">
-                        ♡ {{ place_bookmark_counts.get(place.id, 0) }}
-                    </span>
+                                    ♡ {{ place_bookmark_counts.get(place.id, 0) }}
+                                </span>
                             </div>
                         </a>
                     {% else %}
@@ -345,7 +348,7 @@
                 <div class="recent-header">
                     <h3 id="registered-places-title">내가 등록한 여행지</h3>
 
-                    <a href="{{ url_for('mypage.my_places') }}" class="more">
+                    <a href="{{ url_for('mypage.mypage_places') }}" class="more">
                         전체보기 ›
                     </a>
                 </div>
@@ -353,16 +356,16 @@
                 <div class="overview-registered-grid">
                     {% for place in recent_registered_places %}
                         {% set photo_names = (place.photos or '').split(',')
-                | map('trim')
-                | reject('equalto', '')
-                | list %}
+                            | map('trim')
+                            | reject('equalto', '')
+                            | list %}
 
                         <a class="overview-registered-card"
-                           href="{{ url_for('trip_location.trip_location_detail',
-                                place_id=place.id) }}">
+                           href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
 
                             <div class="overview-registered-photo">
                                 {% if photo_names %}
+
                                     <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
                                          alt="{{ place.place }} 사진"
                                          loading="lazy"
@@ -377,17 +380,23 @@
                             </div>
 
                             <div class="overview-place-body">
-                                <h4>{{ place.place }}</h4>
+                                <h4 data-translate-place="{{ place.id }}"
+                                    data-translate-field="place"
+                                    data-place-country="{{ place.country }}">{{ place.place }}</h4>
 
                                 <p>
                                     {{ place.category or '여행지' }}
-                                    · {{ place.country or '국가 미등록' }}
-                                    {% if place.region %} · {{ place.region }}{% endif %}
+                                    · {% if place.country %}<span data-country-name="{{ place.country }}">{{ place.country }}</span>{% else %}국가 미등록{% endif %}
+                                    {% if place.region %}
+                                        · <span data-translate-place="{{ place.id }}"
+                                                data-translate-field="region"
+                                                data-place-country="{{ place.country }}">{{ place.region }}</span>
+                                    {% endif %}
                                 </p>
 
                                 <span class="overview-place-count">
-                        ♡ {{ place_bookmark_counts.get(place.id, 0) }}
-                    </span>
+                                    ♡ {{ place_bookmark_counts.get(place.id, 0) }}
+                                </span>
 
                                 {% if place.created_at %}
                                     <time class="overview-registered-date"
@@ -408,22 +417,24 @@
                     </a>
                 </div>
             </section>
+        </section>
     </main>
+
     <!-- =========================
          FOOTER
     ========================== -->
     {% include 'footer.html' %}
 
-
 </div>
-
 
 <script src="{{ url_for('static', filename='js/mypage.js') }}"></script>
 <script src="{{ url_for('static', filename='js/header_search.js') }}"></script>
 
 </body>
+
 </html>
 
 
 </body>
 </html>
+

@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어딧세이 - {{ place.place }}</title>
+    {% include 'components/language_assets.html' %}
 
     {# header css  #}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage_mapcommon.css') }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_all.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_location_review.css') }}">
@@ -25,11 +24,13 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    {% include 'theme_head.html' %}
 </head>
 <body>
 
 <!-- 헤더 영역 -->
 {% include 'header.html' %}
+
 
 
 <!-- 메인 콘텐츠 -->
@@ -69,17 +70,22 @@
                     <div class="place-title-left">
 
 
-                        <h1 class="title">
-                            {{ place.place }}
-                        </h1>
+                        <div class="title-with-heart">
+                            <h1 class="title"
+                                data-translate-place="{{ place.id }}"
+                                data-translate-field="place"
+                                data-place-country="{{ place.country }}">
+                                {{ place.place }}
+                            </h1>
+
+                            <div class="title-bookmark-count">
+                                ♥ <span id="bookmarkCount">0</span>
+                            </div>
+                        </div>
 
                         {% with display_travel_tags=place.travel_tags or [] %}
                             {% include "components/travel_tag_badges.html" %}
                         {% endwith %}
-
-                        <div class="title-bookmark-count">
-                            ♥ <span id="bookmarkCount">0</span>
-                        </div>
                     </div>
 
                     {% if g.user and place.user_id == g.user.id %}
@@ -111,7 +117,10 @@
                 </div>
 
                 <p class="subtitle">
-                    {{ place.country }} / {{ place.region }}
+                    <span data-country-name="{{ place.country }}">{{ place.country }}</span> /
+                    <span data-translate-place="{{ place.id }}"
+                          data-translate-field="region"
+                          data-place-country="{{ place.country }}">{{ place.region }}</span>
                 </p>
 
             </div>
@@ -121,7 +130,7 @@
                 {% if author %}
                     <p class="author-info">
                         <span class="meta-label">작성자</span>
-                        <span>{{ author.nickname }}</span>
+                        <span data-user-content>{{ author.nickname }}</span>
                     </p>
                 {% endif %}
 
@@ -151,7 +160,7 @@
                         카테고리
                     </span>
 
-                        <span class="place-category">
+                        <span class="place-category" data-translate-place="{{ place.id }}" data-translate-field="category">
                         {{ place.category }}
                     </span>
 
@@ -164,7 +173,7 @@
                         한줄 소개
                     </span>
 
-                            <p class="place-intro">
+                            <p class="place-intro" data-user-content>
                                 {{ place.intro }}
                             </p>
 
@@ -339,17 +348,23 @@
                         <div class="basic-info-row">
                             <span class="basic-info-label">위치</span>
 
-                            <span>
-                                {{ place.country }}
-                                {{ place.region }}
-                                {{ place.place }}
+                            <span data-user-content>
+                                <span data-country-name="{{ place.country }}">{{ place.country }}</span>
+
+                                <span data-translate-place="{{ place.id }}"
+                                      data-translate-field="region"
+                                      data-place-country="{{ place.country }}">{{ place.region }}</span>
+
+                                <span data-translate-place="{{ place.id }}"
+                                      data-translate-field="place"
+                                      data-place-country="{{ place.country }}">{{ place.place }}</span>
                             </span>
                         </div>
 
                         <div class="basic-info-row">
                             <span class="basic-info-label">카테고리</span>
 
-                            <span>
+                            <span data-translate-place="{{ place.id }}" data-translate-field="category">
                                 {{ place.category }}
                             </span>
                         </div>
@@ -357,7 +372,7 @@
                         <div class="basic-info-row">
                             <span class="basic-info-label">한줄 소개</span>
 
-                            <span>
+                            <span data-user-content>
                                 {{ place.intro }}
                             </span>
                         </div>
@@ -371,7 +386,8 @@
                             <div class="detail-map"
                                  data-lat="{{ place.latitude }}"
                                  data-lng="{{ place.longitude }}"
-                                 data-title="{{ place.place }}">
+                                 data-title="{{ place.place }}"
+                                 data-country="{{ place.country }}">
                             </div>
 
                             <a class="detail-map-caption"
@@ -401,7 +417,7 @@
 
                 <div class="traveler-info-layout">
 
-                    <div class="traveler-info-text">
+                    <div class="traveler-info-text" data-user-content>
                         {{ place.reason }}
                     </div>
                 </div>
@@ -422,7 +438,7 @@
 
                         <div class="registered-info-text">
                             {% if place.restaurant %}
-                                {{ place.restaurant }}
+                                <span data-user-content>{{ place.restaurant }}</span>
                             {% else %}
                                 <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
@@ -493,7 +509,7 @@
 
                         <div class="registered-info-text">
                             {% if place.nearby %}
-                                {{ place.nearby }}
+                                <span data-user-content>{{ place.nearby }}</span>
                             {% else %}
                                 <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
@@ -581,13 +597,20 @@
 
                                 <div class="nearby-place-info">
 
-                                    <strong class="nearby-place-name">
+                                    <strong class="nearby-place-name"
+                                            data-user-content
+                                            data-translate-place="{{ item.place.id }}"
+                                            data-translate-field="place"
+                                            data-place-country="{{ item.place.country }}">
                                         {{ item.place.place }}
                                     </strong>
 
                                     <span class="nearby-place-region">
-                                {{ item.place.country }} · {{ item.place.region }}
-                            </span>
+                                        <span data-country-name="{{ item.place.country }}">{{ item.place.country }}</span> ·
+                                        <span data-translate-place="{{ item.place.id }}"
+                                              data-translate-field="region"
+                                              data-place-country="{{ item.place.country }}">{{ item.place.region }}</span>
+                                    </span>
 
                                     <span class="nearby-place-distance">
                                 📍 현재 여행지에서 약 {{ item.distance }}km 떨어진 곳

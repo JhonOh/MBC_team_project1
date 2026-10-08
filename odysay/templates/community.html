@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>어딧세이 - 커뮤니티</title>
+    {% include 'components/language_assets.html' %}
 
     <!-- FontAwesome 아이콘 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/community.css') }}">
 
-
-
-
+{% include 'theme_head.html' %}
 </head>
 <body>
 
@@ -25,15 +24,15 @@
 
 <!-- 메인 컨테이너 -->
 <main class="main-container"
-      data-posts-api="{{ url_for('mypage.my_posts_api')
-                      if my_posts_mode
+      data-posts-api="{{ url_for('mypage.mypage_posts_api')
+                      if mypage_posts_mode
                       else url_for('community.get_places') }}">
 
     <!-- 좌측 사이드바 -->
     <aside class="sidebar-left">
         <div class="menu-list">
-            <a href="{{ url_for('mypage.my_posts', category='ALL', sort=initial_sort)
-                if my_posts_mode
+            <a href="{{ url_for('mypage.mypage_posts', category='ALL', sort=initial_sort)
+                if mypage_posts_mode
                 else url_for('community.community_all') }}"
                class="menu-item {% if current_category == 'ALL' or not current_category %}active{% endif %}">
                 <i class="fa-regular fa-comments"></i>
@@ -41,8 +40,8 @@
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
 
-            <a href="{{ url_for('mypage.my_posts', category='여행 후기', sort=initial_sort)
-                if my_posts_mode
+            <a href="{{ url_for('mypage.mypage_posts', category='여행 후기', sort=initial_sort)
+                if mypage_posts_mode
                 else url_for('community.community_review') }}"
                class="menu-item {% if current_category == '여행 후기' %}active{% endif %}">
                 <i class="fa-regular fa-image"></i>
@@ -50,8 +49,8 @@
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
 
-            <a href="{{ url_for('mypage.my_posts', category='여행 팁', sort=initial_sort)
-                if my_posts_mode
+            <a href="{{ url_for('mypage.mypage_posts', category='여행 팁', sort=initial_sort)
+                if mypage_posts_mode
                 else url_for('community.community_tip') }}"
                class="menu-item {% if current_category == '여행 팁' %}active{% endif %}">
                 <i class="fa-solid fa-map-location-dot"></i>
@@ -59,8 +58,8 @@
                 <i class="fa-solid fa-chevron-right arrow"></i>
             </a>
 
-            <a href="{{ url_for('mypage.my_posts', category='자유 게시판', sort=initial_sort)
-                if my_posts_mode
+            <a href="{{ url_for('mypage.mypage_posts', category='자유 게시판', sort=initial_sort)
+                if mypage_posts_mode
                 else url_for('community.community_free') }}"
                class="menu-item {% if current_category == '자유 게시판' %}active{% endif %}">
                 <i class="fa-regular fa-comment-dots"></i>
@@ -147,11 +146,11 @@
             <div class="widget-header">
                 <h3>
                     <i class="fa-solid fa-fire text-orange"></i>
-                    {{ '내 글 중 인기 글' if my_posts_mode else '지금 핫한 글' }}
+                    {{ '내 글 중 인기 글' if mypage_posts_mode else '지금 핫한 글' }}
                 </h3>
 
-                <a href="{{ url_for('mypage.my_posts', sort='popular')
-                 if my_posts_mode
+                <a href="{{ url_for('mypage.mypage_posts', sort='popular')
+                 if mypage_posts_mode
                  else url_for('community.community_all', sort='popular') }}"
                    class="more-link">
                     더보기 &gt;

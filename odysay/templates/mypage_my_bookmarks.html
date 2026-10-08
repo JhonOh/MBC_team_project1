@@ -4,14 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내가 찜한 여행지 | 어딧세이</title>
+    {% include 'components/language_assets.html' %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+    {% include 'theme_head.html' %}
+
 
 </head>
 {% include 'header.html' %}
 
 <body class="my-places-page">
+
 
 <main>
     <section class="travel-hero">
@@ -36,6 +40,8 @@
             <div class="destination-count">총 <strong>{{ places | length }}</strong>개의 여행지</div>
         </div>
         {% if places %}
+
+
             <div class="destination-grid">
                 {% for place in places %}
                     {% set photo_names = (place.photos or '').split(',') | map('trim') | reject('equalto', '') | list %}

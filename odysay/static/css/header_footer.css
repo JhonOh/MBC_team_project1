@@ -1,35 +1,13 @@
 /* ==============================
-   0. Layout Reset & Sticky Footer Base
-============================== */
-html {
-    height: 100%;
-}
-
-body {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-/* 본문 영역: header와 footer 사이의 모든 형제 요소가 남은 유휴 공간을 분할/확장하여 차지 */
-/* main 태그나 페이지별 본문 컨테이너 클래스가 무엇이든 자동으로 바닥으로 밀어냅니다. */
-body > :not(.header):not(.footer) {
-    flex: 1 0 auto;
-}
-
-/* ==============================
    HEADER (공통 기본)
 ============================== */
 .header {
     position: relative; /* mega-dropdown의 정렬 기준 */
     width: 100%;
     height: 76px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8ecf1;
+    background: var(--odysay-surface, #ffffff);
+    border-bottom: 1px solid var(--odysay-border, #e8ecf1);
     z-index: 1000;
-    flex-shrink: 0; /* 높이 줄어듦 방지 */
 }
 
 .header-inner {
@@ -67,14 +45,14 @@ body > :not(.header):not(.footer) {
 .logo-text strong {
     font-size: 20px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     line-height: 1.1;
 }
 
 .logo-text small {
     margin-top: 2px;
     font-size: 9px;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     letter-spacing: 3px;
     margin-right: -3px;
     text-align: center;
@@ -104,7 +82,7 @@ body > :not(.header):not(.footer) {
 .gnb-link {
     font-size: 16px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     text-decoration: none;
     padding: 26px 5px;
     display: inline-block;
@@ -113,7 +91,7 @@ body > :not(.header):not(.footer) {
 
 .gnb-link:hover,
 .gnb-link.active {
-    color: #557ba8;
+    color: var(--odysay-muted, #557ba8);
 }
 
 /* ==============================
@@ -125,8 +103,8 @@ body > :not(.header):not(.footer) {
     left: 50%;
     transform: translateX(-50%);
     min-width: 150px;
-    background: #ffffff;
-    border: 1px solid #e8ecf1;
+    background: var(--odysay-surface, #ffffff);
+    border: 1px solid var(--odysay-border, #e8ecf1);
     border-radius: 8px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
     padding: 12px 0;
@@ -154,15 +132,15 @@ body > :not(.header):not(.footer) {
     display: block;
     padding: 8px 18px;
     font-size: 13.5px;
-    color: #4a5568;
+    color: var(--odysay-muted, #4a5568);
     text-decoration: none;
     white-space: nowrap;
     transition: background 0.2s, color 0.2s;
 }
 
 .sub-menu a:hover {
-    background: #f7fafc;
-    color: #152238;
+    background: var(--odysay-surface-muted, #f7fafc);
+    color: var(--odysay-text, #152238);
     font-weight: 600;
 }
 
@@ -180,19 +158,35 @@ body > :not(.header):not(.footer) {
     cursor: pointer;
     padding: 20px 5px;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center;      /* 이미지와 글씨 수직 중앙 정렬 */
+    justify-content: center;  /* 수평 중앙 정렬 */
+    gap: 8px;
 }
 
 .all-menu-icon {
     width: 22px;
     height: auto;
     object-fit: contain;
+    display: block;           /* 이미지 기본 여백 제거 및 중앙 배치 고정 */
     transition: opacity 0.2s ease;
+}
+
+/* PC 화면에서는 전체 메뉴 글씨 숨김 */
+.all-menu-text {
+    display: none;
+    font-size: 16px;
+    font-weight: 700;
+    color: #152238;
+    white-space: nowrap;
+    line-height: 1;            /* 이미지와의 수직 중앙 라인 맞춤 */
 }
 
 .all-menu-btn:hover .all-menu-icon {
     opacity: 0.6;
+}
+
+.all-menu-btn:hover .all-menu-text {
+    color: #557ba8;
 }
 
 /* ==============================
@@ -204,11 +198,11 @@ body > :not(.header):not(.footer) {
     left: 0;
     width: 100%;
 
-    background: rgba(255, 255, 255, 0.96);
+    background: var(--odysay-surface, rgba(255, 255, 255, 0.96));
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 
-    border-bottom: 1px solid rgba(232, 236, 241, 0.8);
+    border-bottom: 1px solid var(--odysay-border, rgba(232, 236, 241, 0.8));
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 
     /* 기본 상태: 숨김 */
@@ -244,7 +238,7 @@ body > :not(.header):not(.footer) {
 
 .sub-column {
     padding: 0 30px;
-    border-left: 1px solid #f0f3f7;
+    border-left: 1px solid var(--odysay-border, #f0f3f7);
 }
 
 .sub-column:first-child {
@@ -255,10 +249,10 @@ body > :not(.header):not(.footer) {
     display: block;
     font-size: 15px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238);
     margin-bottom: 15px;
     padding-bottom: 8px;
-    border-bottom: 2px solid #152238;
+    border-bottom: 2px solid var(--odysay-accent, #152238);
 }
 
 .sub-list {
@@ -272,14 +266,14 @@ body > :not(.header):not(.footer) {
 
 .sub-list a {
     font-size: 13.5px;
-    color: #616f82;
+    color: var(--odysay-muted, #616f82);
     text-decoration: none;
     transition: color 0.2s, transform 0.2s;
     display: inline-block;
 }
 
 .sub-list a:hover {
-    color: #152238;
+    color: var(--odysay-text, #152238);
     font-weight: 600;
     transform: translateX(3px);
 }
@@ -288,6 +282,9 @@ body > :not(.header):not(.footer) {
    4. 우측 유틸리티 (로그인/로그아웃)
 ============================== */
 .header-util {
+    display: flex;
+    align-items: center;
+    gap: 12px;
     flex-shrink: 0;
 }
 
@@ -307,14 +304,67 @@ body > :not(.header):not(.footer) {
 }
 
 /* ==============================
-   5. FOOTER (공통)
+   5. 반응형 (화면이 줄어들었을 때)
+============================== */
+@media (max-width: 992px) {
+    .header-inner {
+        max-width: calc(100% - 40px);
+    }
+
+    /* 4개 주요 메뉴 안보이게 처리 */
+    .main-menu-item {
+        display: none !important;
+    }
+
+    /* 버튼 내 요소 간격 및 수직 Center 라인 고정 */
+    .all-menu-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px; /* 줄 3개 이미지와 '전체 메뉴' 글자 사이 여백 */
+    }
+
+    /* 전체 메뉴 버튼 텍스트 노출 및 높이 맞춤 */
+    .all-menu-text {
+        display: inline-block;
+        line-height: 1;
+    }
+
+    /* 메가 드롭다운 모바일/작은 화면 레이아웃 지원 */
+    .mega-dropdown-inner {
+        width: 100%;
+        max-width: calc(100% - 40px);
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 20px 0;
+    }
+
+    .sub-column {
+        padding: 0 15px;
+    }
+
+    .sub-column:nth-child(2n+1) {
+        border-left: none;
+    }
+
+    .all-menu-wrap:hover ~ .mega-dropdown,
+    .all-menu-wrap:has(:hover) ~ .mega-dropdown,
+    .mega-dropdown:hover,
+    .header:has(.all-menu-wrap:hover) .mega-dropdown {
+        max-height: 500px; /* 2열 배치로 늘어난 높이 확보 */
+    }
+}
+
+/* ==============================
+   6. FOOTER (공통)
 ============================== */
 .footer {
-    border-top: 1px solid #e8ecf1;
+    border-top: 1px solid var(--odysay-border, #e8ecf1);
     padding: 30px 0 35px;
-    background: #ffffff;
+
+    background: var(--odysay-surface, #ffffff);
     flex-shrink: 0; /* 화면이 작아지거나 콘텐츠가 적어도 푸터 높이가 압축되지 않도록 설정 */
-}
+
 
 .footer-inner {
     width: 1200px;
@@ -327,19 +377,53 @@ body > :not(.header):not(.footer) {
 
 .footer-left strong {
     font-size: 15px;
-    color: #26364d;
+    color: var(--odysay-text, #26364d);
     font-weight: 700;
 }
 
 .footer-left p {
     margin-top: 5px;
     font-size: 10px;
-    color: #929dad;
+    color: var(--odysay-muted, #929dad);
 }
 
 .footer-right {
     display: flex;
     gap: 20px;
     font-size: 10px;
-    color: #9aa4b2;
+    color: var(--odysay-muted, #9aa4b2);
+
+
+}
+
+/* ==============================
+   7. STICKY FOOTER (모든 페이지 공통)
+============================== */
+html {
+    height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    min-height: 100dvh;          /* 모바일 주소창 대응 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* header / footer는 찌그러지지 않게 */
+.header,
+.footer {
+    flex-shrink: 0;
+}
+
+/* 본문 영역이 남는 공간을 모두 차지 → footer가 아래로 밀림 */
+body > main {
+    flex: 1 0 auto;
+    width: 100%;                 /* 중요: auto 마진 때문에 줄어드는 것 방지 */
+    box-sizing: border-box;
+}
+
+/* 본문이 main 태그가 아닌 페이지 대비용 안전장치 */
+.footer {
+    margin-top: auto;
 }

@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>여행지 | 어딧세이</title>
+    {% include 'components/language_assets.html' %}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
+    {% include 'theme_head.html' %}
 </head>
 
 <body>

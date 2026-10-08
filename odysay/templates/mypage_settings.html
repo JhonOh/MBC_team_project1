@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>설정</title>
+    {% include 'components/language_assets.html' %}
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
+     {% include 'theme_head.html' %}
 </head>
 
 <body>
 {% include 'header.html' %}
+
 <div class="mypage-wrap">
 
 
@@ -30,7 +33,7 @@
             <ul class="side-list">
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage') }}">
+                    <a href="{{ url_for('mypage.mypage') }}">
                         <span class="menu-icon">♙</span>
                         <span>내 정보</span>
                     </a>
@@ -51,7 +54,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ url_for('homepage.mypage_settings') }}"
+                    <a href="{{ url_for('mypage.mypage_settings') }}"
                        class="active">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>

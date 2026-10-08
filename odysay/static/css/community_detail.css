@@ -1,12 +1,12 @@
 :root {
     --primary-color: #2b6cb0;
     --primary-hover: #2c5282;
-    --bg-color: #f7fafc;
-    --card-bg: #ffffff;
-    --text-color: #2d3748;
-    --text-muted: #718096;
-    --border-color: #e2e8f0;
-    --danger-color: #e53e3e;
+    --bg-color: var(--odysay-surface-muted, #f7fafc);
+    --card-bg: var(--odysay-surface, #ffffff);
+    --text-color: var(--odysay-text, #2d3748);
+    --text-muted: var(--odysay-muted, #718096);
+    --border-color: var(--odysay-border, #e2e8f0);
+    --danger-color: var(--odysay-danger, #e53e3e);
 }
 
 body {
@@ -38,7 +38,7 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 10px;
-    color: #1a202c;
+    color: var(--odysay-text, #1a202c);
 }
 
 .post-meta {
@@ -64,13 +64,13 @@ body {
     border-radius: 4px;
     font-size: 0.85rem;
     border: 1px solid var(--border-color);
-    background-color: #fff;
+    background-color: var(--odysay-surface, #fff);
     cursor: pointer;
     transition: all 0.2s;
 }
 
 .btn:hover {
-    background-color: #f1f5f9;
+    background-color: var(--odysay-surface-tint, #f1f5f9);
 }
 
 .btn-primary {
@@ -89,7 +89,7 @@ body {
 }
 
 .btn-danger:hover {
-    background-color: #fff5f5;
+    background-color: var(--odysay-surface, #fff5f5);
 }
 
 .post-content {
@@ -124,7 +124,7 @@ body {
     font-size: 1rem;
     border-radius: 20px;
     border: 1px solid var(--border-color);
-    background-color: #fff;
+    background-color: var(--odysay-surface, #fff);
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.2s ease;
@@ -136,9 +136,9 @@ body {
 
 /* 좋아요 활성화 상태 스타일 */
 .btn-like.active {
-    border-color: #e53e3e;
-    background-color: #fff5f5;
-    color: #e53e3e;
+    border-color: var(--odysay-accent, #e53e3e);
+    background-color: var(--odysay-surface, #fff5f5);
+    color: var(--odysay-danger, #e53e3e);
     font-weight: 600;
 }
 
@@ -225,9 +225,9 @@ body {
 .author-badge {
     display: inline-block;
     font-size: 0.75rem;
-    color: #2b6cb0;
-    background-color: #ebf8ff;
-    border: 1px solid #bee3f8;
+    color: var(--odysay-accent, #2b6cb0);
+    background-color: var(--odysay-surface-tint, #ebf8ff);
+    border: 1px solid var(--odysay-border, #bee3f8);
     border-radius: 12px;
     padding: 1px 6px;
     margin-left: 4px;
