@@ -796,3 +796,42 @@ textarea.form-control {
         color: white;
     }
 }
+
+/* ================= LOADING MODAL ================= */
+.loading-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(2px);
+}
+
+.loading-modal-content {
+    background: var(--odysay-surface, #ffffff);
+    padding: 30px 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+}
+
+.loading-modal-content h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--odysay-text, #142947);
+    margin-bottom: 8px;
+}
+
+.loading-modal-content p {
+    font-size: 13px;
+    color: var(--odysay-muted, #718097);
+    margin: 0;
+    line-height: 1.5;
+}

@@ -32,14 +32,18 @@ geolocator = Nominatim(user_agent="odysay_travel_app_v8")
 # 1. Gemini AI: 오타/한글발음 ➔ 정식 명칭 추출
 # -----------------------------------------------------------
 def get_corrected_place_from_ai(country, region, place):
-    if current_app.testing or not current_app.config.get('GEMINI_FREE_TIER_CONFIRMED'):
+    # current_app.config 확인 부분 제거 또는 키 검증 강화
+    api_key = os.getenv("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY") or GEMINI_API_KEY
+
+    if not api_key:
+        print("[Gemini AI Error] GEMINI_API_KEY가 설정되지 않았습니다.")
         return country, region, place
+
     max_retries = 3
     retry_delay = 1
 
     for attempt in range(max_retries):
         try:
-            api_key = os.environ.get("GEMINI_API_KEY") or GEMINI_API_KEY
             client = genai.Client(api_key=api_key)
 
             prompt = f"""
@@ -59,6 +63,7 @@ def get_corrected_place_from_ai(country, region, place):
             }}
             """
 
+            # 올바른 정식 모델명 지정 (gemini-3.6-flash)
             response = client.models.generate_content(
                 model='gemini-3.6-flash',
                 contents=prompt,
