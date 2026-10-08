@@ -524,6 +524,9 @@
 ========================= */
 
 .destination-card {
+    display: block;
+    color: inherit;
+    text-decoration: none;
     overflow: hidden;
 
     border: 1px solid var(--odysay-border, #e5e9ef);
@@ -537,6 +540,11 @@
         transform 0.25s,
         box-shadow 0.25s,
         border-color 0.25s;
+}
+
+.destination-card:focus-visible {
+    outline: 3px solid var(--odysay-accent, #507da6);
+    outline-offset: 3px;
 }
 
 .card-image img.destination-photo-fallback {
@@ -756,10 +764,6 @@
 ========================= */
 
 @media (max-width: 760px) {
-
-    .gnb {
-        display: none;
-    }
 
     .travel-hero {
         padding: 55px 20px 45px;

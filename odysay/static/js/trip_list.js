@@ -255,8 +255,9 @@ function renderDestinations() {
 ========================================================= */
 
 function createDestinationCard(place) {
-    const card = document.createElement("article");
+    const card = document.createElement("a");
     card.className = "destination-card";
+    card.href = `/homepage/trip_location/${Number(place.id)}`;
 
     const imagePath = getPlaceImage(place);
 
@@ -318,7 +319,7 @@ function createDestinationCard(place) {
     const photo = card.querySelector('img');
     const showFallback = () => {
         photo.classList.add('destination-photo-fallback');
-        photo.src = '/static/images/logo.png';
+        photo.src = '/static/images/logo-transparent.png';
     };
     photo.addEventListener('error', showFallback, { once: true });
     if (place.photo_url) {
@@ -341,7 +342,7 @@ function escapeCardText(value) {
 ========================================================= */
 
 function getPlaceImage(place) {
-    return place.photo_url || "/static/images/logo.png";
+    return place.photo_url || "/static/images/logo-transparent.png";
 }
 
 
@@ -427,12 +428,22 @@ function updateSelectedCountryHeader(count) {
 
 
 /* =========================================================
-   15. URL 파라미터 자동 선택 처리
+   15. URL 파라미터 자동 선택 처리 및 포커스
 ========================================================= */
 
 function handleUrlParams() {
     const urlParams = new URLSearchParams(window.location.search);
     const query = urlParams.get("keyword") || urlParams.get("country");
+    const focusParam = urlParams.get("focus"); // focus 파라미터 확인
+
+    // header의 '나라 이름 검색'을 눌러 들어온 경우
+    if (focusParam === "search" && countrySearch) {
+        setTimeout(() => {
+            countrySearch.focus(); // 입력창 포커스
+            // 화면 스크롤이 검색창 위치로 부드럽게 이동하도록 설정 (선택사항)
+            countrySearch.scrollIntoView({ behavior: "smooth", block: "center" });
+        }, 100);
+    }
 
     if (!query) return;
 

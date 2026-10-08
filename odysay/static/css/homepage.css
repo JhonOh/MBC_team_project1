@@ -432,7 +432,7 @@
     flex: 1;
 }
 
-.recommend-info span {
+.recommend-info > span {
     display: block;
     font-size: 11px;
     color: var(--odysay-muted, #68778d);
@@ -469,7 +469,7 @@
 .community-list {
     display: flex;
     flex-direction: column;
-    gap: 0; /* 패딩을 통해 구분선 위치를 정확히 중앙으로 맞추기 위해 gap 0 설정 */
+    gap: 8px;
 }
 
 .recent-item,
@@ -477,20 +477,31 @@
     display: flex;
     gap: 14px;
 
-    padding-bottom: 8px;
+    padding: 0 8px 0 0;
     border-bottom: 1px solid var(--odysay-border, #edf0f4);
     align-items: stretch;
     min-height: 84px;
     box-sizing: border-box;
     border-radius: 8px;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    overflow: hidden;
+    position: relative;
+    transform-origin: center;
+    transition: transform 0.25s ease, box-shadow 0.25s ease,
+                background-color 0.2s ease, border-color 0.2s ease;
 }
 
 .recent-item:hover,
-.community-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(15, 30, 50, 0.08);
-    background-color: #ffffff;
+.community-item:hover,
+.recent-item:focus-visible,
+.community-item:focus-visible {
+    background-color: var(--odysay-surface-muted, #f1f5f9);
+    border-color: var(--odysay-accent, #7894b1);
+}
+
+.recent-item:focus-visible,
+.community-item:focus-visible {
+    outline: 2px solid var(--odysay-accent, #7894b1);
+    outline-offset: 2px;
 }
 
 .recent-item:last-child,
@@ -517,9 +528,13 @@
     transition: transform 0.35s ease;
 }
 
-.recent-item:hover img,
-.community-item:hover img {
-    transform: scale(1.06);
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .recent-item:hover,
+    .community-item:hover {
+        transform: scale(1.015);
+        box-shadow: 0 5px 14px rgb(0 0 0 / 12%);
+        z-index: 1;
+    }
 }
 
 .recent-info,
@@ -654,6 +669,14 @@
 .bottom-logo strong {
     display: block;
     font-size: 18px;
+}
+
+.brand-mark-image {
+    display: block;
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    object-fit: contain;
 }
 
 .bottom-logo small {

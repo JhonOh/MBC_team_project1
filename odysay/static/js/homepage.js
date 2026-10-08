@@ -1,15 +1,19 @@
 // static/js/homepage.js
 
 function handleSearch() {
+    if (window.APP_CONFIG?.isGuest) {
+        showSignupNotice();
+        return;
+    }
+
     const input = document.getElementById('mainSearchInput');
     const keyword = input ? input.value.trim() : '';
-    const targetUrl = window.APP_CONFIG?.tripListUrl || '/homepage/trip_list';
+    const targetUrl =
+        window.APP_CONFIG?.tripListUrl || '/homepage/trip_list';
 
-    if (keyword) {
-        window.location.href = `${targetUrl}?keyword=${encodeURIComponent(keyword)}`;
-    } else {
-        window.location.href = targetUrl;
-    }
+    window.location.href = keyword
+        ? `${targetUrl}?keyword=${encodeURIComponent(keyword)}`
+        : targetUrl;
 }
 
 // 헬퍼: 사진 유무에 따른 HTML 반환 (업로드 이미지 or 대체 로고 이미지)
@@ -21,7 +25,7 @@ function renderImageOrPlaceholder(photos, altText, customClass = '') {
         }
     }
     // 사진이 없을 때 logo-img 대신 no-photo-img 클래스 적용
-    return `<img src="/static/images/logo.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
+    return `<img src="/static/images/logo-transparent.png" alt="어딧세이 로고" class="no-photo-img ${customClass}">`;
 }
 
 function escapeHtml(value) {
@@ -153,20 +157,19 @@ function renderCountryLabel(country) {
                             if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
 
-                            const popup = document.createElement('div');
-                            popup.dataset.databasePopup = 'true';
 
+                            const popup = createMapPlacePopup(place);
                             const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
                             const canonicalCountry =
                                 window.OdysayCountries?.canonicalize?.(place.country) || place.country;
 
-                            const title = document.createElement('strong');
+                            const title = popup.querySelector('.map-place-card__title');
                             title.textContent =
                                 isEnglish && canonicalCountry === '대한민국'
                                     ? window.OdysayLanguage?.englishKoreanPlaceName?.(place.title) || place.title
                                     : place.title;
 
-                            const location = document.createElement('p');
+                            const location = popup.querySelector('.map-place-card__location');
 
                             const displayCountry =
                                 window.OdysayLanguage?.countryName?.(place.country) || place.country;
@@ -180,16 +183,17 @@ function renderCountryLabel(country) {
                                 .filter(Boolean)
                                 .join(' ');
 
+
                             const intro = document.createElement('p');
                             intro.textContent = place.intro || '';
                             window.OdysayLanguage.bindContent(title, 'place', place.id, 'place', place.title);
                             if (place.intro) window.OdysayLanguage.bindContent(intro, 'place', place.id, 'intro', place.intro);
-                            const link = document.createElement('a');
-                            link.href = place.detail_url;
+                       
+                            const link = popup.querySelector('.map-place-card__link');
+
                             link.dataset.i18n = 'common.details';
                             link.textContent = uiText('common.details');
 
-                            popup.append(title, location, intro, link);
                             // 같은 장소를 현재 표시하는 세계 지도의 경도 범위로 맞춤
                             let displayLng = place.lng;
 
@@ -200,7 +204,13 @@ function renderCountryLabel(country) {
 // 지정한 지도 범위 안의 여행지만 표시
                             if (allowedBounds.contains([place.lat, displayLng])) {
                                 markers.addLayer(
-                                    L.marker([place.lat, displayLng]).bindPopup(popup)
+                                    L.marker([place.lat, displayLng]).bindPopup(popup, {
+                                        className: 'map-place-popup',
+                                        maxWidth: 288,
+                                        minWidth: 0,
+                                        maxHeight: Math.max(120, map.getSize().y - 100),
+                                        autoPanPadding: [24, 24]
+                                    })
                                 );
                             }
 
@@ -525,15 +535,15 @@ function showExchange(amount, result, from, to, rate, date = '') {
         <div class="exchange-result">
 
             <small>${uiText('exchange.estimated')}</small>
-            <strong>${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</strong>
-            <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, { maximumFractionDigits: 2 })} ${to}</span>
-            <p>1 ${from} = ${rate.toLocaleString(locale, { maximumFractionDigits: 6 })} ${to}${date ? ` · ${uiText('exchange.asOf', { date })}` : ''}</p>
+            <strong>${result.toLocaleString(locale, {maximumFractionDigits: 2})} ${to}</strong>
+            <span>${amount.toLocaleString(locale)} ${from} → ${result.toLocaleString(locale, {maximumFractionDigits: 2})} ${to}</span>
+            <p>1 ${from} = ${rate.toLocaleString(locale, {maximumFractionDigits: 6})} ${to}${date ? ` · ${uiText('exchange.asOf', {date})}` : ''}</p>
             <p class="exchange-notice">${uiText('exchange.notice')}</p>`
 
 }
 
 
- /* ===== 시차 ===== */
+/* ===== 시차 ===== */
 
 function getZone(n) {
     const country = canonicalCountryFromInput(`country${n}`);
@@ -571,13 +581,13 @@ function checkTime() {
     const h = Math.floor(Math.abs(diff) / 60);
     const m = Math.abs(diff) % 60;
     const gap = m
-        ? uiText('time.hoursMinutes', { hours: h, minutes: m })
-        : uiText('time.hours', { hours: h });
+        ? uiText('time.hoursMinutes', {hours: h, minutes: m})
+        : uiText('time.hours', {hours: h});
     const c1Label = localizedCountry(c1);
     const c2Label = localizedCountry(c2);
     const differenceLabel = diff === 0
         ? uiText('time.noDifference')
-        : uiText(diff > 0 ? 'time.faster' : 'time.slower', { country: c2Label, gap });
+        : uiText(diff > 0 ? 'time.faster' : 'time.slower', {country: c2Label, gap});
 
     $('timeResult').innerHTML = `
         <div class="time-result-row">
@@ -670,7 +680,10 @@ async function checkWeather() {
                     <strong>${icon} ${Math.round(current.temperature_2m)}°C</strong>
                     <b>${text}</b>
                 </div>
-                <p>${uiText('weather.feelsLikeHumidity', { temperature: Math.round(current.apparent_temperature), humidity: current.relative_humidity_2m })}</p>
+                <p>${uiText('weather.feelsLikeHumidity', {
+            temperature: Math.round(current.apparent_temperature),
+            humidity: current.relative_humidity_2m
+        })}</p>
                 <div class="weather-hour-title">${uiText('weather.hourly')}</div>
                 <div class="weather-hourly">${hourly}</div>
                 <p class="weather-notice">
@@ -692,6 +705,15 @@ document.addEventListener('wheel', e => {
 
     e.preventDefault();
     box.scrollLeft += e.delta
-}, { passive: false });
+}, {passive: false});
 
 
+/* ===== 키보드 ESC 누를 때 모달 닫기 ===== */
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' || e.key === 'Esc') {
+        closeExchangeModal();
+        closeTimeModal();
+        closeRouteModal();
+        closeWeatherModal();
+    }
+});

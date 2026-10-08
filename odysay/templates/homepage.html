@@ -81,7 +81,7 @@
                 </a>
 
 
-                <a href="#">
+                <a href="{{ url_for('inquiry.index') }}">
 
                     <span><i class="fa-regular fa-comments"></i></span>
                     QnA
@@ -166,7 +166,7 @@
 
             <div class="bottom-brand">
                 <div class="bottom-logo">
-                    <span class="logo-symbol">△△</span>
+                    <img class="brand-mark-image" src="{{ url_for('static', filename='images/logo-transparent.png') }}" alt="어딧세이 로고" width="56" height="56">
                     <div>
                         <strong>어딧세이</strong>
                         <small>ODYSAY</small>
@@ -375,6 +375,7 @@
 <!-- JS 파일 내에서 사용할 Flask url_for 값 전달 -->
 <script>
     window.APP_CONFIG = {
+        isGuest: {{ (g.user is none) | tojson }},
         tripListUrl: "{{ url_for('homepage.trip_list') }}",
         getPlacesUrl: {{ url_for('homepage.get_places') | tojson }}
     };
@@ -385,5 +386,99 @@
 
 <script src="{{ url_for('static', filename='js/travel_tools.js') }}"></script>
 <script src="{{ url_for('static', filename='js/homepage.js') }}"></script>
+{% if g.user is none %}
+<!-- 홈페이지 자체 가입 안내 모달 -->
+<div class="modal fade"
+     id="signupNoticeModal"
+     tabindex="-1"
+     aria-labelledby="signupNoticeTitle"
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="signupNoticeTitle">
+                    로그인 안내
+                </h2>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="닫기"></button>
+            </div>
+
+            <div class="modal-body">
+                이 기능은 회원가입 후 로그인하면 이용할 수 있습니다.
+            </div>
+
+            <div class="modal-footer">
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    닫기
+                </button>
+                <a href="{{ url_for('first.map') }}"
+                   class="btn btn-outline-primary">
+                    로그인
+                </a>
+                <a href="{{ url_for('auth.signup') }}"
+                   class="btn btn-primary">
+                    회원가입
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    function showSignupNotice() {
+        const element = document.getElementById('signupNoticeModal');
+        bootstrap.Modal.getOrCreateInstance(element).show();
+    }
+
+    // 헤더와 동적으로 생성되는 여행지 카드 링크도 처리
+    document.addEventListener('click', function (event) {
+        const link = event.target.closest('a[href]');
+        if (!link) return;
+
+        const target = new URL(link.href, window.location.href);
+        if (target.origin !== window.location.origin) return;
+
+        const path = target.pathname.replace(/\/+$/, '');
+        const memberRoots = [
+            '/homepage/trip_list',
+            '/homepage/trip_location',
+            '/homepage/community',
+            '/homepage/upload',
+            '/homepage/mypage',
+            '/homepage/profile_edit',
+            '/trip-list'
+        ];
+
+        const requiresLogin = memberRoots.some(root =>
+            path === root || path.startsWith(root + '/')
+        );
+
+        if (!requiresLogin) return;
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        showSignupNotice();
+    }, true);
+
+    // 서버가 접근을 차단하고 돌려보낸 경우
+    const currentUrl = new URL(window.location.href);
+
+    if (currentUrl.searchParams.get('signup_required') === '1') {
+        showSignupNotice();
+
+        // 새로고침할 때 안내가 반복되지 않도록 제거
+        currentUrl.searchParams.delete('signup_required');
+        window.history.replaceState(
+            window.history.state, '', currentUrl.href
+        );
+    }
+</script>
+{% endif %}
 </body>
 </html>

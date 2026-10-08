@@ -206,7 +206,7 @@ def mypage():
             'photos': post.photos,
             'created_at': post.created_at,
             'likes': post.likes or 0,
-            'comment_count': len(post.comments),
+            'comment_count': len(post.comments) if post.comments else 0,
             'detail_url': url_for('detail.detail', post_type='post', item_id=post.id),
         })
 
@@ -257,10 +257,10 @@ def mypage():
 
 
 # -----------------------------------------------------------
-# 2. header.html 연동용 마이페이지 서브 라우트 (a5에서 처리)
+# 2. header.html 연동용 마이페이지 서브 라우트
 # -----------------------------------------------------------
 
-# 내가 쓴 글
+# 내가 쓴 글 페이지
 @bp.route('/posts')
 def mypage_posts():
     if g.user is None:
@@ -278,12 +278,11 @@ def mypage_posts():
 
     return render_template(
         'community.html',
-        my_posts_mode=True,
+        mypage_posts_mode=True,
         current_category=category,
         initial_sort=sort,
     )
 
-# 에일리어스 설정 (mypage.my_posts 호출 시 대응)
 my_posts = mypage_posts
 
 
@@ -334,56 +333,81 @@ def mypage_settings():
 
 
 # -----------------------------------------------------------
-# 3. API
+# 3. API (내가 쓴 글 목록 전용 API - endpoint='mypage_posts_api')
 # -----------------------------------------------------------
-@bp.route('/api/posts')
+@bp.route('/api/posts', endpoint='mypage_posts_api')
 def my_posts_api():
     if g.user is None:
         return jsonify(error='로그인이 필요합니다.'), 401
 
     user_id = g.user.id
     author_name = g.user.nickname or g.user.username
+
+    category = request.args.get('category', 'ALL')
+    sort = request.args.get('sort', 'latest')
+
     results = []
 
-    places = TripLocationmd.query.filter_by(user_id=user_id).all()
-    for place in places:
-        created_at = place.created_at
-        results.append({
-            'id': f'place_{place.id}',
-            'raw_id': place.id,
-            'title': place.place,
-            'country': place.country,
-            'region': place.region,
-            'category': '여행 후기',
-            'intro': place.intro,
-            'photos': place.photos,
-            'likes': Bookmark.query.filter_by(place_id=place.id).count(),
-            'comment_count': TravelTalk.query.filter_by(place_id=place.id).count(),
-            'author': author_name,
-            'created_at': created_at.strftime('%Y.%m.%d') if created_at else '',
-            'raw_date': created_at.isoformat() if created_at else '',
-            'detail_url': url_for('trip_location.trip_location_detail', place_id=place.id),
-        })
+    # 1. 여행지/여행 후기 (TripLocationmd)
+    if category in ('ALL', '여행 후기'):
+        places = TripLocationmd.query.filter_by(user_id=user_id).all()
+        for place in places:
+            created_at = place.created_at
+            likes_count = Bookmark.query.filter_by(place_id=place.id).count()
+            comment_count = TravelTalk.query.filter_by(place_id=place.id).count()
 
-    posts = Post.query.filter_by(user_id=user_id).all()
-    for post in posts:
-        created_at = post.created_at
-        results.append({
-            'id': f'post_{post.id}',
-            'raw_id': post.id,
-            'title': post.title,
-            'country': '커뮤니티',
-            'region': post.category,
-            'category': post.category,
-            'intro': post.content,
-            'photos': post.photos,
-            'likes': post.likes or 0,
-            'comment_count': len(post.comments),
-            'author': author_name,
-            'created_at': created_at.strftime('%Y.%m.%d') if created_at else '',
-            'raw_date': created_at.isoformat() if created_at else '',
-            'detail_url': url_for('detail.detail', post_type='post', item_id=post.id),
-        })
+            results.append({
+                'id': f'place_{place.id}',
+                'raw_id': place.id,
+                'title': place.place,
+                'country': place.country or '',
+                'region': place.region or '',
+                'category': '여행 후기',
+                'intro': place.intro or '',
+                'photos': place.photos,
+                'likes': likes_count,
+                'comment_count': comment_count,
+                'author': author_name,
+                'created_at': created_at.strftime('%Y.%m.%d') if created_at else '',
+                'raw_date': created_at.isoformat() if created_at else '',
+                'detail_url': url_for('trip_location.trip_location_detail', place_id=place.id),
+            })
 
-    results.sort(key=lambda item: item['raw_date'], reverse=True)
+    # 2. 일반 커뮤니티 게시글 (Post - 여행 팁, 자유 게시판)
+    if category != '여행 후기':
+        post_query = Post.query.filter_by(user_id=user_id)
+        if category in ('여행 팁', '자유 게시판'):
+            post_query = post_query.filter_by(category=category)
+
+        posts = post_query.all()
+        for post in posts:
+            created_at = post.created_at
+            likes_count = post.likes or 0
+            comment_count = len(post.comments) if post.comments else 0
+
+            results.append({
+                'id': f'post_{post.id}',
+                'raw_id': post.id,
+                'title': post.title,
+                'country': '커뮤니티',
+                'region': post.category,
+                'category': post.category,
+                'intro': post.content or '',
+                'photos': post.photos,
+                'likes': likes_count,
+                'comment_count': comment_count,
+                'author': author_name,
+                'created_at': created_at.strftime('%Y.%m.%d') if created_at else '',
+                'raw_date': created_at.isoformat() if created_at else '',
+                'detail_url': url_for('detail.detail', post_type='post', item_id=post.id),
+            })
+
+    # 3. 정렬 조건 적용
+    if sort == 'popular':
+        results.sort(key=lambda item: (item['likes'] + item['comment_count'], item['likes'], item['raw_date']), reverse=True)
+    elif sort == 'comments':
+        results.sort(key=lambda item: (item['comment_count'], item['raw_date']), reverse=True)
+    else:
+        results.sort(key=lambda item: item['raw_date'], reverse=True)
+
     return jsonify(results)

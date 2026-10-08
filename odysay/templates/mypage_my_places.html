@@ -2,16 +2,14 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내가 만든 여행지 | 어딧세이</title>
-
     {% include 'components/language_assets.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
-        {% include 'theme_head.html' %}
+    {% include 'theme_head.html' %}
 
 
 </head>
@@ -54,12 +52,23 @@
                        href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
                         <div class="card-image">
                             {% if photo_names %}
-                                data-fallback="{{ url_for('static', filename='images/logo.png') }}"
-                                onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
-                                this.src=this.dataset.fallback;"
+                                <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
+
+                                     alt="{{ place.place }} 사진"
+                                     loading="lazy"
+                                     data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                     onerror="this.onerror=null;
+                      this.classList.add('destination-photo-fallback');
+                      this.alt='어딧세이 기본 이미지';
+                      this.src=this.dataset.fallback;">
+
                             {% else %}
-                                <div class="my-place-placeholder">등록된 사진이 없습니다</div>
+                                <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                     alt="어딧세이 기본 이미지"
+                                     class="destination-photo-fallback"
+                                     loading="lazy">
                             {% endif %}
+
                             <span class="country-badge" data-country-name="{{ place.country }}">{{ place.country }}</span>
                         </div>
                         <div class="card-content">
@@ -71,10 +80,10 @@
                                     등록일 {{ place.created_at.strftime('%Y.%m.%d') }}</time>
                             {% endif %}
                             <div class="card-bottom">
+
                                 <span class="like"
                                       aria-label="좋아요 {{ place.likes or 0 }}개">♡ {{ place.likes or 0 }}</span>
-                                <span class="detail-text">자세히 보기 →</span>
-                            </div>
+                            <span class="detail-text">자세히 보기 →</span>
                         </div>
                     </a>
                 {% endfor %}

@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let placesData = [];
   const uiText = (key, values) => window.OdysayLanguage?.t?.(key, values) || key;
   const displayCountry = (country) => window.OdysayLanguage?.countryName?.(country) || country || '';
+
   const isPlaceItem = (item) =>
     String(item?.id || '').startsWith('place_');
   const escapeContent = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -9,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const kind = String(item.id).replace(/_\d+$/, '');
     const id = item.raw_id || String(item.id).split('_').pop();
     return `<span ${window.OdysayLanguage.contentAttrs(kind, id, field)}>${escapeContent(value)}</span>`;
-  };
+ 
 
   const isKoreanPlace = (item) => {
     const country =
@@ -41,9 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
       return window.OdysayLanguage?.englishKoreanPlaceName?.(title) || title;
     }
 
-    // 일반 커뮤니티 게시글 제목은 사용자가 작성한 내용 → 그대로
     return title;
   };
+
   const displayCategory = (category) => {
     const normalized = String(category || '').replace(/\s+/g, '');
     const keyByCategory = {
@@ -54,14 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
     return keyByCategory[normalized] ? uiText(keyByCategory[normalized]) : (category || uiText('community.general'));
   };
 
-  // 1. HTML의 hidden input에서 현재 카테고리값 및 초기 정렬값 읽기
+  // 1. HTML의 hidden input에서 현재 카테고리 및 초기 정렬값 읽기
   const categoryInput = document.getElementById('currentCategoryInput');
   let currentCategory = categoryInput ? categoryInput.value : 'ALL';
 
   const sortInput = document.getElementById('initialSortInput');
   let currentSort = sortInput ? sortInput.value : 'latest';
 
-  // 정렬 탭 버튼 UI 상태 초기화
+  // 정렬 탭 버튼 UI 초기 상태 반영
   const tabBtns = document.querySelectorAll('.tab-btn');
   tabBtns.forEach(btn => {
     btn.classList.remove('active');
@@ -76,49 +77,62 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. 백엔드 API로부터 데이터 가져오기
   fetchPlaces();
 
- function fetchPlaces() {
-  const container = document.querySelector('.main-container');
-  const apiUrl =
-    container?.dataset.postsApi || '/homepage/community/api/places';
+  function fetchPlaces() {
+    const container = document.querySelector('.main-container');
+    let baseUrl = container?.dataset.postsApi;
 
-  fetch(apiUrl)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(
-          response.status === 401
-            ? uiText('community.loginRequired')
-            : uiText('community.loadError')
-        );
-      }
+    if (!baseUrl) {
+      baseUrl = '/homepage/community/api/places';
+    }
 
-      return response.json();
-    })
-    .then(data => {
-      placesData = data;
-      applyFilterAndRender();
-      renderHotList(placesData);
-    })
-    .catch(error => {
-      console.error('데이터 가져오기 실패:', error);
+    // URL에 query parameter 추가 (category & sort)
+    const urlParams = new URLSearchParams();
+    if (currentCategory) urlParams.append('category', currentCategory);
+    if (currentSort) urlParams.append('sort', currentSort);
 
-      const postList = document.getElementById('postList');
-      const pagination = document.getElementById('pagination');
+    const fullUrl = `${baseUrl}${baseUrl.includes('?') ? '&' : '?'}${urlParams.toString()}`;
 
-      if (postList) {
-        postList.textContent = error.message;
-      }
+    fetch(fullUrl)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(
+            response.status === 401
+              ? uiText('community.loginRequired')
+              : uiText('community.loadError')
+          );
+        }
+        return response.json();
+      })
+      .then(data => {
+        placesData = data;
+        applyFilterAndRender();
+        renderHotList(placesData);
+      })
+      .catch(error => {
+        console.error('데이터 가져오기 실패:', error);
 
-      if (pagination) {
-        pagination.innerHTML = '';
-      }
-    });
-}
+        const postList = document.getElementById('postList');
+        const pagination = document.getElementById('pagination');
+
+        if (postList) {
+          postList.innerHTML = `
+            <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size:36px; margin-bottom:12px; color:#ff6b6b;"></i>
+              <p>${error.message}</p>
+            </div>`;
+        }
+
+        if (pagination) {
+          pagination.innerHTML = '';
+        }
+      });
+  }
 
   // 3. 필터링 + 정렬 + 페이징 종합 적용
   function applyFilterAndRender() {
     let filtered = [...placesData];
 
-    // [카테고리 필터링]
+    // [카테고리 필터링 (클라이언트 측 보완)]
     if (currentCategory !== 'ALL') {
       filtered = filtered.filter(item => {
         if (!item.category) return false;
@@ -151,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const commentB = b.comment_count ?? b.comments_count ?? 0;
 
       if (currentSort === 'popular') {
-        // 인기순: (좋아요 + 댓글) 합계 내림차순 -> 동율 시 좋아요 내림차순 -> 최신순
         const totalA = likesA + commentA;
         const totalB = likesB + commentB;
 
@@ -163,13 +176,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         return timeB - timeA;
       } else if (currentSort === 'comments') {
-        // 댓글순
+        // 1순위: 댓글 수 내림차순
         if (commentB !== commentA) {
           return commentB - commentA;
         }
+        // 2순위: 댓글 수가 같을 경우 좋아요(하트) 수 내림차순
+        if (likesB !== likesA) {
+          return likesB - likesA;
+        }
+        // 3순위: 댓글 수와 좋아요 수가 모두 같을 경우 최신순
         return timeB - timeA;
       } else {
-        // 최신순 (기본값)
         return timeB - timeA;
       }
     });
@@ -196,10 +213,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (items.length === 0) {
       postList.innerHTML = `
-
         <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
           <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:var(--odysay-muted, #ccc);"></i>
+
           <p>${uiText('community.noPosts')}</p>
+
 
         </div>`;
       return;
@@ -292,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pagination.appendChild(nextBtn);
   }
 
-  // 6. 우측 사이드바 '지금 핫한 글' Top 5 렌더링
+  // 6. 우측 사이드바 '지금 핫한 글 / 내 글 중 인기 글' Top 5 렌더링
   function renderHotList(items) {
     const hotList = document.getElementById('hotList');
     if (!hotList) return;
@@ -363,7 +381,7 @@ document.addEventListener('DOMContentLoaded', () => {
       targetBtn.classList.add('active');
       currentSort = targetBtn.dataset.sort || 'latest';
       currentPage = 1;
-      applyFilterAndRender();
+      fetchPlaces(); // 정렬 변경 시 백엔드 재요청
     });
   });
 

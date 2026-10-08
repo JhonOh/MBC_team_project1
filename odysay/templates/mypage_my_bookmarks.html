@@ -5,17 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>내가 찜한 여행지 | 어딧세이</title>
     {% include 'components/language_assets.html' %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/trip_list.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_my_places.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     {% include 'theme_head.html' %}
 
 
 </head>
-{% include 'header.html' %}
 
 <body class="my-places-page">
 
+{% include 'header.html' %}
 
 <main>
     <section class="travel-hero">
@@ -50,13 +51,24 @@
                         <div class="card-image">
                             {% if photo_names %}
                                 <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
-                                     alt="{{ place.place }} 사진" loading="lazy">
+                                     alt="{{ place.place }} 사진"
+                                     loading="lazy"
+                                     data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                     onerror="this.onerror=null;
+                      this.classList.add('destination-photo-fallback');
+                      this.alt='어딧세이 기본 이미지';
+                      this.src=this.dataset.fallback;">
                             {% else %}
-                                data-fallback="{{ url_for('static', filename='images/logo.png') }}"
-                                onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지';
-                                this.src=this.dataset.fallback;"
+
+                                <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                     alt="어딧세이 기본 이미지"
+                                     class="destination-photo-fallback"
+                                     loading="lazy">
+
                             {% endif %}
+
                             <span class="country-badge" data-country-name="{{ place.country }}">{{ place.country }}</span>
+
                         </div>
                         <div class="card-content">
                             <div class="card-location" data-translate-place="{{ place.id }}" data-translate-field="region">{{ place.region }}</div>

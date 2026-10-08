@@ -117,9 +117,12 @@ button {
     color: var(--odysay-muted, #bdc3c7);
 }
 
-.mountains-icon {
-    font-size: 50px;
-    letter-spacing: -5px;
+.place-placeholder-logo {
+    display: block;
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin: 0 auto 12px;
 }
 
 /* ================= 메인 이미지 하단 썸네일 ================= */
