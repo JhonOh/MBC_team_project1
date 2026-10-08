@@ -245,7 +245,7 @@
                                             alt="{{ item.title }} 사진"
                                             loading="lazy">
                                 {% else %}
-                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                    <img src="{{ url_for('static', filename='images/logo-transparent.png') }}"
                                          class="fallback-logo"
                                          alt="어딧세이 기본 이미지"
                                          loading="lazy">
@@ -307,7 +307,7 @@
                                             alt="{{ place.place }} 사진"
                                             loading="lazy">
                                 {% else %}
-                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                    <img src="{{ url_for('static', filename='images/logo-transparent.png') }}"
                                          class="fallback-logo"
                                          alt="어딧세이 기본 이미지"
                                          loading="lazy">
@@ -369,10 +369,10 @@
                                     <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
                                          alt="{{ place.place }} 사진"
                                          loading="lazy"
-                                         data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                                         data-fallback="{{ url_for('static', filename='images/logo-transparent.png') }}"
                                          onerror="this.onerror=null; this.classList.add('fallback-logo'); this.alt='어딧세이 기본 이미지'; this.src=this.dataset.fallback;">
                                 {% else %}
-                                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                                    <img src="{{ url_for('static', filename='images/logo-transparent.png') }}"
                                          class="fallback-logo"
                                          alt="어딧세이 기본 이미지"
                                          loading="lazy">
