@@ -255,8 +255,9 @@ function renderDestinations() {
 ========================================================= */
 
 function createDestinationCard(place) {
-    const card = document.createElement("article");
+    const card = document.createElement("a");
     card.className = "destination-card";
+    card.href = `/homepage/trip_location/${Number(place.id)}`;
 
     const imagePath = getPlaceImage(place);
 
@@ -318,7 +319,7 @@ function createDestinationCard(place) {
     const photo = card.querySelector('img');
     const showFallback = () => {
         photo.classList.add('destination-photo-fallback');
-        photo.src = '/static/images/logo.png';
+        photo.src = '/static/images/logo-transparent.png';
     };
     photo.addEventListener('error', showFallback, { once: true });
     if (place.photo_url) {
@@ -341,7 +342,7 @@ function escapeCardText(value) {
 ========================================================= */
 
 function getPlaceImage(place) {
-    return place.photo_url || "/static/images/logo.png";
+    return place.photo_url || "/static/images/logo-transparent.png";
 }
 
 
