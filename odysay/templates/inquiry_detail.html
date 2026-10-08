@@ -4,7 +4,7 @@
 
 {% block content %}
 <article class="inquiry-panel">
-    <h1 class="inquiry-title">{{ inquiry.title }}</h1>
+    <h1 class="inquiry-title" data-translate-type="inquiry" data-translate-id="{{ inquiry.id }}" data-translate-field="title">{{ inquiry.title }}</h1>
 
     <div class="inquiry-meta">
         <span class="inquiry-status {{ 'inquiry-status-done' if inquiry.answer else 'inquiry-status-waiting' }}">
@@ -24,7 +24,7 @@
         {% endif %}
     </div>
 
-    <div class="inquiry-message">{{ inquiry.content }}</div>
+    <div class="inquiry-message" data-translate-type="inquiry" data-translate-id="{{ inquiry.id }}" data-translate-field="content">{{ inquiry.content }}</div>
 </article>
 
 <section class="inquiry-panel">
@@ -34,7 +34,7 @@
     </h2>
 
     {% if inquiry.answer %}
-        <div class="inquiry-message">{{ inquiry.answer }}</div>
+        <div class="inquiry-message" data-translate-type="inquiry" data-translate-id="{{ inquiry.id }}" data-translate-field="answer">{{ inquiry.answer }}</div>
 
         {% if inquiry.answered_at %}
             <div class="inquiry-meta">

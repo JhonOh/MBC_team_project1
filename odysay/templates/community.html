@@ -108,15 +108,18 @@
             <!-- 현재 카테고리에 따라 이동할 경로 분기 -->
             {% if current_category == '여행 후기' %}
                 <a href="/homepage/upload" class="btn-primary-write">
-                    <i class="fa-solid fa-pen"></i> 글쓰기
+                    <i class="fa-solid fa-pen"></i>
+                    <span>글쓰기</span>
                 </a>
             {% elif current_category == '여행 팁' %}
                 <a href="/homepage/community/postwrite/?category=tip" class="btn-primary-write">
-                    <i class="fa-solid fa-pen"></i> 글쓰기
+                    <i class="fa-solid fa-pen"></i>
+                    <span>글쓰기</span>
                 </a>
             {% elif current_category == '자유 게시판' %}
                 <a href="/homepage/community/postwrite/?category=free" class="btn-primary-write">
-                    <i class="fa-solid fa-pen"></i> 글쓰기
+                    <i class="fa-solid fa-pen"></i>
+                    <span>글쓰기</span>
                 </a>
             {% endif %}
         </div>

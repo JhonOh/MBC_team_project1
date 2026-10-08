@@ -288,8 +288,8 @@ function createDestinationCard(place) {
         </div>
 
         <div class="card-content">
-            <div class="card-location">
-                ${displayRegion}
+            <div class="card-location" data-translate-place="${Number(place.id)}" data-translate-field="region">
+                ${region}
             </div>
 
             <h3 class="card-title"
