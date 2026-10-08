@@ -58,10 +58,12 @@
                       this.alt='어딧세이 기본 이미지';
                       this.src=this.dataset.fallback;">
                             {% else %}
+
                                 <img src="{{ url_for('static', filename='images/logo.png') }}"
                                      alt="어딧세이 기본 이미지"
                                      class="destination-photo-fallback"
                                      loading="lazy">
+
                             {% endif %}
 
                             <span class="country-badge">{{ place.country }}</span>
