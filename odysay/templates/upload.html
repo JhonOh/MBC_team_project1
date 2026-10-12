@@ -416,9 +416,16 @@
                 <div class="button-area">
 
 
+                    {% set cancel_url = url_for('trip_location.trip_location_detail', place_id=place.id) if edit_mode else url_for('homepage.homepage') %}
+
                     <button type="button"
                             class="cancel-button"
+
                             onclick="window.location.href='{{ url_for('trip_location.trip_location_detail', place_id=place.id) if edit_mode else url_for('homepage.homepage') }}'">
+
+                            data-cancel-url="{{ cancel_url }}"
+                            onclick="window.location.href=this.dataset.cancelUrl;">
+
                         취소하기
                     </button>
 
