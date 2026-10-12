@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/upload.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/travel_tags.css') }}">
 
-{% include 'theme_head.html' %}
+    {% include 'theme_head.html' %}
 </head>
 <body>
 {# header  #}
@@ -91,6 +91,7 @@
 
 
 
+
                       {% if edit_mode %}{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}{% else %}{{ url_for('homepage.upload') }}{% endif %}"
 
               enctype="multipart/form-data">
@@ -138,7 +139,8 @@
                             지역 <span>*</span>
                         </label>
 
-                        <input type="text" id="region" name="region" data-translate-input class="form-control" placeholder="지역을 입력해주세요."
+                        <input type="text" id="region" name="region" data-translate-input class="form-control"
+                               placeholder="지역을 입력해주세요."
                                value="{{ place.region if edit_mode else '' }}" required>
                     </div>
 
@@ -263,7 +265,8 @@
                             주변 맛집
                         </label>
 
-                        <textarea id="restaurant" name="restaurant" data-translate-input class="form-control" maxlength="300"
+                        <textarea id="restaurant" name="restaurant" data-translate-input class="form-control"
+                                  maxlength="300"
                                   placeholder="이 근처에 추천하고 싶은 맛집이 있나요?">{{ place.restaurant if edit_mode and place.restaurant else '' }}</textarea>
                         <!-- 주변 맛집 사진 -->
                         <div class="nearby-photo-area">
@@ -413,10 +416,16 @@
                 <div class="button-area">
 
 
+                    {% set cancel_url = url_for('trip_location.trip_location_detail', place_id=place.id) if edit_mode else url_for('homepage.homepage') %}
+
                     <button type="button"
                             class="cancel-button"
-                            onclick="window.location.href='
-                                    {% if edit_mode %}{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}{% else %}{{ url_for('homepage.homepage') }}{% endif %}'">
+
+                            onclick="window.location.href='{{ url_for('trip_location.trip_location_detail', place_id=place.id) if edit_mode else url_for('homepage.homepage') }}'">
+
+                            data-cancel-url="{{ cancel_url }}"
+                            onclick="window.location.href=this.dataset.cancelUrl;">
+
                         취소하기
                     </button>
 
