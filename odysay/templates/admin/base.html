@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}콘텐츠 관리{% endblock %} | 어딧세이</title>
     {% include 'components/language_assets.html' %}
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/header_footer.css') }}">
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/admin.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+
 
     {% include 'theme_head.html' %}
 </head>
@@ -13,18 +18,18 @@
 
 {% include 'header.html' %}
 
-<header><a class="brand" href="{{ url_for('admin.index') }}">어딧세이 <span>콘텐츠 관리</span></a>
-<nav>
-    <a href="{{ url_for('admin.index') }}">전체 콘텐츠</a>
-    <a href="{{ url_for('admin.logs') }}">관리 이력</a>
-    <a href="{{ url_for('reports.index') }}">신고 관리</a>
-    <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
-    <a href="{{ url_for('inquiry.index') }}">문의 및 신고관리</a>
-</nav>
+<header class ="admin-header"><a class="brand" href="{{ url_for('admin.index') }}">어딧세이 <span>콘텐츠 관리</span></a>
+    <nav>
+        <a href="{{ url_for('admin.index') }}">전체 콘텐츠</a>
+        <a href="{{ url_for('admin.logs') }}">관리 이력</a>
+        <a href="{{ url_for('reports.index') }}">신고 관리</a>
+        <a href="{{ url_for('homepage.mypage') }}">마이페이지</a>
+        <a href="{{ url_for('inquiry.index') }}">문의 및 신고관리</a>
+    </nav>
 </header>
 <main>
-{% for message in get_flashed_messages() %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
-{% block content %}{% endblock %}
+    {% for message in get_flashed_messages() %}<p class="notice" role="status">{{ message }}</p>{% endfor %}
+    {% block content %}{% endblock %}
 
 </main>
 {% include 'footer.html' %}

@@ -45,53 +45,61 @@
         </div>
         {% if places %}
 
-            <div class="destination-grid">
-                {% for place in places %}
-                    {% set photo_names = (place.photos or '').split(',') | map('trim') | reject('equalto', '') | list %}
-                    <a class="destination-card"
-                       href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
-                        <div class="card-image">
-                            {% if photo_names %}
-                                <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
+        <div class="destination-grid">
+            {% for place in places %}
+            {% set photo_names = (place.photos or '').split(',') | map('trim') | reject('equalto', '') | list %}
+            <a class="destination-card"
+               href="{{ url_for('trip_location.trip_location_detail', place_id=place.id) }}">
+                <div class="card-image">
+                    {% if photo_names %}
+                    <img src="{{ url_for('static', filename='uploads/' ~ photo_names[0]) }}"
 
-                                     alt="{{ place.place }} 사진"
-                                     loading="lazy"
-                                     data-fallback="{{ url_for('static', filename='images/logo.png') }}"
-                                     onerror="this.onerror=null;
+                         alt="{{ place.place }} 사진"
+                         loading="lazy"
+                         data-fallback="{{ url_for('static', filename='images/logo.png') }}"
+                         onerror="this.onerror=null;
                       this.classList.add('destination-photo-fallback');
                       this.alt='어딧세이 기본 이미지';
                       this.src=this.dataset.fallback;">
 
-                            {% else %}
-                                <img src="{{ url_for('static', filename='images/logo.png') }}"
-                                     alt="어딧세이 기본 이미지"
-                                     class="destination-photo-fallback"
-                                     loading="lazy">
-                            {% endif %}
+                    {% else %}
+                    <img src="{{ url_for('static', filename='images/logo.png') }}"
+                         alt="어딧세이 기본 이미지"
+                         class="destination-photo-fallback"
+                         loading="lazy">
+                    {% endif %}
 
-                            <span class="country-badge">{{ place.country }}</span>
-                        </div>
-                        <div class="card-location">{{ place.region }}</div>
-                        <h3 class="card-title">{{ place.place }}</h3>
-                        <p class="card-description">{{ place.intro or '소개가 없습니다.' }}</p>
-                        {% if place.created_at %}
-                            <time class="my-place-date" datetime="{{ place.created_at.isoformat() }}">
-                                등록일 {{ place.created_at.strftime('%Y.%m.%d') }}</time>
-                        {% endif %}
-                        <div class="card-bottom">
+                    <span class="country-badge" data-country-name="{{ place.country }}">{{ place.country }}</span>
+                </div>
+                <div class="card-content">
+                    <div class="card-location" data-translate-place="{{ place.id }}" data-translate-field="region">{{
+                        place.region }}
+                    </div>
+                    <h3 class="card-title" data-translate-place="{{ place.id }}" data-translate-field="place">{{
+                        place.place }}</h3>
+                    <p class="card-description" {% if place.intro %}data-translate-place="{{ place.id }}"
+                       data-translate-field="intro" {% endif %}>{{ place.intro or '소개가 없습니다.' }}</p>
+                    {% if place.created_at %}
+                    <time class="my-place-date" datetime="{{ place.created_at.isoformat() }}">
+                        등록일 {{ place.created_at.strftime('%Y.%m.%d') }}
+                    </time>
+                    {% endif %}
+                    <div class="card-bottom">
+
                                 <span class="like"
                                       aria-label="좋아요 {{ place.likes or 0 }}개">♡ {{ place.likes or 0 }}</span>
-                            <span class="detail-text">자세히 보기 →</span>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
+                        <span class="detail-text">자세히 보기 →</span>
+                    </div>
+                </div>>
+            </a>
+            {% endfor %}
+        </div>
         {% else %}
-            <div class="empty-state my-empty-state">
-                <div class="empty-icon" aria-hidden="true">🧳</div>
-                <h3>아직 등록한 여행지가 없습니다.</h3>
-                <p>여행지 등록 버튼으로 첫 여행지를 등록해 보세요.</p>
-            </div>
+        <div class="empty-state my-empty-state">
+            <div class="empty-icon" aria-hidden="true">🧳</div>
+            <h3>아직 등록한 여행지가 없습니다.</h3>
+            <p>여행지 등록 버튼으로 첫 여행지를 등록해 보세요.</p>
+        </div>
         {% endif %}
     </section>
 

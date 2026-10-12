@@ -18,6 +18,7 @@ from wtforms import DateField, SelectField
 
 from odysay.models import User
 
+from flask_wtf.file import FileField, FileAllowed
 
 class UserCreateForm(FlaskForm):
     username = StringField(
@@ -125,6 +126,17 @@ class LoginForm(FlaskForm):
     submit = SubmitField('로그인')
 
 class ProfileEditForm(FlaskForm):
+    avatar = FileField(
+        '프로필 이미지',
+        validators=[
+            FileAllowed(
+                ['jpg', 'jpeg', 'png', 'webp'],
+                'JPG, PNG, WEBP 사진만 등록할 수 있습니다.'
+            )
+        ]
+    )
+
+    # 기존 nickname, 비밀번호, submit 필드는 유지
     nickname = StringField(
         '닉네임',
         filters=[lambda value: value.strip() if value else value],
@@ -159,5 +171,6 @@ class ProfileEditForm(FlaskForm):
         '새 비밀번호 확인',
         validators=[Optional()]
     )
+
 
     submit = SubmitField('저장')

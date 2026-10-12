@@ -197,7 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPagination(totalPages);
   }
 
-  // 4. 게시글 리스트 렌더링
+  //4. 게시글 리스트 렌더링
   function renderPostList(items) {
     const postList = document.getElementById('postList');
     if (!postList) return;
