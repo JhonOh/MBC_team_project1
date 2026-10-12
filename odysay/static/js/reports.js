@@ -1,9 +1,10 @@
+const reportText = (key) => window.OdysayLanguage?.t?.(key) || key;
 window.submitContentReport = async function (button, kind, contentId) {
     if (button.disabled) return;
-    const reason = window.prompt('신고 사유를 입력해 주세요. (1~500자)');
+    const reason = window.prompt(reportText('report.reasonPrompt'));
     if (reason === null) return;
     if (!reason.trim() || reason.trim().length > 500) {
-        alert('신고 사유를 1~500자로 입력해 주세요.');
+        alert(reportText('report.reasonRequired'));
         return;
     }
     button.disabled = true;
@@ -19,13 +20,13 @@ window.submitContentReport = async function (button, kind, contentId) {
         });
         const data = await response.json().catch(() => ({}));
         if (!response.ok || !data.success) {
-            throw new Error(data.message || data.error || '신고 접수에 실패했습니다. 다시 시도해 주세요.');
+            throw new Error(reportText('report.submitError'));
         }
         saved = true;
-        button.textContent = '🚨 신고 완료';
-        alert(data.message);
+        button.textContent = reportText('report.completed');
+        alert(reportText('report.success'));
     } catch (error) {
-        alert(error.message || '신고 접수에 실패했습니다.');
+        alert(error.message || reportText('report.submitError'));
     } finally {
         button.disabled = saved;
     }

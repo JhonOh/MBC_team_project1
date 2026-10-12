@@ -364,9 +364,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ).textContent = review.nickname;
 
 
-                    reviewItem.querySelector(
-                        '.review-text'
-                    ).textContent = review.content;
+                    window.OdysayLanguage.bindContent(reviewItem.querySelector('.review-text'),
+                        'review', review.id, 'content', review.content);
 
 
                     reviewItem.querySelector(
@@ -549,8 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         reviewItem.dataset.reviewId;
 
                     const reviewText =
-                        reviewItem.querySelector('.review-text')
-                            .textContent.trim();
+                        window.OdysayLanguage.originalContent(reviewItem.querySelector('.review-text')).trim();
 
                     const reviewScore =
                         Number(

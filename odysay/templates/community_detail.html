@@ -21,7 +21,7 @@
         <div id="title-display">
             <h1 class="post-title">
                 {% if is_post %}
-                    <span data-user-content>{{ item.title }}</span>
+                    <span data-translate-type="post" data-translate-id="{{ item.id }}" data-translate-field="title">{{ item.title }}</span>
                 {% else %}
                     <span data-translate-place="{{ item.id }}"
                           data-translate-field="place"
@@ -73,16 +73,16 @@
     <!-- 게시글 본문 -->
     <div id="post-content-display" class="post-content">
         {% if is_post %}
-            {{ item.content }}
+            <span data-translate-type="post" data-translate-id="{{ item.id }}" data-translate-field="content">{{ item.content }}</span>
         {% else %}
             <p>
                 <strong data-i18n="community.intro">소개:</strong>
-                <span data-user-content>{{ item.intro }}</span>
+                <span data-translate-place="{{ item.id }}" data-translate-field="intro">{{ item.intro }}</span>
             </p>
 
             <p>
                 <strong data-i18n="community.reason">추천 이유:</strong>
-                <span data-user-content>{{ item.reason }}</span>
+                <span data-translate-place="{{ item.id }}" data-translate-field="reason">{{ item.reason }}</span>
             </p>
         {% endif %}
     </div>
@@ -188,7 +188,7 @@
                         {% endif %}
                     </div>
 
-                    <div class="comment-content" id="comment-text-{{ comment.id }}">{{ comment.content }}</div>
+                    <div class="comment-content" id="comment-text-{{ comment.id }}" data-translate-type="comment" data-translate-id="{{ comment.id }}" data-translate-field="content">{{ comment.content }}</div>
 
                     <div class="comment-edit-form" id="comment-edit-form-{{ comment.id }}" style="display: none;">
                         <textarea class="edit-input"
@@ -250,12 +250,12 @@
                 }
 
             } else {
-                alert(data.message || data.error || '좋아요 처리에 실패하였습니다.');
+                alert(uiText('community.likeError'));
             }
 
         } catch (error) {
             console.error('Error:', error);
-            alert('통신 중 오류가 발생했습니다.');
+            alert(uiText('community.networkError'));
         }
 
     }
@@ -282,7 +282,7 @@
             const title = document.getElementById('edit-post-title').value.trim();
             const content = document.getElementById('edit-post-content').value.trim();
             if (!title || !content) {
-                alert('제목과 내용을 모두 입력해 주세요.');
+                alert(uiText('community.postRequired'));
                 return;
             }
             payload = {title, content};
@@ -290,7 +290,7 @@
             const intro = document.getElementById('edit-place-intro').value.trim();
             const reason = document.getElementById('edit-place-reason').value.trim();
             if (!intro || !reason) {
-                alert('소개와 추천 이유를 모두 입력해 주세요.');
+                alert(uiText('community.placeRequired'));
                 return;
             }
             payload = {intro, reason};
@@ -305,7 +305,7 @@
         );
 
         if (selectedTags.length > 3) {
-            alert("여행 스타일은 최대 3개까지 선택할 수 있습니다.");
+            alert(uiText('tags.maxSelected'));
             return;
         }
 
@@ -331,13 +331,13 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('서버와 통신 중 오류가 발생했습니다.');
+            alert(uiText('community.serverError'));
         }
     }
 
     // 4. 게시글 삭제 API 호출
     async function deletePost() {
-        if (!confirm('정말 이 게시글을 삭제하시겠습니까?')) return;
+        if (!confirm(uiText('community.deleteConfirm'))) return;
 
         try {
             const response = await fetch(`/homepage/community/detail/api/post/delete/${postType}/${itemId}`, {
@@ -350,14 +350,14 @@
             const data = await response.json();
 
             if (response.ok && data.success) {
-                alert('게시글이 삭제되었습니다.');
+                alert(uiText('community.postDeleted'));
                 window.location.href = data.redirect_url || '/homepage/community';
             } else {
                 alert(data.message || '삭제 권한이 없거나 처리 중 오류가 발생했습니다.');
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('서버와 통신 중 오류가 발생했습니다.');
+            alert(uiText('community.serverError'));
         }
     }
 
@@ -367,7 +367,7 @@
         const content = textarea.value.trim();
 
         if (!content) {
-            alert('댓글 내용을 입력해 주세요.');
+            alert(uiText('community.commentRequired'));
             return;
         }
 
@@ -391,7 +391,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('서버와 통신 중 오류가 발생했습니다.');
+            alert(uiText('community.serverError'));
         }
     }
 
@@ -410,7 +410,7 @@
     async function submitEditComment(commentId) {
         const content = document.getElementById(`comment-edit-input-${commentId}`).value.trim();
         if (!content) {
-            alert('수정할 내용을 입력해주세요.');
+            alert(uiText('community.commentEditRequired'));
             return;
         }
 
@@ -426,11 +426,11 @@
             const data = await response.json();
 
             if (response.ok && data.success) {
-                document.getElementById(`comment-text-${commentId}`).innerText = data.comment.content;
+                window.OdysayLanguage.resetContent(document.getElementById(`comment-text-${commentId}`), data.comment.content);
 
                 const dateElem = document.getElementById(`comment-date-${commentId}`);
                 if (dateElem && data.comment.updated_at) {
-                    dateElem.innerHTML = `${data.comment.updated_at} <span class="edited-tag">(수정됨)</span>`;
+                    dateElem.innerHTML = `${data.comment.updated_at} <span class="edited-tag" data-i18n="community.edited">${uiText('community.edited')}</span>`;
                 }
 
                 hideEditCommentForm(commentId);
@@ -440,13 +440,13 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('통신 오류가 발생했습니다.');
+            alert(uiText('community.networkError'));
         }
     }
 
     // 8. 댓글 삭제 API 호출
     async function deleteComment(commentId) {
-        if (!confirm('댓글을 삭제하시겠습니까?')) return;
+        if (!confirm(uiText('community.commentDeleteConfirm'))) return;
 
 
         try {
@@ -468,7 +468,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('통신 오류가 발생했습니다.');
+            alert(uiText('community.networkError'));
         }
     }
 </script>

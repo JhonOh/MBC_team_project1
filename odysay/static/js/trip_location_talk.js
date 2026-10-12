@@ -1,6 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 리뷰 / 여행톡 공통 기능
     const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+    const talkText = (key) =>
+        window.OdysayLanguage?.t?.(key) || key;
+
+    const talkError = (key, serverMessage) => {
+        const language = window.OdysayLanguage?.getLanguage?.()
+            || localStorage.getItem('odysay.language')
+            || 'ko';
+
+        return language === 'en'
+            ? talkText(key)
+            : (serverMessage || talkText(key));
+    };
 
     function formatPostDate(date) {
         return date.toLocaleString(window.OdysayLanguage?.getLocale?.() || 'ko-KR', {
@@ -15,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkLogin() {
         if (!currentUser || !currentUser.isLoggedIn) {
-            alert('로그인 후 이용할 수 있습니다.');
+            alert(talkText('talk.loginRequired'));
             return false;
         }
         return true;
@@ -25,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentUser.isPlaceAuthor) {
             return `
                 <span class="author-badge">
-                    작성자
+                    ${talkText('community.authorBadge')}
                 </span>
             `;
         }
@@ -225,7 +237,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
                                     <span class="travel-talk-user"></span>
                                     
-                                    ${talk.is_place_author ? '<span class="author-badge">작성자</span>' : ''}
+                                    ${talk.is_place_author
+                                        ? `<span class="author-badge">${talkText('community.authorBadge')}</span>`
+                                        : ''}
                                     
                                     ${talk.is_best ? '<span class="best-badge">BEST</span>' : ''}
                                     
@@ -251,13 +265,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <button
                                                     type="button"
                                                     class="travel-talk-edit-button">
-                                                    수정
+                                                    ${talkText('community.edit')}
                                                 </button>
         
                                                 <button
                                                     type="button"
                                                     class="travel-talk-delete-button">
-                                                    삭제
+                                                    ${talkText('community.delete')}
                                                 </button>
         
                                             </div>
@@ -287,7 +301,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button
                                 type="button"
                                 class="travel-talk-comment">
-                                💬 댓글
+                                💬 ${talkText('community.comments')}
                                 <span class="travel-talk-comment-count">
                                     0
                                 </span>
@@ -296,7 +310,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button
                                 type="button"
                                 class="travel-talk-report">
-                                🚨 신고
+                                🚨 ${talkText('community.report')}
                             </button>
         
                         </div>
@@ -306,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <div class="travel-talk-comment-list">
         
                                 <p class="travel-talk-no-comment">
-                                    아직 댓글이 없습니다.
+                                    ${talkText('talk.noComments')}
                                 </p>
         
                             </div>
@@ -316,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <textarea
                                     class="travel-talk-comment-input"
                                     maxlength="500"
-                                    placeholder="댓글을 입력해주세요."
+                                    data-i18n-placeholder="talk.commentPlaceholder"
                                 ></textarea>
         
                                 <div class="travel-talk-comment-write-bottom">
@@ -330,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <button
                                         type="button"
                                         class="travel-talk-comment-submit">
-                                        등록
+                                        ${talkText('community.submit')}
                                     </button>
         
                                 </div>
@@ -344,13 +358,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         '.travel-talk-user'
                     ).textContent = talk.nickname;
 
-                    travelTalkItem.querySelector(
-                        '.travel-talk-post-title'
-                    ).textContent = talk.title;
+                    window.OdysayLanguage.bindContent(travelTalkItem.querySelector('.travel-talk-post-title'),
+                        'talk', talk.id, 'title', talk.title);
 
-                    travelTalkItem.querySelector(
-                        '.travel-talk-text'
-                    ).textContent = talk.content;
+                    window.OdysayLanguage.bindContent(travelTalkItem.querySelector('.travel-talk-text'),
+                        'talk', talk.id, 'content', talk.content);
 
                     travelTalkItem.querySelector(
                         '.travel-talk-date'
@@ -358,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         formatPostDate(
                             new Date(talk.updated_at || talk.created_at)
                         ) +
-                        (talk.updated_at ? ' (수정)' : '');
+                        (talk.updated_at ? talkText('talk.edited') : '');
 
                     travelTalkList.appendChild(
                         travelTalkItem
@@ -427,7 +439,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (title === '') {
 
-                        alert('제목을 입력해주세요.');
+                        alert(talkText('talk.titleRequired'));
 
                         travelTalkTitle.focus();
 
@@ -437,7 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     if (text === '') {
 
-                        alert('내용을 입력해주세요.');
+                        alert(talkText('talk.contentRequired'));
 
                         travelTalkInput.focus();
 
@@ -471,10 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (!response.ok) {
 
-                            alert(
-                                data.message ||
-                                '여행톡 등록 중 오류가 발생했습니다.'
-                            );
+                            alert(talkError('talk.postError', data.message));
 
                             return;
                         }
@@ -513,9 +522,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             error
                         );
 
-                        alert(
-                            '여행톡 등록 중 오류가 발생했습니다.'
-                        );
+                        alert(talkText('talk.postError'));
                     }
                 }
             );
@@ -563,7 +570,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             .then(data => {
 
                                 if (!data.success) {
-                                    alert(data.message || '추천 처리 중 오류가 발생했습니다.');
+                                    alert(talkError('talk.recommendError', data.message));
                                     return;
                                 }
 
@@ -686,7 +693,9 @@ document.addEventListener('DOMContentLoaded', () => {
     
                                 <span class="travel-talk-comment-user"></span>
                                 
-                                ${comment.is_place_author ? '<span class="author-badge">작성자</span>' : ''}
+                                ${comment.is_place_author
+                                    ? `<span class="author-badge">${talkText('community.authorBadge')}</span>`
+                                    : ''}
     
                             </div>
     
@@ -701,7 +710,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             <button
                                 type="button"
                                 class="travel-talk-comment-report">
-                                🚨 신고
+                                🚨 ${talkText('community.report')}
                             </button>
     
                             ${
@@ -720,13 +729,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <button
                                                     type="button"
                                                     class="comment-edit-button">
-                                                    수정
+                                                    ${talkText('community.edit')}
                                                 </button>
     
                                                 <button
                                                     type="button"
                                                     class="comment-delete-button">
-                                                    삭제
+                                                    ${talkText('community.delete')}
                                                 </button>
     
                                             </div>
@@ -744,10 +753,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     ).textContent =
                         comment.nickname;
 
-                    commentItem.querySelector(
-                        '.travel-talk-comment-text'
-                    ).textContent =
-                        comment.content;
+                    window.OdysayLanguage.bindContent(commentItem.querySelector('.travel-talk-comment-text'),
+                        'talk_comment', comment.id, 'content', comment.content);
 
                     commentItem.querySelector(
                         '.travel-talk-comment-date'
@@ -757,7 +764,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 comment.updated_at || comment.created_at
                             )
                         ) +
-                        (comment.updated_at ? ' (수정)' : '');
+                        (comment.updated_at ? talkText('talk.edited') : '');
 
                     commentList.appendChild(
                         commentItem
@@ -887,7 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (commentText === '') {
 
                     alert(
-                        '댓글 내용을 입력해주세요.'
+                        talkText('talk.commentRequired')
                     );
 
                     commentInput.focus();
@@ -930,10 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (!result.ok) {
 
-                            alert(
-                                result.data.message ||
-                                '댓글 등록 중 오류가 발생했습니다.'
-                            );
+                            alert(talkError('talk.commentPostError', result.data.message));
 
                             return;
                         }
@@ -958,9 +962,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             error
                         );
 
-                        alert(
-                            '댓글 등록 중 오류가 발생했습니다.'
-                        );
+                        alert(talkText('talk.commentPostError'));
                     });
 
                 return;
@@ -1097,10 +1099,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const oldTitle =
-                titleElement.textContent.trim();
+                window.OdysayLanguage.originalContent(titleElement).trim();
 
             const oldText =
-                textElement.textContent.trim();
+                window.OdysayLanguage.originalContent(textElement).trim();
 
 
             // 원래 제목 / 본문 숨기기
@@ -1120,13 +1122,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     type="text"
                     class="travel-talk-post-edit-title"
                     maxlength="100"
-                    placeholder="제목을 입력해주세요."
+                    placeholder="${talkText('talk.titlePlaceholder')}"
                 >
         
                 <textarea
                     class="travel-talk-post-edit-text"
                     maxlength="500"
-                    placeholder="내용을 입력해주세요."
+                    placeholder="${talkText('talk.contentPlaceholder')}"
                 ></textarea>
         
                 <div class="travel-talk-post-edit-bottom">
@@ -1140,13 +1142,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <button
                         type="button"
                         class="travel-talk-post-edit-cancel">
-                        취소
+                        ${talkText('community.cancel')}
                     </button>
         
                     <button
                         type="button"
                         class="travel-talk-post-edit-save">
-                        수정 완료
+                        ${talkText('community.saveChanges')}
                     </button>
         
                 </div>
@@ -1258,7 +1260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (newTitle === '') {
 
-            alert('제목을 입력해주세요.');
+            alert(talkText('talk.titleRequired'));
 
             editBox.querySelector(
                 '.travel-talk-post-edit-title'
@@ -1270,7 +1272,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (newText === '') {
 
-            alert('내용을 입력해주세요.');
+            alert(talkText('talk.contentRequired'));
 
             editBox.querySelector(
                 '.travel-talk-post-edit-text'
@@ -1314,10 +1316,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (!result.ok) {
 
-                    alert(
-                        result.data.message ||
-                        '여행톡 수정 중 오류가 발생했습니다.'
-                    );
+                    alert(talkError('talk.editError', result.data.message));
 
                     return;
                 }
@@ -1334,9 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     error
                 );
 
-                alert(
-                    '여행톡 수정 중 오류가 발생했습니다.'
-                );
+                alert(talkText('talk.editError'));
 
             });
 
@@ -1368,7 +1365,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     travelTalkItem.dataset.travelTalkId;
 
                 const result =
-                    confirm('이 게시글을 삭제하시겠습니까?');
+                    confirm(talkText('talk.deleteConfirm'));
 
                 if (!result) {
                     return;
@@ -1402,10 +1399,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (!result.ok) {
 
-                            alert(
-                                result.data.message ||
-                                '여행톡 삭제 중 오류가 발생했습니다.'
-                            );
+                            alert(talkError('talk.deleteError', result.data.message));
 
                             return;
                         }
@@ -1422,9 +1416,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             error
                         );
 
-                        alert(
-                            '여행톡 삭제 중 오류가 발생했습니다.'
-                        );
+                        alert(talkText('talk.deleteError'));
 
                     });
 
@@ -1535,7 +1527,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 const oldText =
-                    textElement.textContent.trim();
+                    window.OdysayLanguage.originalContent(textElement).trim();
 
                 // 기존 댓글 내용 숨기기
                 textElement.style.display = 'none';
@@ -1552,7 +1544,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <textarea
                         class="comment-edit-text"
                         maxlength="500"
-                        placeholder="댓글을 입력해주세요."
+                        placeholder="${talkText('talk.commentPlaceholder')}"
                     ></textarea>
             
                     <div class="comment-edit-actions">
@@ -1566,13 +1558,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button
                             type="button"
                             class="comment-edit-cancel">
-                            취소
+                            ${talkText('community.cancel')}
                         </button>
             
                         <button
                             type="button"
                             class="comment-edit-save">
-                            수정 완료
+                            ${talkText('community.saveChanges')}
                         </button>
             
                     </div>
@@ -1695,9 +1687,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (newText === '') {
 
-                    alert(
-                        '댓글 내용을 입력해주세요.'
-                    );
+                    alert(talkText('talk.commentRequired'));
 
                     editText.focus();
 
@@ -1740,10 +1730,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (!result.ok) {
 
-                            alert(
-                                result.data.message ||
-                                '댓글 수정 중 오류가 발생했습니다.'
-                            );
+                            alert(talkError('talk.commentEditError', result.data.message));
 
                             return;
                         }
@@ -1761,9 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             error
                         );
 
-                        alert(
-                            '댓글 수정 중 오류가 발생했습니다.'
-                        );
+                        alert(talkText('talk.commentEditError'));
                     });
 
                 return;
@@ -1809,7 +1794,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const result =
                     confirm(
-                        '이 댓글을 삭제하시겠습니까?'
+                        talkText('talk.commentDeleteConfirm')
                     );
 
 
@@ -1846,10 +1831,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         if (!result.ok) {
 
-                            alert(
-                                result.data.message ||
-                                '댓글 삭제 중 오류가 발생했습니다.'
-                            );
+                            alert(talkError('talk.commentDeleteError', result.data.message));
 
                             return;
                         }
@@ -1869,9 +1851,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             error
                         );
 
-                        alert(
-                            '댓글 삭제 중 오류가 발생했습니다.'
-                        );
+                        alert(talkText('talk.commentDeleteError'));
 
                     });
 

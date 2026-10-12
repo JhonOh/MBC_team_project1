@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parent
 DIALECT = dialect()
 NEW_TABLES = {
     'bookmarks', 'post_like', 'inquiries', 'content_moderation',
-    'moderation_log', 'review_recommends', 'travel_talk_recommends',
+    'moderation_log', 'review_recommends', 'travel_talk_recommends', 'content_translation',
 }
 ADD_COLUMNS = {
     'user': {'nickname', 'birth_date', 'gender', 'profile_image', 'is_active', 'created_at'},
@@ -195,9 +195,15 @@ def main():
     mode.add_argument('--check', action='store_true', help='읽기 전용 점검')
     mode.add_argument('--apply', action='store_true', help='백업 후 적용 (서버 종료 필수)')
     parser.add_argument('--database', type=Path, help='테스트 복사본 등 명시적인 DB 파일 경로')
+    parser.add_argument('--translations-only', action='store_true', help='번역 테이블만 점검/추가 (다른 스키마 변경 제외)')
     args = parser.parse_args()
     try:
-        return run(args.database if args.database else configured_path(), args.apply)
+        metadata = None
+        if args.translations_only:
+            from sqlalchemy import MetaData
+            metadata = MetaData()
+            load_metadata().tables['content_translation'].to_metadata(metadata)
+        return run(args.database if args.database else configured_path(), args.apply, metadata)
     except Exception as error:
         print(f'실패: {error}', file=sys.stderr)
         print('적용 중 오류라면 이번 트랜잭션은 롤백됩니다. 무조건 반복 실행하지 마세요.', file=sys.stderr)

@@ -2,6 +2,7 @@
 function createMapPlacePopup(place) {
     const card = document.createElement('article');
     card.className = 'map-place-card';
+    card.dataset.databasePopup = 'true';
 
     const media = document.createElement('div');
     media.className = 'map-place-card__media';
@@ -27,12 +28,14 @@ function createMapPlacePopup(place) {
     const title = document.createElement('h3');
     title.className = 'map-place-card__title';
     title.textContent = place.title || '이름 없는 여행지';
+    window.OdysayLanguage?.bindContent(title, 'place', place.id, 'place', title.textContent);
     const location = document.createElement('p');
     location.className = 'map-place-card__location';
     location.textContent = [place.country, place.region].filter(Boolean).join(' · ');
     const intro = document.createElement('p');
     intro.className = 'map-place-card__intro';
     intro.textContent = place.intro || '이 장소의 이야기를 상세페이지에서 만나보세요.';
+    if (place.intro) window.OdysayLanguage?.bindContent(intro, 'place', place.id, 'intro', place.intro);
     const likes = document.createElement('p');
     const count = Number.isSafeInteger(place.like_count) && place.like_count > 0 ? place.like_count : 0;
     likes.className = 'map-place-card__likes' + (count > 0 ? ' has-like' : '');

@@ -157,8 +157,8 @@ function renderCountryLabel(country) {
                             if (!Number.isFinite(place.lat) || !Number.isFinite(place.lng) || Math.abs(place.lat) > 90 || Math.abs(place.lng) > 180) continue;
 
 
-                            const popup = createMapPlacePopup(place);
 
+                            const popup = createMapPlacePopup(place);
                             const isEnglish = window.OdysayLanguage?.getLanguage?.() === 'en';
                             const canonicalCountry =
                                 window.OdysayCountries?.canonicalize?.(place.country) || place.country;
@@ -183,7 +183,14 @@ function renderCountryLabel(country) {
                                 .filter(Boolean)
                                 .join(' ');
 
+
+                            const intro = document.createElement('p');
+                            intro.textContent = place.intro || '';
+                            window.OdysayLanguage.bindContent(title, 'place', place.id, 'place', place.title);
+                            if (place.intro) window.OdysayLanguage.bindContent(intro, 'place', place.id, 'intro', place.intro);
+                       
                             const link = popup.querySelector('.map-place-card__link');
+
                             link.dataset.i18n = 'common.details';
                             link.textContent = uiText('common.details');
 
@@ -365,7 +372,7 @@ function renderCountryLabel(country) {
                         <div class="community-info">
                             <div class="community-top">
                                 <span class="community-category">${item.category || uiText('home.defaultCommunity')}</span>
-                                <strong>${item.title}</strong>
+                                <strong ${window.OdysayLanguage.contentAttrs(String(item.id).replace(/_\d+$/, ''), item.raw_id, String(item.id).startsWith('place_') ? 'place' : 'title')}>${escapeHtml(item.title)}</strong>
                             </div>
                             <div class="community-meta">
                                 <span>

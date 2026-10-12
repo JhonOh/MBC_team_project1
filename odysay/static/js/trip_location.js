@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     // 1. 사용자 접속 기준 로컬 시간 변환 기능
     const timeElements = document.querySelectorAll('.created-time, .updated-time');
+    const talkText = (key) =>
+        window.OdysayLanguage?.t?.(key) || key;
     function renderLocalTimes() {
         timeElements.forEach(el => {
             const rawTime = el.getAttribute('data-utc');
@@ -27,6 +29,63 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     renderLocalTimes();
     window.addEventListener('odysay:languagechange', renderLocalTimes);
+
+    // 여행 스타일 태그 영어 번역
+    const travelTagTranslations = {
+        '미식': 'Food & Dining',
+        '문화': 'Culture',
+        '자연': 'Nature',
+        '힐링': 'Relaxation',
+        '액티비티': 'Adventure',
+        '쇼핑': 'Shopping',
+        '역사': 'History',
+        '예술': 'Art'
+    };
+
+    const travelTagBadges = document.querySelectorAll(
+        '.travel-tag-badge[data-travel-tag]'
+    );
+
+    travelTagBadges.forEach((badge) => {
+        badge.dataset.koLabel = badge.textContent.trim();
+    });
+
+    function renderTravelTags() {
+        const isEnglish =
+            document.documentElement.lang?.toLowerCase().startsWith('en');
+
+        travelTagBadges.forEach((badge) => {
+            const koreanLabel = badge.dataset.koLabel;
+
+            badge.textContent = isEnglish
+                ? (travelTagTranslations[koreanLabel] || koreanLabel)
+                : koreanLabel;
+        });
+    }
+    // 주변 여행지 거리 문구 번역
+    function renderNearbyDistances() {
+        const isEnglish =
+            document.documentElement.lang?.toLowerCase().startsWith('en');
+
+        document.querySelectorAll('.nearby-place-distance[data-distance]')
+            .forEach((element) => {
+                const distance = element.dataset.distance;
+
+                element.textContent = isEnglish
+                    ? `📍 About ${distance} km from this destination`
+                    : `📍 현재 여행지에서 약 ${distance}km 떨어진 곳`;
+            });
+    }
+
+    renderNearbyDistances();
+
+    window.addEventListener(
+        'odysay:languagechange',
+        renderNearbyDistances
+    );
+
+    renderTravelTags();
+    window.addEventListener('odysay:languagechange', renderTravelTags);
 
     // 2. 이미지 슬라이더 기능
     const mainImage = document.getElementById('mainImage');
@@ -313,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
             bookmarkButton.addEventListener('click', async function () {
 
                 if (!currentUser || !currentUser.isLoggedIn) {
-                    alert('로그인 후 이용할 수 있습니다.');
+                    alert(talkText('talk.loginRequired'));
                     return;
                 }
 
@@ -381,11 +440,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         function checkLogin() {
-
             if (!currentUser || !currentUser.isLoggedIn) {
-
-                alert('로그인 후 이용할 수 있습니다.');
-
+                alert(talkText('talk.loginRequired'));
                 return false;
             }
 
@@ -399,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 return `
                     <span class="author-badge">
-                        작성자
+                        ${talkText('community.authorBadge')}
                     </span>
                 `;
             }

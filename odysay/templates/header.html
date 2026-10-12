@@ -18,7 +18,7 @@
                     <div class="single-dropdown">
                         <ul class="sub-menu">
                             <li><a href="{{ url_for('homepage.trip_list') }}?all">전체 여행지</a></li>
-                            <li><a href="{{ url_for('homepage.trip_list') }}?focus=search">나라 이름 검색</a></li>
+                            <li><a href="{{ url_for('homepage.trip_list') }}?focus=search" data-i18n="tripList.countrySearch">나라 이름 검색</a></li>
                         </ul>
                     </div>
                 </li>
@@ -89,7 +89,7 @@
                 <strong class="sub-title">여행지</strong>
                 <ul class="sub-list">
                     <li><a href="{{ url_for('homepage.trip_list') }}?all">전체 여행지</a></li>
-                    <li><a href="{{ url_for('homepage.trip_list') }}?focus=search">나라 이름 검색</a></li>
+                    <li><a href="{{ url_for('homepage.trip_list') }}?focus=search" data-i18n="tripList.countrySearch">나라 이름 검색</a></li>
                 </ul>
             </div>
 

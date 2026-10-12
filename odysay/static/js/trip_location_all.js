@@ -557,11 +557,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         ).addTo(detailMap);
 
+                        const titlePopup = document.createElement('span');
+                        titlePopup.dataset.databasePopup = 'true';
+                        window.OdysayLanguage.bindContent(titlePopup, 'place', detailMapElement.dataset.placeId, 'place', originalPlaceTitle);
                         L.marker(
                             [latitude, longitude]
                         )
                             .addTo(detailMap)
-                            .bindPopup(placeTitle)
+                            .bindPopup(titlePopup)
                             .openPopup();
                     }
                 }

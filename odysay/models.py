@@ -2,6 +2,21 @@ from datetime import datetime ,timezone
 from . import db
 
 
+class ContentTranslation(db.Model):
+    """English copies only. Original user records are never replaced."""
+    __tablename__ = 'content_translation'
+    id = db.Column(db.Integer, primary_key=True)
+    content_type = db.Column(db.String(32), nullable=False)
+    content_id = db.Column(db.Integer, nullable=False)
+    source_hashes = db.Column(db.JSON, nullable=False, default=dict)
+    english = db.Column(db.JSON, nullable=False, default=dict)
+    status = db.Column(db.String(32), nullable=False, default='pending')
+    attempts = db.Column(db.Integer, nullable=False, default=0)
+    retry_after = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    __table_args__ = (db.UniqueConstraint('content_type', 'content_id', name='uq_translation_content'),)
+
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)

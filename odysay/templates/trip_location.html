@@ -92,20 +92,22 @@
                         <div class="owner-actions">
 
                             <a href="{{ url_for('trip_location.trip_location_edit', place_id=place.id) }}"
-                               class="owner-button">
+                               class="owner-button"
+                               data-i18n="detail.edit">
                                 수정
                             </a>
 
                             <form method="POST"
                                   action="{{ url_for('trip_location.trip_location_delete', place_id=place.id) }}"
-                                  onsubmit="return confirm('정말 이 여행지를 삭제하시겠습니까?');">
+                                  onsubmit="return confirm(window.OdysayLanguage?.t?.('detail.deleteConfirm') || '정말 이 여행지를 삭제하시겠습니까?');">
 
                                 <input type="hidden"
                                        name="csrf_token"
                                        value="{{ csrf_token() }}">
 
                                 <button type="submit"
-                                        class="owner-button owner-delete">
+                                        class="owner-button owner-delete"
+                                        data-i18n="detail.delete">
                                     삭제
                                 </button>
 
@@ -173,7 +175,7 @@
                         한줄 소개
                     </span>
 
-                            <p class="place-intro" data-user-content>
+                            <p class="place-intro" data-translate-place="{{ place.id }}" data-translate-field="intro">
                                 {{ place.intro }}
                             </p>
 
@@ -372,7 +374,7 @@
                         <div class="basic-info-row">
                             <span class="basic-info-label">한줄 소개</span>
 
-                            <span data-user-content>
+                            <span data-translate-place="{{ place.id }}" data-translate-field="intro">
                                 {{ place.intro }}
                             </span>
                         </div>
@@ -384,6 +386,7 @@
                         <div class="detail-map-link">
 
                             <div class="detail-map"
+                                 data-place-id="{{ place.id }}"
                                  data-lat="{{ place.latitude }}"
                                  data-lng="{{ place.longitude }}"
                                  data-title="{{ place.place }}"
@@ -391,12 +394,13 @@
                             </div>
 
                             <a class="detail-map-caption"
+                               data-i18n="detail.viewFullMap"
                                href="{{ url_for(
-                               'homepage.homepage',
-                               place_id=place.id,
-                               lat=place.latitude,
-                               lng=place.longitude
-                           ) }}">
+                                   'homepage.homepage',
+                                   place_id=place.id,
+                                   lat=place.latitude,
+                                   lng=place.longitude
+                               ) }}">
                                 전체 지도에서 보기 →
                             </a>
 
@@ -417,7 +421,7 @@
 
                 <div class="traveler-info-layout">
 
-                    <div class="traveler-info-text" data-user-content>
+                    <div class="traveler-info-text" data-translate-place="{{ place.id }}" data-translate-field="reason">
                         {{ place.reason }}
                     </div>
                 </div>
@@ -438,7 +442,7 @@
 
                         <div class="registered-info-text">
                             {% if place.restaurant %}
-                                <span data-user-content>{{ place.restaurant }}</span>
+                                <span data-translate-place="{{ place.id }}" data-translate-field="restaurant">{{ place.restaurant }}</span>
                             {% else %}
                                 <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
@@ -509,7 +513,7 @@
 
                         <div class="registered-info-text">
                             {% if place.nearby %}
-                                <span data-user-content>{{ place.nearby }}</span>
+                                <span data-translate-place="{{ place.id }}" data-translate-field="nearby">{{ place.nearby }}</span>
                             {% else %}
                                 <span class="registered-info-no-text">
                                 등록된 설명이 없습니다.
@@ -612,9 +616,10 @@
                                               data-place-country="{{ item.place.country }}">{{ item.place.region }}</span>
                                     </span>
 
-                                    <span class="nearby-place-distance">
-                                📍 현재 여행지에서 약 {{ item.distance }}km 떨어진 곳
-                            </span>
+                                    <span class="nearby-place-distance"
+                                          data-distance="{{ item.distance }}">
+                                        📍 현재 여행지에서 약 {{ item.distance }}km 떨어진 곳
+                                    </span>
 
                                 </div>
 
@@ -764,7 +769,8 @@
                             💬 여행톡
                         </h2>
 
-                        <p class="travel-talk-description">
+                        <p class="travel-talk-description"
+                           data-i18n="talk.description">
                             이 여행지에 대해 궁금한 점이나 정보를 자유롭게 이야기해보세요.
                         </p>
                     </div>
@@ -772,16 +778,18 @@
                     <div class="travel-talk-write-buttons">
 
                         <button
-                                type="button"
-                                class="travel-talk-write-cancel"
-                                id="travelTalkWriteCancel">
+                            type="button"
+                            class="travel-talk-write-cancel"
+                            id="travelTalkWriteCancel"
+                            data-i18n="talk.writeCancel">
                             작성 취소
                         </button>
 
                         <button
-                                type="button"
-                                class="travel-talk-open-button"
-                                id="travelTalkOpenButton">
+                            type="button"
+                            class="travel-talk-open-button"
+                            id="travelTalkOpenButton"
+                            data-i18n="talk.write">
                             글 작성하기
                         </button>
 
@@ -789,20 +797,22 @@
 
                 </div>
 
-
                 <!-- 글 작성 -->
                 <div class="travel-talk-write"
                      id="travelTalkWrite">
 
-                    <input type="text"
-                           id="travelTalkTitle"
-                           maxlength="60"
-                           placeholder="제목을 입력해주세요.">
+                    <input
+                        type="text"
+                        id="travelTalkTitle"
+                        maxlength="60"
+                        placeholder="제목을 입력해주세요."
+                        data-i18n-placeholder="talk.titlePlaceholder">
 
                     <textarea
-                            id="travelTalkInput"
-                            maxlength="500"
-                            placeholder="내용을 입력해주세요."></textarea>
+                        id="travelTalkInput"
+                        maxlength="500"
+                        placeholder="내용을 입력해주세요."
+                        data-i18n-placeholder="talk.contentPlaceholder"></textarea>
 
                     <div class="travel-talk-write-bottom">
 
@@ -810,9 +820,10 @@
                             <span id="travelTalkTextCount">0</span>/500
                         </span>
 
-                        <button type="button"
-                                id="travelTalkSubmit"
-                                class="travel-talk-submit">
+                        <button
+                            type="button"
+                            id="travelTalkSubmit"
+                            class="travel-talk-submit">
                             등록
                         </button>
 
@@ -820,13 +831,13 @@
 
                 </div>
 
-
                 <!-- 글 목록 -->
                 <div id="travelTalkList"
                      class="travel-talk-list">
 
                     <p id="noTravelTalkMessage"
-                       class="empty-message">
+                       class="empty-message"
+                       data-i18n="talk.empty">
                         아직 등록된 여행톡이 없습니다.
                     </p>
 
