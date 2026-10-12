@@ -51,7 +51,7 @@ button.theme-toggle:focus-visible {
 .theme-toolbar {
     position: fixed;
     right: max(20px, env(safe-area-inset-right));
-    bottom: max(20px, env(safe-area-inset-bottom));
+    bottom: max(70px, env(safe-area-inset-bottom) + 50px);
     z-index: 1040;
     display: flex;
     flex: 0 0 auto;
@@ -60,16 +60,7 @@ button.theme-toggle:focus-visible {
 }
 .theme-toolbar .theme-toggle { box-shadow: 0 2px 12px rgb(0 0 0 / 18%); }
 
-/* Keep the same button reachable when an existing desktop header overflows. */
-@media (max-width: 900px) {
-    .header-util > .theme-toggle {
-        position: fixed;
-        right: max(20px, env(safe-area-inset-right));
-        bottom: max(20px, env(safe-area-inset-bottom));
-        z-index: 1040;
-        box-shadow: 0 2px 12px rgb(0 0 0 / 18%);
-    }
-}
+
 
 /* Low specificity lets page-specific control styles take precedence. */
 :where(html[data-theme="dark"]) :where(

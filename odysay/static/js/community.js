@@ -6,11 +6,13 @@ document.addEventListener('DOMContentLoaded', () => {
   const isPlaceItem = (item) =>
     String(item?.id || '').startsWith('place_');
   const escapeContent = (value) => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+
+  // [수정 포인트] contentSpan 함수의 닫는 중괄호 } 추가
   const contentSpan = (item, field, value) => {
     const kind = String(item.id).replace(/_\d+$/, '');
     const id = item.raw_id || String(item.id).split('_').pop();
     return `<span ${window.OdysayLanguage.contentAttrs(kind, id, field)}>${escapeContent(value)}</span>`;
- 
+  };
 
   const isKoreanPlace = (item) => {
     const country =
@@ -215,10 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
       postList.innerHTML = `
         <div style="text-align:center; padding:60px 20px; background:var(--odysay-surface, #fff); border-radius:12px; color:var(--odysay-muted, #888);">
           <i class="fa-regular fa-folder-open" style="font-size:36px; margin-bottom:12px; color:var(--odysay-muted, #ccc);"></i>
-
           <p>${uiText('community.noPosts')}</p>
-
-
         </div>`;
       return;
     }
@@ -248,7 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="post-body-wrap">
               <span class="badge">${displayCategory(item.category)}</span>
               <div class="post-main-content">
-                <h3 class="post-title">[${escapeContent(isPlaceItem(item) ? (displayCountry(item.country) || 'Odysay') : uiText('home.defaultCommunity'))}/${isPlaceItem(item) ? contentSpan(item, 'region', item.region) : escapeContent(displayCategory(item.category))}] ${contentSpan(item, isPlaceItem(item) ? 'place' : 'title', item.title)}</h3>                <p class="post-desc">${item.intro ? contentSpan(item, isPlaceItem(item) ? 'intro' : 'content', item.intro) : uiText('community.noContent')}</p>
+                <h3 class="post-title">[${escapeContent(isPlaceItem(item) ? (displayCountry(item.country) || 'Odysay') : uiText('home.defaultCommunity'))}/${isPlaceItem(item) ? contentSpan(item, 'region', item.region) : escapeContent(displayCategory(item.category))}] ${contentSpan(item, isPlaceItem(item) ? 'place' : 'title', item.title)}</h3>
+                <p class="post-desc">${item.intro ? contentSpan(item, isPlaceItem(item) ? 'intro' : 'content', item.intro) : uiText('community.noContent')}</p>
               </div>
             </div>
             <div class="post-meta">

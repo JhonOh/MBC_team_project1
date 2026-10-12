@@ -36,7 +36,7 @@ def get_corrected_place_from_ai(country, region, place):
     api_key = os.getenv("GEMINI_API_KEY") or os.environ.get("GEMINI_API_KEY") or GEMINI_API_KEY
 
     if not api_key:
-        print("[Gemini AI Error] GEMINI_API_KEY가 설정되지 않았습니다.")
+        print("[Gemini AI Error] GEMINI_API_KEY가 설정되지 않았습니다.", flush=True)
         return country, region, place
 
     max_retries = 3
@@ -79,11 +79,11 @@ def get_corrected_place_from_ai(country, region, place):
             r = data.get('corrected_region', region)
             p = data.get('corrected_place', place)
 
-            print(f"[Gemini AI 명칭 보정 성공] 입력: ({country} {region} {place}) -> 교정: ({c} / {r} / {p})")
+            print(f"[Gemini AI 명칭 보정 성공] 입력: ({country} {region} {place}) -> 교정: ({c} / {r} / {p})", flush=True)
             return c, r, p
 
         except Exception as e:
-            print(f"[Gemini AI 시도 {attempt + 1}/{max_retries} 실패]: {e}")
+            print(f"[Gemini AI 시도 {attempt + 1}/{max_retries} 실패]: {e}", flush=True)
             if attempt < max_retries - 1:
                 time.sleep(retry_delay)
 
@@ -96,7 +96,7 @@ def get_corrected_place_from_ai(country, region, place):
 def get_coords_from_tmap(region, place, raw_place=""):
     api_key = os.getenv("TMAP_API_KEY") or TMAP_API_KEY
     if not api_key:
-        print("[TMAP 지도 에러] TMAP_API_KEY가 설정되지 않았습니다.")
+        print("[TMAP 지도 에러] TMAP_API_KEY가 설정되지 않았습니다.", flush=True)
         return None, None
 
     headers = {
@@ -119,7 +119,7 @@ def get_coords_from_tmap(region, place, raw_place=""):
         search_steps.append((3, "원본 입력 장소", q3))
 
     for step_num, step_name, q in search_steps:
-        print(f"[TMAP 지도 {step_num}차 시도 ({step_name})] 쿼리: '{q}'")
+        print(f"[TMAP 지도 {step_num}차 시도 ({step_name})] 쿼리: '{q}'", flush=True)
         params = {
             "version": 1,
             "searchKeyword": q,
@@ -133,14 +133,14 @@ def get_coords_from_tmap(region, place, raw_place=""):
                 if pois:
                     lat = float(pois[0].get('frontLat') or pois[0].get('noorLat'))
                     lng = float(pois[0].get('frontLon') or pois[0].get('noorLon'))
-                    print(f"[TMAP 지도 검색 성공 ({step_num}차)] 쿼리: '{q}' -> 좌표: ({lat}, {lng})")
+                    print(f"[TMAP 지도 검색 성공 ({step_num}차)] 쿼리: '{q}' -> 좌표: ({lat}, {lng})", flush=True)
                     return lat, lng
                 else:
-                    print(f"[TMAP 지도 {step_num}차 실패] 결과 0건")
+                    print(f"[TMAP 지도 {step_num}차 실패] 결과 0건", flush=True)
             else:
-                print(f"[TMAP 지도 API 오류 ({step_num}차)] Status: {res.status_code} | 응답: {res.text}")
+                print(f"[TMAP 지도 API 오류 ({step_num}차)] Status: {res.status_code} | 응답: {res.text}", flush=True)
         except Exception as e:
-            print(f"[TMAP 지도 API 예외 발생 ({step_num}차)]: {e}")
+            print(f"[TMAP 지도 API 예외 발생 ({step_num}차)]: {e}", flush=True)
 
     return None, None
 
@@ -175,11 +175,11 @@ def upload():
         is_korea = any(k in c_country.lower() or k in country.lower() for k in ['한국', '대한민국', 'korea', 'south korea'])
 
         if is_korea:
-            print("[국내 장소 감지] TMAP 지도 API로 정밀 검색을 진행합니다...")
+            print("[국내 장소 감지] TMAP 지도 API로 정밀 검색을 진행합니다...", flush=True)
             lat, lng = get_coords_from_tmap(c_region, c_place, raw_place=place)
 
         if lat is None or lng is None:
-            print("[해외 장소 또는 TMAP 검색 실패] OpenStreetMap 검색을 진행합니다...")
+            print("[해외 장소 또는 TMAP 검색 실패] OpenStreetMap 검색을 진행합니다...", flush=True)
             search_queries = [
                 f"{c_place}, {c_region}, {c_country}",
                 f"{c_place}, {c_country}",
@@ -191,19 +191,19 @@ def upload():
                     location = geolocator.geocode(query)
                     if location:
                         lat, lng = location.latitude, location.longitude
-                        print(f"[OpenStreetMap 좌표 취득 성공] 쿼리: '{query}' -> 좌표: ({lat}, {lng})")
+                        print(f"[OpenStreetMap 좌표 취득 성공] 쿼리: '{query}' -> 좌표: ({lat}, {lng})", flush=True)
                         break
                 except Exception as geo_e:
-                    print(f"[OpenStreetMap 검색 중 예외]: {geo_e}")
+                    print(f"[OpenStreetMap 검색 중 예외]: {geo_e}", flush=True)
 
         if lat is None or lng is None:
-            print("[Fallback] 특정 건물 검색 실패. 지역 단위 검색 진행...")
+            print("[Fallback] 특정 건물 검색 실패. 지역 단위 검색 진행...", flush=True)
             fallback_location = geolocator.geocode(f"{c_region}, {c_country}") or geolocator.geocode(f"{c_country}")
             if fallback_location:
                 lat, lng = fallback_location.latitude, fallback_location.longitude
-                print(f"[Fallback 성공] 좌표: ({lat}, {lng})")
+                print(f"[Fallback 성공] 좌표: ({lat}, {lng})", flush=True)
             else:
-                print("[Fallback 실패] 좌표를 찾을 수 없음")
+                print("[Fallback 실패] 좌표를 찾을 수 없음", flush=True)
 
         # 카테고리
         categories = request.form.getlist('category')
@@ -289,7 +289,7 @@ def upload():
             db.session.add(new_trip_location)
             db.session.commit()
 
-            print(f"[DB 저장 성공] {place} ({lat}, {lng})")
+            print(f"[DB 저장 성공] {place} ({lat}, {lng})", flush=True)
 
             # 3. 생성된 상세페이지로 이동
             return redirect(
@@ -301,7 +301,7 @@ def upload():
 
         except Exception as e:
             db.session.rollback()
-            print(f"[DB 저장 실패 및 롤백]: {e}")
+            print(f"[DB 저장 실패 및 롤백]: {e}", flush=True)
             return f"DB 저장 중 오류가 발생했습니다. (잠시 후 다시 시도해 주세요): {e}", 500
 
     return render_template(
