@@ -5,6 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 import config
 
+# 추가: 프록시 환경(Render 등)에서 HTTPS 스킴과 올바른 호스트를 인식하기 위한 미들웨어
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 naming_convention = {
     'ix': 'ix_%(column_0_label)s',
     'uq': 'uq_%(table_name)s_%(column_0_name)s',
@@ -19,6 +22,11 @@ csrf = CSRFProtect()
 
 def create_app(test_config=None):
     app = Flask(__name__)
+
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1
+    )
+
     app.config.from_object(config)
     if test_config:
         app.config.update(test_config)

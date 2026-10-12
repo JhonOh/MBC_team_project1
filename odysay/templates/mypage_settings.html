@@ -11,14 +11,13 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header_footer.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/mypage_setting.css') }}">
-     {% include 'theme_head.html' %}
+    {% include 'theme_head.html' %}
 </head>
 
 <body>
 {% include 'header.html' %}
 
 <div class="mypage-wrap">
-
 
 
     <!-- MAIN CONTENT -->
@@ -41,22 +40,35 @@
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('mypage.mypage_posts') }}">
                         <span class="menu-icon">♧</span>
                         <span>내가 쓴 글</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="#">
+                    <a href="{{ url_for('mypage.mypage_bookmarks') }}">
                         <span class="menu-icon">♡</span>
                         <span>내가 찜한 여행지</span>
                     </a>
                 </li>
 
                 <li>
-                    <a href="{{ url_for('mypage.mypage_settings') }}"
-                       class="active">
+                    <a href="{{ url_for('mypage.mypage_places') }}">
+                        <span class="menu-icon">✎</span>
+                        <span>내가 만든 여행지</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('inquiry.index') }}">
+                        <span class="menu-icon">✉</span>
+                        <span>{{ '문의 관리 및 신고관리' if is_admin() else '1:1 문의' }}</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{{ url_for('mypage.mypage_settings') }}" class="active">
                         <span class="menu-icon">⚙</span>
                         <span>설정</span>
                     </a>
@@ -76,7 +88,7 @@
 
 
             <!-- 회원 탈퇴 -->
-            <div class="withdraw-box" id ="withdraw">
+            <div class="withdraw-box" id="withdraw">
 
                 <div class="withdraw-header">
                     <h2>회원 탈퇴</h2>
@@ -111,9 +123,9 @@
 
                     <!-- 서버에서 전달한 안내 및 오류 -->
                     {% for message in get_flashed_messages() %}
-                        <p class="withdraw-error" role="alert">
-                            {{ message }}
-                        </p>
+                    <p class="withdraw-error" role="alert">
+                        {{ message }}
+                    </p>
                     {% endfor %}
 
                     <form
@@ -165,8 +177,7 @@
         </section>
 
     </main>
-        {% include 'footer.html' %}
-
+    {% include 'footer.html' %}
 
 
 </div>

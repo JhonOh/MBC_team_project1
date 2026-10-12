@@ -176,7 +176,7 @@
     display: none;
     font-size: 16px;
     font-weight: 700;
-    color: #152238;
+    color: var(--odysay-text, #152238); /* 👈 테마에 맞춰 글자 색상이 자동으로 바뀌도록 변경 */
     white-space: nowrap;
     line-height: 1;            /* 이미지와의 수직 중앙 라인 맞춤 */
 }
